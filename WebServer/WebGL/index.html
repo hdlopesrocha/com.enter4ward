@@ -1,0 +1,40 @@
+<html>
+
+<head>
+<title>Learning WebGL &mdash; lesson 11</title>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<script type="text/javascript" src="lib/glMatrix-0.9.5.min.js"></script>
+<script type="text/javascript" src="lib/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="lib/webgl-utils.js"></script>
+<script type="text/javascript" src="lib/bimk.js"></script>
+<script type="text/javascript" src="lesson11.js"></script>
+</head>
+<body onload="webGLStart();">
+
+    <div style ="position:absolute;z-index:100">
+
+		Drag your mouse to rotate.<br/>    
+		[Velocity:<input type="range" id="VV" value="30"/>]<br>
+		[Zoom: <input type="range" id="ZZ"  min="0" max="100" value="50"/>]<br>
+		[Direction: <input type="range" id="DD"  min="-100" max="100" value="0"/>]<br>		
+		[Rotation:<input type="checkbox" id="CC" checked/>]<br>
+		[Textures:<input type="checkbox" id="TT" checked/>]<br>
+	</div>
+    <canvas id="lesson11-canvas" style="border: none;position:absolute;" width="980" height="500"; margin:0px;>
+		
+		<img src = "nosupport.png" style="background-color:black"></img>
+    </canvas>
+    <div style="right:0px;position:absolute;z-index:100">
+    	Color:<br>
+		[R:<input type="range" id="RR" min="0" max="100" value="100"/>]<br>
+		[G:<input type="range" id="GG" min="0" max="100" value="70"/>]<br>
+		[B:<input type="range" id="BB" min="0" max="100" value="0"/>]<br>    
+    	<br>Rims<br>
+		[R:<input type="range" id="rRR" min="0" max="100" value="10"/>]<br>
+		[G:<input type="range" id="rGG" min="0" max="100" value="10"/>]<br>
+		[B:<input type="range" id="rBB" min="0" max="100" value="10"/>]<br>
+</div>
+</body>
+
+</html>

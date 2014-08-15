@@ -1,0 +1,185 @@
+package hidrogine.webserver;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.StringTokenizer;
+
+/**
+ * The Class Controller.
+ */
+public abstract class Controller {
+
+    /** The server. */
+    private HttpServer server;
+
+    /** The request. */
+    private Request request;
+
+    /** The response. */
+    private Response response;
+
+    /** The session. */
+    private Session session;
+
+    /**
+     * Gets the session.
+     *
+     * @return the session
+     */
+    public final Session getSession() {
+        return session;
+    }
+
+    /**
+     * Instantiates a new controller.
+     */
+    public Controller() {
+    }
+
+    /**
+     * Process.
+     *
+     * @return the string
+     */
+    public abstract Response process();
+
+    /**
+     * Read.
+     *
+     * @param key
+     *            the key
+     * @return the object
+     */
+    public final Object read(final String key) {
+        if (session == null) {
+            session = request.getSession();
+        }
+        return session != null ? session.read(key) : null;
+    }
+
+    /**
+     * Write.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     */
+    public final void write(final String key, final Object value) {
+        if (session == null) {
+            session = request.getSession();
+            if (session == null) {
+                session = server.generateSession();
+            }
+        }
+        session.write(key, value);
+    }
+
+    /**
+     * Gets the request.
+     *
+     * @return the request
+     */
+    public final Request getRequest() {
+        return request;
+    }
+
+    /**
+     * Ok.
+     *
+     * @param html
+     *            the html
+     * @return the response
+     */
+    public final Response ok(final String html) {
+        response.setContentType("text/html");
+        response.setData(html.getBytes());
+        return response;
+    }
+
+    /**
+     * Ok.
+     *
+     * @param file
+     *            the file
+     * @return the response
+     */
+    public final Response ok(final File file) {
+        StringTokenizer fileToks = new StringTokenizer(file.getName(), ".");
+
+        try {
+            response.setData(read(file));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        if (fileToks.countTokens() > 1) {
+            fileToks.nextElement();
+            response.setContentType(fileToks.nextToken());
+        } else {
+            response.setContentType("text/html");
+        }
+        return response;
+    }
+
+    /**
+     * Ok.
+     *
+     * @param file
+     *            the file
+     * @param filename
+     *            the filename
+     * @return the response
+     */
+    public final Response ok(final File file, final String filename) {
+        ok(file);
+        response.setContentDisposition("attachment; filename=\"" + filename
+                + "\"");
+        return response;
+    }
+
+    /**
+     * Read.
+     *
+     * @param file
+     *            the file
+     * @return the byte[]
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    private byte[] read(final File file) throws IOException {
+
+        byte[] buffer = new byte[(int) file.length()];
+        InputStream ios = null;
+        try {
+            ios = new FileInputStream(file);
+            if (ios.read(buffer) == -1) {
+                throw new IOException(
+                        "EOF reached while trying to read the whole file");
+            }
+        } finally {
+            if (ios != null) {
+                ios.close();
+            }
+        }
+
+        return buffer;
+    }
+
+    /**
+     * Prepare.
+     *
+     * @param s
+     *            the s
+     * @param r
+     *            the r
+     */
+    public final void prepare(final HttpServer s, final Request r) {
+        server = s;
+        request = r;
+        response = new Response(s, r);
+    }
+
+}

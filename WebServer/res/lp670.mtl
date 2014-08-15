@@ -1,0 +1,189 @@
+# 
+# Wavefront material file
+# Converted by the DEEP Exploration  Deep Exploration 6.0 6.0.0.5908 Release
+# Right Hemisphere, LTD
+# http://www.righthemisphere.com/
+# 
+
+newmtl lights0
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 48.5029
+map_Kd lights.png
+
+newmtl nodmg
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.901961 0.901961 0.901961
+illum 2
+Ns 19.6983
+map_Kd nodamage.png
+
+newmtl black
+Ka 0.6 0.6 0.6
+Kd 1 1 1
+Ks 0.886275 0.886275 0.886275
+illum 2
+Ns 21.1121
+map_Kd black.png
+ 
+
+newmtl c0
+Ka 0 0 0
+Kd 1.0 1.0 1.0
+Ks 0.5 0.5 0.5
+illum 2
+Ns 8
+map_Kd color.png
+
+newmtl undercarriage
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.815686 0.815686 0.815686
+illum 2
+Ns 19.6983
+map_Kd undercarriage.png
+
+
+newmtl grille2
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.992157 0.992157 0.992157
+illum 2
+Ns 34.2967
+map_Kd grille2.png
+
+newmtl carbon_fiber
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+illum 2
+Ns 19.6983
+map_Kd carbonfiber.png
+
+newmtl lights1
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.992157 0.992157 0.992157
+illum 2
+Ns 16
+d 0.94
+map_Kd lights.png
+
+
+newmtl glass
+Ka 0.133333 0.133333 0.133333
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 24.2515
+d 0.38
+map_Kd glass0.png
+
+
+newmtl badge
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+illum 2
+Ns 8
+map_Kd nodamage.png
+
+newmtl inner_rim
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+illum 2
+Ns 17.1484
+map_Kd wheel0.png
+
+newmtl rim
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.882353 0.882353 0.882353
+illum 2
+Ns 14.9285
+map_Kd wheel.png
+
+newmtl tire
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.933333 0.933333 0.933333
+illum 2
+Ns 14.9285
+map_Kd tirea0.png
+
+newmtl inner_rim0
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+illum 2
+Ns 17.1484
+map_Kd wheel0.png
+
+newmtl rim0
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.882353 0.882353 0.882353
+illum 2
+Ns 14.9285
+map_Kd wheel.png
+
+newmtl tire0
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.933333 0.933333 0.933333
+illum 2
+Ns 14.9285
+map_Kd tirea0.png
+
+newmtl inner_rim1
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+illum 2
+Ns 17.1484
+map_Kd wheel0.png
+
+newmtl rim1
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.882353 0.882353 0.882353
+illum 2
+Ns 14.9285
+map_Kd wheel.png
+
+newmtl tire1
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.933333 0.933333 0.933333
+illum 2
+Ns 14.9285
+map_Kd tirea0.png
+
+newmtl inner_rim2
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+illum 2
+Ns 17.1484
+map_Kd wheel0.png
+
+newmtl rim2
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.882353 0.882353 0.882353
+illum 2
+Ns 14.9285
+map_Kd wheel.png
+
+newmtl tire2
+Ka 0.8 0.8 0.8
+Kd 1 1 1
+Ks 0.933333 0.933333 0.933333
+illum 2
+Ns 14.9285
+map_Kd tirea0.png
+

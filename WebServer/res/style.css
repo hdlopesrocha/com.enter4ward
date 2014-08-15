@@ -1,0 +1,71 @@
+body, html {
+	height: 100%;
+	background-color: #dddddd;
+	width:100%;
+}
+
+* {
+	margin:0px;
+	padding:0px;
+}
+
+
+nav a, footer a {
+	color:white;
+	text-decoration: none;
+}
+
+main, nav, footer ,header{
+	max-width:100%;
+	width: 1000px;
+	margin: 0px auto;
+	background-color: #cccccc;
+}
+
+header {
+	height:128px;
+	background:url('/res/header.jpg');
+  	background-size: cover;
+	background-position:center; 
+	text-align: center;
+	color:white;
+	vertical-align: middle;
+	line-height: 128px;
+	font-size: 48px;
+}
+
+li[selected]{
+  box-shadow: inset 0px 4px 4px 0px rgba(0,0,0,0.4);
+}
+
+li[selected] a{
+	padding-top:2px;
+}
+
+
+footer,nav {
+	background-color:#444444;
+	text-align: center;
+}
+
+.wrapper {
+  min-height: 100%;  
+  margin-bottom: -100px;  /* equal to footer height */ 
+}
+
+.wrapper:after {
+  content: "";
+  display: block;
+}
+
+footer, .wrapper:after {
+  height: 100px;   /* .push must be the same height as footer */ 
+}
+
+
+nav {
+	padding-top:0px;
+	padding-bottom:0px;
+}
+
+
