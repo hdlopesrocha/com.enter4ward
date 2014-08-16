@@ -1,5 +1,6 @@
 package hidrogine.math;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class Vector2.
  */
@@ -80,4 +81,57 @@ public class Vector2 {
     public final void setY(final float yy) {
         y = yy;
     }
+
+    /**
+     * Adds the.
+     *
+     * @param vec
+     *            the vec
+     * @return the vector2
+     */
+    public final Vector2 add(final Vector2 vec) {
+        x += vec.getX();
+        y += vec.getY();
+        return this;
+    }
+
+    /**
+     * Subtract.
+     *
+     * @param vec
+     *            the vec
+     * @return the vector2
+     */
+    public final Vector2 subtract(final Vector2 vec) {
+        x -= vec.getX();
+        y -= vec.getY();
+        return this;
+    }
+
+    /**
+     * Multiply.
+     *
+     * @param vec
+     *            the vec
+     * @return the vector2
+     */
+    public final Vector2 multiply(final Vector2 vec) {
+        x *= vec.getX();
+        y *= vec.getY();
+        return this;
+    }
+
+    /**
+     * Divide.
+     *
+     * @param vec
+     *            the vec
+     * @return the vector2
+     */
+    public final Vector2 divide(final Vector2 vec) {
+        x /= vec.getX();
+        y /= vec.getY();
+        return this;
+    }
+
 }
