@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="libs/asm-debug-all.jar"/>
 	<classpathentry kind="lib" path="libs/lzma.jar"/>
 	<classpathentry kind="lib" path="libs/TWL.jar"/>
+	<classpathentry kind="lib" path="/home/hdlopesrocha/hidrogine/lib/json-20140107.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
