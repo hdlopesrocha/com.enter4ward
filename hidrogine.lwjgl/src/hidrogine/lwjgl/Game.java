@@ -117,6 +117,12 @@ public abstract class Game {
      *            the height
      */
     public Game(int width, int height) {
+        try {
+            LibraryLoader.loadNativeLibraries();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         this.width = width;
         this.height = height;
         setupOpenGL();
