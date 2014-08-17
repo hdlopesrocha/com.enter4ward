@@ -1,4 +1,5 @@
 import hidrogine.lwjgl.Game;
+import hidrogine.lwjgl.TextureLoader;
 import hidrogine.lwjgl.VertexData;
 
 import java.nio.ByteBuffer;
@@ -63,20 +64,7 @@ public class TheQuadExampleMoving extends Game {
 
     // Texture variables
     /** The tex ids. */
-    private int[] texIds = new int[2];
-
-    /** The texture selector. */
-    private int textureSelector = 0;
-    // Moving variables
-
-    /** The model pos. */
-    private Vector3f modelPos = null;
-
-    /** The model angle. */
-    private Vector3f modelAngle = null;
-
-    /** The model scale. */
-    private Vector3f modelScale = null;
+    private int texId;
 
     /** The camera pos. */
     private Vector3f cameraPos = null;
@@ -155,9 +143,6 @@ public class TheQuadExampleMoving extends Game {
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 
         // Set the default quad rotation, scale and position values
-        modelPos = new Vector3f(0, 0, 0);
-        modelAngle = new Vector3f(0, 0, 0);
-        modelScale = new Vector3f(1, 1, 1);
         cameraPos = new Vector3f(0, 0, -1);
 
         this.exitOnGLError("setupQuad");
@@ -170,9 +155,7 @@ public class TheQuadExampleMoving extends Game {
      */
     @Override
     public void setup() {
-        texIds = new int[2];
-        texIds[0] = loadPNGTexture("stGrid1.png", GL13.GL_TEXTURE0);
-        texIds[1] = loadPNGTexture("stGrid2.png", GL13.GL_TEXTURE0);
+        texId = TextureLoader.loadTexture("stGrid1.png");
         this.exitOnGLError("setupTexture");
         
      
@@ -186,75 +169,21 @@ public class TheQuadExampleMoving extends Game {
      */
     @Override
     public void update() {
-        // -- Input processing
-        float rotationDelta = 15f;
-        float scaleDelta = 0.1f;
-        float posDelta = 0.1f;
-        Vector3f scaleAddResolution = new Vector3f(scaleDelta, scaleDelta,
-                scaleDelta);
-        Vector3f scaleMinusResolution = new Vector3f(-scaleDelta, -scaleDelta,
-                -scaleDelta);
 
         while (Keyboard.next()) {
             // Only listen to events where the key was pressed (down event)
             if (!Keyboard.getEventKeyState())
                 continue;
-
-            // Switch textures depending on the key released
-            switch (Keyboard.getEventKey()) {
-            case Keyboard.KEY_1:
-                textureSelector = 0;
-                break;
-            case Keyboard.KEY_2:
-                textureSelector = 1;
-                break;
-            }
-
-            // Change model scale, rotation and translation values
-            switch (Keyboard.getEventKey()) {
-            // Move
-            case Keyboard.KEY_UP:
-                modelPos.y += posDelta;
-                break;
-            case Keyboard.KEY_DOWN:
-                modelPos.y -= posDelta;
-                break;
-            // Scale
-            case Keyboard.KEY_P:
-                Vector3f.add(modelScale, scaleAddResolution, modelScale);
-                break;
-            case Keyboard.KEY_M:
-                Vector3f.add(modelScale, scaleMinusResolution, modelScale);
-                break;
-            // Rotation
-            case Keyboard.KEY_LEFT:
-                modelAngle.z += rotationDelta;
-                break;
-            case Keyboard.KEY_RIGHT:
-                modelAngle.z -= rotationDelta;
-                break;
-            }
         }
 
         // -- Update matrices
         // Reset view and model matrices
-        setViewMatrix(new Matrix4f());
-        setModelMatrix(new Matrix4f());
+        program.setViewMatrix(new Matrix4f());
+        program.setModelMatrix(new Matrix4f());
 
         // Translate camera
-        Matrix4f.translate(cameraPos, getViewMatrix(), getViewMatrix());
+        Matrix4f.translate(cameraPos, program.getViewMatrix(), program.getViewMatrix());
 
-        // Scale, translate and rotate model
-        Matrix4f.scale(modelScale, getModelMatrix(), getModelMatrix());
-        Matrix4f.translate(modelPos, getModelMatrix(), getModelMatrix());
-        Matrix4f.rotate(this.degreesToRadians(modelAngle.z), new Vector3f(0, 0,
-                1), getModelMatrix(), getModelMatrix());
-        Matrix4f.rotate(this.degreesToRadians(modelAngle.y), new Vector3f(0, 1,
-                0), getModelMatrix(), getModelMatrix());
-        Matrix4f.rotate(this.degreesToRadians(modelAngle.x), new Vector3f(1, 0,
-                0), getModelMatrix(), getModelMatrix());
-
-        updateMatrices();
 
         GL20.glUseProgram(0);
 
@@ -274,7 +203,7 @@ public class TheQuadExampleMoving extends Game {
 
         // Bind the texture
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texIds[textureSelector]);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texId);
 
         // Bind to the VAO that has all the information about the vertices
         GL30.glBindVertexArray(vaoId);
