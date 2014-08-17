@@ -10,7 +10,6 @@ import java.util.Stack;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.util.vector.Matrix4f;
 
 
 public class ShaderProgram {
@@ -22,13 +21,14 @@ public class ShaderProgram {
     private int viewMatrixLocation = 0;
     private int modelMatrixLocation = 0;
     Stack<float[]> matrixStack = new Stack<float[]>();
-    private Matrix4f projectionMatrix = null;
-    private Matrix4f viewMatrix = null;
-    private Matrix4f modelMatrix = null;
     private FloatBuffer matrix44Buffer = null;
+
     private int pId = 0;
     
-    public ShaderProgram(String vertexShader, String fragShader, int width, int height) {
+    public ShaderProgram(String vertexShader, String fragShader) {
+        // Create a FloatBuffer with the proper size to store our matrices later
+        matrix44Buffer = BufferUtils.createFloatBuffer(16);
+        
         // Load the vertex shader
         int vsId = this.loadShader("vertex.glsl", GL20.GL_VERTEX_SHADER);
         // Load the fragment shader
@@ -55,27 +55,11 @@ public class ShaderProgram {
         viewMatrixLocation = GL20.glGetUniformLocation(pId, "viewMatrix");
         modelMatrixLocation = GL20.glGetUniformLocation(pId, "modelMatrix");
     
-        setupMatrices(width,height);
 
     }
-    /**
-     * Gets the view matrix.
-     *
-     * @return the view matrix
-     */
-    public Matrix4f getViewMatrix() {
-        return viewMatrix;
-    }
 
-    /**
-     * Gets the model matrix.
-     *
-     * @return the model matrix
-     */
-    public Matrix4f getModelMatrix() {
-        return modelMatrix;
-    }
 
+  
     
     /**
      * Use default shader.
@@ -84,53 +68,26 @@ public class ShaderProgram {
         GL20.glUseProgram(pId);
     }
     
-    /**
-     * Sets the projection matrix.
-     *
-     * @param projectionMatrix
-     *            the new projection matrix
-     */
-    public void setProjectionMatrix(Matrix4f projectionMatrix) {
-        this.projectionMatrix = projectionMatrix;
-    }
+    
 
-    /**
-     * Sets the view matrix.
-     *
-     * @param viewMatrix
-     *            the new view matrix
-     */
-    public void setViewMatrix(Matrix4f viewMatrix) {
-        this.viewMatrix = viewMatrix;
-    }
-
-    /**
-     * Sets the model matrix.
-     *
-     * @param modelMatrix
-     *            the new model matrix
-     */
-    public void setModelMatrix(Matrix4f modelMatrix) {
-        this.modelMatrix = modelMatrix;
-    }
-
+   
     
     /**
      * Sets the projection matrix.
      */
-    public void update() {
+    public void update(Camera camera) {
         // Upload matrices to the uniform variables
         GL20.glUseProgram(pId);
 
-        projectionMatrix.store(matrix44Buffer);
+        camera.getProjectionMatrix().store(matrix44Buffer);
         matrix44Buffer.flip();
         GL20.glUniformMatrix4(projectionMatrixLocation, false, matrix44Buffer);
 
-        viewMatrix.store(matrix44Buffer);
+        camera.getViewMatrix().store(matrix44Buffer);
         matrix44Buffer.flip();
         GL20.glUniformMatrix4(viewMatrixLocation, false, matrix44Buffer);
 
-        modelMatrix.store(matrix44Buffer);
+        camera.getModelMatrix().store(matrix44Buffer);
         matrix44Buffer.flip();
         GL20.glUniformMatrix4(modelMatrixLocation, false, matrix44Buffer);
         
@@ -175,44 +132,6 @@ public class ShaderProgram {
         return shaderID;
     }
 
-    /**
-     * Setup matrices.
-     */
-    private void setupMatrices(int width, int height) {
-        // Setup projection matrix
-        projectionMatrix = new Matrix4f();
-        float fieldOfView = 60f;
-        float aspectRatio = (float) width / (float) height;
-        float near_plane = 0.1f;
-        float far_plane = 100f;
 
-        float y_scale = Utils.coTangent(Utils.degreesToRadians(fieldOfView / 2f));
-        float x_scale = y_scale / aspectRatio;
-        float frustum_length = far_plane - near_plane;
 
-        projectionMatrix.m00 = x_scale;
-        projectionMatrix.m11 = y_scale;
-        projectionMatrix.m22 = -((far_plane + near_plane) / frustum_length);
-        projectionMatrix.m23 = -1;
-        projectionMatrix.m32 = -((2 * near_plane * far_plane) / frustum_length);
-        projectionMatrix.m33 = 0;
-
-        // Setup view matrix
-        viewMatrix = new Matrix4f();
-
-        // Setup model matrix
-        modelMatrix = new Matrix4f();
-
-        // Create a FloatBuffer with the proper size to store our matrices later
-        matrix44Buffer = BufferUtils.createFloatBuffer(16);
-    }
-    
-    /**
-     * Gets the projection matrix.
-     *
-     * @return the projection matrix
-     */
-    public Matrix4f getProjectionMatrix() {
-        return projectionMatrix;
-    }
 }

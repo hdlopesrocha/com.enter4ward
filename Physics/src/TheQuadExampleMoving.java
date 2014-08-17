@@ -12,8 +12,6 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
 
 /**
  * The Class TheQuadExampleMoving.
@@ -28,8 +26,8 @@ public class TheQuadExampleMoving extends Game {
      * @param height
      *            the height
      */
-    public TheQuadExampleMoving(int width, int height) {
-        super(width, height);
+    public TheQuadExampleMoving() {
+        super(800,600);
     }
 
     // Entry point for the application
@@ -40,7 +38,7 @@ public class TheQuadExampleMoving extends Game {
      *            the arguments
      */
     public static void main(String[] args) {
-        new TheQuadExampleMoving(800,600);
+        new TheQuadExampleMoving();
     }
 
     // Quad variables
@@ -65,9 +63,6 @@ public class TheQuadExampleMoving extends Game {
     // Texture variables
     /** The tex ids. */
     private int texId;
-
-    /** The camera pos. */
-    private Vector3f cameraPos = null;
 
     /**
      * Setup quad.
@@ -141,11 +136,6 @@ public class TheQuadExampleMoving extends Game {
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer,
                 GL15.GL_STATIC_DRAW);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
-
-        // Set the default quad rotation, scale and position values
-        cameraPos = new Vector3f(0, 0, -1);
-
-        this.exitOnGLError("setupQuad");
     }
 
     /*
@@ -155,11 +145,10 @@ public class TheQuadExampleMoving extends Game {
      */
     @Override
     public void setup() {
-        texId = TextureLoader.loadTexture("stGrid1.png");
-        this.exitOnGLError("setupTexture");
+        getCamera().lookAt(0, 0, 1, 0, 0, -1);
         
-     
-        this.setupQuad();
+        texId = TextureLoader.loadTexture("stGrid1.png");       
+        setupQuad();
     }
 
     /*
@@ -169,25 +158,13 @@ public class TheQuadExampleMoving extends Game {
      */
     @Override
     public void update() {
-
         while (Keyboard.next()) {
             // Only listen to events where the key was pressed (down event)
             if (!Keyboard.getEventKeyState())
                 continue;
         }
 
-        // -- Update matrices
-        // Reset view and model matrices
-        program.setViewMatrix(new Matrix4f());
-        program.setModelMatrix(new Matrix4f());
-
-        // Translate camera
-        Matrix4f.translate(cameraPos, program.getViewMatrix(), program.getViewMatrix());
-
-
         GL20.glUseProgram(0);
-
-        this.exitOnGLError("logicCycle");
     }
 
     /*
@@ -228,7 +205,6 @@ public class TheQuadExampleMoving extends Game {
 
         GL20.glUseProgram(0);
 
-        this.exitOnGLError("renderCycle");
     }
 
 }

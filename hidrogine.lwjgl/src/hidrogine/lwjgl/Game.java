@@ -6,71 +6,59 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.PixelFormat;
-import org.lwjgl.util.glu.GLU;
 
 /**
  * The Class Game.
  */
 public abstract class Game {
 
-
-
     // Shader variables
+    /** The program. */
     protected ShaderProgram program;
 
+    /** The camera. */
+    private Camera camera;
 
-
-
- 
-
-    /** The width. */
-    private int width;
-
-    /**
-     * Gets the width.
-     *
-     * @return the width
-     */
-    public int getWidth() {
-        return width;
+    
+    public Camera getCamera() {
+        return camera;
     }
-
-    /**
-     * Gets the height.
-     *
-     * @return the height
-     */
-    public int getHeight() {
-        return height;
-    }
-
-    /** The height. */
-    private int height;
 
     /**
      * Instantiates a new game.
-     *
-     * @param width
-     *            the width
-     * @param height
-     *            the height
      */
-    public Game(int width, int height) {
+    public Game(int w, int h) {
         try {
             LibraryLoader.loadNativeLibraries();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        this.width = width;
-        this.height = height;
-        setupOpenGL();
-        program = new ShaderProgram("vertex.glsl", "fragment.glsl", width, height);
+
+        // Setup an OpenGL context with API version 3.2
+        try {
+            PixelFormat pixelFormat = new PixelFormat();
+            ContextAttribs contextAtrributes = new ContextAttribs(3, 2)
+                    .withForwardCompatible(true).withProfileCore(true);
+            camera = new Camera(w, h);
+            Display.setDisplayMode(new DisplayMode(w, h));
+            Display.setTitle("Game");
+            Display.create(pixelFormat, contextAtrributes);
+        } catch (LWJGLException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+
+        // Setup an XNA like background color
+        GL11.glClearColor(0.4f, 0.6f, 0.9f, 0f);
+        GL11.glViewport(0, 0, w, h);
+
+        program = new ShaderProgram("vertex.glsl", "fragment.glsl");
         setup();
         while (!Display.isCloseRequested()) {
             // Do a single loop (logic/render)
             update();
-            program.update();
+            program.update(camera);
             draw();
             // Force a maximum FPS of about 60
             Display.sync(60);
@@ -82,68 +70,23 @@ public abstract class Game {
 
     }
 
-
     /**
-     * Setup open gl.
-     */
-    private void setupOpenGL() {
-        // Setup an OpenGL context with API version 3.2
-        try {
-            PixelFormat pixelFormat = new PixelFormat();
-            ContextAttribs contextAtrributes = new ContextAttribs(3, 2)
-                    .withForwardCompatible(true).withProfileCore(true);
-
-            Display.setDisplayMode(new DisplayMode(width, height));
-            Display.setTitle("Game");
-            Display.create(pixelFormat, contextAtrributes);
-
-            GL11.glViewport(0, 0, width, height);
-        } catch (LWJGLException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
-
-        // Setup an XNA like background color
-        GL11.glClearColor(0.4f, 0.6f, 0.9f, 0f);
-
-        // Map the internal OpenGL coordinate system to the entire screen
-        GL11.glViewport(0, 0, width, height);
-
-        this.exitOnGLError("setupOpenGL");
-    }
-
-    /**
-     * Exit on gl error.
+     * Sets the camera.
      *
-     * @param errorMessage
-     *            the error message
+     * @param c
+     *            the new camera
      */
-    protected void exitOnGLError(String errorMessage) {
-        int errorValue = GL11.glGetError();
-
-        if (errorValue != GL11.GL_NO_ERROR) {
-            String errorString = GLU.gluErrorString(errorValue);
-            System.err.println("ERROR - " + errorMessage + ": " + errorString);
-
-            if (Display.isCreated())
-                Display.destroy();
-            System.exit(-1);
-        }
+    public void setCamera(Camera c) {
+        camera = c;
+        GL11.glViewport(0, 0, c.getWidth(), c.getHeight());
     }
 
-   
     /**
      * Use default shader.
      */
     public void useDefaultShader() {
         program.use();
     }
-
-   
- 
-
-
-
 
     /**
      * Update.
