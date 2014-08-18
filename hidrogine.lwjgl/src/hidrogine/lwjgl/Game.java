@@ -52,7 +52,7 @@ public abstract class Game {
         // Setup an XNA like background color
         GL11.glClearColor(0.4f, 0.6f, 0.9f, 0f);
         GL11.glViewport(0, 0, w, h);
-
+        GL11.glEnable(GL11.GL_DEPTH_TEST);              // Enables Depth Testing
         program = new ShaderProgram("vertex.glsl", "fragment.glsl");
         setup();
         while (!Display.isCloseRequested()) {
@@ -78,7 +78,6 @@ public abstract class Game {
      */
     public void setCamera(Camera c) {
         camera = c;
-        GL11.glViewport(0, 0, c.getWidth(), c.getHeight());
     }
 
     /**

@@ -78,10 +78,10 @@ public class Camera {
      *            the look at z
      */
     public void lookAt(float posX, float posY, float posZ, float lookAtX,
-            float lookAtY, float lookAtZ) {
+            float lookAtY, float lookAtZ, float upX, float upY, float upZ) {
         Vector3f dir = new Vector3f(lookAtX - posX, lookAtY - posY, lookAtZ
                 - posZ);
-        Vector3f up = new Vector3f(0, 1f, 0);
+        Vector3f up = new Vector3f(upX, upY, upZ);
         Vector3f right = new Vector3f();
         dir.normalise();
 
@@ -123,7 +123,6 @@ public class Camera {
         // multiplication(in fact translation) viewMatrix with aux
         Matrix4f.mul(viewMatrix, aux, viewMatrix);
         
-        System.out.println(viewMatrix.toString());
     }
     
     
