@@ -1,7 +1,9 @@
 package hidrogine.lwjgl;
 
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -10,7 +12,8 @@ import org.lwjgl.util.vector.Vector3f;
 public class Camera {
 
     /** The matrix. */
-    private Matrix4f viewMatrix;
+    private Quaternion rotation;
+    private Vector3f position;
     private Matrix4f projectionMatrix = null;
     private Matrix4f modelMatrix = null;
 
@@ -23,7 +26,46 @@ public class Camera {
      * @return the matrix
      */
     public Matrix4f getViewMatrix() {
-        return viewMatrix;
+        Matrix4f result = convertQuaternionToMatrix4f(rotation);
+        result = result.translate(position);
+        return result;
+    }
+
+    private static Matrix4f convertQuaternionToMatrix4f(Quaternion q) {
+        Matrix4f matrix = new Matrix4f();
+        matrix.m00 = 1.0f - 2.0f * (q.getY() * q.getY() + q.getZ() * q.getZ());
+        matrix.m01 = 2.0f * (q.getX() * q.getY() + q.getZ() * q.getW());
+        matrix.m02 = 2.0f * (q.getX() * q.getZ() - q.getY() * q.getW());
+        matrix.m03 = 0.0f;
+
+        // Second row
+        matrix.m10 = 2.0f * (q.getX() * q.getY() - q.getZ() * q.getW());
+        matrix.m11 = 1.0f - 2.0f * (q.getX() * q.getX() + q.getZ() * q.getZ());
+        matrix.m12 = 2.0f * (q.getZ() * q.getY() + q.getX() * q.getW());
+        matrix.m13 = 0.0f;
+
+        // Third row
+        matrix.m20 = 2.0f * (q.getX() * q.getZ() + q.getY() * q.getW());
+        matrix.m21 = 2.0f * (q.getY() * q.getZ() - q.getX() * q.getW());
+        matrix.m22 = 1.0f - 2.0f * (q.getX() * q.getX() + q.getY() * q.getY());
+        matrix.m23 = 0.0f;
+
+        // Fourth row
+        matrix.m30 = 0;
+        matrix.m31 = 0;
+        matrix.m32 = 0;
+        matrix.m33 = 1.0f;
+
+        return matrix;
+    }
+
+    public void rotate(float x, float y, float z, float w) {
+        Quaternion newRot = new Quaternion().setIdentity();
+        newRot.setFromAxisAngle(new Vector4f(x, y, z, w));
+        Quaternion res = new Quaternion();
+        Quaternion.mul(newRot,rotation, res);
+        res.normalise();
+        rotation = res;
     }
 
     /**
@@ -35,12 +77,13 @@ public class Camera {
      *            the h
      */
     public Camera(int w, int h) {
+        position = new Vector3f();
+        rotation = new Quaternion().setIdentity();
         width = w;
         height = h;
         modelMatrix = new Matrix4f();
-        viewMatrix = new Matrix4f();
-        viewMatrix = Matrix4f.setIdentity(viewMatrix);
-        projectionMatrix= createProjectionMatrix(w,h);
+
+        projectionMatrix = createProjectionMatrix(w, h);
     }
 
     /**
@@ -78,55 +121,18 @@ public class Camera {
      *            the look at z
      */
     public void lookAt(float posX, float posY, float posZ, float lookAtX,
-            float lookAtY, float lookAtZ, float upX, float upY, float upZ) {
-        Vector3f dir = new Vector3f(lookAtX - posX, lookAtY - posY, lookAtZ
-                - posZ);
-        Vector3f up = new Vector3f(upX, upY, upZ);
-        Vector3f right = new Vector3f();
-        dir.normalise();
+        float lookAtY, float lookAtZ) {
 
-        Vector3f.cross(dir, up, right);
-        right.normalise();
+        position.set(posX, posY, posZ);
+    }
 
-        Vector3f.cross(right, dir, up);
-        up.normalise();
-
-        Matrix4f aux = new Matrix4f();
-
-        viewMatrix = new Matrix4f();
-        viewMatrix.m00 = right.getX();
-        viewMatrix.m01 = right.getY();
-        viewMatrix.m02 = right.getZ();
-        viewMatrix.m03 = 0.0f;
-
-        viewMatrix.m10 = up.getX();
-        viewMatrix.m11 = up.getY();
-        viewMatrix.m12 = up.getZ();
-        viewMatrix.m13 = 0.0f;
-
-        viewMatrix.m20 = -dir.getX();
-        viewMatrix.m21 = -dir.getY();
-        viewMatrix.m22 = -dir.getZ();
-        viewMatrix.m23 = 0.0f;
-
-        viewMatrix.m30 = 0.0f;
-        viewMatrix.m31 = 0.0f;
-        viewMatrix.m32 = 0.0f;
-        viewMatrix.m33 = 1.0f;
-
-        // setup aux as a translation matrix by placing positions in the last
-        // column
-        aux.m30 = -posX;
-        aux.m31 = -posY;
-        aux.m32 = -posZ;
-
-        // multiplication(in fact translation) viewMatrix with aux
-        Matrix4f.mul(viewMatrix, aux, viewMatrix);
-        
+    public void move(Vector3f change) {
+        position.x+=change.x;
+        position.y+=change.y;
+        position.z+=change.z;
     }
     
-    
-    private static Matrix4f createProjectionMatrix(int width, int height){
+    private static Matrix4f createProjectionMatrix(int width, int height) {
         // Setup projection matrix
         Matrix4f matrix = new Matrix4f();
         float fieldOfView = 60f;
@@ -134,7 +140,8 @@ public class Camera {
         float near_plane = 0.1f;
         float far_plane = 100f;
 
-        float y_scale = Utils.coTangent(Utils.degreesToRadians(fieldOfView / 2f));
+        float y_scale = Utils.coTangent(Utils
+                .degreesToRadians(fieldOfView / 2f));
         float x_scale = y_scale / aspectRatio;
         float frustum_length = far_plane - near_plane;
 
@@ -146,7 +153,7 @@ public class Camera {
         matrix.m33 = 0;
         return matrix;
     }
-    
+
     public Matrix4f getProjectionMatrix() {
         return projectionMatrix;
     }
@@ -154,4 +161,31 @@ public class Camera {
     public Matrix4f getModelMatrix() {
         return modelMatrix;
     }
+    
+    public void move(float front, float down, float left) {
+        Matrix4f trans = convertQuaternionToMatrix4f(rotation);
+        trans.invert();
+        if (front != 0) {
+            Vector4f frontVec = new Vector4f(0, 0, 1, 0);
+            Matrix4f.transform(trans, frontVec, frontVec);
+            frontVec.scale(front);
+            position.translate(frontVec.x, frontVec.y, frontVec.z);
+        }
+
+        if (down != 0) {
+            Vector4f downVec = new Vector4f(0, 1, 0, 0);
+            Matrix4f.transform(trans, downVec, downVec);
+            downVec.scale(down);
+            position.translate(downVec.x, downVec.y, downVec.z);
+        }
+
+        if (left != 0) {
+            Vector4f leftVec = new Vector4f(1, 0, 0, 0);
+            Matrix4f.transform(trans, leftVec, leftVec);
+            leftVec.scale(left);
+            position.translate(leftVec.x, leftVec.y, leftVec.z);
+        }
+    } 
+  
+  
 }

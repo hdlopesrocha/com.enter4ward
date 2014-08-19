@@ -4,7 +4,6 @@ import hidrogine.lwjgl.TextureLoader;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
@@ -23,7 +22,7 @@ public class TheQuadExampleMoving extends Game {
      *            the height
      */
     public TheQuadExampleMoving() {
-        super(800,600);
+        super(800, 600);
     }
 
     // Entry point for the application
@@ -37,13 +36,7 @@ public class TheQuadExampleMoving extends Game {
         new TheQuadExampleMoving();
     }
 
-    // Texture variables
-    /** The tex ids. */
-    private int texId;
-
     Model3D box;
-    
-
 
     /*
      * (non-Javadoc)
@@ -52,8 +45,7 @@ public class TheQuadExampleMoving extends Game {
      */
     @Override
     public void setup() {
-        getCamera().lookAt(0, 0, 3, 0, 0, 0,0,1,0);
-        texId = TextureLoader.loadTexture("stGrid1.png");       
+        getCamera().lookAt(0, 0, -3, 0, 0, 0);
         box = new Model3D("box.mat", "teapot.geo", 0.00175f);
         program.setLightPosition(0, new Vector4f(3, 3, 3, 0));
     }
@@ -65,25 +57,45 @@ public class TheQuadExampleMoving extends Game {
      */
     @Override
     public void update() {
-        while (Keyboard.next()) {
-            // Only listen to events where the key was pressed (down event)
-            if (!Keyboard.getEventKeyState())
-                continue;
-            
-            if(Keyboard.getEventKey() == Keyboard.KEY_A){
-                getCamera().getViewMatrix().rotate(0.1f, new Vector3f(0,1,0));
-            }
-            if(Keyboard.getEventKey() == Keyboard.KEY_D){
-                getCamera().getViewMatrix().rotate(-0.1f, new Vector3f(0,1,0));
-            }
-     
-            if(Keyboard.getEventKey() == Keyboard.KEY_W){
-                getCamera().getViewMatrix().rotate(-0.1f, new Vector3f(1,0,0));
-            }  
 
-            if(Keyboard.getEventKey() == Keyboard.KEY_S){
-                getCamera().getViewMatrix().rotate(0.1f, new Vector3f(1,0,0));
-            }  
+        float sense = 0.03f;
+        if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+            getCamera().rotate(0, 1, 0, sense);
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+            getCamera().rotate(0, 1, 0, -sense);
+        }
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+            getCamera().rotate(1, 0, 0, -sense);
+        }
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+            getCamera().rotate(1, 0, 0, sense);
+        }
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
+            getCamera().rotate(0, 0, 1, -sense);
+        }
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_E)) {
+            getCamera().rotate(0, 0, 1, sense);
+        }
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+            getCamera().move(sense, 0, 0);
+        }
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+            getCamera().move(-sense, 0, 0);
+        }
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+            getCamera().move(0, 0, sense);
+        }
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+            getCamera().move(0, 0, -sense);
         }
 
         GL20.glUseProgram(0);
@@ -97,11 +109,11 @@ public class TheQuadExampleMoving extends Game {
     @Override
     public void draw() {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        //box.draw(shader);
+        // box.draw(shader);
         useDefaultShader();
 
         box.draw(program);
-        
+
         GL20.glUseProgram(0);
 
     }
