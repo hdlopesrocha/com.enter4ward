@@ -1,14 +1,22 @@
-#version 150 core
+#version 330 core
 
 uniform sampler2D texture_diffuse;
+uniform vec4 light0Position;
 
-in vec4 pass_Color;
-in vec2 pass_TextureCoord;
+varying vec3 position;
+varying vec3 normal;
+varying vec2 texCoord;
 
-out vec4 out_Color;
 
 void main(void) {
-	out_Color = pass_Color;
+	vec3 lightDir = normalize(light0Position.xyz - position);
+	vec3 normal2 = normalize(normal);
+
+
 	// Override out_Color with our texture pixel
-	out_Color = texture2D(texture_diffuse, pass_TextureCoord);
+	gl_FragColor = texture2D(texture_diffuse, texCoord);
+	gl_FragColor.xyz *=  max(dot(normal2, lightDir), 0.0);	
+	//gl_FragColor.xyz = (normal+vec3(1.0,1.0,1.0))/2.0;
+	//gl_FragColor.xyz = (position+vec3(1.0,1.0,1.0))/2.0;
+	
 }

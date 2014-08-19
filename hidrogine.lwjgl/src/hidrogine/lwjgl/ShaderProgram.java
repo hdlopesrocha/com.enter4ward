@@ -10,6 +10,7 @@ import java.util.Stack;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.util.vector.Vector4f;
 
 
 public class ShaderProgram {
@@ -20,14 +21,17 @@ public class ShaderProgram {
     private int projectionMatrixLocation = 0;
     private int viewMatrixLocation = 0;
     private int modelMatrixLocation = 0;
+    private int [] lightPositionLocation = new int[10];
     Stack<float[]> matrixStack = new Stack<float[]>();
     private FloatBuffer matrix44Buffer = null;
+    private FloatBuffer vector4Buffer = null;
 
     private int pId = 0;
     
     public ShaderProgram(String vertexShader, String fragShader) {
         // Create a FloatBuffer with the proper size to store our matrices later
         matrix44Buffer = BufferUtils.createFloatBuffer(16);
+        vector4Buffer = BufferUtils.createFloatBuffer(4);
         
         // Load the vertex shader
         int vsId = this.loadShader("vertex.glsl", GL20.GL_VERTEX_SHADER);
@@ -54,7 +58,9 @@ public class ShaderProgram {
                 "projectionMatrix");
         viewMatrixLocation = GL20.glGetUniformLocation(pId, "viewMatrix");
         modelMatrixLocation = GL20.glGetUniformLocation(pId, "modelMatrix");
-    
+        for(int i=0; i<10 ;++i){
+            lightPositionLocation[i] = GL20.glGetUniformLocation(pId, "light"+i+"Position");
+        }
 
     }
 
@@ -91,6 +97,12 @@ public class ShaderProgram {
         matrix44Buffer.flip();
         GL20.glUniformMatrix4(modelMatrixLocation, false, matrix44Buffer);
         
+    }
+    
+    public void setLightPosition(int index,Vector4f lightPosition){
+        lightPosition.store(vector4Buffer);
+        vector4Buffer.flip();
+        GL20.glUniformMatrix4(lightPositionLocation[index], false, vector4Buffer);
     }
     
 

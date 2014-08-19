@@ -1,21 +1,29 @@
-#version 150 core
+#version 330 core
+
+attribute vec3 in_Position;
+attribute vec3 in_Normal;
+attribute vec2 in_TextureCoord;
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
+uniform vec4 light0Position;
 
-in vec4 in_Position;
-in vec4 in_Color;
-in vec2 in_TextureCoord;
 
-out vec4 pass_Color;
-out vec2 pass_TextureCoord;
+
+varying vec3 position;
+varying vec3 normal;
+varying vec2 texCoord;
 
 void main(void) {
+	mat4 modelViewMatrix = viewMatrix * modelMatrix;
+
+	position =(modelViewMatrix * vec4(in_Position,1.0)).xyz;
+	normal = in_Normal;
+	texCoord = in_TextureCoord;
 	// Override gl_Position with our new calculated position
-	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(in_Position.xyz,1.0);
+	gl_Position = projectionMatrix * modelViewMatrix * vec4(in_Position,1.0);
 	
 	
-	pass_Color = in_Color;
-	pass_TextureCoord = in_TextureCoord;
+
 }

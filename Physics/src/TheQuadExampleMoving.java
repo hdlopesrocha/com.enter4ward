@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 /**
  * The Class TheQuadExampleMoving.
@@ -53,7 +54,8 @@ public class TheQuadExampleMoving extends Game {
     public void setup() {
         getCamera().lookAt(0, 0, 3, 0, 0, 0,0,1,0);
         texId = TextureLoader.loadTexture("stGrid1.png");       
-        box = new Model3D("box.mat", "box.geo", 1f);
+        box = new Model3D("box.mat", "teapot.geo", 0.00175f);
+        program.setLightPosition(0, new Vector4f(3, 3, 3, 0));
     }
 
     /*
