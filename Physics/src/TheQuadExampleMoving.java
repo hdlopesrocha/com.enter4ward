@@ -1,12 +1,10 @@
 import hidrogine.lwjgl.Game;
 import hidrogine.lwjgl.Model3D;
-import hidrogine.lwjgl.TextureLoader;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
 
 /**
  * The Class TheQuadExampleMoving.
@@ -22,7 +20,7 @@ public class TheQuadExampleMoving extends Game {
      *            the height
      */
     public TheQuadExampleMoving() {
-        super(800, 600);
+        super(1280, 720);
     }
 
     // Entry point for the application
@@ -47,7 +45,8 @@ public class TheQuadExampleMoving extends Game {
     public void setup() {
         getCamera().lookAt(0, 0, -3, 0, 0, 0);
         box = new Model3D("box.mat", "teapot.geo", 0.00175f);
-        program.setLightPosition(0, new Vector4f(3, 3, 3, 0));
+        program.setLightPosition(0, new Vector3f(3, 3, 3));
+        program.setAmbientColor(0, 0, 0);
     }
 
     /*
@@ -97,6 +96,7 @@ public class TheQuadExampleMoving extends Game {
         if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
             getCamera().move(0, 0, -sense);
         }
+        
 
         GL20.glUseProgram(0);
     }
@@ -115,7 +115,7 @@ public class TheQuadExampleMoving extends Game {
         box.draw(program);
 
         GL20.glUseProgram(0);
-
+  
     }
 
 }

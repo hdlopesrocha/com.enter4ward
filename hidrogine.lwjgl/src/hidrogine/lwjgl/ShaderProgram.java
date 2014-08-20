@@ -10,6 +10,8 @@ import java.util.Stack;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 
@@ -21,17 +23,20 @@ public class ShaderProgram {
     private int projectionMatrixLocation = 0;
     private int viewMatrixLocation = 0;
     private int modelMatrixLocation = 0;
+
+    private int ambientColorLocation = 0;
     private int [] lightPositionLocation = new int[10];
+    private Vector3f [] lightPosition = new Vector3f[10];
+
+    
     Stack<float[]> matrixStack = new Stack<float[]>();
     private FloatBuffer matrix44Buffer = null;
-    private FloatBuffer vector4Buffer = null;
-
+    private Vector3f ambientColor = new Vector3f();
     private int pId = 0;
     
     public ShaderProgram(String vertexShader, String fragShader) {
         // Create a FloatBuffer with the proper size to store our matrices later
         matrix44Buffer = BufferUtils.createFloatBuffer(16);
-        vector4Buffer = BufferUtils.createFloatBuffer(4);
         
         // Load the vertex shader
         int vsId = this.loadShader("vertex.glsl", GL20.GL_VERTEX_SHADER);
@@ -58,6 +63,7 @@ public class ShaderProgram {
                 "projectionMatrix");
         viewMatrixLocation = GL20.glGetUniformLocation(pId, "viewMatrix");
         modelMatrixLocation = GL20.glGetUniformLocation(pId, "modelMatrix");
+        ambientColorLocation = GL20.glGetUniformLocation(pId, "ambientColor");
         for(int i=0; i<10 ;++i){
             lightPositionLocation[i] = GL20.glGetUniformLocation(pId, "light"+i+"Position");
         }
@@ -65,7 +71,9 @@ public class ShaderProgram {
     }
 
 
-  
+    public void setAmbientColor(float r, float g, float b){
+        ambientColor.set(r, g, b);
+    }
     
     /**
      * Use default shader.
@@ -82,6 +90,9 @@ public class ShaderProgram {
      * Sets the projection matrix.
      */
     public void update(Camera camera) {
+        
+        Matrix4f modelView = new Matrix4f();
+        Matrix4f.mul(camera.getViewMatrix(),camera.getModelMatrix(), modelView);
         // Upload matrices to the uniform variables
         GL20.glUseProgram(pId);
 
@@ -97,12 +108,23 @@ public class ShaderProgram {
         matrix44Buffer.flip();
         GL20.glUniformMatrix4(modelMatrixLocation, false, matrix44Buffer);
         
+        GL20.glUniform3f(ambientColorLocation, ambientColor.x,ambientColor.y, ambientColor.z);
+
+        
+        for(int i=0; i<10; ++i){
+            Vector3f pos = lightPosition[i];
+            if(pos!=null){
+                
+                Vector4f newPos = new Vector4f();
+                Matrix4f.transform(modelView, new Vector4f(pos.x,pos.y,pos.z, 0.0f), newPos);
+                GL20.glUniform3f(lightPositionLocation[i], newPos.x,newPos.y, newPos.z);
+            }
+        }
+        
     }
     
-    public void setLightPosition(int index,Vector4f lightPosition){
-        lightPosition.store(vector4Buffer);
-        vector4Buffer.flip();
-        GL20.glUniformMatrix4(lightPositionLocation[index], false, vector4Buffer);
+    public void setLightPosition(int index,Vector3f lightPosition){
+        this.lightPosition[index]=lightPosition;
     }
     
 
