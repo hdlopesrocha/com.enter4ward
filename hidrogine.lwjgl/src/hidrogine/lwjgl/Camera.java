@@ -13,8 +13,14 @@ public class Camera {
 
     /** The matrix. */
     private Quaternion rotation;
+
+    /** The position. */
     private Vector3f position;
+
+    /** The projection matrix. */
     private Matrix4f projectionMatrix = null;
+
+    /** The model matrix. */
     private Matrix4f modelMatrix = null;
 
     /** The height. */
@@ -31,6 +37,13 @@ public class Camera {
         return result;
     }
 
+    /**
+     * Convert quaternion to matrix4f.
+     *
+     * @param q
+     *            the q
+     * @return the matrix4f
+     */
     private static Matrix4f convertQuaternionToMatrix4f(Quaternion q) {
         Matrix4f matrix = new Matrix4f();
         matrix.m00 = 1.0f - 2.0f * (q.getY() * q.getY() + q.getZ() * q.getZ());
@@ -59,11 +72,23 @@ public class Camera {
         return matrix;
     }
 
+    /**
+     * Rotate.
+     *
+     * @param x
+     *            the x
+     * @param y
+     *            the y
+     * @param z
+     *            the z
+     * @param w
+     *            the w
+     */
     public void rotate(float x, float y, float z, float w) {
         Quaternion newRot = new Quaternion().setIdentity();
         newRot.setFromAxisAngle(new Vector4f(x, y, z, w));
         Quaternion res = new Quaternion();
-        Quaternion.mul(newRot,rotation, res);
+        Quaternion.mul(newRot, rotation, res);
         res.normalise();
         rotation = res;
     }
@@ -121,17 +146,32 @@ public class Camera {
      *            the look at z
      */
     public void lookAt(float posX, float posY, float posZ, float lookAtX,
-        float lookAtY, float lookAtZ) {
+            float lookAtY, float lookAtZ) {
 
         position.set(posX, posY, posZ);
     }
 
+    /**
+     * Move.
+     *
+     * @param change
+     *            the change
+     */
     public void move(Vector3f change) {
-        position.x+=change.x;
-        position.y+=change.y;
-        position.z+=change.z;
+        position.x += change.x;
+        position.y += change.y;
+        position.z += change.z;
     }
-    
+
+    /**
+     * Creates the projection matrix.
+     *
+     * @param width
+     *            the width
+     * @param height
+     *            the height
+     * @return the matrix4f
+     */
     private static Matrix4f createProjectionMatrix(int width, int height) {
         // Setup projection matrix
         Matrix4f matrix = new Matrix4f();
@@ -154,14 +194,34 @@ public class Camera {
         return matrix;
     }
 
+    /**
+     * Gets the projection matrix.
+     *
+     * @return the projection matrix
+     */
     public Matrix4f getProjectionMatrix() {
         return projectionMatrix;
     }
 
+    /**
+     * Gets the model matrix.
+     *
+     * @return the model matrix
+     */
     public Matrix4f getModelMatrix() {
         return modelMatrix;
     }
-    
+
+    /**
+     * Move.
+     *
+     * @param front
+     *            the front
+     * @param down
+     *            the down
+     * @param left
+     *            the left
+     */
     public void move(float front, float down, float left) {
         Matrix4f trans = convertQuaternionToMatrix4f(rotation);
         trans.invert();
@@ -185,7 +245,6 @@ public class Camera {
             leftVec.scale(left);
             position.translate(leftVec.x, leftVec.y, leftVec.z);
         }
-    } 
-  
-  
+    }
+
 }

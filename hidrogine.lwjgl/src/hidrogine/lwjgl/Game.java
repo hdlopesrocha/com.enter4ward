@@ -17,12 +17,8 @@ public abstract class Game {
     protected ShaderProgram program;
 
     /** The camera. */
-    private Camera camera;
+    protected Camera camera;
 
-    
-    public Camera getCamera() {
-        return camera;
-    }
 
     /**
      * Instantiates a new game.
@@ -50,7 +46,7 @@ public abstract class Game {
         }
 
         // Setup an XNA like background color
-        GL11.glClearColor(0.4f, 0.6f, 0.9f, 0f);
+        GL11.glClearColor(0.5f, 0.5f, 0.5f, 0f);
         GL11.glViewport(0, 0, w, h);
         GL11.glEnable(GL11.GL_DEPTH_TEST);              // Enables Depth Testing
         GL11.glEnable(GL11.GL_CULL_FACE);
@@ -71,15 +67,6 @@ public abstract class Game {
 
     }
 
-    /**
-     * Sets the camera.
-     *
-     * @param c
-     *            the new camera
-     */
-    public void setCamera(Camera c) {
-        camera = c;
-    }
 
     /**
      * Use default shader.

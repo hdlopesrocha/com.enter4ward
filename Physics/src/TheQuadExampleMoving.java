@@ -2,10 +2,12 @@ import hidrogine.lwjgl.Game;
 import hidrogine.lwjgl.Model3D;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Vector3f;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class TheQuadExampleMoving.
  */
@@ -13,11 +15,6 @@ public class TheQuadExampleMoving extends Game {
 
     /**
      * Instantiates a new the quad example moving.
-     *
-     * @param width
-     *            the width
-     * @param height
-     *            the height
      */
     public TheQuadExampleMoving() {
         super(1280, 720);
@@ -34,6 +31,7 @@ public class TheQuadExampleMoving extends Game {
         new TheQuadExampleMoving();
     }
 
+    /** The box. */
     Model3D box;
 
     /*
@@ -43,7 +41,7 @@ public class TheQuadExampleMoving extends Game {
      */
     @Override
     public void setup() {
-        getCamera().lookAt(0, 0, -3, 0, 0, 0);
+        camera.lookAt(0, 0, -3, 0, 0, 0);
         box = new Model3D("box.mat", "teapot.geo", 0.00175f);
         program.setLightPosition(0, new Vector3f(3, 3, 3));
         program.setAmbientColor(0, 0, 0);
@@ -56,47 +54,39 @@ public class TheQuadExampleMoving extends Game {
      */
     @Override
     public void update() {
-
+        
+        
         float sense = 0.03f;
-        if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-            getCamera().rotate(0, 1, 0, sense);
+        if(Mouse.isButtonDown(0)){
+            camera.rotate(0, 1, 0, Mouse.getDX()*sense*0.2f);
+        
+            camera.rotate(1, 0, 0, -Mouse.getDY()*sense*0.2f);
         }
-        if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-            getCamera().rotate(0, 1, 0, -sense);
-        }
-
-        if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-            getCamera().rotate(1, 0, 0, -sense);
-        }
-
-        if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-            getCamera().rotate(1, 0, 0, sense);
-        }
+  
 
         if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
-            getCamera().rotate(0, 0, 1, -sense);
+            camera.rotate(0, 0, 1, -sense);
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_E)) {
-            getCamera().rotate(0, 0, 1, sense);
+            camera.rotate(0, 0, 1, sense);
         }
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-            getCamera().move(sense, 0, 0);
+        if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+            camera.move(sense, 0, 0);
         }
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-            getCamera().move(-sense, 0, 0);
+        if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+            camera.move(-sense, 0, 0);
         }
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-            getCamera().move(0, 0, sense);
+        if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+            camera.move(0, 0, sense);
         }
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-            getCamera().move(0, 0, -sense);
+        if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+            camera.move(0, 0, -sense);
         }
-        
 
         GL20.glUseProgram(0);
     }
@@ -115,7 +105,7 @@ public class TheQuadExampleMoving extends Game {
         box.draw(program);
 
         GL20.glUseProgram(0);
-  
+
     }
 
 }
