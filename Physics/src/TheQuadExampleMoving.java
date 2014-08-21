@@ -41,10 +41,13 @@ public class TheQuadExampleMoving extends Game {
      */
     @Override
     public void setup() {
-        camera.lookAt(0, 0, -3, 0, 0, 0);
-        box = new Model3D("box.mat", "teapot.geo", 0.00175f);
+        camera.lookAt(0, 0, 3, 0, 0, 0);
+        box = new Model3D("car.mat", "car.geo", 1f);
         program.setLightPosition(0, new Vector3f(3, 3, 3));
         program.setAmbientColor(0, 0, 0);
+        program.setDiffuseColor(1, 1, 1);
+        program.setMaterialShininess(1000);
+        program.setLightColor(0, new Vector3f(1,1,1) );
     }
 
     /*
@@ -59,10 +62,11 @@ public class TheQuadExampleMoving extends Game {
         float sense = 0.03f;
         if(Mouse.isButtonDown(0)){
             camera.rotate(0, 1, 0, Mouse.getDX()*sense*0.2f);
-        
             camera.rotate(1, 0, 0, -Mouse.getDY()*sense*0.2f);
+           
         }
   
+        
 
         if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
             camera.rotate(0, 0, 1, -sense);
@@ -73,20 +77,21 @@ public class TheQuadExampleMoving extends Game {
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-            camera.move(sense, 0, 0);
-        }
-
-        if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
             camera.move(-sense, 0, 0);
         }
 
+        if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+            camera.move(sense, 0, 0);
+        }
+
         if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-            camera.move(0, 0, sense);
+            camera.move(0, 0, -sense);
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-            camera.move(0, 0, -sense);
+            camera.move(0, 0, sense);
         }
+        program.setLightPosition(0, camera.getPosition());
 
         GL20.glUseProgram(0);
     }

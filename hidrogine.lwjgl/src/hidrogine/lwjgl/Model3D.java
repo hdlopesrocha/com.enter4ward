@@ -106,8 +106,8 @@ public class Model3D extends Model {
                     currentSubGroup.addNormal((float) vn.getDouble(k));
                 }
                 JSONArray vt = jSubGroup.getJSONArray("vt");
-                for (int k = 0; k < vt.length(); ++k) {
-                    currentSubGroup.addTexture((float) vt.getDouble(k));
+                for (int k = 0; k < vt.length()/2; ++k) {
+                    currentSubGroup.addTexture((float) vt.getDouble(k*2+0),(float) vt.getDouble(k*2+1));
                 }
                 JSONArray ii = jSubGroup.getJSONArray("ii");
                 for (int k = 0; k < ii.length(); ++k) {

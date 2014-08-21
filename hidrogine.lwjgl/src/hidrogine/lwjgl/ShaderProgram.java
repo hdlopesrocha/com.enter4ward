@@ -12,7 +12,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
 
 
 public class ShaderProgram {
@@ -23,15 +22,24 @@ public class ShaderProgram {
     private int projectionMatrixLocation = 0;
     private int viewMatrixLocation = 0;
     private int modelMatrixLocation = 0;
-
-    private int ambientColorLocation = 0;
-    private int [] lightPositionLocation = new int[10];
-    private Vector3f [] lightPosition = new Vector3f[10];
-
+    private int normalMatrixLocation = 0;
+    private int cameraDirectionLocation =0;
     
+    private int cameraPositionLocation =0;
+    private int materialShininessLocation = 0;
+    private int ambientColorLocation = 0;
+    private int diffuseColorLocation = 0;
+
+    private int [] lightPositionLocation = new int[10];
+    private int [] lightSpecularColorLocation = new int[10];
+
+    private Vector3f [] lightPosition = new Vector3f[10];
+    private Vector3f [] lightSpecularColor = new Vector3f[10];
+
     Stack<float[]> matrixStack = new Stack<float[]>();
     private FloatBuffer matrix44Buffer = null;
-    private Vector3f ambientColor = new Vector3f();
+
+
     private int pId = 0;
     
     public ShaderProgram(String vertexShader, String fragShader) {
@@ -49,11 +57,11 @@ public class ShaderProgram {
         GL20.glAttachShader(pId, fsId);
 
         // Position information will be attribute 0
-        GL20.glBindAttribLocation(pId, 0, "in_Position");
+        GL20.glBindAttribLocation(pId, 0, "gl_Position");
         // Color information will be attribute 1
-        GL20.glBindAttribLocation(pId, 1, "in_Color");
+        GL20.glBindAttribLocation(pId, 1, "gl_Color");
         // Textute information will be attribute 2
-        GL20.glBindAttribLocation(pId, 2, "in_TextureCoord");
+        GL20.glBindAttribLocation(pId, 2, "gl_TextureCoord");
 
         GL20.glLinkProgram(pId);
         GL20.glValidateProgram(pId);
@@ -64,17 +72,21 @@ public class ShaderProgram {
         viewMatrixLocation = GL20.glGetUniformLocation(pId, "viewMatrix");
         modelMatrixLocation = GL20.glGetUniformLocation(pId, "modelMatrix");
         ambientColorLocation = GL20.glGetUniformLocation(pId, "ambientColor");
+        diffuseColorLocation = GL20.glGetUniformLocation(pId, "diffuseColor");
+        materialShininessLocation= GL20.glGetUniformLocation(pId, "materialShininess");
+        cameraPositionLocation= GL20.glGetUniformLocation(pId, "cameraPosition");
+
+        cameraDirectionLocation= GL20.glGetUniformLocation(pId, "cameraDirection");
+        
+        normalMatrixLocation = GL20.glGetUniformLocation(pId, "normalMatrix");
         for(int i=0; i<10 ;++i){
-            lightPositionLocation[i] = GL20.glGetUniformLocation(pId, "light"+i+"Position");
+            lightPositionLocation[i] = GL20.glGetUniformLocation(pId, "lightPosition["+i+"]");
+            lightSpecularColorLocation[i] = GL20.glGetUniformLocation(pId, "lightSpecularColor["+i+"]");
+
         }
 
     }
 
-
-    public void setAmbientColor(float r, float g, float b){
-        ambientColor.set(r, g, b);
-    }
-    
     /**
      * Use default shader.
      */
@@ -108,23 +120,58 @@ public class ShaderProgram {
         matrix44Buffer.flip();
         GL20.glUniformMatrix4(modelMatrixLocation, false, matrix44Buffer);
         
-        GL20.glUniform3f(ambientColorLocation, ambientColor.x,ambientColor.y, ambientColor.z);
+        GL20.glUniform3f(cameraPositionLocation, camera.getPosition().x,camera.getPosition().y, camera.getPosition().z);
+
+        
+        Vector3f cameraDirection = camera.getDirection();
+        GL20.glUniform3f(cameraDirectionLocation, cameraDirection.x,cameraDirection.y, cameraDirection.z);
 
         
         for(int i=0; i<10; ++i){
-            Vector3f pos = lightPosition[i];
-            if(pos!=null){
+            Vector3f position = lightPosition[i];
+            Vector3f specularColor = lightSpecularColor[i];
+            
+            if(position!=null){
                 
-                Vector4f newPos = new Vector4f();
-                Matrix4f.transform(modelView, new Vector4f(pos.x,pos.y,pos.z, 0.0f), newPos);
-                GL20.glUniform3f(lightPositionLocation[i], newPos.x,newPos.y, newPos.z);
+                GL20.glUniform3f(lightPositionLocation[i], position.x,position.y, position.z);
+                
+
+            }
+            if(specularColor!=null){
+                GL20.glUniform3f(lightSpecularColorLocation[i], specularColor.x,specularColor.y, specularColor.z);
             }
         }
         
+        modelView.invert().transpose();
+        modelView.store(matrix44Buffer);
+        matrix44Buffer.flip();
+        GL20.glUniformMatrix4(normalMatrixLocation, false, matrix44Buffer);
+
+        
+        
+    }
+    
+    public void setMaterialShininess(float value){
+        GL20.glUseProgram(pId);
+ GL20.glUniform1f(materialShininessLocation, value);
+    }
+    
+    public void setAmbientColor(float r, float g, float b){
+        GL20.glUseProgram(pId);
+
+        GL20.glUniform3f(ambientColorLocation, r,g,b);    
+    }
+    
+    public void setDiffuseColor(float r, float g, float b){
+        GL20.glUseProgram(pId);
+GL20.glUniform3f(diffuseColorLocation, r,g,b);
     }
     
     public void setLightPosition(int index,Vector3f lightPosition){
         this.lightPosition[index]=lightPosition;
+    }
+    public void setLightColor(int index,Vector3f lightColor){
+        this.lightSpecularColor[index]=lightColor;
     }
     
 
@@ -159,10 +206,11 @@ public class ShaderProgram {
         GL20.glCompileShader(shaderID);
 
         if (GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
-            System.err.println("Could not compile shader.");
+            System.err.println("Could not compile "+filename+".\n"+ GL20.glGetShaderInfoLog(shaderID, 9999));
             System.exit(-1);
         }
 
+        
         return shaderID;
     }
 

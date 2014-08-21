@@ -33,17 +33,10 @@ public class Camera {
      */
     public Matrix4f getViewMatrix() {
         Matrix4f result = convertQuaternionToMatrix4f(rotation);
-        result = result.translate(position);
+        result = result.translate(new Vector3f(-position.x,-position.y,-position.z));
         return result;
     }
 
-    /**
-     * Convert quaternion to matrix4f.
-     *
-     * @param q
-     *            the q
-     * @return the matrix4f
-     */
     private static Matrix4f convertQuaternionToMatrix4f(Quaternion q) {
         Matrix4f matrix = new Matrix4f();
         matrix.m00 = 1.0f - 2.0f * (q.getY() * q.getY() + q.getZ() * q.getZ());
@@ -175,13 +168,13 @@ public class Camera {
     private static Matrix4f createProjectionMatrix(int width, int height) {
         // Setup projection matrix
         Matrix4f matrix = new Matrix4f();
-        float fieldOfView = 60f;
+        float fieldOfView = 45f;
         float aspectRatio = (float) width / (float) height;
         float near_plane = 0.1f;
         float far_plane = 100f;
 
-        float y_scale = Utils.coTangent(Utils
-                .degreesToRadians(fieldOfView / 2f));
+        float y_scale = (float) (1f / Math
+                .tan(Math.toRadians(fieldOfView / 2f)));
         float x_scale = y_scale / aspectRatio;
         float frustum_length = far_plane - near_plane;
 
@@ -192,6 +185,7 @@ public class Camera {
         matrix.m32 = -((2 * near_plane * far_plane) / frustum_length);
         matrix.m33 = 0;
         return matrix;
+
     }
 
     /**
@@ -247,4 +241,16 @@ public class Camera {
         }
     }
 
+    public Vector3f getPosition() {
+        // TODO Auto-generated method stub
+        return position;
+    }
+
+    public Vector3f getDirection() {
+        Matrix4f trans = convertQuaternionToMatrix4f(rotation);
+        trans.invert();
+        Vector4f frontVec = new Vector4f(0, 0, 1, 0);
+        Matrix4f.transform(trans, frontVec, frontVec);
+        return new Vector3f(frontVec.x, frontVec.y, frontVec.z);
+    }
 }

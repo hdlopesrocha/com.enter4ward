@@ -110,15 +110,7 @@ public class BufferObject {
         normalData.add(z);
     }
 
-    /**
-     * Adds the texture.
-     *
-     * @param f
-     *            the f
-     */
-    public final void addTexture(final float f) {
-        textureData.add(f);
-    }
+
 
     /**
      * Adds the texture.
@@ -130,7 +122,7 @@ public class BufferObject {
      */
     public final void addTexture(final float x, final float y) {
         textureData.add(x);
-        textureData.add(y);
+        textureData.add(1-y);
     }
 
     /**
@@ -252,11 +244,17 @@ public class BufferObject {
      *            the shader
      */
     public final void draw(final ShaderProgram shader) {
-
+        int tex = material != null ? material.texture : 0;
         // Bind the texture according to the set texture filter
-        if (material != null) {
+            if(material!=null){
+                if(material.Ns!=null)  shader.setMaterialShininess(material.Ns);
+               // if(material.Ka!=null)  shader.setAmbientColor(material.Ka[0],material.Ka[1],material.Ka[2]);
+                if(material.Kd!=null)  shader.setDiffuseColor(material.Kd[0],material.Kd[1],material.Kd[2]);
+            
+            }
+            
             GL13.glActiveTexture(GL13.GL_TEXTURE0);
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, material.texture);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex);
             // XXX shader.use();
             // XXX shader.bindTexture(material.texture);
             // Bind to the VAO that has all the information about the vertices
@@ -281,6 +279,6 @@ public class BufferObject {
             GL20.glDisableVertexAttribArray(2);
             GL30.glBindVertexArray(0);
 
-        }
+        
     }
 }
