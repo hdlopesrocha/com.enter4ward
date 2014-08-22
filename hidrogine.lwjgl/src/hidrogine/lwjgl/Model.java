@@ -5,5 +5,4 @@ public abstract class Model {
 
     public abstract void draw(ShaderProgram shader);
 
-
 }

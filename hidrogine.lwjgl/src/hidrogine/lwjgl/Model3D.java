@@ -5,9 +5,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.TreeMap;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.lwjgl.opengl.GL11;
 
 public class Model3D extends Model {
 
@@ -131,8 +133,10 @@ public class Model3D extends Model {
     public void draw(ShaderProgram shader) {
         for (Group g : groups.values()) {
             for (BufferObject sg : g.subGroups) {
-                sg.draw(shader);
+               sg.draw(shader);
             }
         }
+    
     }
+
 }

@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.util.vector.Vector3f;
 
 /**
  * The Class BufferObject.
@@ -57,6 +58,8 @@ public class BufferObject {
     public final void setMaterial(final Material f) {
         material = f;
     }
+    
+  
 
     /**
      * Adds the vertex.
@@ -248,8 +251,9 @@ public class BufferObject {
         // Bind the texture according to the set texture filter
             if(material!=null){
                 if(material.Ns!=null)  shader.setMaterialShininess(material.Ns);
-               // if(material.Ka!=null)  shader.setAmbientColor(material.Ka[0],material.Ka[1],material.Ka[2]);
+                if(material.Ks!=null)  shader.setMaterialSpecular(material.Ks[0],material.Ks[1],material.Ks[2]);
                 if(material.Kd!=null)  shader.setDiffuseColor(material.Kd[0],material.Kd[1],material.Kd[2]);
+                if(material.d!=null)  shader.setMaterialAlpha(material.d);
             
             }
             
@@ -278,7 +282,7 @@ public class BufferObject {
             GL20.glDisableVertexAttribArray(1);
             GL20.glDisableVertexAttribArray(2);
             GL30.glBindVertexArray(0);
-
+            shader.setMaterialAlpha(1f);
         
     }
 }

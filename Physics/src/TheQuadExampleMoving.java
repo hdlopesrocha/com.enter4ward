@@ -6,6 +6,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -106,7 +107,9 @@ public class TheQuadExampleMoving extends Game {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         // box.draw(shader);
         useDefaultShader();
-
+        program.setOpaque(true);
+        box.draw(program);
+        program.setOpaque(false);
         box.draw(program);
 
         GL20.glUseProgram(0);

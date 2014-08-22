@@ -50,6 +50,9 @@ public abstract class Game {
         GL11.glViewport(0, 0, w, h);
         GL11.glEnable(GL11.GL_DEPTH_TEST);              // Enables Depth Testing
         GL11.glEnable(GL11.GL_CULL_FACE);
+     // Enable transparency
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         program = new ShaderProgram("vertex.glsl", "fragment.glsl");
         setup();
         while (!Display.isCloseRequested()) {

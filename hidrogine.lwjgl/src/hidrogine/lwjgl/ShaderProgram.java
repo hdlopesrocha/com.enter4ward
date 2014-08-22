@@ -12,6 +12,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 
 public class ShaderProgram {
@@ -27,6 +28,10 @@ public class ShaderProgram {
     
     private int cameraPositionLocation =0;
     private int materialShininessLocation = 0;
+    private int materialAlphaLocation =0;
+    private int materialSpecularLocation=0;
+
+    private int opaqueLocation =0;
     private int ambientColorLocation = 0;
     private int diffuseColorLocation = 0;
 
@@ -73,18 +78,23 @@ public class ShaderProgram {
         modelMatrixLocation = GL20.glGetUniformLocation(pId, "modelMatrix");
         ambientColorLocation = GL20.glGetUniformLocation(pId, "ambientColor");
         diffuseColorLocation = GL20.glGetUniformLocation(pId, "diffuseColor");
-        materialShininessLocation= GL20.glGetUniformLocation(pId, "materialShininess");
         cameraPositionLocation= GL20.glGetUniformLocation(pId, "cameraPosition");
-
-        cameraDirectionLocation= GL20.glGetUniformLocation(pId, "cameraDirection");
-        
+        opaqueLocation= GL20.glGetUniformLocation(pId, "opaque");
+        cameraDirectionLocation= GL20.glGetUniformLocation(pId, "cameraDirection");        
         normalMatrixLocation = GL20.glGetUniformLocation(pId, "normalMatrix");
+        
+        // material locations
+        materialShininessLocation= GL20.glGetUniformLocation(pId, "materialShininess");
+        materialAlphaLocation= GL20.glGetUniformLocation(pId, "materialAlpha");
+        materialSpecularLocation= GL20.glGetUniformLocation(pId, "materialSpecular");
+        
+        
         for(int i=0; i<10 ;++i){
             lightPositionLocation[i] = GL20.glGetUniformLocation(pId, "lightPosition["+i+"]");
             lightSpecularColorLocation[i] = GL20.glGetUniformLocation(pId, "lightSpecularColor["+i+"]");
 
         }
-
+        setMaterialAlpha(1f);
     }
 
     /**
@@ -147,13 +157,17 @@ public class ShaderProgram {
         matrix44Buffer.flip();
         GL20.glUniformMatrix4(normalMatrixLocation, false, matrix44Buffer);
 
-        
-        
     }
+    
+    public void setMaterialAlpha(float value){
+        GL20.glUseProgram(pId);
+        GL20.glUniform1f(materialAlphaLocation, value);
+    }
+    
     
     public void setMaterialShininess(float value){
         GL20.glUseProgram(pId);
- GL20.glUniform1f(materialShininessLocation, value);
+        GL20.glUniform1f(materialShininessLocation, value);
     }
     
     public void setAmbientColor(float r, float g, float b){
@@ -161,6 +175,12 @@ public class ShaderProgram {
 
         GL20.glUniform3f(ambientColorLocation, r,g,b);    
     }
+
+    public void setMaterialSpecular(float r, float g, float b){
+        GL20.glUseProgram(pId);
+        GL20.glUniform3f(materialSpecularLocation, r,g,b);    
+    }
+    
     
     public void setDiffuseColor(float r, float g, float b){
         GL20.glUseProgram(pId);
@@ -174,7 +194,15 @@ GL20.glUniform3f(diffuseColorLocation, r,g,b);
         this.lightSpecularColor[index]=lightColor;
     }
     
+    public void setOpaque(Boolean value){
+        GL20.glUseProgram(pId);
+       if(value)
+           GL11.glEnable(GL11.GL_CULL_FACE);
+       else
+           GL11.glDisable(GL11.GL_CULL_FACE);
 
+        GL20.glUniform1i(opaqueLocation, value?1:0);    
+    }
     /**
      * Load shader.
      *

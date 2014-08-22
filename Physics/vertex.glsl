@@ -4,8 +4,7 @@ attribute vec3 in_Position;
 attribute vec3 in_Normal;
 attribute vec2 in_TextureCoord;
 
-uniform vec3 lightPosition[10];
-uniform vec3 lightSpecularColor[10];
+
 uniform vec3 cameraPosition;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
