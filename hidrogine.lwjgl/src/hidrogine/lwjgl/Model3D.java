@@ -11,6 +11,9 @@ import java.util.TreeMap;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.util.glu.Sphere;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -104,6 +107,7 @@ public class Model3D extends Model {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
+    @SuppressWarnings("unchecked")
     private void loadGeometry(String filename, float scale)
             throws JSONException, IOException {
         JSONObject jObject = new JSONObject(new String(Files.readAllBytes(Paths
@@ -127,14 +131,12 @@ public class Model3D extends Model {
                             .getString("mm")));
                 }
                 JSONArray vv = jSubGroup.getJSONArray("vv");
-                for (int k = 0; k < vv.length(); ++k) {
-                    float val = (float) vv.getDouble(k) * scale;
-                    if (k % 3 == 1) {
-
-                        currentGroup.maxY = Math.max(currentGroup.maxY, val);
-                    }
-
-                    currentSubGroup.addVertex(val);
+                for (int k = 0; k < vv.length()/3; ++k) {
+                    float vx = (float) vv.getDouble(k*3+0) * scale;
+                    float vy = (float) vv.getDouble(k*3+1) * scale;
+                    float vz = (float) vv.getDouble(k*3+2) * scale;
+                    currentGroup.addVertex(vx,vy,vz);
+                    currentSubGroup.addVertex(vx,vy,vz);
                 }
                 JSONArray vn = jSubGroup.getJSONArray("vn");
                 for (int k = 0; k < vn.length(); ++k) {
@@ -179,10 +181,14 @@ public class Model3D extends Model {
      * 
      * @see hidrogine.lwjgl.Model#draw(hidrogine.lwjgl.ShaderProgram)
      */
+    public static Box box = new Box();
     public void draw(ShaderProgram shader) {
         shader.updateModelMatrix();
         
         for (Group g : groups) {
+            GL13.glActiveTexture(GL13.GL_TEXTURE0);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+            box.draw(shader,g.getMin(), g.getMax());
             for (BufferObject sg : g.subGroups) {
                 sg.bind(shader);
                 sg.draw(shader);
@@ -202,6 +208,9 @@ public class Model3D extends Model {
         shader.updateModelMatrix();
         
         for (Group g : groups) {
+            GL13.glActiveTexture(GL13.GL_TEXTURE0);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+            box.draw(shader,g.getMin(), g.getMax());          
             for (BufferObject sg : g.subGroups) {
                 sg.bind(shader);
                 handler.onDraw(g, sg.getMaterial());

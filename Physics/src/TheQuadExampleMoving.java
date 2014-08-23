@@ -1,3 +1,4 @@
+import hidrogine.lwjgl.Box;
 import hidrogine.lwjgl.DrawHandler;
 import hidrogine.lwjgl.Game;
 import hidrogine.lwjgl.Group;
@@ -37,7 +38,8 @@ public class TheQuadExampleMoving extends Game {
     }
 
     /** The box. */
-    Model3D box;
+    Model3D car;
+
     DrawHandler boxHandler;
 
     float time=0;
@@ -49,7 +51,7 @@ public class TheQuadExampleMoving extends Game {
     @Override
     public void setup() {
         camera.lookAt(0, 0, 3, 0, 0, 0);
-        box = new Model3D("car.mat", "car.geo", 1f);
+        car = new Model3D("car.mat", "car.geo", 1f);
         program.setLightPosition(0, new Vector3f(3, 3, 3));
         program.setAmbientColor(0, 0, 0);
         program.setDiffuseColor(1, 1, 1);
@@ -129,15 +131,17 @@ public class TheQuadExampleMoving extends Game {
 
         program.setIdentity();
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+
         // box.draw(shader);
         useDefaultShader();
+        program.setOpaque(true);
+
         program.pushMatrix();
         program.getModelMatrix().rotate(time, new Vector3f(0,0,1));
         
-        program.setOpaque(true);
-        box.draw(program,boxHandler);
+        car.draw(program,boxHandler);
         program.setOpaque(false);
-        box.draw(program,boxHandler);
+        car.draw(program,boxHandler);
         program.popMatrix();
         GL20.glUseProgram(0);
         
