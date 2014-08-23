@@ -1,4 +1,7 @@
+import hidrogine.lwjgl.DrawHandler;
 import hidrogine.lwjgl.Game;
+import hidrogine.lwjgl.Group;
+import hidrogine.lwjgl.Material;
 import hidrogine.lwjgl.Model3D;
 
 import org.lwjgl.input.Keyboard;
@@ -14,6 +17,7 @@ import org.lwjgl.util.vector.Vector4f;
  */
 public class TheQuadExampleMoving extends Game {
 
+    
     /**
      * Instantiates a new the quad example moving.
      */
@@ -34,7 +38,9 @@ public class TheQuadExampleMoving extends Game {
 
     /** The box. */
     Model3D box;
+    DrawHandler boxHandler;
 
+    float time=0;
     /*
      * (non-Javadoc)
      * 
@@ -49,6 +55,18 @@ public class TheQuadExampleMoving extends Game {
         program.setDiffuseColor(1, 1, 1);
         program.setMaterialShininess(1000);
         program.setLightColor(0, new Vector3f(1,1,1) );
+        
+        boxHandler = new DrawHandler() {
+
+
+            @Override
+            public void onDraw(Group group, Material material) {
+                if(material.getName().equals("c0")){
+                    program.setDiffuseColor((float)(Math.sin(time)+1)/2f,(float) (Math.cos(time*Math.E/2)+1)/2f,(float)(Math.sin(time*Math.PI/2)*Math.cos(time*Math.PI/2)+1)/2f );
+                }   
+            }
+        };
+        
     }
 
     /*
@@ -58,6 +76,8 @@ public class TheQuadExampleMoving extends Game {
      */
     @Override
     public void update() {
+        time+=0.003f;
+        
         
         
         float sense = 0.03f;
@@ -97,6 +117,8 @@ public class TheQuadExampleMoving extends Game {
         GL20.glUseProgram(0);
     }
 
+    
+    
     /*
      * (non-Javadoc)
      * 
@@ -104,16 +126,21 @@ public class TheQuadExampleMoving extends Game {
      */
     @Override
     public void draw() {
+
+        program.setIdentity();
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         // box.draw(shader);
         useDefaultShader();
+        program.pushMatrix();
+        program.getModelMatrix().rotate(time, new Vector3f(0,0,1));
+        
         program.setOpaque(true);
-        box.draw(program);
+        box.draw(program,boxHandler);
         program.setOpaque(false);
-        box.draw(program);
-
+        box.draw(program,boxHandler);
+        program.popMatrix();
         GL20.glUseProgram(0);
-
+        
     }
 
 }

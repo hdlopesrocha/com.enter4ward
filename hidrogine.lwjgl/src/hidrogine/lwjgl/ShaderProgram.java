@@ -37,11 +37,12 @@ public class ShaderProgram {
 
     private int [] lightPositionLocation = new int[10];
     private int [] lightSpecularColorLocation = new int[10];
-
+    /** The model matrix. */
+    private Matrix4f modelMatrix = null;
     private Vector3f [] lightPosition = new Vector3f[10];
     private Vector3f [] lightSpecularColor = new Vector3f[10];
 
-    Stack<float[]> matrixStack = new Stack<float[]>();
+    Stack<Matrix4f> matrixStack = new Stack<Matrix4f>();
     private FloatBuffer matrix44Buffer = null;
 
 
@@ -50,7 +51,8 @@ public class ShaderProgram {
     public ShaderProgram(String vertexShader, String fragShader) {
         // Create a FloatBuffer with the proper size to store our matrices later
         matrix44Buffer = BufferUtils.createFloatBuffer(16);
-        
+        modelMatrix = new Matrix4f();
+        modelMatrix.setIdentity();
         // Load the vertex shader
         int vsId = this.loadShader("vertex.glsl", GL20.GL_VERTEX_SHADER);
         // Load the fragment shader
@@ -114,7 +116,7 @@ public class ShaderProgram {
     public void update(Camera camera) {
         
         Matrix4f modelView = new Matrix4f();
-        Matrix4f.mul(camera.getViewMatrix(),camera.getModelMatrix(), modelView);
+        Matrix4f.mul(camera.getViewMatrix(),modelMatrix, modelView);
         // Upload matrices to the uniform variables
         GL20.glUseProgram(pId);
 
@@ -126,7 +128,7 @@ public class ShaderProgram {
         matrix44Buffer.flip();
         GL20.glUniformMatrix4(viewMatrixLocation, false, matrix44Buffer);
 
-        camera.getModelMatrix().store(matrix44Buffer);
+        modelMatrix.store(matrix44Buffer);
         matrix44Buffer.flip();
         GL20.glUniformMatrix4(modelMatrixLocation, false, matrix44Buffer);
         
@@ -143,7 +145,12 @@ public class ShaderProgram {
             
             if(position!=null){
                 
-                GL20.glUniform3f(lightPositionLocation[i], position.x,position.y, position.z);
+                Vector4f newLpos = new Vector4f(position.x,position.y, position.z,0f);
+                
+                Matrix4f.transform(modelMatrix, newLpos, newLpos);
+                GL20.glUniform3f(lightPositionLocation[i], newLpos.x,newLpos.y, newLpos.z);
+                
+               // GL20.glUniform3f(lightPositionLocation[i], position.x,position.y, position.z);
                 
 
             }
@@ -243,5 +250,38 @@ GL20.glUniform3f(diffuseColorLocation, r,g,b);
     }
 
 
+
+    
+    public void pushMatrix() {
+        Matrix4f copy = new Matrix4f();
+        Matrix4f.load(modelMatrix, copy);
+        matrixStack.push(copy);
+    }
+
+    public void popMatrix() {
+        if (matrixStack.size() > 0) {
+            modelMatrix = matrixStack.pop();
+        }
+    }
+
+    protected void updateModelMatrix(){
+        GL20.glUseProgram(pId);
+        modelMatrix.store(matrix44Buffer);
+        matrix44Buffer.flip();
+        GL20.glUniformMatrix4(modelMatrixLocation, false, matrix44Buffer);    
+    }
+    
+    public void setIdentity() {
+        Matrix4f.setIdentity(modelMatrix);
+    }
+    
+    /**
+     * Gets the model matrix.
+     *
+     * @return the model matrix
+     */
+    public Matrix4f getModelMatrix() {
+        return modelMatrix;
+    }
 
 }

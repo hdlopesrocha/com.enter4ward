@@ -20,8 +20,7 @@ public class Camera {
     /** The projection matrix. */
     private Matrix4f projectionMatrix = null;
 
-    /** The model matrix. */
-    private Matrix4f modelMatrix = null;
+
 
     /** The height. */
     private int width, height;
@@ -99,7 +98,6 @@ public class Camera {
         rotation = new Quaternion().setIdentity();
         width = w;
         height = h;
-        modelMatrix = new Matrix4f();
 
         projectionMatrix = createProjectionMatrix(w, h);
     }
@@ -197,14 +195,6 @@ public class Camera {
         return projectionMatrix;
     }
 
-    /**
-     * Gets the model matrix.
-     *
-     * @return the model matrix
-     */
-    public Matrix4f getModelMatrix() {
-        return modelMatrix;
-    }
 
     /**
      * Move.

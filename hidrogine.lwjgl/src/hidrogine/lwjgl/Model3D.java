@@ -3,33 +3,51 @@ package hidrogine.lwjgl;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TreeMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.lwjgl.opengl.GL11;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Model3D.
+ */
 public class Model3D extends Model {
 
-    public TreeMap<String,Group> groups = new TreeMap<String, Group>();
+    /** The groups. */
+    public List<Group> groups = new ArrayList<Group>();
+
+    /** The materials. */
     public TreeMap<String, Material> materials = new TreeMap<String, Material>();
 
+    /**
+     * Load materials.
+     *
+     * @param filename
+     *            the filename
+     * @throws JSONException
+     *             the JSON exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    private void loadMaterials(String filename) throws JSONException,
+            IOException {
 
-    private void loadMaterials(String filename) throws JSONException, IOException{
-
-        JSONObject jObject = new JSONObject(new String(Files.readAllBytes(Paths.get(filename))));
+        JSONObject jObject = new JSONObject(new String(Files.readAllBytes(Paths
+                .get(filename))));
         Iterator<String> keys = jObject.keys();
-        
-        
+
         while (keys.hasNext()) {
-            String key=keys.next();
+            String key = keys.next();
             JSONObject jMat = jObject.getJSONObject(key);
-            Material currentMaterial = new Material();
+            Material currentMaterial = new Material(key);
 
             materials.put(key, currentMaterial);
-            
+
             if (jMat.has("map_Kd")) {
                 currentMaterial.setTexture(jMat.getString("map_Kd"));
             }
@@ -71,19 +89,33 @@ public class Model3D extends Model {
             }
 
         }
-        
+
     }
-    private void loadGeometry(String filename, float scale) throws JSONException, IOException{
-        JSONObject jObject = new JSONObject(new String(Files.readAllBytes(Paths.get(filename))));
+
+    /**
+     * Load geometry.
+     *
+     * @param filename
+     *            the filename
+     * @param scale
+     *            the scale
+     * @throws JSONException
+     *             the JSON exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    private void loadGeometry(String filename, float scale)
+            throws JSONException, IOException {
+        JSONObject jObject = new JSONObject(new String(Files.readAllBytes(Paths
+                .get(filename))));
         Iterator<String> groupNames = jObject.keys();
-        
-        
+
         while (groupNames.hasNext()) {
-            String groupName= groupNames.next();
-            
-            Group currentGroup = new Group();
-            groups.put(groupName,currentGroup);
-            
+            String groupName = groupNames.next();
+
+            Group currentGroup = new Group(groupName);
+            groups.add(currentGroup);
+
             JSONArray subGroups = jObject.getJSONArray(groupName);
             for (int j = 0; j < subGroups.length(); ++j) {
                 JSONObject jSubGroup = subGroups.getJSONObject(j);
@@ -91,7 +123,8 @@ public class Model3D extends Model {
                 currentGroup.subGroups.add(currentSubGroup);
 
                 if (jSubGroup.has("mm")) {
-                    currentSubGroup.setMaterial(materials.get(jSubGroup.getString("mm")));
+                    currentSubGroup.setMaterial(materials.get(jSubGroup
+                            .getString("mm")));
                 }
                 JSONArray vv = jSubGroup.getJSONArray("vv");
                 for (int k = 0; k < vv.length(); ++k) {
@@ -108,8 +141,9 @@ public class Model3D extends Model {
                     currentSubGroup.addNormal((float) vn.getDouble(k));
                 }
                 JSONArray vt = jSubGroup.getJSONArray("vt");
-                for (int k = 0; k < vt.length()/2; ++k) {
-                    currentSubGroup.addTexture((float) vt.getDouble(k*2+0),(float) vt.getDouble(k*2+1));
+                for (int k = 0; k < vt.length() / 2; ++k) {
+                    currentSubGroup.addTexture((float) vt.getDouble(k * 2 + 0),
+                            (float) vt.getDouble(k * 2 + 1));
                 }
                 JSONArray ii = jSubGroup.getJSONArray("ii");
                 for (int k = 0; k < ii.length(); ++k) {
@@ -120,23 +154,59 @@ public class Model3D extends Model {
             }
         }
     }
-    
+
+    /**
+     * Instantiates a new model3 d.
+     *
+     * @param materials
+     *            the materials
+     * @param geometry
+     *            the geometry
+     * @param scale
+     *            the scale
+     */
     public Model3D(String materials, String geometry, float scale) {
         try {
             loadMaterials(materials);
             loadGeometry(geometry, scale);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
-        }        
+        }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see hidrogine.lwjgl.Model#draw(hidrogine.lwjgl.ShaderProgram)
+     */
     public void draw(ShaderProgram shader) {
-        for (Group g : groups.values()) {
+        shader.updateModelMatrix();
+        
+        for (Group g : groups) {
             for (BufferObject sg : g.subGroups) {
-               sg.draw(shader);
+                sg.bind(shader);
+                sg.draw(shader);
             }
         }
-    
     }
 
+    /**
+     * Draw.
+     *
+     * @param shader
+     *            the shader
+     * @param handler
+     *            the handler
+     */
+    public void draw(ShaderProgram shader, DrawHandler handler) {
+        shader.updateModelMatrix();
+        
+        for (Group g : groups) {
+            for (BufferObject sg : g.subGroups) {
+                sg.bind(shader);
+                handler.onDraw(g, sg.getMaterial());
+                sg.draw(shader);
+            }
+        }
+    }
 }

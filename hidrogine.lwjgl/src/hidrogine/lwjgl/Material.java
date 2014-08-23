@@ -13,9 +13,10 @@ public class Material {
     public Float sharpness;
     public Float Ni;
     public int texture = 0;
-
-    public Material() {
-
+    public String name;
+    
+    public Material(String n) {
+        name = n;
     }
 
 
@@ -24,5 +25,13 @@ public class Material {
     
     public void setTexture(String filename) {
         texture = TextureLoader.loadTexture(filename);
+    }
+
+
+
+
+
+    public Object getName() {
+        return name;
     }
 }

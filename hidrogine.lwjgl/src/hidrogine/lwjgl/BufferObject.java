@@ -11,12 +11,15 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.util.vector.Vector3f;
 
 /**
  * The Class BufferObject.
  */
 public class BufferObject {
+
+    public Material getMaterial() {
+        return material;
+    }
 
     /** The vertex data. */
     private ArrayList<Float> vertexData = new ArrayList<Float>();
@@ -41,13 +44,15 @@ public class BufferObject {
 
     /** The vboi id. */
     private int vboiId;
+    
 
     /**
      * Instantiates a new buffer object.
+     * @param subGroupName 
      */
     public BufferObject() {
-
     }
+
 
     /**
      * Sets the material.
@@ -58,8 +63,6 @@ public class BufferObject {
     public final void setMaterial(final Material f) {
         material = f;
     }
-    
-  
 
     /**
      * Adds the vertex.
@@ -113,8 +116,6 @@ public class BufferObject {
         normalData.add(z);
     }
 
-
-
     /**
      * Adds the texture.
      *
@@ -125,7 +126,7 @@ public class BufferObject {
      */
     public final void addTexture(final float x, final float y) {
         textureData.add(x);
-        textureData.add(1-y);
+        textureData.add(1 - y);
     }
 
     /**
@@ -155,11 +156,13 @@ public class BufferObject {
             packedVector.add(textureData.remove(0));
         }
         indexCount = indexData.size();
-        FloatBuffer vertexBuffer = ByteBuffer.allocateDirect(packedVector.size() * 4)
+        FloatBuffer vertexBuffer = ByteBuffer
+                .allocateDirect(packedVector.size() * 4)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
         vertexBuffer.put(toFloatArray(packedVector)).position(0);
 
-        ShortBuffer indexBuffer = ByteBuffer.allocateDirect(indexData.size() * 2)
+        ShortBuffer indexBuffer = ByteBuffer
+                .allocateDirect(indexData.size() * 2)
                 .order(ByteOrder.nativeOrder()).asShortBuffer();
         indexBuffer.put(toShortArray(indexData)).position(0);
 
@@ -240,6 +243,28 @@ public class BufferObject {
         return ret;
     }
 
+    public final void bind(final ShaderProgram shader) {
+        int tex = material != null ? material.texture : 0;
+        // Bind the texture according to the set texture filter
+        if (material != null) {
+            if (material.Ns != null)
+                shader.setMaterialShininess(material.Ns);
+            if (material.Ks != null)
+                shader.setMaterialSpecular(material.Ks[0], material.Ks[1],
+                        material.Ks[2]);
+            if (material.Kd != null)
+                shader.setDiffuseColor(material.Kd[0], material.Kd[1],
+                        material.Kd[2]);
+            if (material.d != null)
+                shader.setMaterialAlpha(material.d);
+
+        }
+
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex);
+
+    }
+
     /**
      * Draw.
      *
@@ -247,42 +272,28 @@ public class BufferObject {
      *            the shader
      */
     public final void draw(final ShaderProgram shader) {
-        int tex = material != null ? material.texture : 0;
-        // Bind the texture according to the set texture filter
-            if(material!=null){
-                if(material.Ns!=null)  shader.setMaterialShininess(material.Ns);
-                if(material.Ks!=null)  shader.setMaterialSpecular(material.Ks[0],material.Ks[1],material.Ks[2]);
-                if(material.Kd!=null)  shader.setDiffuseColor(material.Kd[0],material.Kd[1],material.Kd[2]);
-                if(material.d!=null)  shader.setMaterialAlpha(material.d);
-            
-            }
-            
-            GL13.glActiveTexture(GL13.GL_TEXTURE0);
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex);
-            // XXX shader.use();
-            // XXX shader.bindTexture(material.texture);
-            // Bind to the VAO that has all the information about the vertices
-            GL30.glBindVertexArray(vaoId);
-            GL20.glEnableVertexAttribArray(0);
-            GL20.glEnableVertexAttribArray(1);
-            GL20.glEnableVertexAttribArray(2);
+        // Bind to the VAO that has all the information about the vertices
+        GL30.glBindVertexArray(vaoId);
+        GL20.glEnableVertexAttribArray(0);
+        GL20.glEnableVertexAttribArray(1);
+        GL20.glEnableVertexAttribArray(2);
 
-            // Bind to the index VBO that has all the information about the
-            // order of
-            // the vertices
-            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboiId);
+        // Bind to the index VBO that has all the information about the
+        // order of
+        // the vertices
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboiId);
 
-            // Draw the vertices
-            GL11.glDrawElements(GL11.GL_TRIANGLES, indexCount,
-                    GL11.GL_UNSIGNED_SHORT, 0);
+        // Draw the vertices
+        GL11.glDrawElements(GL11.GL_TRIANGLES, indexCount,
+                GL11.GL_UNSIGNED_SHORT, 0);
 
-            // Put everything back to default (deselect)
-            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
-            GL20.glDisableVertexAttribArray(0);
-            GL20.glDisableVertexAttribArray(1);
-            GL20.glDisableVertexAttribArray(2);
-            GL30.glBindVertexArray(0);
-            shader.setMaterialAlpha(1f);
-        
+        // Put everything back to default (deselect)
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+        GL20.glDisableVertexAttribArray(0);
+        GL20.glDisableVertexAttribArray(1);
+        GL20.glDisableVertexAttribArray(2);
+        GL30.glBindVertexArray(0);
+        shader.setMaterialAlpha(1f);
+
     }
 }
