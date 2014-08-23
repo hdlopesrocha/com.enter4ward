@@ -24,8 +24,8 @@ void main(void) {
 	mat4 modelViewProjection = projectionMatrix * modelView;
 	// ====================
 
-	vPosition =in_Position;
-	vNormal = in_Normal;
+	vPosition =mat3(modelMatrix)*in_Position;
+	vNormal = mat3(modelMatrix)*in_Normal;
 	vTexCoord = in_TextureCoord;
 	gl_Position = modelViewProjection * vec4(in_Position,1.0);
 }
