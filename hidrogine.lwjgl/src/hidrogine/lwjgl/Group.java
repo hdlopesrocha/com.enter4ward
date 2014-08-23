@@ -35,6 +35,11 @@ public class Group {
        }
     }
 
+    public Vector3f getCenter(){
+        return new Vector3f((min.x+max.x)/2,(min.y+max.y)/2,(min.z+max.z)/2);
+        
+    }
+    
     public Vector3f getMin() {
         return min;
     }

@@ -62,10 +62,27 @@ public class TheQuadExampleMoving extends Game {
 
 
             @Override
-            public void onDraw(Group group, Material material) {
+            public void beforeDraw(Group group, Material material) {
                 if(material.getName().equals("c0")){
                     program.setDiffuseColor((float)(Math.sin(time)+1)/2f,(float) (Math.cos(time*Math.E/2)+1)/2f,(float)(Math.sin(time*Math.PI/2)*Math.cos(time*Math.PI/2)+1)/2f );
                 }   
+                if(group.getName().startsWith("w") && group.getName().length()==2 ){
+                    program.pushMatrix();
+                    Vector3f center = group.getCenter();
+                    program.getModelMatrix().translate(center);
+                    program.getModelMatrix().rotate(time*32, new Vector3f(1,0,0));
+                    center.negate();
+                    program.getModelMatrix().translate(center);
+                    
+                }
+            
+            }
+
+            @Override
+            public void afterDraw(Group group, Material material) {
+                if(group.getName().startsWith("w") && group.getName().length()==2 ){
+                    program.popMatrix();
+                }
             }
         };
         
@@ -134,11 +151,10 @@ public class TheQuadExampleMoving extends Game {
 
         // box.draw(shader);
         useDefaultShader();
-        program.setOpaque(true);
 
         program.pushMatrix();
+        program.setOpaque(true);
         program.getModelMatrix().rotate(time, new Vector3f(0,0,1));
-        
         car.draw(program,boxHandler);
         program.setOpaque(false);
         car.draw(program,boxHandler);

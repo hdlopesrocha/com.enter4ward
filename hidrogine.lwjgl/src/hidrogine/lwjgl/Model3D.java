@@ -182,9 +182,7 @@ public class Model3D extends Model {
      * @see hidrogine.lwjgl.Model#draw(hidrogine.lwjgl.ShaderProgram)
      */
     public static Box box = new Box();
-    public void draw(ShaderProgram shader) {
-        shader.updateModelMatrix();
-        
+    public void draw(ShaderProgram shader) {       
         for (Group g : groups) {
             GL13.glActiveTexture(GL13.GL_TEXTURE0);
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
@@ -205,16 +203,15 @@ public class Model3D extends Model {
      *            the handler
      */
     public void draw(ShaderProgram shader, DrawHandler handler) {
-        shader.updateModelMatrix();
-        
         for (Group g : groups) {
             GL13.glActiveTexture(GL13.GL_TEXTURE0);
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
             box.draw(shader,g.getMin(), g.getMax());          
             for (BufferObject sg : g.subGroups) {
                 sg.bind(shader);
-                handler.onDraw(g, sg.getMaterial());
+                handler.beforeDraw(g, sg.getMaterial());
                 sg.draw(shader);
+                handler.afterDraw(g, sg.getMaterial());
             }
         }
     }
