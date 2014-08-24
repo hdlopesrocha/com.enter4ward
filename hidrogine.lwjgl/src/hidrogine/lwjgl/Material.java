@@ -18,18 +18,10 @@ public class Material {
     public Material(String n) {
         name = n;
     }
-
-
-
-    
     
     public void setTexture(String filename) {
         texture = TextureLoader.loadTexture(filename);
     }
-
-
-
-
 
     public Object getName() {
         return name;

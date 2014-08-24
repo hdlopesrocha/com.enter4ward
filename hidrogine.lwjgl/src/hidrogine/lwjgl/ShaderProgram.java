@@ -23,9 +23,6 @@ public class ShaderProgram {
     private int projectionMatrixLocation = 0;
     private int viewMatrixLocation = 0;
     private int modelMatrixLocation = 0;
-    private int normalMatrixLocation = 0;
-    private int cameraDirectionLocation =0;
-    
     private int cameraPositionLocation =0;
     private int materialShininessLocation = 0;
     private int materialAlphaLocation =0;
@@ -82,8 +79,6 @@ public class ShaderProgram {
         diffuseColorLocation = GL20.glGetUniformLocation(pId, "diffuseColor");
         cameraPositionLocation= GL20.glGetUniformLocation(pId, "cameraPosition");
         opaqueLocation= GL20.glGetUniformLocation(pId, "opaque");
-        cameraDirectionLocation= GL20.glGetUniformLocation(pId, "cameraDirection");        
-        normalMatrixLocation = GL20.glGetUniformLocation(pId, "normalMatrix");
         
         // material locations
         materialShininessLocation= GL20.glGetUniformLocation(pId, "materialShininess");
@@ -109,13 +104,13 @@ public class ShaderProgram {
     
 
    
+    Matrix4f modelView = new Matrix4f();
     
     /**
      * Sets the projection matrix.
      */
     public void update(Camera camera) {
         
-        Matrix4f modelView = new Matrix4f();
         Matrix4f.mul(camera.getViewMatrix(),modelMatrix, modelView);
         // Upload matrices to the uniform variables
         GL20.glUseProgram(pId);
@@ -123,7 +118,7 @@ public class ShaderProgram {
         camera.getProjectionMatrix().store(matrix44Buffer);
         matrix44Buffer.flip();
         GL20.glUniformMatrix4(projectionMatrixLocation, false, matrix44Buffer);
-
+        
         camera.getViewMatrix().store(matrix44Buffer);
         matrix44Buffer.flip();
         GL20.glUniformMatrix4(viewMatrixLocation, false, matrix44Buffer);
@@ -132,38 +127,19 @@ public class ShaderProgram {
         matrix44Buffer.flip();
         GL20.glUniformMatrix4(modelMatrixLocation, false, matrix44Buffer);
         
-        GL20.glUniform3f(cameraPositionLocation, camera.getPosition().x,camera.getPosition().y, camera.getPosition().z);
+        Vector3f cameraPosition = camera.getPosition();
+        GL20.glUniform3f(cameraPositionLocation, cameraPosition.x, cameraPosition.y, cameraPosition.z);
 
-        
-        Vector3f cameraDirection = camera.getDirection();
-        GL20.glUniform3f(cameraDirectionLocation, cameraDirection.x,cameraDirection.y, cameraDirection.z);
-
-        
         for(int i=0; i<10; ++i){
             Vector3f position = lightPosition[i];
             Vector3f specularColor = lightSpecularColor[i];
-            
             if(position!=null){
-                
-                Vector4f newLpos = new Vector4f(position.x,position.y, position.z,0f);
-                
-                Matrix4f.transform(modelMatrix, newLpos, newLpos);
-                GL20.glUniform3f(lightPositionLocation[i], newLpos.x,newLpos.y, newLpos.z);
-                
-               // GL20.glUniform3f(lightPositionLocation[i], position.x,position.y, position.z);
-                
-
+                GL20.glUniform3f(lightPositionLocation[i], position.x,position.y, position.z);
             }
             if(specularColor!=null){
                 GL20.glUniform3f(lightSpecularColorLocation[i], specularColor.x,specularColor.y, specularColor.z);
             }
         }
-        
-        modelView.invert().transpose();
-        modelView.store(matrix44Buffer);
-        matrix44Buffer.flip();
-        GL20.glUniformMatrix4(normalMatrixLocation, false, matrix44Buffer);
-
     }
     
     public void setMaterialAlpha(float value){

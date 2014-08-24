@@ -27,7 +27,6 @@ public abstract class Game {
         try {
             LibraryLoader.loadNativeLibraries();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

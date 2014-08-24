@@ -1,6 +1,5 @@
 #version 330 core
 uniform vec3 cameraPosition;
-uniform vec3 cameraDirection;
 
 uniform vec3 lightPosition[10];
 uniform vec3 lightSpecularColor[10];
