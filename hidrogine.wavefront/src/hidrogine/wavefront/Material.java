@@ -1,6 +1,5 @@
 package hidrogine.wavefront;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -280,10 +279,9 @@ public class Material {
      * To json.
      *
      * @return the JSON object
-     * @throws JSONException
      *             the JSON exception
      */
-    public final JSONObject toJSON() throws JSONException {
+    public final JSONObject toJSON() {
         JSONObject jmaterial = new JSONObject();
 
 

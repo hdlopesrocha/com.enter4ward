@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.TreeMap;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -122,10 +121,9 @@ class MaterialGroup {
      * To json.
      *
      * @return the JSON object
-     * @throws JSONException
      *             the JSON exception
      */
-    public JSONObject toJSON() throws JSONException {
+    public JSONObject toJSON() {
         JSONObject jobj = new JSONObject();
 
         jobj.put("mm", material);

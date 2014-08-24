@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -86,10 +85,9 @@ public class MaterialLibrary {
      * Materials to json.
      *
      * @return the string
-     * @throws JSONException
      *             the JSON exception
      */
-    public final JSONObject toJSON() throws JSONException {
+    public final JSONObject toJSON() {
         JSONObject jmaterials = new JSONObject();
 
         for (Material mat : materials) {
@@ -105,10 +103,8 @@ public class MaterialLibrary {
      * @return the file
      * @throws IOException
      *             Signals that an I/O exception has occurred.
-     * @throws JSONException
-     *             the JSON exception
      */
-    public final File toFile() throws IOException, JSONException {
+    public final File toFile() throws IOException {
         File file = File.createTempFile("file", "temp");
         BufferedWriter bw1 = new BufferedWriter(new FileWriter(file));
         bw1.write(toJSON().toString());

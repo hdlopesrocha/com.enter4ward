@@ -1,16 +1,13 @@
-import hidrogine.lwjgl.Box;
 import hidrogine.lwjgl.DrawHandler;
 import hidrogine.lwjgl.Game;
 import hidrogine.lwjgl.Group;
 import hidrogine.lwjgl.Material;
 import hidrogine.lwjgl.Model3D;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -18,7 +15,6 @@ import org.lwjgl.util.vector.Vector4f;
  */
 public class TheQuadExampleMoving extends Game {
 
-    
     /**
      * Instantiates a new the quad example moving.
      */
@@ -40,9 +36,12 @@ public class TheQuadExampleMoving extends Game {
     /** The box. */
     Model3D car;
 
+    /** The box handler. */
     DrawHandler boxHandler;
 
-    float time=0;
+    /** The time. */
+    float time = 0;
+
     /*
      * (non-Javadoc)
      * 
@@ -56,36 +55,40 @@ public class TheQuadExampleMoving extends Game {
         program.setAmbientColor(0, 0, 0);
         program.setDiffuseColor(1, 1, 1);
         program.setMaterialShininess(1000);
-        program.setLightColor(0, new Vector3f(1,1,1) );
-        
-        boxHandler = new DrawHandler() {
+        program.setLightColor(0, new Vector3f(1, 1, 1));
 
+        boxHandler = new DrawHandler() {
 
             @Override
             public void beforeDraw(Group group, Material material) {
-                if(material.getName().equals("c0")){
-                    program.setDiffuseColor((float)(Math.sin(time)+1)/2f,(float) (Math.cos(time*Math.E/2)+1)/2f,(float)(Math.sin(time*Math.PI/2)*Math.cos(time*Math.PI/2)+1)/2f );
-                }   
-                if(group.getName().startsWith("w") && group.getName().length()==2 ){
+                if (material.getName().equals("c0")) {
+                    program.setDiffuseColor(
+                            (float) (Math.sin(time) + 1) / 2f,
+                            (float) (Math.cos(time * Math.E / 2) + 1) / 2f,
+                            (float) (Math.sin(time * Math.PI / 2)
+                                    * Math.cos(time * Math.PI / 2) + 1) / 2f);
+                }
+                if (group.getName().startsWith("w")
+                        && group.getName().length() == 2) {
                     program.pushMatrix();
                     Vector3f center = group.getCenter();
                     program.getModelMatrix().translate(center);
-                    program.getModelMatrix().rotate(time*32, new Vector3f(1,0,0));
+                    program.getModelMatrix().rotate(time * 32,
+                            new Vector3f(1, 0, 0));
                     center.negate();
                     program.getModelMatrix().translate(center);
-                    
+
                 }
-            
             }
 
             @Override
             public void afterDraw(Group group, Material material) {
-                if(group.getName().startsWith("w") && group.getName().length()==2 ){
+                if (group.getName().startsWith("w")
+                        && group.getName().length() == 2) {
                     program.popMatrix();
                 }
             }
         };
-        
     }
 
     /*
@@ -95,18 +98,13 @@ public class TheQuadExampleMoving extends Game {
      */
     @Override
     public void update() {
-        time+=0.003f;
-        
-        
-        
+        time += 0.003f;
+
         float sense = 0.03f;
-        if(Mouse.isButtonDown(0)){
-            camera.rotate(0, 1, 0, Mouse.getDX()*sense*0.2f);
-            camera.rotate(1, 0, 0, -Mouse.getDY()*sense*0.2f);
-           
+        if (Mouse.isButtonDown(0)) {
+            camera.rotate(0, 1, 0, Mouse.getDX() * sense * 0.2f);
+            camera.rotate(1, 0, 0, -Mouse.getDY() * sense * 0.2f);
         }
-  
-        
 
         if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
             camera.rotate(0, 0, 1, -sense);
@@ -136,8 +134,6 @@ public class TheQuadExampleMoving extends Game {
         GL20.glUseProgram(0);
     }
 
-    
-    
     /*
      * (non-Javadoc)
      * 
@@ -154,13 +150,13 @@ public class TheQuadExampleMoving extends Game {
 
         program.pushMatrix();
         program.setOpaque(true);
-        program.getModelMatrix().rotate(time, new Vector3f(0,0,1));
-        car.draw(program,boxHandler);
+        program.getModelMatrix().rotate(time, new Vector3f(0, 0, 1));
+        car.draw(program, boxHandler);
         program.setOpaque(false);
-        car.draw(program,boxHandler);
+        car.draw(program, boxHandler);
         program.popMatrix();
         GL20.glUseProgram(0);
-        
+
     }
 
 }

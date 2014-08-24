@@ -7,13 +7,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.util.glu.Sphere;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -131,22 +128,23 @@ public class Model3D extends Model {
                             .getString("mm")));
                 }
                 JSONArray vv = jSubGroup.getJSONArray("vv");
+                JSONArray vn = jSubGroup.getJSONArray("vn");
+                JSONArray vt = jSubGroup.getJSONArray("vt");
+
+                
                 for (int k = 0; k < vv.length()/3; ++k) {
                     float vx = (float) vv.getDouble(k*3+0) * scale;
                     float vy = (float) vv.getDouble(k*3+1) * scale;
                     float vz = (float) vv.getDouble(k*3+2) * scale;
+                    float nx = (float) vn.getDouble(k*3+0);
+                    float ny = (float) vn.getDouble(k*3+1);
+                    float nz = (float) vn.getDouble(k*3+2);
+                    float tx = (float) vt.getDouble(k*2+0);
+                    float ty = (float) vt.getDouble(k*2+1);
                     currentGroup.addVertex(vx,vy,vz);
-                    currentSubGroup.addVertex(vx,vy,vz);
+                    currentSubGroup.addVertex(vx,vy,vz,nx,ny,nz,tx,ty);                
                 }
-                JSONArray vn = jSubGroup.getJSONArray("vn");
-                for (int k = 0; k < vn.length(); ++k) {
-                    currentSubGroup.addNormal((float) vn.getDouble(k));
-                }
-                JSONArray vt = jSubGroup.getJSONArray("vt");
-                for (int k = 0; k < vt.length() / 2; ++k) {
-                    currentSubGroup.addTexture((float) vt.getDouble(k * 2 + 0),
-                            (float) vt.getDouble(k * 2 + 1));
-                }
+
                 JSONArray ii = jSubGroup.getJSONArray("ii");
                 for (int k = 0; k < ii.length(); ++k) {
                     currentSubGroup.addIndex((short) ii.getInt(k));
@@ -184,7 +182,6 @@ public class Model3D extends Model {
     public static Box box = new Box();
     public void draw(ShaderProgram shader) {       
         for (Group g : groups) {
-            GL13.glActiveTexture(GL13.GL_TEXTURE0);
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
             box.draw(shader,g.getMin(), g.getMax());
             for (BufferObject sg : g.subGroups) {
@@ -204,7 +201,6 @@ public class Model3D extends Model {
      */
     public void draw(ShaderProgram shader, DrawHandler handler) {
         for (Group g : groups) {
-            GL13.glActiveTexture(GL13.GL_TEXTURE0);
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
             box.draw(shader,g.getMin(), g.getMax());          
             for (BufferObject sg : g.subGroups) {

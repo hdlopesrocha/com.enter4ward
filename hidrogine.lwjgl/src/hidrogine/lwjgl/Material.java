@@ -23,7 +23,7 @@ public class Material {
         texture = TextureLoader.loadTexture(filename);
     }
 
-    public Object getName() {
+    public String getName() {
         return name;
     }
 }

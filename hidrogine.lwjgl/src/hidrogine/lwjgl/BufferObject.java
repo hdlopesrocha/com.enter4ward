@@ -20,15 +20,7 @@ public class BufferObject {
     public Material getMaterial() {
         return material;
     }
-
-    /** The vertex data. */
-    private ArrayList<Float> vertexData = new ArrayList<Float>();
-
-    /** The normal data. */
-    private ArrayList<Float> normalData = new ArrayList<Float>();
-
-    /** The texture data. */
-    private ArrayList<Float> textureData = new ArrayList<Float>();
+    ArrayList<Float> packedVector = new ArrayList<Float>();
 
     /** The index data. */
     private ArrayList<Short> indexData = new ArrayList<Short>();
@@ -64,15 +56,7 @@ public class BufferObject {
         material = f;
     }
 
-    /**
-     * Adds the vertex.
-     *
-     * @param f
-     *            the f
-     */
-    public final void addVertex(final float f) {
-        vertexData.add(f);
-    }
+   
 
     /**
      * Adds the vertex.
@@ -84,50 +68,19 @@ public class BufferObject {
      * @param z
      *            the z
      */
-    public final void addVertex(final float x, final float y, final float z) {
-        vertexData.add(x);
-        vertexData.add(y);
-        vertexData.add(z);
+    public final void addVertex(final float vx, final float vy, final float vz,
+            final float nx, final float ny, final float nz, final float tx, final float ty) {
+        packedVector.add(vx);
+        packedVector.add(vy);
+        packedVector.add(vz);
+        packedVector.add(nx);
+        packedVector.add(ny);
+        packedVector.add(nz);
+        packedVector.add(tx);
+        packedVector.add(1 - ty);
     }
 
-    /**
-     * Adds the normal.
-     *
-     * @param f
-     *            the f
-     */
-    public final void addNormal(final float f) {
-        normalData.add(f);
-    }
 
-    /**
-     * Adds the normal.
-     *
-     * @param x
-     *            the x
-     * @param y
-     *            the y
-     * @param z
-     *            the z
-     */
-    public final void addNormal(final float x, final float y, final float z) {
-        normalData.add(x);
-        normalData.add(y);
-        normalData.add(z);
-    }
-
-    /**
-     * Adds the texture.
-     *
-     * @param x
-     *            the x
-     * @param y
-     *            the y
-     */
-    public final void addTexture(final float x, final float y) {
-        textureData.add(x);
-        textureData.add(1 - y);
-    }
 
     /**
      * Adds the index.
@@ -143,18 +96,7 @@ public class BufferObject {
      * Builds the buffer.
      */
     public final void buildBuffer() {
-        ArrayList<Float> packedVector = new ArrayList<Float>();
-        while (vertexData.size() > 0 && normalData.size() > 0
-                && textureData.size() > 0) {
-            packedVector.add(vertexData.remove(0));
-            packedVector.add(vertexData.remove(0));
-            packedVector.add(vertexData.remove(0));
-            packedVector.add(normalData.remove(0));
-            packedVector.add(normalData.remove(0));
-            packedVector.add(normalData.remove(0));
-            packedVector.add(textureData.remove(0));
-            packedVector.add(textureData.remove(0));
-        }
+
         indexCount = indexData.size();
         FloatBuffer vertexBuffer = ByteBuffer
                 .allocateDirect(packedVector.size() * 4)
@@ -167,13 +109,7 @@ public class BufferObject {
         indexBuffer.put(toShortArray(indexData)).position(0);
 
         // CLEAR
-        vertexData.clear();
-        normalData.clear();
-        textureData.clear();
         indexData.clear();
-        vertexData = null;
-        normalData = null;
-        textureData = null;
         indexData = null;
 
         // Create a new Vertex Array Object in memory and select it (bind)
