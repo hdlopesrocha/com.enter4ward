@@ -96,7 +96,7 @@ public class BufferObject {
      * Builds the buffer.
      */
     public final void buildBuffer() {
-
+        
         indexCount = indexData.size();
         FloatBuffer vertexBuffer = ByteBuffer
                 .allocateDirect(packedVector.size() * 4)
@@ -109,6 +109,8 @@ public class BufferObject {
         indexBuffer.put(toShortArray(indexData)).position(0);
 
         // CLEAR
+        packedVector.clear();
+        packedVector = null;
         indexData.clear();
         indexData = null;
 

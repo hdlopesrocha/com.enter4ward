@@ -1,5 +1,6 @@
 package hidrogine.lwjgl;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -7,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.lwjgl.opengl.GL11;
 
 // TODO: Auto-generated Javadoc
@@ -107,8 +110,9 @@ public class Model3D extends Model {
     @SuppressWarnings("unchecked")
     private void loadGeometry(String filename, float scale)
             throws JSONException, IOException {
-        JSONObject jObject = new JSONObject(new String(Files.readAllBytes(Paths
-                .get(filename))));
+        FileInputStream file = new FileInputStream(filename);
+        JSONTokener tokener = new JSONTokener(file);
+        JSONObject jObject = new JSONObject(tokener);
         Iterator<String> groupNames = jObject.keys();
 
         while (groupNames.hasNext()) {
@@ -153,6 +157,7 @@ public class Model3D extends Model {
                 currentSubGroup.buildBuffer();
             }
         }
+        file.close();
     }
 
     /**
