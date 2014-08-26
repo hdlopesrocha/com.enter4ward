@@ -46,14 +46,14 @@ public class Model3D extends Model {
     private void loadMaterials(String filename) throws JSONException,
             IOException {
 
-        JSONObject jObject = new JSONObject(new String(Files.readAllBytes(Paths
+        final JSONObject jObject = new JSONObject(new String(Files.readAllBytes(Paths
                 .get(filename))));
-        Iterator<String> keys = jObject.keys();
+        final Iterator<String> keys = jObject.keys();
 
         while (keys.hasNext()) {
-            String key = keys.next();
-            JSONObject jMat = jObject.getJSONObject(key);
-            Material currentMaterial = new Material(key);
+            final String key = keys.next();
+            final JSONObject jMat = jObject.getJSONObject(key);
+            final Material currentMaterial = new Material(key);
 
             materials.put(key, currentMaterial);
 
@@ -61,19 +61,19 @@ public class Model3D extends Model {
                 currentMaterial.setTexture(jMat.getString("map_Kd"));
             }
             if (jMat.has("Ka")) {
-                JSONArray array = jMat.getJSONArray("Ka");
+                final JSONArray array = jMat.getJSONArray("Ka");
                 currentMaterial.Ka = new Float[3];
                 for (int j = 0; j < 3; ++j)
                     currentMaterial.Ka[j] = (float) array.getDouble(j);
             }
             if (jMat.has("Kd")) {
-                JSONArray array = jMat.getJSONArray("Kd");
+                final JSONArray array = jMat.getJSONArray("Kd");
                 currentMaterial.Kd = new Float[3];
                 for (int j = 0; j < 3; ++j)
                     currentMaterial.Kd[j] = (float) array.getDouble(j);
             }
             if (jMat.has("Ks")) {
-                JSONArray array = jMat.getJSONArray("Ks");
+                final JSONArray array = jMat.getJSONArray("Ks");
                 currentMaterial.Ks = new Float[3];
                 for (int j = 0; j < 3; ++j)
                     currentMaterial.Ks[j] = (float) array.getDouble(j);
@@ -111,23 +111,23 @@ public class Model3D extends Model {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    private void loadGeometry(String filename, float scale)
+    private void loadGeometry(final String filename, final float scale)
             throws JSONException, IOException {
-        JsonFactory factory = new JsonFactory();
-        JsonParser parser = factory.createParser(new File(filename));
+        final JsonFactory factory = new JsonFactory();
+        final JsonParser parser = factory.createParser(new File(filename));
         if (parser.nextToken() == JsonToken.START_OBJECT) {
             while (parser.nextToken() != JsonToken.END_OBJECT) {
                 if (parser.nextToken() == JsonToken.START_ARRAY) {
-                    Group group = new Group(parser.getCurrentName());
+                    final Group group = new Group(parser.getCurrentName());
                     groups.add(group);
                     while (parser.nextToken() != JsonToken.END_ARRAY) {
-                        BufferObject buffer = new BufferObject();
-                        ArrayList<Float> vv = new ArrayList<Float>();
-                        ArrayList<Float> vn = new ArrayList<Float>();
-                        ArrayList<Float> vt = new ArrayList<Float>();
-                        ArrayList<Short> ii = new ArrayList<Short>();
+                        final BufferObject buffer = new BufferObject();
+                        final ArrayList<Float> vv = new ArrayList<Float>();
+                        final ArrayList<Float> vn = new ArrayList<Float>();
+                        final ArrayList<Float> vt = new ArrayList<Float>();
+                        final ArrayList<Short> ii = new ArrayList<Short>();
                         while (true) {
-                            JsonToken token = parser.nextToken();
+                            final JsonToken token = parser.nextToken();
                             if (token == JsonToken.FIELD_NAME) {
                                 switch (parser.getCurrentName()) {
                                 case "mm":
@@ -211,28 +211,28 @@ public class Model3D extends Model {
      *             Signals that an I/O exception has occurred.
      */
     @SuppressWarnings("unchecked")
-    private void loadGeometry_old(String filename, float scale)
+    private void loadGeometry_old(final String filename, final float scale)
             throws JSONException, IOException {
-        FileInputStream file = new FileInputStream(filename);
-        JSONTokener tokener = new JSONTokener(file);
-        JSONObject jObject = new JSONObject(tokener);
-        Iterator<String> groupNames = jObject.keys();
+        final FileInputStream file = new FileInputStream(filename);
+        final JSONTokener tokener = new JSONTokener(file);
+        final JSONObject jObject = new JSONObject(tokener);
+        final Iterator<String> groupNames = jObject.keys();
         while (groupNames.hasNext()) {
-            String groupName = groupNames.next();
-            Group currentGroup = new Group(groupName);
+            final String groupName = groupNames.next();
+            final Group currentGroup = new Group(groupName);
             groups.add(currentGroup);
-            JSONArray subGroups = jObject.getJSONArray(groupName);
+            final JSONArray subGroups = jObject.getJSONArray(groupName);
             for (int j = 0; j < subGroups.length(); ++j) {
-                JSONObject jSubGroup = subGroups.getJSONObject(j);
-                BufferObject currentSubGroup = new BufferObject();
+                final JSONObject jSubGroup = subGroups.getJSONObject(j);
+                final BufferObject currentSubGroup = new BufferObject();
                 currentGroup.subGroups.add(currentSubGroup);
                 if (jSubGroup.has("mm")) {
                     currentSubGroup.setMaterial(materials.get(jSubGroup
                             .getString("mm")));
                 }
-                JSONArray vv = jSubGroup.getJSONArray("vv");
-                JSONArray vn = jSubGroup.getJSONArray("vn");
-                JSONArray vt = jSubGroup.getJSONArray("vt");
+                final JSONArray vv = jSubGroup.getJSONArray("vv");
+                final JSONArray vn = jSubGroup.getJSONArray("vn");
+                final JSONArray vt = jSubGroup.getJSONArray("vt");
                 for (int k = 0; k < vv.length() / 3; ++k) {
                     float vx = (float) vv.getDouble(k * 3 + 0) * scale;
                     float vy = (float) vv.getDouble(k * 3 + 1) * scale;
@@ -245,7 +245,7 @@ public class Model3D extends Model {
                     currentGroup.addVertex(vx, vy, vz);
                     currentSubGroup.addVertex(vx, vy, vz, nx, ny, nz, tx, ty);
                 }
-                JSONArray ii = jSubGroup.getJSONArray("ii");
+                final JSONArray ii = jSubGroup.getJSONArray("ii");
                 for (int k = 0; k < ii.length(); ++k) {
                     currentSubGroup.addIndex((short) ii.getInt(k));
                 }
