@@ -76,13 +76,11 @@ public class Camera {
      * @param w
      *            the w
      */
+    private static final Quaternion newRot = new Quaternion().setIdentity();
     public void rotate(float x, float y, float z, float w) {
-        Quaternion newRot = new Quaternion().setIdentity();
         newRot.setFromAxisAngle(new Vector4f(x, y, z, w));
-        Quaternion res = new Quaternion();
-        Quaternion.mul(newRot, rotation, res);
-        res.normalise();
-        rotation = res;
+        Quaternion.mul(newRot, rotation, rotation);
+        rotation.normalise();
     }
 
     /**

@@ -6,7 +6,7 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector3f;
 
 public class Group {
-    public List<BufferObject> subGroups = new ArrayList<BufferObject>();
+    public List<IBufferObject> subGroups = new ArrayList<IBufferObject>();
     private Vector3f min;
     private Vector3f max;
     

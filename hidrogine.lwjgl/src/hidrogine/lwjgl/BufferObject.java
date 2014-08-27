@@ -12,15 +12,27 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class BufferObject.
  */
-public class BufferObject {
+public class BufferObject implements IBufferObject {
 
+    /* (non-Javadoc)
+     * @see hidrogine.lwjgl.IBufferObject#getMaterial()
+     */
     public Material getMaterial() {
         return material;
     }
-    ArrayList<Float> packedVector = new ArrayList<Float>();
+
+    /** The positions. */
+    private ArrayList<Float> positions = new ArrayList<Float>();
+    
+    /** The normals. */
+    private ArrayList<Float> normals = new ArrayList<Float>();
+    
+    /** The texture coords. */
+    private ArrayList<Float> textureCoords = new ArrayList<Float>();
 
     /** The index data. */
     private ArrayList<Short> indexData = new ArrayList<Short>();
@@ -37,14 +49,14 @@ public class BufferObject {
     /** The vboi id. */
     private int vboiId;
     
+    /** The vbo id. */
+    private int vboId;
 
     /**
      * Instantiates a new buffer object.
-     * @param subGroupName 
      */
     public BufferObject() {
     }
-
 
     /**
      * Sets the material.
@@ -56,31 +68,37 @@ public class BufferObject {
         material = f;
     }
 
-   
-
     /**
      * Adds the vertex.
      *
-     * @param x
-     *            the x
-     * @param y
-     *            the y
-     * @param z
-     *            the z
+     * @param vx the vx
+     * @param vy the vy
+     * @param vz the vz
      */
-    public final void addVertex(final float vx, final float vy, final float vz,
-            final float nx, final float ny, final float nz, final float tx, final float ty) {
-        packedVector.add(vx);
-        packedVector.add(vy);
-        packedVector.add(vz);
-        packedVector.add(nx);
-        packedVector.add(ny);
-        packedVector.add(nz);
-        packedVector.add(tx);
-        packedVector.add(1 - ty);
+    public final void addPosition(final float vx, final float vy, final float vz) {
+        positions.add(vx);
+        positions.add(vy);
+        positions.add(vz);
+
     }
 
+    /* (non-Javadoc)
+     * @see hidrogine.lwjgl.IBufferObject#addNormal(float, float, float)
+     */
+    public final void addNormal(final float nx, final float ny, final float nz) {
+        normals.add(nx);
+        normals.add(ny);
+        normals.add(nz);
+    }
 
+    /* (non-Javadoc)
+     * @see hidrogine.lwjgl.IBufferObject#addTextureCoord(float, float)
+     */
+    public final void addTextureCoord(final float tx, final float ty) {
+
+        textureCoords.add(tx);
+        textureCoords.add(1 - ty);
+    }
 
     /**
      * Adds the index.
@@ -96,43 +114,52 @@ public class BufferObject {
      * Builds the buffer.
      */
     public final void buildBuffer() {
-        
+        final ArrayList<Float> packedVector = new ArrayList<Float>();
+        while (positions.size() > 0 && normals.size() > 0
+                && textureCoords.size() > 0) {
+            packedVector.add(positions.remove(0));
+            packedVector.add(positions.remove(0));
+            packedVector.add(positions.remove(0));
+            packedVector.add(normals.remove(0));
+            packedVector.add(normals.remove(0));
+            packedVector.add(normals.remove(0));
+            packedVector.add(textureCoords.remove(0));
+            packedVector.add(textureCoords.remove(0));
+        }
+
         indexCount = indexData.size();
-        FloatBuffer vertexBuffer = ByteBuffer
+        final FloatBuffer vertexBuffer = ByteBuffer
                 .allocateDirect(packedVector.size() * 4)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
         vertexBuffer.put(toFloatArray(packedVector)).position(0);
 
-        ShortBuffer indexBuffer = ByteBuffer
+        final ShortBuffer indexBuffer = ByteBuffer
                 .allocateDirect(indexData.size() * 2)
                 .order(ByteOrder.nativeOrder()).asShortBuffer();
         indexBuffer.put(toShortArray(indexData)).position(0);
 
-        // CLEAR
-        packedVector.clear();
-        packedVector = null;
-        indexData.clear();
-        indexData = null;
-
         // Create a new Vertex Array Object in memory and select it (bind)
         vaoId = GL30.glGenVertexArrays();
-        GL30.glBindVertexArray(vaoId);
+        vboiId = GL15.glGenBuffers();
+        vboId = GL15.glGenBuffers();
+        indexData.clear();
+        normals.clear();
+        positions.clear();
+        textureCoords.clear();
 
+        GL30.glBindVertexArray(vaoId);
         // Create a new Vertex Buffer Object in memory and select it (bind)
-        int vboId = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboId);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertexBuffer,
-                GL15.GL_STREAM_DRAW);
+                GL15.GL_STATIC_DRAW);
 
         // Put the position coordinates in attribute list 0
         GL20.glVertexAttribPointer(0, VertexData.positionElementCount,
                 GL11.GL_FLOAT, false, VertexData.stride,
                 VertexData.positionByteOffset);
-        // Put the color components in attribute list 1
         GL20.glVertexAttribPointer(1, VertexData.normalElementCount,
                 GL11.GL_FLOAT, false, VertexData.stride,
                 VertexData.normalByteOffset);
-        // Put the texture coordinates in attribute list 2
         GL20.glVertexAttribPointer(2, VertexData.textureElementCount,
                 GL11.GL_FLOAT, false, VertexData.stride,
                 VertexData.textureByteOffset);
@@ -143,7 +170,6 @@ public class BufferObject {
         GL30.glBindVertexArray(0);
 
         // Create a new VBO for the indices and select it (bind) - INDICES
-        vboiId = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboiId);
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuffer,
                 GL15.GL_STATIC_DRAW);
@@ -181,6 +207,9 @@ public class BufferObject {
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see hidrogine.lwjgl.IBufferObject#bind(hidrogine.lwjgl.ShaderProgram)
+     */
     public final void bind(final ShaderProgram shader) {
         int tex = material != null ? material.texture : 0;
         // Bind the texture according to the set texture filter

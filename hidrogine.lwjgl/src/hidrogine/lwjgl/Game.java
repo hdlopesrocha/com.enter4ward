@@ -29,12 +29,12 @@ public abstract class Game {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         // Setup an OpenGL context with API version 3.2
         try {
             PixelFormat pixelFormat = new PixelFormat();
             ContextAttribs contextAtrributes = new ContextAttribs(3, 2)
                     .withForwardCompatible(true).withProfileCore(true);
+                        
             camera = new Camera(w, h);
             Display.setDisplayMode(new DisplayMode(w, h));
             Display.setTitle("Game");
@@ -43,16 +43,22 @@ public abstract class Game {
             e.printStackTrace();
             System.exit(-1);
         }
-
+        System.out.println("OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
+        try {
+            program = new ShaderProgram("vertex.glsl", "fragment.glsl");
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
         // Setup an XNA like background color
         GL11.glClearColor(0.25f, 0.25f, 0.25f, 0f);
         GL11.glViewport(0, 0, w, h);
         GL11.glEnable(GL11.GL_DEPTH_TEST);              // Enables Depth Testing
         GL11.glEnable(GL11.GL_CULL_FACE);
-     // Enable transparency
+        // Enable transparency
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        program = new ShaderProgram("vertex.glsl", "fragment.glsl");
         setup();
         while (!Display.isCloseRequested()) {
             // Do a single loop (logic/render)

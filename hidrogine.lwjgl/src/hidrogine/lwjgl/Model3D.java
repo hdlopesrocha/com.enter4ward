@@ -17,7 +17,6 @@ import org.json.JSONTokener;
 import org.lwjgl.opengl.GL11;
 
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 
@@ -111,7 +110,7 @@ public class Model3D extends Model {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    private void loadGeometry(final String filename, final float scale)
+    private void loadGeometry2(final String filename, final float scale)
             throws JSONException, IOException {
         final JsonFactory factory = new JsonFactory();
         final JsonParser parser = factory.createParser(new File(filename));
@@ -122,10 +121,7 @@ public class Model3D extends Model {
                     groups.add(group);
                     while (parser.nextToken() != JsonToken.END_ARRAY) {
                         final BufferObject buffer = new BufferObject();
-                        final ArrayList<Float> vv = new ArrayList<Float>();
-                        final ArrayList<Float> vn = new ArrayList<Float>();
-                        final ArrayList<Float> vt = new ArrayList<Float>();
-                        final ArrayList<Short> ii = new ArrayList<Short>();
+               
                         while (true) {
                             final JsonToken token = parser.nextToken();
                             if (token == JsonToken.FIELD_NAME) {
@@ -137,28 +133,33 @@ public class Model3D extends Model {
                                 case "vv":
                                     if (parser.nextToken() == JsonToken.START_ARRAY) {
                                         while (parser.nextToken() != JsonToken.END_ARRAY) {
-                                            vv.add(parser.getFloatValue());
+                                            float vx = parser.getFloatValue() * scale;
+                                            float vy = parser.getFloatValue() * scale;
+                                            float vz = parser.getFloatValue() * scale;
+                                            group.addVertex(vx, vy, vz);
+
+                                            buffer.addPosition(vx, vy, vz);
                                         }
                                     }
                                     break;
                                 case "vn":
                                     if (parser.nextToken() == JsonToken.START_ARRAY) {
                                         while (parser.nextToken() != JsonToken.END_ARRAY) {
-                                            vn.add(parser.getFloatValue());
+                                            buffer.addNormal(parser.getFloatValue(),parser.getFloatValue(),parser.getFloatValue());
                                         }
                                     }
                                     break;
                                 case "vt":
                                     if (parser.nextToken() == JsonToken.START_ARRAY) {
                                         while (parser.nextToken() != JsonToken.END_ARRAY) {
-                                            vt.add(parser.getFloatValue());
+                                            buffer.addTextureCoord(parser.getFloatValue(),parser.getFloatValue());
                                         }
                                     }
                                     break;
                                 case "ii":
                                     if (parser.nextToken() == JsonToken.START_ARRAY) {
                                         while (parser.nextToken() != JsonToken.END_ARRAY) {
-                                            ii.add(parser.getShortValue());
+                                            buffer.addIndex(parser.getShortValue());
                                         }
                                     }
                                     break;
@@ -171,24 +172,7 @@ public class Model3D extends Model {
                             }
 
                         }
-                        for (int i = 0; i < vv.size() / 3; ++i) {
-                            float vx = (float) vv.get(i * 3 + 0) * scale;
-                            float vy = (float) vv.get(i * 3 + 1) * scale;
-                            float vz = (float) vv.get(i * 3 + 2) * scale;
-                            float nx = (float) vn.get(i * 3 + 0);
-                            float ny = (float) vn.get(i * 3 + 1);
-                            float nz = (float) vn.get(i * 3 + 2);
-                            float tx = (float) vt.get(i * 2 + 0);
-                            float ty = (float) vt.get(i * 2 + 1);
-                            group.addVertex(vx, vy, vz);
-
-                            buffer.addVertex(vx, vy, vz, nx, ny, nz, tx, ty);
-                        }
-                        for (int i = 0; i < ii.size(); ++i) {
-
-                            buffer.addIndex(ii.get(i));
-                        }
-
+                        
                         buffer.buildBuffer();
                         group.subGroups.add(buffer);
                     }
@@ -211,7 +195,7 @@ public class Model3D extends Model {
      *             Signals that an I/O exception has occurred.
      */
     @SuppressWarnings("unchecked")
-    private void loadGeometry_old(final String filename, final float scale)
+   private void loadGeometry(final String filename, final float scale)
             throws JSONException, IOException {
         final FileInputStream file = new FileInputStream(filename);
         final JSONTokener tokener = new JSONTokener(file);
@@ -224,7 +208,7 @@ public class Model3D extends Model {
             final JSONArray subGroups = jObject.getJSONArray(groupName);
             for (int j = 0; j < subGroups.length(); ++j) {
                 final JSONObject jSubGroup = subGroups.getJSONObject(j);
-                final BufferObject currentSubGroup = new BufferObject();
+                final IBufferObject currentSubGroup = new BufferObject();
                 currentGroup.subGroups.add(currentSubGroup);
                 if (jSubGroup.has("mm")) {
                     currentSubGroup.setMaterial(materials.get(jSubGroup
@@ -243,7 +227,11 @@ public class Model3D extends Model {
                     float tx = (float) vt.getDouble(k * 2 + 0);
                     float ty = (float) vt.getDouble(k * 2 + 1);
                     currentGroup.addVertex(vx, vy, vz);
-                    currentSubGroup.addVertex(vx, vy, vz, nx, ny, nz, tx, ty);
+                    currentSubGroup.addPosition(vx, vy, vz);
+                    currentSubGroup.addNormal(nx, ny, nz);
+                    currentSubGroup.addTextureCoord( tx, ty);
+
+                
                 }
                 final JSONArray ii = jSubGroup.getJSONArray("ii");
                 for (int k = 0; k < ii.length(); ++k) {
@@ -285,7 +273,7 @@ public class Model3D extends Model {
         for (Group g : groups) {
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
             box.draw(shader, g.getMin(), g.getMax());
-            for (BufferObject sg : g.subGroups) {
+            for (IBufferObject sg : g.subGroups) {
                 sg.bind(shader);
                 sg.draw(shader);
             }
@@ -304,7 +292,7 @@ public class Model3D extends Model {
         for (Group g : groups) {
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
             box.draw(shader, g.getMin(), g.getMax());
-            for (BufferObject sg : g.subGroups) {
+            for (IBufferObject sg : g.subGroups) {
                 sg.bind(shader);
                 handler.beforeDraw(g, sg.getMaterial());
                 sg.draw(shader);

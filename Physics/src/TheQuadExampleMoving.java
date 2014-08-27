@@ -3,11 +3,15 @@ import hidrogine.lwjgl.Game;
 import hidrogine.lwjgl.Group;
 import hidrogine.lwjgl.Material;
 import hidrogine.lwjgl.Model3D;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Vector3f;
+
+import de.matthiasmann.twl.renderer.Texture.Rotation;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -131,7 +135,6 @@ public class TheQuadExampleMoving extends Game {
         }
         program.setLightPosition(0, camera.getPosition());
 
-        GL20.glUseProgram(0);
     }
 
     /*
@@ -139,9 +142,11 @@ public class TheQuadExampleMoving extends Game {
      * 
      * @see hidrogine.lwjgl.Game#draw()
      */
+    private static final Vector3f rotAxis = new Vector3f(0, 0, 1);
+    
     @Override
     public void draw() {
-
+        program.use();
         program.setIdentity();
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
@@ -150,7 +155,7 @@ public class TheQuadExampleMoving extends Game {
 
         program.pushMatrix();
         program.setOpaque(true);
-        program.getModelMatrix().rotate(time, new Vector3f(0, 0, 1));
+        program.getModelMatrix().rotate(time, rotAxis);
         car.draw(program, boxHandler);
         program.setOpaque(false);
         car.draw(program, boxHandler);
