@@ -32,7 +32,7 @@ public abstract class Game {
         // Setup an OpenGL context with API version 3.2
         try {
             PixelFormat pixelFormat = new PixelFormat();
-            ContextAttribs contextAtrributes = new ContextAttribs(3, 2)
+            ContextAttribs contextAtrributes = new ContextAttribs(3, 3)
                     .withForwardCompatible(true).withProfileCore(true);
                         
             camera = new Camera(w, h);
@@ -43,7 +43,11 @@ public abstract class Game {
             e.printStackTrace();
             System.exit(-1);
         }
-        System.out.println("OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
+
+        System.err.println("GL_VENDOR: " + GL11.glGetString(GL11.GL_VENDOR));
+        System.err.println("GL_RENDERER: " + GL11.glGetString(GL11.GL_RENDERER));
+        System.err.println("GL_VERSION: " + GL11.glGetString(GL11.GL_VERSION));
+        
         try {
             program = new ShaderProgram("vertex.glsl", "fragment.glsl");
         } catch (Exception e) {

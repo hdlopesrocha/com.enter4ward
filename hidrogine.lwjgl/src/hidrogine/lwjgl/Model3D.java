@@ -208,7 +208,7 @@ public class Model3D extends Model {
             final JSONArray subGroups = jObject.getJSONArray(groupName);
             for (int j = 0; j < subGroups.length(); ++j) {
                 final JSONObject jSubGroup = subGroups.getJSONObject(j);
-                final IBufferObject currentSubGroup = new BufferObject();
+                final IBufferObject currentSubGroup = new VertexBufferObject();
                 currentGroup.subGroups.add(currentSubGroup);
                 if (jSubGroup.has("mm")) {
                     currentSubGroup.setMaterial(materials.get(jSubGroup
