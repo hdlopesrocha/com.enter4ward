@@ -68,6 +68,7 @@ public abstract class Game {
             // Force a maximum FPS of about 60
             Display.sync(60);
             // Let the CPU synchronize with the GPU if GPU is tagging behind
+            program.use();
             Display.update();
         }
 

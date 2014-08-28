@@ -103,7 +103,7 @@ public class TheQuadExampleMoving extends Game {
     @Override
     public void update() {
         time += 0.003f;
-
+        
         float sense = 0.03f;
         if (Mouse.isButtonDown(0)) {
             camera.rotate(0, 1, 0, Mouse.getDX() * sense * 0.2f);
@@ -134,6 +134,8 @@ public class TheQuadExampleMoving extends Game {
             camera.move(0, 0, sense);
         }
         program.setLightPosition(0, camera.getPosition());
+       
+        program.setTime(time*10);
 
     }
 

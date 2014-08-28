@@ -8,7 +8,7 @@ import java.util.Stack;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBFragmentShader;
-import org.lwjgl.opengl.ARBShaderObjects;
+import static org.lwjgl.opengl.ARBShaderObjects.*;
 import org.lwjgl.opengl.ARBVertexShader;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
@@ -26,6 +26,7 @@ public class ShaderProgram {
     private int materialShininessLocation = 0;
     private int materialAlphaLocation = 0;
     private int materialSpecularLocation = 0;
+    private int timeLocation = 0;
 
     private int opaqueLocation = 0;
     private int ambientColorLocation = 0;
@@ -50,67 +51,69 @@ public class ShaderProgram {
         modelMatrix = new Matrix4f();
         modelMatrix.setIdentity();
         // Load the vertex shader
-        int vsId = this.createShader("vertex.glsl", ARBVertexShader.GL_VERTEX_SHADER_ARB);
+        int vsId = this.createShader("vertex.glsl",
+                ARBVertexShader.GL_VERTEX_SHADER_ARB);
         // Load the fragment shader
-        int fsId = this.createShader("fragment.glsl", ARBFragmentShader.GL_FRAGMENT_SHADER_ARB);
+        int fsId = this.createShader("fragment.glsl",
+                ARBFragmentShader.GL_FRAGMENT_SHADER_ARB);
 
         // Create a new shader program that links both shaders
-        program = ARBShaderObjects.glCreateProgramObjectARB();
+        program = glCreateProgramObjectARB();
 
         /*
          * if the vertex and fragment shaders setup sucessfully, attach them to
          * the shader program, link the sahder program (into the GL context I
          * suppose), and validate
          */
-        ARBShaderObjects.glAttachObjectARB(program, vsId);
-        ARBShaderObjects.glAttachObjectARB(program, fsId);
+        glAttachObjectARB(program, vsId);
+        glAttachObjectARB(program, fsId);
 
-        ARBShaderObjects.glLinkProgramARB(program);
-        if (ARBShaderObjects.glGetObjectParameteriARB(program,
-                ARBShaderObjects.GL_OBJECT_LINK_STATUS_ARB) == GL11.GL_FALSE) {
+        glLinkProgramARB(program);
+        if (glGetObjectParameteriARB(program, GL_OBJECT_LINK_STATUS_ARB) == GL11.GL_FALSE) {
             System.err.println(getLogInfo(program));
             return;
         }
 
-        ARBShaderObjects.glValidateProgramARB(program);
-        if (ARBShaderObjects.glGetObjectParameteriARB(program,
-                ARBShaderObjects.GL_OBJECT_VALIDATE_STATUS_ARB) == GL11.GL_FALSE) {
+        glValidateProgramARB(program);
+        if (glGetObjectParameteriARB(program, GL_OBJECT_VALIDATE_STATUS_ARB) == GL11.GL_FALSE) {
             System.err.println(getLogInfo(program));
             return;
         }
-/*
-        // Position information will be attribute 0
-        GL20.glBindAttribLocation(program, 0, "gl_Position");
-        // Color information will be attribute 1
-        GL20.glBindAttribLocation(program, 1, "gl_Color");
-        // Textute information will be attribute 2
-        GL20.glBindAttribLocation(program, 2, "gl_TextureCoord");
-*/
+        /*
+         * // Position information will be attribute 0
+         * GL20.glBindAttribLocation(program, 0, "gl_Position"); // Color
+         * information will be attribute 1 GL20.glBindAttribLocation(program, 1,
+         * "gl_Color"); // Textute information will be attribute 2
+         * GL20.glBindAttribLocation(program, 2, "gl_TextureCoord");
+         */
         use();
-        ARBShaderObjects.glValidateProgramARB(program);
+        glValidateProgramARB(program);
 
         // Get matrices uniform locations
-        projectionMatrixLocation = ARBShaderObjects.glGetUniformLocationARB(program,
+        projectionMatrixLocation = glGetUniformLocationARB(program,
                 "projectionMatrix");
-        viewMatrixLocation = ARBShaderObjects.glGetUniformLocationARB(program, "viewMatrix");
-        modelMatrixLocation = ARBShaderObjects.glGetUniformLocationARB(program, "modelMatrix");
-        ambientColorLocation = ARBShaderObjects.glGetUniformLocationARB(program, "ambientColor");
-        diffuseColorLocation = ARBShaderObjects.glGetUniformLocationARB(program, "diffuseColor");
-        cameraPositionLocation = ARBShaderObjects.glGetUniformLocationARB(program,
+        viewMatrixLocation = glGetUniformLocationARB(program, "viewMatrix");
+        modelMatrixLocation = glGetUniformLocationARB(program, "modelMatrix");
+        ambientColorLocation = glGetUniformLocationARB(program, "ambientColor");
+        timeLocation = glGetUniformLocationARB(program, "ftime");
+
+        diffuseColorLocation = glGetUniformLocationARB(program, "diffuseColor");
+        cameraPositionLocation = glGetUniformLocationARB(program,
                 "cameraPosition");
-        opaqueLocation = ARBShaderObjects.glGetUniformLocationARB(program, "opaque");
+        opaqueLocation = glGetUniformLocationARB(program, "opaque");
 
         // material locations
-        materialShininessLocation = ARBShaderObjects.glGetUniformLocationARB(program,
+        materialShininessLocation = glGetUniformLocationARB(program,
                 "materialShininess");
-        materialAlphaLocation = ARBShaderObjects.glGetUniformLocationARB(program, "materialAlpha");
-        materialSpecularLocation = ARBShaderObjects.glGetUniformLocationARB(program,
+        materialAlphaLocation = glGetUniformLocationARB(program,
+                "materialAlpha");
+        materialSpecularLocation = glGetUniformLocationARB(program,
                 "materialSpecular");
 
         for (int i = 0; i < 10; ++i) {
-            lightPositionLocation[i] = ARBShaderObjects.glGetUniformLocationARB(program,
+            lightPositionLocation[i] = glGetUniformLocationARB(program,
                     "lightPosition[" + i + "]");
-            lightSpecularColorLocation[i] = ARBShaderObjects.glGetUniformLocationARB(program,
+            lightSpecularColorLocation[i] = glGetUniformLocationARB(program,
                     "lightSpecularColor[" + i + "]");
 
         }
@@ -121,7 +124,8 @@ public class ShaderProgram {
      * Use default shader.
      */
     public void use() {
-        ARBShaderObjects.glUseProgramObjectARB(program);    }
+        glUseProgramObjectARB(program);
+    }
 
     Matrix4f modelView = new Matrix4f();
 
@@ -132,57 +136,60 @@ public class ShaderProgram {
 
         Matrix4f.mul(camera.getViewMatrix(), modelMatrix, modelView);
         // Upload matrices to the uniform variables
-        use();
 
         camera.getProjectionMatrix().store(matrix44Buffer);
         matrix44Buffer.flip();
-        ARBShaderObjects.glUniformMatrix4ARB(projectionMatrixLocation, false, matrix44Buffer);
+        glUniformMatrix4ARB(projectionMatrixLocation, false, matrix44Buffer);
 
         camera.getViewMatrix().store(matrix44Buffer);
         matrix44Buffer.flip();
-        ARBShaderObjects.glUniformMatrix4ARB(viewMatrixLocation, false, matrix44Buffer);
+        glUniformMatrix4ARB(viewMatrixLocation, false, matrix44Buffer);
 
         modelMatrix.store(matrix44Buffer);
         matrix44Buffer.flip();
-        ARBShaderObjects.glUniformMatrix4ARB(modelMatrixLocation, false, matrix44Buffer);
+        glUniformMatrix4ARB(modelMatrixLocation, false, matrix44Buffer);
 
         Vector3f cameraPosition = camera.getPosition();
-        ARBShaderObjects.glUniform3fARB(cameraPositionLocation, cameraPosition.x,
+        glUniform3fARB(cameraPositionLocation, cameraPosition.x,
                 cameraPosition.y, cameraPosition.z);
 
         for (int i = 0; i < 10; ++i) {
             Vector3f position = lightPosition[i];
             Vector3f specularColor = lightSpecularColor[i];
             if (position != null) {
-                ARBShaderObjects.glUniform3fARB(lightPositionLocation[i], position.x,
+                glUniform3fARB(lightPositionLocation[i], position.x,
                         position.y, position.z);
             }
             if (specularColor != null) {
-                ARBShaderObjects.glUniform3fARB(lightSpecularColorLocation[i],
-                        specularColor.x, specularColor.y, specularColor.z);
+                glUniform3fARB(lightSpecularColorLocation[i], specularColor.x,
+                        specularColor.y, specularColor.z);
             }
         }
     }
 
     public void setMaterialAlpha(float value) {
-      
-        ARBShaderObjects.glUniform1fARB(materialAlphaLocation, value);
+
+        glUniform1fARB(materialAlphaLocation, value);
     }
 
     public void setMaterialShininess(float value) {
-        ARBShaderObjects.glUniform1fARB(materialShininessLocation, value);
+        glUniform1fARB(materialShininessLocation, value);
+    }
+
+    public void setTime(float value) {
+        glUniform1fARB(timeLocation, value);
     }
 
     public void setAmbientColor(float r, float g, float b) {
-        ARBShaderObjects.glUniform3fARB(ambientColorLocation, r, g, b);
+        glUniform3fARB(ambientColorLocation, r, g, b);
     }
 
     public void setMaterialSpecular(float r, float g, float b) {
-        ARBShaderObjects.glUniform3fARB(materialSpecularLocation, r, g, b);
+        glUniform3fARB(materialSpecularLocation, r, g, b);
     }
 
     public void setDiffuseColor(float r, float g, float b) {
-        ARBShaderObjects.glUniform3fARB(diffuseColorLocation, r, g, b);
+        glUniform3fARB(diffuseColorLocation, r, g, b);
     }
 
     public void setLightPosition(int index, Vector3f lightPosition) {
@@ -199,7 +206,7 @@ public class ShaderProgram {
         else
             GL11.glDisable(GL11.GL_CULL_FACE);
 
-        ARBShaderObjects.glUniform1iARB(opaqueLocation, value ? 1 : 0);
+        glUniform1iARB(opaqueLocation, value ? 1 : 0);
     }
 
     /*
@@ -211,31 +218,28 @@ public class ShaderProgram {
     private int createShader(String filename, int shaderType) throws Exception {
         int shader = 0;
         try {
-            shader = ARBShaderObjects.glCreateShaderObjectARB(shaderType);
+            shader = glCreateShaderObjectARB(shaderType);
 
             if (shader == 0)
                 return 0;
 
-            ARBShaderObjects.glShaderSourceARB(shader,
-                    readFileAsString(filename));
-            ARBShaderObjects.glCompileShaderARB(shader);
+            glShaderSourceARB(shader, readFileAsString(filename));
+            glCompileShaderARB(shader);
 
-            if (ARBShaderObjects.glGetObjectParameteriARB(shader,
-                    ARBShaderObjects.GL_OBJECT_COMPILE_STATUS_ARB) == GL11.GL_FALSE)
+            if (glGetObjectParameteriARB(shader, GL_OBJECT_COMPILE_STATUS_ARB) == GL11.GL_FALSE)
                 throw new RuntimeException("Error creating shader: "
                         + getLogInfo(shader));
 
             return shader;
         } catch (Exception exc) {
-            ARBShaderObjects.glDeleteObjectARB(shader);
+            glDeleteObjectARB(shader);
             throw exc;
         }
     }
 
     private static String getLogInfo(int obj) {
-        return ARBShaderObjects.glGetInfoLogARB(obj, ARBShaderObjects
-                .glGetObjectParameteriARB(obj,
-                        ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB));
+        return glGetInfoLogARB(obj,
+                glGetObjectParameteriARB(obj, GL_OBJECT_INFO_LOG_LENGTH_ARB));
     }
 
     private String readFileAsString(String filename) throws Exception {
@@ -304,7 +308,7 @@ public class ShaderProgram {
         use();
         modelMatrix.store(matrix44Buffer);
         matrix44Buffer.flip();
-        ARBShaderObjects.glUniformMatrix4ARB(modelMatrixLocation, false, matrix44Buffer);
+        glUniformMatrix4ARB(modelMatrixLocation, false, matrix44Buffer);
     }
 
     public void setIdentity() {

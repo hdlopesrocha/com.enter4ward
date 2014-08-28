@@ -7,6 +7,7 @@ uniform vec3 diffuseColor;
 uniform vec3 ambientColor;
 uniform float materialShininess;
 uniform float materialAlpha;
+uniform float ftime;
 uniform vec3 materialSpecular;
 uniform int opaque;
 
@@ -50,5 +51,4 @@ void main(void) {
 	//gl_FragColor.xyz = (normalize(vPosition)+vec3(1.0,1.0,1.0))/2.0;
 	
 	outColor = clamp(outColor,0.0,1.0);
-
 }
