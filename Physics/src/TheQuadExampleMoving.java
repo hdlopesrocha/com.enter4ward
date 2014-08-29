@@ -1,5 +1,6 @@
 import hidrogine.lwjgl.DrawHandler;
 import hidrogine.lwjgl.Game;
+import hidrogine.lwjgl.Grid;
 import hidrogine.lwjgl.Group;
 import hidrogine.lwjgl.Material;
 import hidrogine.lwjgl.Model3D;
@@ -39,7 +40,7 @@ public class TheQuadExampleMoving extends Game {
 
     /** The box. */
     Model3D car;
-
+    Grid grid;
     /** The box handler. */
     DrawHandler boxHandler;
 
@@ -55,6 +56,7 @@ public class TheQuadExampleMoving extends Game {
     public void setup() {
         camera.lookAt(0, 0, 3, 0, 0, 0);
         car = new Model3D("car.mat", "car.geo", 1f);
+        grid = new Grid(32);
         program.setLightPosition(0, new Vector3f(3, 3, 3));
         program.setAmbientColor(0, 0, 0);
         program.setDiffuseColor(1, 1, 1);
@@ -93,6 +95,7 @@ public class TheQuadExampleMoving extends Game {
                 }
             }
         };
+        
     }
 
     /*
@@ -144,10 +147,20 @@ public class TheQuadExampleMoving extends Game {
      * 
      * @see hidrogine.lwjgl.Game#draw()
      */
-    private static final Vector3f rotAxis = new Vector3f(0, 0, 1);
     
     @Override
     public void draw() {
+    	float mb = 1024*1024;
+        
+        //Getting the runtime reference from system
+        Runtime runtime = Runtime.getRuntime();
+         
+                 //Print used memory
+       Display.setTitle("Used Memory:"
+            + (runtime.totalMemory() - runtime.freeMemory()) / mb);
+    	
+    	
+    	
         program.use();
         program.setIdentity();
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -155,10 +168,15 @@ public class TheQuadExampleMoving extends Game {
         // box.draw(shader);
         useDefaultShader();
 
-        program.pushMatrix();
         program.setOpaque(true);
-        program.getModelMatrix().rotate(time, rotAxis);
+        grid.draw(program);
+        program.pushMatrix();
         car.draw(program, boxHandler);
+        if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+        	car.drawBoxs(program);
+        }
+        
+        
         program.setOpaque(false);
         car.draw(program, boxHandler);
         program.popMatrix();

@@ -21,6 +21,7 @@ public class Camera {
     private Matrix4f projectionMatrix = null;
 
 
+    private Matrix4f viewMatrix = new Matrix4f();
 
     /** The height. */
     private int width, height;
@@ -30,38 +31,39 @@ public class Camera {
      *
      * @return the matrix
      */
+    private Vector3f negativePos = new Vector3f();
     public Matrix4f getViewMatrix() {
+    	position.negate(negativePos);
         Matrix4f result = convertQuaternionToMatrix4f(rotation);
-        result = result.translate(new Vector3f(-position.x,-position.y,-position.z));
+        result = result.translate(negativePos);
         return result;
     }
 
-    private static Matrix4f convertQuaternionToMatrix4f(Quaternion q) {
-        Matrix4f matrix = new Matrix4f();
-        matrix.m00 = 1.0f - 2.0f * (q.getY() * q.getY() + q.getZ() * q.getZ());
-        matrix.m01 = 2.0f * (q.getX() * q.getY() + q.getZ() * q.getW());
-        matrix.m02 = 2.0f * (q.getX() * q.getZ() - q.getY() * q.getW());
-        matrix.m03 = 0.0f;
+    private Matrix4f convertQuaternionToMatrix4f(Quaternion q) {
+        viewMatrix.m00 = 1.0f - 2.0f * (q.getY() * q.getY() + q.getZ() * q.getZ());
+        viewMatrix.m01 = 2.0f * (q.getX() * q.getY() + q.getZ() * q.getW());
+        viewMatrix.m02 = 2.0f * (q.getX() * q.getZ() - q.getY() * q.getW());
+        viewMatrix.m03 = 0.0f;
 
         // Second row
-        matrix.m10 = 2.0f * (q.getX() * q.getY() - q.getZ() * q.getW());
-        matrix.m11 = 1.0f - 2.0f * (q.getX() * q.getX() + q.getZ() * q.getZ());
-        matrix.m12 = 2.0f * (q.getZ() * q.getY() + q.getX() * q.getW());
-        matrix.m13 = 0.0f;
+        viewMatrix.m10 = 2.0f * (q.getX() * q.getY() - q.getZ() * q.getW());
+        viewMatrix.m11 = 1.0f - 2.0f * (q.getX() * q.getX() + q.getZ() * q.getZ());
+        viewMatrix.m12 = 2.0f * (q.getZ() * q.getY() + q.getX() * q.getW());
+        viewMatrix.m13 = 0.0f;
 
         // Third row
-        matrix.m20 = 2.0f * (q.getX() * q.getZ() + q.getY() * q.getW());
-        matrix.m21 = 2.0f * (q.getY() * q.getZ() - q.getX() * q.getW());
-        matrix.m22 = 1.0f - 2.0f * (q.getX() * q.getX() + q.getY() * q.getY());
-        matrix.m23 = 0.0f;
+        viewMatrix.m20 = 2.0f * (q.getX() * q.getZ() + q.getY() * q.getW());
+        viewMatrix.m21 = 2.0f * (q.getY() * q.getZ() - q.getX() * q.getW());
+        viewMatrix.m22 = 1.0f - 2.0f * (q.getX() * q.getX() + q.getY() * q.getY());
+        viewMatrix.m23 = 0.0f;
 
         // Fourth row
-        matrix.m30 = 0;
-        matrix.m31 = 0;
-        matrix.m32 = 0;
-        matrix.m33 = 1.0f;
+        viewMatrix.m30 = 0;
+        viewMatrix.m31 = 0;
+        viewMatrix.m32 = 0;
+        viewMatrix.m33 = 1.0f;
 
-        return matrix;
+        return viewMatrix;
     }
 
     /**
@@ -234,7 +236,7 @@ public class Camera {
         return position;
     }
 
-    public Vector3f getDirection() {
+    private Vector3f getDirection() {
         Matrix4f trans = convertQuaternionToMatrix4f(rotation);
         trans.invert();
         Vector4f frontVec = new Vector4f(0, 0, 1, 0);

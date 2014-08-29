@@ -35,11 +35,10 @@ public class ShaderProgram {
     private int[] lightPositionLocation = new int[10];
     private int[] lightSpecularColorLocation = new int[10];
     /** The model matrix. */
-    private Matrix4f modelMatrix = null;
     private Vector3f[] lightPosition = new Vector3f[10];
     private Vector3f[] lightSpecularColor = new Vector3f[10];
-
-    Stack<Matrix4f> matrixStack = new Stack<Matrix4f>();
+    private int stackPointer = 0;
+    Matrix4f [] matrixStack = new Matrix4f[128];
     private FloatBuffer matrix44Buffer = null;
 
     private int program = 0;
@@ -48,8 +47,10 @@ public class ShaderProgram {
             throws Exception {
         // Create a FloatBuffer with the proper size to store our matrices later
         matrix44Buffer = BufferUtils.createFloatBuffer(16);
-        modelMatrix = new Matrix4f();
-        modelMatrix.setIdentity();
+        for(int i=0; i < 128 ; ++i){
+        	matrixStack[i]=new Matrix4f();
+        	matrixStack[i].setIdentity();
+        }
         // Load the vertex shader
         int vsId = this.createShader("vertex.glsl",
                 ARBVertexShader.GL_VERTEX_SHADER_ARB);
@@ -134,7 +135,7 @@ public class ShaderProgram {
      */
     public void update(Camera camera) {
 
-        Matrix4f.mul(camera.getViewMatrix(), modelMatrix, modelView);
+        Matrix4f.mul(camera.getViewMatrix(), matrixStack[stackPointer], modelView);
         // Upload matrices to the uniform variables
 
         camera.getProjectionMatrix().store(matrix44Buffer);
@@ -145,7 +146,7 @@ public class ShaderProgram {
         matrix44Buffer.flip();
         glUniformMatrix4ARB(viewMatrixLocation, false, matrix44Buffer);
 
-        modelMatrix.store(matrix44Buffer);
+        matrixStack[stackPointer].store(matrix44Buffer);
         matrix44Buffer.flip();
         glUniformMatrix4ARB(modelMatrixLocation, false, matrix44Buffer);
 
@@ -293,26 +294,23 @@ public class ShaderProgram {
     }
 
     public void pushMatrix() {
-        Matrix4f copy = new Matrix4f();
-        Matrix4f.load(modelMatrix, copy);
-        matrixStack.push(copy);
+        Matrix4f.load(matrixStack[stackPointer], matrixStack[stackPointer+1]);
+        ++stackPointer;
     }
 
     public void popMatrix() {
-        if (matrixStack.size() > 0) {
-            modelMatrix = matrixStack.pop();
-        }
+        --stackPointer;
     }
 
     protected void updateModelMatrix() {
         use();
-        modelMatrix.store(matrix44Buffer);
+        matrixStack[stackPointer].store(matrix44Buffer);
         matrix44Buffer.flip();
         glUniformMatrix4ARB(modelMatrixLocation, false, matrix44Buffer);
     }
 
     public void setIdentity() {
-        Matrix4f.setIdentity(modelMatrix);
+        Matrix4f.setIdentity(matrixStack[stackPointer]);
     }
 
     /**
@@ -321,7 +319,7 @@ public class ShaderProgram {
      * @return the model matrix
      */
     public Matrix4f getModelMatrix() {
-        return modelMatrix;
+        return matrixStack[stackPointer];
     }
 
 }

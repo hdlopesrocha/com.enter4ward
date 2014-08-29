@@ -32,7 +32,7 @@ public abstract class Game {
         // Setup an OpenGL context with API version 3.2
         try {
             PixelFormat pixelFormat = new PixelFormat();
-            ContextAttribs contextAtrributes = new ContextAttribs(3, 3)
+            ContextAttribs contextAtrributes = new ContextAttribs(3, 2)
                     .withForwardCompatible(true).withProfileCore(true);
                         
             camera = new Camera(w, h);
@@ -56,7 +56,7 @@ public abstract class Game {
         }
         
         // Setup an XNA like background color
-        GL11.glClearColor(0.25f, 0.25f, 0.25f, 0f);
+        GL11.glClearColor(0f, 0f, 0f, 0f);
         GL11.glViewport(0, 0, w, h);
         GL11.glEnable(GL11.GL_DEPTH_TEST);              // Enables Depth Testing
         GL11.glEnable(GL11.GL_CULL_FACE);
@@ -64,6 +64,7 @@ public abstract class Game {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         setup();
+        System.gc();
         while (!Display.isCloseRequested()) {
             // Do a single loop (logic/render)
             update();
