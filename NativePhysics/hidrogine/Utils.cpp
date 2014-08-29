@@ -1,3 +1,5 @@
+#ifndef HIDROGINE_SHADER_UTILS
+#define HIDROGINE_SHADER_UTILS
 #include <fstream>
 #include <string>
 
@@ -15,3 +17,4 @@ namespace hidrogine {
 		}
 	};
 }
+#endif

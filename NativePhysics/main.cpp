@@ -25,7 +25,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
-#include "hidrogine/Utils.cpp"
+#include "hidrogine/ShaderProgram.cpp"
 using namespace std;
 using namespace hidrogine;
 GLuint VBO;
@@ -77,7 +77,7 @@ int main(int argc, char** argv)
     glutCreateWindow("Tutorial 03");
 
     InitializeGlutCallbacks();
-printf("%s\n", glGetString(GL_VERSION));
+	printf("%s\n", glGetString(GL_VERSION));
     // Must be done after glut is initialized!
     GLenum res = glewInit();
     if (res != GLEW_OK) {
@@ -88,7 +88,7 @@ printf("%s\n", glGetString(GL_VERSION));
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 
     CreateVertexBuffer();
-
+	ShaderProgram * program = new ShaderProgram("vertex.glsl", "fragment.glsl");
     glutMainLoop();
 
     return 0;
