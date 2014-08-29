@@ -1,25 +1,8 @@
-/*
-
-	Copyright 2010 Etay Meiri
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-    Tutorial 03 - First triangle
-*/
+#pragma comment(lib, "glew32.lib")
 #include <math.h>
 #include <stdio.h>
 #include <GL/glew.h>
+#include <GL/gl.h>
 #include <GL/freeglut.h>
 #include "math_3d.h"
 #include <fstream>
@@ -32,7 +15,7 @@ GLuint VBO;
 float t=0;
 static void RenderSceneCB()
 {
-t+=0.1f;
+t+=0.01f;
     glClearColor(1.0f, (cos(t)+1.0f)/2.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -43,8 +26,8 @@ t+=0.1f;
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
     glDisableVertexAttribArray(0);
-  // code for rendering here
     glutSwapBuffers();   // swapping image buffer for double buffering
+	glFinish();
     glutPostRedisplay(); // redrawing. Omit this line if you don't want constant redraw
 }
 
@@ -69,12 +52,11 @@ static void CreateVertexBuffer()
 
 int main(int argc, char** argv)
 {
-	cout << Utils::fileToString("INSTALL") << endl;
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGBA);
     glutInitWindowSize(1024, 768);
     glutInitWindowPosition(100, 100);
-    glutCreateWindow("Tutorial 03");
+    glutCreateWindow("hidrogine");
 
     InitializeGlutCallbacks();
 	printf("%s\n", glGetString(GL_VERSION));

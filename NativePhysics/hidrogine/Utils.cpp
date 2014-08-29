@@ -3,10 +3,8 @@
 #include <fstream>
 #include <string>
 
-using namespace std;
 
 namespace hidrogine {
-
 	class Utils {
 		public: static string fileToString(string filename){
 			ifstream ifs(filename.c_str());
