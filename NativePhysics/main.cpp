@@ -22,7 +22,12 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include "math_3d.h"
-
+#include <fstream>
+#include <string>
+#include <iostream>
+#include "hidrogine/Utils.cpp"
+using namespace std;
+using namespace hidrogine;
 GLuint VBO;
 float t=0;
 static void RenderSceneCB()
@@ -64,6 +69,7 @@ static void CreateVertexBuffer()
 
 int main(int argc, char** argv)
 {
+	cout << Utils::fileToString("INSTALL") << endl;
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGBA);
     glutInitWindowSize(1024, 768);
