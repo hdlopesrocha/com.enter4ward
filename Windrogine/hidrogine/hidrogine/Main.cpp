@@ -4,13 +4,15 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/freeglut.h>
-#include "math_3d.h"
 #include <fstream>
 #include <string>
 #include <iostream>
-#include "ShaderProgram.h"
+#include "unilib/math/Math.hpp"
+#include "hidrogine/ShaderProgram.h"
 using namespace std;
 using namespace hidrogine;
+using namespace unilib;
+
 GLuint VBO;
 float t=0;
 static void RenderSceneCB()
@@ -39,10 +41,10 @@ static void InitializeGlutCallbacks()
 
 static void CreateVertexBuffer()
 {
-    Vector3f Vertices[3];
-    Vertices[0] = Vector3f(-1.0f, -1.0f, 0.0f);
-    Vertices[1] = Vector3f(1.0f, -1.0f, 0.0f);
-    Vertices[2] = Vector3f(0.0f, 1.0f, 0.0f);
+    Vector3 Vertices[3];
+    Vertices[0] = Vector3(-1.0f, -1.0f, 0.0f);
+    Vertices[1] = Vector3(1.0f, -1.0f, 0.0f);
+    Vertices[2] = Vector3(0.0f, 1.0f, 0.0f);
 
  	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);

@@ -66,16 +66,33 @@
     <None Include="..\..\..\NativePhysics\vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="hidrogine\Game.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="ShaderProgram.cpp" />
-    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="unilib\math\BoundingBox.cpp" />
+    <ClCompile Include="unilib\math\BoundingFrustum.cpp" />
+    <ClCompile Include="unilib\math\BoundingSphere.cpp" />
+    <ClCompile Include="unilib\math\MathHelper.cpp" />
+    <ClCompile Include="unilib\math\Matrix.cpp" />
+    <ClCompile Include="unilib\math\Plane.cpp" />
+    <ClCompile Include="unilib\math\PlaneHelper.cpp" />
+    <ClCompile Include="unilib\math\PrimeCache.cpp" />
+    <ClCompile Include="unilib\math\Quaternion.cpp" />
+    <ClCompile Include="unilib\math\Ray.cpp" />
+    <ClCompile Include="unilib\math\Statistics.cpp" />
+    <ClCompile Include="unilib\math\Vector2.cpp" />
+    <ClCompile Include="unilib\math\Vector3.cpp" />
+    <ClCompile Include="unilib\math\Vector4.cpp" />
+    <ClCompile Include="hidrogine\ShaderProgram.cpp" />
+    <ClCompile Include="hidrogine\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="math_3d.h" />
-    <ClInclude Include="ShaderProgram.h" />
-    <ClInclude Include="Utils.h" />
+    <ClInclude Include="hidrogine\Game.h" />
+    <ClInclude Include="unilib\math\Math.hpp" />
+    <ClInclude Include="hidrogine\ShaderProgram.h" />
+    <ClInclude Include="hidrogine\Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="hidrogine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
