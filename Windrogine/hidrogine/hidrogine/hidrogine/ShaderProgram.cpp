@@ -75,7 +75,7 @@ namespace hidrogine {
 		//Vertex and fragment shaders are successfully compiled.
 		//Now time to link them together into a program.
 		//Get a program object.
-		GLuint program = glCreateProgram();
+		program = glCreateProgram();
 			 
 		//Attach our shaders to our program
 		glAttachShader(program, vertexShader);
@@ -111,11 +111,52 @@ namespace hidrogine {
 		//Always detach shaders after a successful link.
 		glDetachShader(program, vertexShader);
 		glDetachShader(program, fragmentShader);
+
+		glUseProgram(program);
+
+		// Get matrices uniform locations
+        projectionMatrixLocation = glGetUniformLocation(program, "projectionMatrix");
+        viewMatrixLocation = glGetUniformLocation(program, "viewMatrix");
+        modelMatrixLocation = glGetUniformLocation(program, "modelMatrix");
+        ambientColorLocation = glGetUniformLocation(program, "ambientColor");
+        timeLocation = glGetUniformLocation(program, "ftime");
+
+        diffuseColorLocation = glGetUniformLocation(program, "diffuseColor");
+        cameraPositionLocation = glGetUniformLocation(program, "cameraPosition");
+        opaqueLocation = glGetUniformLocation(program, "opaque");
+
+        // material locations
+        materialShininessLocation = glGetUniformLocation(program, "materialShininess");
+        materialAlphaLocation = glGetUniformLocation(program, "materialAlpha");
+        materialSpecularLocation = glGetUniformLocation(program,"materialSpecular");
+
+        for (int i = 0; i < 10; ++i) {
+			lightPositionLocation[i] = glGetUniformLocation(program,("lightPosition[" + to_string(i) + "]").c_str() );
+            lightSpecularColorLocation[i] = glGetUniformLocation(program, ("lightSpecularColor[" + to_string(i) + "]").c_str());
+        }
+        setMaterialAlpha(1.0f);
+
 	}
+
+	
+	void ShaderProgram::setMaterialAlpha(float value) {
+
+        glUniform1fARB(materialAlphaLocation, value);
+    }
 
 
 	ShaderProgram::~ShaderProgram(void)
 	{
 	}
+
+
+
+
+
+
+
+
+
+
 
 }

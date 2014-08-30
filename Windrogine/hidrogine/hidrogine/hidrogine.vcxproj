@@ -66,8 +66,10 @@
     <None Include="..\..\..\NativePhysics\vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="hidrogine\Camera.cpp" />
     <ClCompile Include="hidrogine\Game.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="unilib\json\Json.cpp" />
     <ClCompile Include="unilib\math\BoundingBox.cpp" />
     <ClCompile Include="unilib\math\BoundingFrustum.cpp" />
     <ClCompile Include="unilib\math\BoundingSphere.cpp" />
@@ -78,18 +80,44 @@
     <ClCompile Include="unilib\math\PrimeCache.cpp" />
     <ClCompile Include="unilib\math\Quaternion.cpp" />
     <ClCompile Include="unilib\math\Ray.cpp" />
-    <ClCompile Include="unilib\math\Statistics.cpp" />
     <ClCompile Include="unilib\math\Vector2.cpp" />
     <ClCompile Include="unilib\math\Vector3.cpp" />
     <ClCompile Include="unilib\math\Vector4.cpp" />
     <ClCompile Include="hidrogine\ShaderProgram.cpp" />
     <ClCompile Include="hidrogine\Utils.cpp" />
+    <ClInclude Include="hidrogine\Camera.h" />
+    <ClInclude Include="unilib\util\Collection.h" />
+    <ClInclude Include="unilib\util\HashFunction.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="unilib\util\HashMap.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="unilib\util\Iterator.h" />
+    <ClInclude Include="unilib\util\LinkedList.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="unilib\util\Map.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClCompile Include="unilib\util\Queue.cpp" />
+    <ClInclude Include="unilib\util\Stack.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClCompile Include="unilib\util\String.cpp" />
+    <ClInclude Include="unilib\util\TreeMap.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hidrogine\Game.h" />
+    <ClInclude Include="unilib\json\Json.h" />
     <ClInclude Include="unilib\math\Math.hpp" />
     <ClInclude Include="hidrogine\ShaderProgram.h" />
     <ClInclude Include="hidrogine\Utils.h" />
+    <ClInclude Include="unilib\util\Comparator.h" />
+    <ClInclude Include="unilib\util\LockMap.h" />
+    <ClInclude Include="unilib\util\String.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="hidrogine.rc" />

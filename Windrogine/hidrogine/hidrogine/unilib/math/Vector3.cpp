@@ -145,6 +145,9 @@ namespace unilib
         return *this == other;
     }
 
+	Vector3 Vector3::Negate(){
+		return Vector3(-X,-Y,-Z);
+    }
 
     int Vector3::GetHashCode(){
         return (int)(X + Y + Z);
@@ -319,6 +322,10 @@ namespace unilib
         Y-=value.Y;
         Z-=value.Z;
         return *this;
+    }
+
+	Vector3 Vector3::operator-(){
+        return Vector3(-X,-Y,-Z);
     }
 
     Vector3 Vector3::operator-(Vector3 value){

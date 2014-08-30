@@ -140,7 +140,7 @@ namespace unilib {
         public: static Vector3 Multiply(Vector3 value1, Vector3 value2);
         public: static Vector3 Multiply(Vector3 value1, float scaleFactor);
         public: static Vector3 Negate(Vector3 value);
-        public: void Normalize();
+		public: void Normalize();
         public: static Vector3 Normalize(Vector3 value);
         public: static Vector3 Reflect(Vector3 vector, Vector3 normal);
         public: static Vector3 SmoothStep(Vector3 value1, Vector3 value2, float amount);
@@ -149,12 +149,14 @@ namespace unilib {
         public: static Vector3 Transform(Vector3 value, Quaternion rotation);
         public: static Vector3 TransformNormal(Vector3 normal, Matrix matrix);
         public: string ToString();
+		public: Vector3 Negate();
         public: bool operator==(Vector3 value);
         public: bool operator!=(Vector3 value);
         public: Vector3 operator+(Vector3 value);
         public: Vector3 operator+=(Vector3 value);
         public: Vector3 operator-(Vector3 value);
-        public: Vector3 operator-=(Vector3 value);
+        public: Vector3 operator-();
+		public: Vector3 operator-=(Vector3 value);	
         public: Vector3 operator/=(float value);
         public: Vector3 operator/=(Vector3 value);
         public: Vector3 operator/(float value);
@@ -287,10 +289,8 @@ namespace unilib {
         public: static Matrix Transform(Matrix value, Quaternion rotation);
         public: bool Decompose(Vector3 * scale, Quaternion * rotation, Vector3 * translation);
         public: static Matrix Add(Matrix matrix1, Matrix matrix2);
-        public: static Matrix CreateBillboard(Vector3 objectPosition, Vector3 cameraPosition,
-            Vector3 cameraUpVector, Vector3 * cameraForwardVector);
-        public: static Matrix CreateConstrainedBillboard(Vector3 objectPosition, Vector3 cameraPosition,
-            Vector3 rotateAxis, Vector3 * cameraForwardVector, Vector3 * objectForwardVector);
+        public: static Matrix CreateBillboard(Vector3 objectPosition, Vector3 cameraPosition, Vector3 cameraUpVector, Vector3 * cameraForwardVector);
+        public: static Matrix CreateConstrainedBillboard(Vector3 objectPosition, Vector3 cameraPosition, Vector3 rotateAxis, Vector3 * cameraForwardVector, Vector3 * objectForwardVector);
         public: static Matrix CreateFromAxisAngle(Vector3 axis, float angle);
         public: static Matrix CreateFromQuaternion(Quaternion quaternion);
         public: static Matrix CreateLookAt(Vector3 cameraPosition, Vector3 cameraTarget, Vector3 cameraUpVector);

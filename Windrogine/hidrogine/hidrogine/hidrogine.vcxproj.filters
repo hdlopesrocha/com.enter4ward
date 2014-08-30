@@ -52,9 +52,6 @@
     <ClCompile Include="unilib\math\Ray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="unilib\math\Statistics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="unilib\math\Vector2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -73,6 +70,18 @@
     <ClCompile Include="hidrogine\Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="unilib\json\Json.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="unilib\util\Queue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="unilib\util\String.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hidrogine\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="unilib\math\Math.hpp">
@@ -85,6 +94,45 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="hidrogine\Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unilib\util\String.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unilib\util\LockMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unilib\util\Comparator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unilib\json\Json.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unilib\util\Collection.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unilib\util\Iterator.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unilib\util\TreeMap.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unilib\util\LinkedList.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unilib\util\HashFunction.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unilib\util\HashMap.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unilib\util\Map.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unilib\util\Stack.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hidrogine\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

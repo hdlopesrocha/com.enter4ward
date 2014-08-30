@@ -3,8 +3,7 @@
 
 
 #include <stdlib.h>
-#include "Collection.cpp"
-#include "Iterator.cpp"
+#include "Collection.h"
 
 
 namespace unilib {

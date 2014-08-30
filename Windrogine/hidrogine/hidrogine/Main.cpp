@@ -73,6 +73,7 @@ int main(int argc, char** argv)
 
     CreateVertexBuffer();
 	ShaderProgram * program = new ShaderProgram("vertex.glsl", "fragment.glsl");
+	
     glutMainLoop();
 
     return 0;

@@ -1,24 +1,9 @@
-#ifndef unilib_util_String
-#define unilib_util_String
-
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <deque>
-#include <sstream>
-#include <algorithm>    // std::generate_n
-
-#include <stdlib.h>
-
-
+#include "String.h"
 using namespace std;
 
 namespace unilib {
-	class String {
-	
 
-	
-		public: static deque<string> Split(string str,char sep){
+	deque<string> String::Split(string str,char sep){
 						
 			deque<string> ret;
 			
@@ -33,17 +18,17 @@ namespace unilib {
 		}
 		
 		
-		public: static StringComparator * GetComparator(){
+		StringComparator * String::GetComparator(){
 			static StringComparator * Comparator = new StringComparator();
 			return Comparator;
 		}		
 
 
-		public: static string Random( size_t length )
+		string String::Random( size_t length )
 		{
-		static bool randInited = false;
+			static bool randInited = false;
 			if(!randInited){
-				srand(time(NULL));
+				srand((unsigned)time(NULL));
 				randInited = true;
 			}
 		
@@ -62,27 +47,24 @@ namespace unilib {
 		}
 
 
-// trim from start
-public: static inline string ltrim(string s) {
-        s.erase(s.begin(), find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace))));
-        return s;
-}
+		// trim from start
+		string String::ltrim(string s) {
+				s.erase(s.begin(), find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace))));
+				return s;
+		}
 
-// trim from end
-public: static inline string rtrim(string s) {
-        s.erase(find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(), s.end());
-        return s;
-}
+		// trim from end
+		string String::rtrim(string s) {
+				s.erase(find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(), s.end());
+				return s;
+		}
 
-// trim from both ends
-public: static inline string Trim(string s) {
-        return ltrim(rtrim(s));
-}
+		// trim from both ends
+		string String::Trim(string s) {
+				return ltrim(rtrim(s));
+		}
 
 	
-	};
+	
 
 }
-
-#endif
-
