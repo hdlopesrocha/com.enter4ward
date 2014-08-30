@@ -139,17 +139,107 @@ namespace hidrogine {
 	}
 
 	
-	void ShaderProgram::setMaterialAlpha(float value) {
 
-        glUniform1fARB(materialAlphaLocation, value);
-    }
 
 
 	ShaderProgram::~ShaderProgram(void)
 	{
 	}
 
+	
 
+    void ShaderProgram::use() {
+        glUseProgram(program);
+    }
+
+
+    void ShaderProgram::update(Camera * camera) {
+		Matrix modelView = camera->getViewMatrix()* matrixStack[stackPointer];
+        // Upload matrices to the uniform variables
+		glUniformMatrix4fv(projectionMatrixLocation,16, false, camera->getProjectionMatrix().M);
+		glUniformMatrix4fv(viewMatrixLocation,16, false, camera->getViewMatrix().M);
+		glUniformMatrix4fv(modelMatrixLocation,16, false, matrixStack[stackPointer].M);
+
+
+        glUniform3f(cameraPositionLocation, camera->getPosition().X, camera->getPosition().Y, camera->getPosition().Z);
+
+        for (int i = 0; i < 10; ++i) {
+            Vector3 position = lightPositions[i];
+            Vector3 specularColor = lightSpecularColor[i];
+            if (position != NULL) {
+                glUniform3fARB(lightPositionLocation[i], position.X, position.Y, position.Z);
+            }
+            if (specularColor != NULL) {
+                glUniform3fARB(lightSpecularColorLocation[i], specularColor.X, specularColor.Y, specularColor.Z);
+            }
+        }
+    }
+
+	void ShaderProgram::setMaterialAlpha(float value) {
+
+        glUniform1fARB(materialAlphaLocation, value);
+    }
+
+    void ShaderProgram::setMaterialShininess(float value) {
+        glUniform1fARB(materialShininessLocation, value);
+    }
+
+    void ShaderProgram::setTime(float value) {
+        glUniform1fARB(timeLocation, value);
+    }
+
+    void ShaderProgram::setAmbientColor(float r, float g, float b) {
+        glUniform3fARB(ambientColorLocation, r, g, b);
+    }
+
+    void ShaderProgram::setMaterialSpecular(float r, float g, float b) {
+        glUniform3fARB(materialSpecularLocation, r, g, b);
+    }
+
+    void ShaderProgram::setDiffuseColor(float r, float g, float b) {
+        glUniform3fARB(diffuseColorLocation, r, g, b);
+    }
+
+    void ShaderProgram::setLightPosition(int index, Vector3 lightPosition) {
+        lightPositions[index] = lightPosition;
+    }
+
+    void ShaderProgram::setLightColor(int index, Vector3 lightColor) {
+        lightSpecularColor[index] = lightColor;
+    }
+
+	void ShaderProgram::setOpaque(bool value) {
+        if (value)
+            glEnable(GL_CULL_FACE);
+        else
+            glDisable(GL_CULL_FACE);
+
+        glUniform1i(opaqueLocation, value ? 1 : 0);
+    }
+
+    
+    void ShaderProgram::pushMatrix() {
+        matrixStack[stackPointer+1]= matrixStack[stackPointer];
+        ++stackPointer;
+    }
+
+    void ShaderProgram::popMatrix() {
+        --stackPointer;
+    }
+
+    void ShaderProgram::updateModelMatrix() {
+        use();
+		glUniformMatrix4fv(modelMatrixLocation,16, false, getModelMatrix().M);
+    }
+
+    void ShaderProgram::setIdentity() {
+		matrixStack[stackPointer]=Matrix::Identity();
+    }
+
+  
+    Matrix ShaderProgram::getModelMatrix() {
+        return matrixStack[stackPointer];
+    }
 
 
 

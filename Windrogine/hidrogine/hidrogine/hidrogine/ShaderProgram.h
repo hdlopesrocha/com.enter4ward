@@ -35,10 +35,11 @@ namespace hidrogine {
 		private: GLuint diffuseColorLocation;
 		private: GLuint lightPositionLocation[10];
 		private: GLuint lightSpecularColorLocation[10];
-		private: Vector3 lightPosition[10];
+		private: Vector3 lightPositions[10];
 		private: Vector3 lightSpecularColor[10];
 		private: int stackPointer;
 		private: Matrix matrixStack[128];
+
 		private: GLuint program;
 
 		public:	ShaderProgram(string vsFilename, string fsFilename);
