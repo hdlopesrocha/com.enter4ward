@@ -1,0 +1,25 @@
+body {
+	background-color: #dddddd;
+	width:100%;
+}
+
+* {
+	margin:0px;
+	padding:0px;
+}
+
+nav {
+	display:inline-block;
+	margin: 0px auto;
+}
+
+body > * {
+	width: 1000px;
+	margin: 0px auto;
+	background-color: #cccccc;
+}
+
+
+footer {
+	text-align: right;
+}

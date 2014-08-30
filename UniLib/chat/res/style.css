@@ -1,0 +1,33 @@
+body, html {
+	background-color: #dddddd;
+	width:100%;
+	height: 100%;
+}
+
+* {
+	margin:0px;
+	padding:0px;
+}
+
+nav {
+	display:inline-block;
+	margin: 0px auto;
+}
+
+body > * {
+	width: 800px;
+	margin: 0px auto;
+	background-color: #cccccc;
+}
+
+
+.message {
+
+	width:100%;
+}
+
+#msgs {
+	overflow: auto;
+	height: 500px; 
+}
+

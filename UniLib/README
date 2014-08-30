@@ -1,0 +1,65 @@
+Hello dear programmer if you like Java and C# and also like to be fast, use this powerful library.
+We have cookies and some abstract type of Collections, a great Math library like XNA and some utilities for OpenGL.
+We also will have some hack tools and network abstractions.
+
+We hope you like our work :-)
+
+Thank you.
+Henrique Rocha
+
+changelog:
+	2012-11-25 :: First UniLib version
+	2012-12-06 :: NryxCipher is my first official Cipher Algorithm!
+	2012-12-16 :: Added Avl to Collection package.
+	2012-12-18 :: Avl, Queue and Stack migrated to util
+	2012-12-28 :: Socket Stream/Datagram added to lang package
+	2012-12-29 :: Start of api.openGL package
+	2013-01-01 :: First wavefront loader
+	2013-01-02 :: wavefront loader with light support
+	2013-01-18 :: wavefront loader supporting groups with multiple textures
+	2013-01-19 :: removed OGLAux, improved interface with header files
+	2013-01-20 :: Math changed to MathHelper, 
+	2013-01-21 :: Vector2, Vector3, Vector4, Matrix and Quaternion added
+	2013-01-21 :: Plane is almost complete
+	2013-01-22 :: math package changed to framework package
+	2013-01-23 :: WaveFront loader indepedent from API/OpenGL (class Model)
+	2013-01-26 :: First render target, shadow mapping under development.
+	2013-01-27 :: More Shaders, GLSL error handling.
+	2013-12-30 :: Util restruct, source code needed on compile time
+	2013-12-31 :: Removed deprecated code
+	2014-01-01 :: Standard Code Format (like C#) (Util changed)
+	2014-01-01 :: Added HttpServer, standard extension is ".cwp" (Compiled Web Page)
+	2014-01-02 :: HttpServer supporting multiple threads
+	2014-01-03 :: HttpServer with file download support
+	2014-01-26 :: Added Statistics class to Math
+	2014-06-05 :: Removed PageBuilder from WebServer
+	2014-06-05 :: Added support for hierarchical HttpPages
+	2014-06-06 :: Added HttpResponse class
+	2014-06-06 :: Added Cookies to HttpServer
+	2014-06-07 :: Added Cookies access to each HttpPage
+	2014-06-10 :: Fixed Bug with TreeMap.Remove
+	2014-06-11 :: HttpServer moved to package ws
+	2014-06-13 :: Added Html classes
+	2014-06-13 :: Method POST with urlencoded is now working
+	2014-06-14 :: Added HashMap (with parallel access)
+	2014-06-14 :: Improved Cookie management	
+	2014-06-18 :: NryxCipher support for new code
+	2014-06-19 :: Added async chat based on publish/subscribe
+	2014-07-09 :: Added JSONObject (Gets)
+	2014-07-10 :: Added JSONArray (Gets)
+	
+	
+problems/bugs:
+	- Sockets are limited in size.
+	- arraylists are not implemented
+	- math package is not fully implemented
+	- math package is strongly linked
+
+goals:	
+	- implementation of other collections
+	- reduce critical section of webserver
+	- cookies must not expire while being used
+	- JSON Puts & ToString & Destructor
+	
+
+

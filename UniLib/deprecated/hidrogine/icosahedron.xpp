@@ -1,0 +1,82 @@
+
+    class Triangle {
+        public: VertexPositionNormal * _corners[3];
+        public: Triangle ** _sub;
+
+
+        public: Triangle(VertexDataBase * db, Vector3 a, Vector3 b, Vector3 c){
+            _corners[0] = db->Insert(a);
+            _corners[2] = db->Insert(b);
+            _corners[1] = db->Insert(c);
+        }
+
+        public: void Divide(VertexDataBase * db,int k){
+            if(k>0){
+                _sub = (Triangle**) malloc(4*sizeof(Triangle*));
+                _sub[0] = new Triangle(db,(_corners[1]->position+ _corners[2]->position)/2,(_corners[0]->position+ _corners[1]->position)/2,(_corners[2]->position+ _corners[0]->position)/2);
+                _sub[1] = new Triangle(db,(_corners[0]->position+ _corners[1]->position)/2,_corners[0]->position,(_corners[0]->position+ _corners[2]->position)/2);
+                _sub[2] = new Triangle(db, _corners[1]->position,(_corners[1]->position+ _corners[0]->position)/2,(_corners[1]->position+ _corners[2]->position)/2);
+                _sub[3] = new Triangle(db,(_corners[2]->position+ _corners[0]->position)/2,_corners[2]->position,(_corners[2]->position+ _corners[1]->position)/2);
+
+                for(int i=0; i < 4 ; ++i){
+                    if(_sub[i]!=NULL)
+                       _sub[i]->Divide(db,k-1);
+
+                }
+            }
+        }
+    };
+
+    class Icosahedron {
+        public: Triangle * _sub[20];
+        public: VertexDataBase * _db;
+        public: Icosahedron(float radius, int k){
+            _db = new VertexDataBase();
+            Vector3 v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11;
+
+            float phi = (1.0 + sqrt(5.0))/2.0;
+            float ratio = sqrt(10.0 + (2.0 * sqrt(5.0))) / (4.0 * phi);
+            float a = (radius / ratio) * 0.5;
+            float b = (radius / ratio) / (2.0 * phi);
+           
+             v0  = Vector3(0,  b, -a);
+             v1  = Vector3( b,  a,  0);
+             v2  = Vector3(-b,  a,  0);
+             v3  = Vector3( 0,  b,  a);
+             v4  = Vector3( 0, -b,  a);
+             v5  = Vector3(-a,  0,  b);
+             v6  = Vector3( 0, -b, -a);
+             v7  = Vector3( a,  0, -b);
+             v8  = Vector3( a,  0,  b);
+             v9  = Vector3(-a,  0, -b);
+             v10 = Vector3( b, -a,  0);
+             v11 = Vector3(-b, -a,  0);
+           
+
+             _sub[0]  = new Triangle(_db,v0, v1, v2);
+             _sub[1]  = new Triangle(_db,v3, v2, v1);
+             _sub[2]  = new Triangle(_db,v3, v4, v5);
+             _sub[3]  = new Triangle(_db,v3, v8, v4);
+             _sub[4]  = new Triangle(_db,v0, v6, v7);
+             _sub[5]  = new Triangle(_db,v0, v9, v6);
+             _sub[6]  = new Triangle(_db,v4, v10, v11);
+             _sub[7]  = new Triangle(_db,v6, v11, v10);
+             _sub[8]  = new Triangle(_db,v2, v5, v9);
+             _sub[9]  = new Triangle(_db,v11, v9, v5);
+             _sub[10] = new Triangle(_db,v1, v7, v8);
+             _sub[11] = new Triangle(_db,v10, v8, v7);
+             _sub[12] = new Triangle(_db,v3, v5, v2);
+             _sub[13] = new Triangle(_db,v3, v1, v8);
+             _sub[14] = new Triangle(_db,v0, v2, v9);
+             _sub[15] = new Triangle(_db,v0, v7, v1);
+             _sub[16] = new Triangle(_db,v6, v9, v11);
+             _sub[17] = new Triangle(_db,v6, v10, v7);
+             _sub[18] = new Triangle(_db,v4, v11, v5);
+             _sub[19] = new Triangle(_db,v4, v8, v10);
+
+            for (int i = 0; i < 20; ++i)
+            {
+                _sub[i]->Divide(_db,k);
+            }
+        }
+    };

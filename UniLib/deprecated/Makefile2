@@ -1,0 +1,29 @@
+exe:
+	g++ Main.cpp lib.a api/openGL/*.cpp -lGLEW -lglut -lGLU -lSDL -lSDL_image -g 
+
+all:	
+	g++ -c framework/math/*.cpp framework/graphic/*.cpp framework/hidrogine/*.cpp -g 
+	ar rvs lib.a *.o
+	rm *.o
+	g++ Main.cpp lib.a api/openGL/*.cpp -lGLEW -lglut -lGL -lGLU -lSDL -lSDL_image -g 
+
+
+run:
+	./a.out
+
+lib:
+	g++ -c framework/math/*.cpp framework/graphic/*.cpp framework/hidrogine/*.cpp api/openGL/*.cpp -lGLEW -lglut -lGL -lGLU -lSDL -lSDL_image -g -lm
+	ar rvs lib.a *.o
+	rm *.o
+
+exp:
+	g++ Exp.cpp lib.a -g  -lGLEW -lglut -lGL -lGLU -lSDL -lSDL_image -Wall -lm
+
+tree:
+	g++ Tree.cpp lib.a -g 
+
+net:
+	g++ Net.cpp network/*.cpp lib.a -g 
+
+bit:
+	g++ Bit.cpp framework/bitmap/*.cpp -g 
