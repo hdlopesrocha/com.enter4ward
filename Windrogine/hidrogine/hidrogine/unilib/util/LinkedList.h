@@ -172,6 +172,17 @@ namespace unilib {
 			}
 			return this;
 		}
+		public: virtual LinkedList<E> * Clear(){
+			Node * ptr = _first;
+			Node * next;
+			_count =0;
+			while(ptr!=NULL){
+				next = ptr->_next;
+				delete ptr;
+				ptr = next;
+			}
+			return this;
+		}
 
 
 		// Creates an Iterator for this LinkedList

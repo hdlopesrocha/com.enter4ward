@@ -58,28 +58,26 @@ namespace hidrogine {
             packedVector->Add(textureCoords->Remove(0));
             packedVector->Add(textureCoords->Remove(0));
         }
-		/*
+		
         indexCount = indexData->Size();
   
 		
         // Create a new Vertex Array Object in memory and select it (bind)
-        vaoId = glGenVertexArrays();
-        vboiId = glGenBuffers();
-        vboId = glGenBuffers();
-        indexData->Clear();
-        normals->Clear();
-        positions->Clear();
-        textureCoords->Clear();
+		glGenVertexArrays(1,&vaoId);
+        glGenBuffers(1,&vboiId);
+        glGenBuffers(1,&vboId);
+
 
         glBindVertexArray(vaoId);
         // Create a new Vertex Buffer Object in memory and select it (bind)
         glBindBuffer(GL_ARRAY_BUFFER, vboId);
-        glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, packedVector->Size(), packedVector->ToArray(), GL_STATIC_DRAW);
 
         // Put the position coordinates in attribute list 0
-        glVertexAttribPointer(0, VertexData.positionElementCount, GL_FLOAT, false, VertexData.stride,VertexData.positionByteOffset);
-        glVertexAttribPointer(1, VertexData.normalElementCount,  GL_FLOAT, false, VertexData.stride, VertexData.normalByteOffset);
-        glVertexAttribPointer(2, VertexData.textureElementCount, GL_FLOAT, false, VertexData.stride, VertexData.textureByteOffset);
+		
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 8*4, (void*)(0));
+        glVertexAttribPointer(1, 3, GL_FLOAT, false, 8*4, (void*)(3*4));
+        glVertexAttribPointer(2, 2, GL_FLOAT, false, 8*4, (void*)(6*4));
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -88,9 +86,13 @@ namespace hidrogine {
 
         // Create a new VBO for the indices and select it (bind) - INDICES
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboiId);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData->Size(),indexData->ToArray(), GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		*/
+		delete indexData->Clear();
+        delete normals->Clear();
+        delete positions->Clear();
+        delete textureCoords->Clear();
+		delete packedVector->Clear();
     }
 
     void BufferObject::bind(ShaderProgram * shader) {
@@ -129,8 +131,7 @@ namespace hidrogine {
 
         shader->updateModelMatrix();
         // Draw the vertices
-        glDrawElements(GL_TRIANGLES, indexCount,
-                GL_UNSIGNED_SHORT, 0);
+        glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_SHORT, 0);
 
         // Put everything back to default (deselect)
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

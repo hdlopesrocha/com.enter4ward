@@ -17,9 +17,9 @@ namespace hidrogine {
 		private: LinkedList<short> * indexData;
 		private: Material * material;
 		private: int indexCount;
-		private: int vaoId;
-		private: int vboiId;
-		private: int vboId;
+		private: GLuint vaoId;
+		private: GLuint vboiId;
+		private: GLuint vboId;
   
 		public: Material * getMaterial();
 		public: BufferObject();

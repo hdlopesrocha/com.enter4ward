@@ -88,6 +88,7 @@
     <ClInclude Include="hidrogine\Camera.h" />
     <ClInclude Include="hidrogine\Material.h" />
     <ClInclude Include="hidrogine\TextureLoader.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="unilib\math\MathHelper.h" />
     <ClInclude Include="unilib\util\Collection.h" />
     <ClInclude Include="unilib\util\HashFunction.h">
@@ -128,8 +129,15 @@
     <ResourceCompile Include="hidrogine.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\NativePhysics\fragment.glsl" />
-    <None Include="..\..\..\NativePhysics\vertex.glsl" />
+    <Text Include="fragment.glsl">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="vertex.glsl">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

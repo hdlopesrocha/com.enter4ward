@@ -152,6 +152,9 @@
     <ClInclude Include="unilib\math\MathHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="hidrogine.rc">
@@ -159,10 +162,12 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\NativePhysics\fragment.glsl">
+    <Text Include="fragment.glsl">
       <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\..\NativePhysics\vertex.glsl">
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="vertex.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
