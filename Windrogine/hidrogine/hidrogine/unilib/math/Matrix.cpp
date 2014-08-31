@@ -405,7 +405,7 @@ namespace unilib
         Matrix result;
         // http://msdn.microsoft.com/en-us/library/bb205351(v=VS.85).aspx
         // http://msdn.microsoft.com/en-us/library/bb195665.aspx
-        if (fieldOfView < 0 || fieldOfView > Pi)
+        if (fieldOfView < 0 || fieldOfView > MathHelper::Pi)
             throw "fieldOfView, fieldOfView takes a value between 0 and Pi (180 degrees) in radians.";
 
         if (nearPlaneDistance <= 0.0f)

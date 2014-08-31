@@ -38,7 +38,7 @@ class MyGame : public Game
 	}
 
 	public: void draw(){
-				glUseProgram(0);
+		glUseProgram(0);
 		glClearColor(1.0f, (cos(t)+1.0f)/2.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		

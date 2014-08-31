@@ -1,5 +1,5 @@
-#ifndef SHADER_PROGRAM
-#define SHADER_PROGRAM
+#ifndef HIDROGINE_SHADER_PROGRAM
+#define HIDROGINE_SHADER_PROGRAM
 
 #pragma once
 
@@ -60,7 +60,7 @@ namespace hidrogine {
 		private: static string getLogInfo(int obj);
 		public: void pushMatrix();
 		public: void popMatrix();
-		protected: void updateModelMatrix();
+		public: void updateModelMatrix();
 		public: void setIdentity();
 		public: Matrix getModelMatrix();
 	};

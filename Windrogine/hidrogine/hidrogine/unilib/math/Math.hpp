@@ -20,7 +20,7 @@ namespace unilib {
 #include <iostream>
 #include <sstream>
 #include <vector>
-#include "MathHelper.cpp"
+#include "MathHelper.h"
 using namespace std;
 
 namespace unilib {

@@ -11,6 +11,7 @@ namespace unilib {
 	//-------------------------------------------------
 	// LinkedList's Class
 	//-------------------------------------------------
+
 	template <class E> class LinkedList : public Collection<E>{
 		//-------------------------------------------------
 		// Node's Class (private)
