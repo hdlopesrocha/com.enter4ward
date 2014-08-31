@@ -5,17 +5,20 @@ namespace hidrogine {
 
 	ShaderProgram::ShaderProgram(string vsFilename, string fsFilename)
 	{
+		stackPointer = 0;
 		//Read our shaders into the appropriate buffers
 		string vertexSource = Utils::fileToString(vsFilename);
 		string fragmentSource = Utils::fileToString(fsFilename);
+		cout << vertexSource << endl;
+
 
 		//Create an empty vertex shader handle
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
 		//Send the vertex shader source code to GL
 		//Note that string's .c_str is NULL character terminated.
-		const GLchar *source = (const GLchar *)vertexSource.c_str();
-		glShaderSource(vertexShader, 1, &source, 0);
+		const GLchar *source = vertexSource.c_str();
+		glShaderSource(vertexShader, 1, &source, NULL);
 
 		//Compile the vertex shader
 		glCompileShader(vertexShader);
@@ -45,8 +48,8 @@ namespace hidrogine {
 			 
 		//Send the fragment shader source code to GL
 		//Note that string's .c_str is NULL character terminated.
-		source = (const GLchar *)fragmentSource.c_str();
-		glShaderSource(fragmentShader, 1, &source, 0);
+		source = fragmentSource.c_str();
+		glShaderSource(fragmentShader, 1, &source, NULL);
 			 
 		//Compile the fragment shader
 		glCompileShader(fragmentShader);

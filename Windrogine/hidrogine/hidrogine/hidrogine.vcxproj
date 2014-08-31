@@ -62,10 +62,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\..\..\NativePhysics\fragment.glsl" />
-    <None Include="..\..\..\NativePhysics\vertex.glsl" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="hidrogine\Camera.cpp" />
     <ClCompile Include="hidrogine\Game.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -100,7 +96,9 @@
     <ClInclude Include="unilib\util\Map.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClCompile Include="unilib\util\Queue.cpp" />
+    <ClInclude Include="unilib\util\Queue.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="unilib\util\Stack.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -121,6 +119,10 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="hidrogine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\NativePhysics\fragment.glsl" />
+    <None Include="..\..\..\NativePhysics\vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

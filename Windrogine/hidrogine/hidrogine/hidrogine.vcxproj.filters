@@ -15,10 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\NativePhysics\fragment.glsl" />
-    <None Include="..\..\..\NativePhysics\vertex.glsl" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -71,9 +67,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="unilib\json\Json.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="unilib\util\Queue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="unilib\util\String.cpp">
@@ -135,10 +128,21 @@
     <ClInclude Include="hidrogine\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="unilib\util\Queue.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="hidrogine.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\NativePhysics\fragment.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\..\NativePhysics\vertex.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

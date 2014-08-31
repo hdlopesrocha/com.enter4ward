@@ -1,7 +1,16 @@
 #include "Camera.h"
 
 namespace hidrogine {
-    Matrix Camera::getViewMatrix() {
+
+    Camera::Camera(int w, int h) {
+        position = Vector3();
+		rotation = Quaternion::Identity();
+        width = w;
+        height = h;
+		projectionMatrix = Matrix::CreatePerspective(w, h,0.1f,100.0f);
+    }
+
+	Matrix Camera::getViewMatrix() {
 		Matrix m = Matrix::CreateFromQuaternion(rotation);
 		m.Translation(position.Negate());
 		return m;
@@ -12,14 +21,6 @@ namespace hidrogine {
 		Quaternion q = Quaternion::CreateFromAxisAngle(Vector3(x,y,z),w);
 		rotation=Quaternion::Multiply(q,rotation);
 		rotation=Quaternion::Normalize(rotation);
-    }
-
-    Camera::Camera(int w, int h) {
-        position = Vector3();
-		rotation = Quaternion::Identity();
-        width = w;
-        height = h;
-		projectionMatrix = Matrix::CreatePerspective(w, h,0.1f,100.0f);
     }
 
 

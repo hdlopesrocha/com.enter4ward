@@ -292,8 +292,7 @@ namespace unilib
 
     Matrix Matrix::CreateFromQuaternion(Quaternion quaternion)
     {
-        Matrix result;
-        result = Matrix::Identity();
+        Matrix result = Matrix::Identity();
                    
         result.M[0] = 1 - 2 * (quaternion.Y * quaternion.Y + quaternion.Z * quaternion.Z);
         result.M[1] = 2 * (quaternion.X * quaternion.Y + quaternion.W * quaternion.Z);
@@ -377,10 +376,26 @@ namespace unilib
         return result;
     }
 
-    Matrix Matrix::CreatePerspective(float width, float height, float zNearPlane, float zFarPlane)
+    Matrix Matrix::CreatePerspective(float width, float height, float near_plane, float far_plane)
     {
-        throw "not implemented!";
-    }
+        // Setup projection matrix
+        Matrix matrix = Matrix();
+        float fieldOfView = 45.0f;
+        float aspectRatio = (float) width / (float) height;
+
+
+		float y_scale = (float) (1.0f / tan(MathHelper::ToRadians(fieldOfView / 2.0f)));
+        float x_scale = y_scale / aspectRatio;
+        float frustum_length = far_plane - near_plane;
+
+		matrix.M[0]= x_scale;
+        matrix.M[5] = y_scale;
+        matrix.M[10] = -((far_plane + near_plane) / frustum_length);
+        matrix.M[11] = -1;
+        matrix.M[14] = -((2 * near_plane * far_plane) / frustum_length);
+       
+        return matrix;
+	}
 
 
 
