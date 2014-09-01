@@ -3,6 +3,8 @@
 
 namespace unilib
 {
+	
+
 
 	int sizeOf(string& str,int first, char begin, char end){
 		int count=0;
@@ -81,8 +83,16 @@ namespace unilib
 			}	
 		}
  	}
+
+ 	bool JSONObject::Has(string key) {
+		return content->ContainsKey(key);
+	}
  	
- 	JSONObject * JSONArray::GetJSONObject(int index){
+			Iterator<Entry<string,JSONNode*>>* JSONObject::GetIterator(){
+		return content->GetIterator();
+	}
+
+	JSONObject * JSONArray::GetJSONObject(int index){
 		return (JSONObject*) content.at(index);
  	}
  	
@@ -122,7 +132,7 @@ namespace unilib
  	}
  	 
  	JSONObject::JSONObject(string str){
- 		content = new TreeMap<string,JSONNode>(String::GetComparator());
+ 		content = new TreeMap<string,JSONNode>(String::Comparator);
 	 
 		int sz=str.size();
 

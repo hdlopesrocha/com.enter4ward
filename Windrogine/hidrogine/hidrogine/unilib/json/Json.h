@@ -44,7 +44,8 @@ namespace unilib
     	public: long Length();
     	public: JSONArray * GetJSONArray(string key);   	
     	public: string ToString();	
-	
+		public: Iterator<Entry<string,JSONNode*>>* GetIterator();
+		public: bool Has(string key);
     };
     
     class JSONArray : public JSONNode

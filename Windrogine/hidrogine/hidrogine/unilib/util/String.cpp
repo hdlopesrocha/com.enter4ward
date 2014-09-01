@@ -17,11 +17,8 @@ namespace unilib {
 			return ret;
 		}
 		
+		StringComparator * String::Comparator = new StringComparator();
 		
-		StringComparator * String::GetComparator(){
-			static StringComparator * Comparator = new StringComparator();
-			return Comparator;
-		}		
 
 
 		string String::Random( size_t length )

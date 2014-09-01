@@ -22,7 +22,7 @@ namespace unilib {
 
 	
 		public: static deque<string> Split(string str,char sep);					
-		public: static StringComparator * GetComparator();
+		public: static StringComparator * Comparator;
 		public: static string Random( size_t length );
 		public: static inline string ltrim(string s);
 		public: static inline string rtrim(string s);
