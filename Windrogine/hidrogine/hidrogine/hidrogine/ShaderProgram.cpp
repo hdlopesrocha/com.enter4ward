@@ -9,7 +9,6 @@ namespace hidrogine {
 		//Read our shaders into the appropriate buffers
 		string vertexSource = Utils::fileToString(vsFilename);
 		string fragmentSource = Utils::fileToString(fsFilename);
-		cout << vertexSource << endl;
 
 
 		//Create an empty vertex shader handle

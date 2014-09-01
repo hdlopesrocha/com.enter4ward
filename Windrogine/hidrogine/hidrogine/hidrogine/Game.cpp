@@ -38,7 +38,6 @@ namespace hidrogine {
 			return ;
 		}
 
-		cout << "Glew Ok!" << endl;
         program = new ShaderProgram("vertex.glsl", "fragment.glsl");
 
 
@@ -53,6 +52,7 @@ namespace hidrogine {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         
+		cout << "Game Ok!" << endl;
 		
     }
 
