@@ -65,7 +65,9 @@
     <ClCompile Include="hidrogine\BufferObject.cpp" />
     <ClCompile Include="hidrogine\Camera.cpp" />
     <ClCompile Include="hidrogine\Game.cpp" />
+    <ClCompile Include="hidrogine\Group.cpp" />
     <ClCompile Include="hidrogine\Material.cpp" />
+    <ClCompile Include="hidrogine\Model3D.cpp" />
     <ClCompile Include="hidrogine\TextureLoader.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="unilib\json\Json.cpp" />
@@ -86,7 +88,10 @@
     <ClCompile Include="hidrogine\Utils.cpp" />
     <ClInclude Include="hidrogine\BufferObject.h" />
     <ClInclude Include="hidrogine\Camera.h" />
+    <ClInclude Include="hidrogine\DrawHandler.h" />
+    <ClInclude Include="hidrogine\Group.h" />
     <ClInclude Include="hidrogine\Material.h" />
+    <ClInclude Include="hidrogine\Model3D.h" />
     <ClInclude Include="hidrogine\TextureLoader.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="unilib\math\MathHelper.h" />
