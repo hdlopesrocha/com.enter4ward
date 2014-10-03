@@ -12,7 +12,7 @@ public class Node {
 
     /** The clazz. */
     private Method  method= null;
-    private Class<?>  clazz= null;
+    private Class<Controller>  clazz= null;
 
     
     /** The child. */
@@ -36,6 +36,7 @@ public class Node {
      * @param c
      *            the c
      */
+    @SuppressWarnings("unchecked")
     public Node(final Node p, final String n, final String l, final String m) {
         parent = p;
         label = l;
@@ -50,8 +51,7 @@ public class Node {
         System.out.println(className);
         System.out.println(methodName);
         try {
-            clazz = Class.forName(className);
-
+            clazz = (Class<Controller>) Class.forName(className);
             method = clazz.getMethod(methodName);
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException e) {
             // TODO Auto-generated catch block
@@ -71,8 +71,8 @@ public class Node {
         return method;
     }
 
-    public final Class<?> getClazz(){
-        return clazz;
+    public final Controller getController() throws InstantiationException, IllegalAccessException{
+        return clazz.newInstance();
     }
     
     /**

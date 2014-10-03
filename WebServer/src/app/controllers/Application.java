@@ -1,10 +1,5 @@
 package app.controllers;
 
-import java.io.IOException;
-
-import org.json.JSONException;
-
-import app.Global;
 import hidrogine.wavefront.MaterialLibrary;
 import hidrogine.wavefront.WaveFront;
 import hidrogine.webserver.Controller;
@@ -12,85 +7,93 @@ import hidrogine.webserver.Html;
 import hidrogine.webserver.Response;
 import hidrogine.webserver.Upload;
 
+import java.io.IOException;
+
+import org.json.JSONException;
+
 /**
  * The Class FileUpload.
  */
 public class Application extends Controller {
 
-    /** The Constant upload. */
-    static final String CONVERT = Html.fromFile("src/app/views/convert.html");
-    /** The Constant login. */
-    static final String LOGIN = Html.fromFile("src/app/views/login.html");
-    /** The Constant upload. */
-    static final String UPLOAD = Html.fromFile("src/app/views/upload.html");
-    /** The Constant store. */
-    static final String STORE = Html.fromFile("src/app/views/store.html");
+	/** The Constant upload. */
+	private static final String CONVERT = Html.fromFile("src/app/views/convert.html");
+	/** The Constant login. */
+	private static final String LOGIN = Html.fromFile("src/app/views/login.html");
+	/** The Constant upload. */
+	private static final String UPLOAD = Html.fromFile("src/app/views/upload.html");
+	/** The Constant store. */
+	private static final String STORE = Html.fromFile("src/app/views/store.html");
+	/** The Constant img. */
+	private static final String IMAGE = "<div><img src='res/test.png'></div>";
+	/** The Constant template. */
+	private static final String TEMPLATE = Html.fromFile("src/app/views/template.html");
 
-    /** The Constant img. */
-    static final String IMAGE = "<div><img src='res/test.png'></div>";
+	private String getTemplate(final String main, final String nav) {
+		return TEMPLATE.replace("@main", main).replace("@nav", nav);
+	}
 
+	public final Response index() {
+		return ok(getTemplate(IMAGE, getNav()));
 
-    public final Response index() {
-        return ok(Global.getTemplate(IMAGE, getRequest().getFile()));
+	}
 
-    }
-    public final Response login() {
-        return ok(Global.getTemplate(LOGIN, getRequest().getFile()));
-    }
-    
-    public final Response convert() {
-        Upload file = getRequest().getUpload("file");
+	public final Response login() {
+		return ok(getTemplate(LOGIN, getNav()));
+	}
 
-        if (file == null) {
-            return ok(Global.getTemplate(CONVERT, getRequest().getFile()));   
-        }
+	public final Response convert() {
+		Upload file = getRequest().getUpload("file");
 
-        try {
-            if("obj".equals(file.getExtension()))
-                return ok(new WaveFront(file.getFile()).toFile(),file.getName()+".geo");
-            if("mtl".equals(file.getExtension()))
-                return ok(new MaterialLibrary(file.getFile()).toFile(),file.getName()+".mat");
-        } catch (IOException | JSONException e) {
-        }
-        return ok("ERROR");                  
+		if (file == null) {
+			return ok(getTemplate(CONVERT, getNav()));
+		}
 
-                
-    }
+		try {
+			if ("obj".equals(file.getExtension()))
+				return ok(new WaveFront(file.getFile()).toFile(),
+						file.getName() + ".geo");
+			if ("mtl".equals(file.getExtension()))
+				return ok(new MaterialLibrary(file.getFile()).toFile(),
+						file.getName() + ".mat");
+		} catch (IOException | JSONException e) {
+		}
+		return ok("ERROR");
+	}
 
-    public final Response store() {
-        String receivedText = getRequest().read("text");
-        if (receivedText != null) {
-            write("text", receivedText);
-        }
-        String storedText = (String) read("text");
-        if (storedText == null) {
-            storedText = "";
-        }
-        return ok(Global.getTemplate(STORE.replace("@content", storedText),
-                getRequest().getFile()));
-    }
-    public final Response upload() {
-        Upload file1 = getRequest().getUpload("file1");
+	public final Response store() {
+		String receivedText = getRequest().read("text");
+		if (receivedText != null) {
+			write("text", receivedText);
+		}
+		String storedText = (String) read("text");
+		if (storedText == null) {
+			storedText = "";
+		}
+		return ok(getTemplate(STORE.replace("@content", storedText), getNav()));
+	}
 
-        if (file1 != null) {
-            try {
-                file1.copyTo(file1.getFilename());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+	public final Response upload() {
+		Upload file1 = getRequest().getUpload("file1");
 
-        Upload file2 = getRequest().getUpload("file2");
-        if (file2 != null) {
-            try {
-                file2.copyTo(file2.getFilename());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+		if (file1 != null) {
+			try {
+				file1.copyTo(file1.getFilename());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 
-        return ok(Global.getTemplate(UPLOAD, getRequest().getFile()));
-    }
-    
+		Upload file2 = getRequest().getUpload("file2");
+		if (file2 != null) {
+			try {
+				file2.copyTo(file2.getFilename());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return ok(getTemplate(UPLOAD, getNav()));
+	}
 
 }

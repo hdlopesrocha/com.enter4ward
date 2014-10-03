@@ -1,8 +1,6 @@
 package hidrogine.webserver;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.Socket;
 
 /**
@@ -40,8 +38,8 @@ public class HttpThread implements Runnable {
 
         try {
             server.process(socket);
-        } catch (IOException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            // e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         try {

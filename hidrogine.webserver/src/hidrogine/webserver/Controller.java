@@ -80,6 +80,10 @@ public abstract class Controller {
     public final Request getRequest() {
         return request;
     }
+    
+    public String getNav(){
+        return server.getNav(request.getFile());
+    }
 
     /**
      * Ok.

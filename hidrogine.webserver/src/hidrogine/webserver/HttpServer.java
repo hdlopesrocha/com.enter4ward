@@ -22,7 +22,7 @@ import org.json.JSONObject;
 public class HttpServer {
 
     /** The Constant VERSION. */
-    public static final String VERSION = "1.4.4";
+    public static final String VERSION = "1.4.5";
 
     /** The port. */
     private int port;
@@ -291,31 +291,28 @@ public class HttpServer {
      * @throws InvocationTargetException 
      * @throws IllegalArgumentException 
      */
-    public final void process(Socket socket) throws IOException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public final void process(Socket socket) throws Exception{
         Request request = new Request(socket, this);
-
         String url = request.getFile().substring(1);
-
         StringTokenizer ssPage = new StringTokenizer(url, "/");
         Node currentNode = root;
-        Controller controller = new FileController();
-        Method method = Controller.class.getMethod("process");
-
-        if (url.length() == 0) {
-            controller = (Controller) root.getClazz().newInstance();
-            method = root.getMethod();
-        } else {
+        if (url.length() != 0) {
             while (currentNode != null && ssPage.hasMoreElements()) {
-                String split = ssPage.nextToken();
-                currentNode = currentNode.getChild(split);
+                currentNode = currentNode.getChild(ssPage.nextToken());
             }
-
-            if (currentNode != null) {
-                controller = (Controller) currentNode.getClazz().newInstance();
-                method = currentNode.getMethod();
-            }
-
         }
+        
+        Controller controller = null;
+        Method method = null;
+        if(currentNode!=null){
+            controller = currentNode.getController();
+            method = currentNode.getMethod();
+        }
+        else {
+            controller = new FileController();
+            method = FileController.class.getMethod("process");
+        }
+        
         controller.prepare(this, request);
         Response response = (Response) method.invoke(controller);
         response.send(socket, controller.getSession());
