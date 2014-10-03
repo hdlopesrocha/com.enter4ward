@@ -1,50 +1,51 @@
 {
 	"port":1991,
 	"session":3600000,
+	"method":"app.controllers.Application.index",
 	"nav":[
 		{
 			"name":"index",
 			"label":"Index",
-			"class":"app.controllers.Index",
+			"method":"app.controllers.Application.index",
 			"nav":[
 				{
 					"name":"login",
 					"label":"Login",
-					"class":"app.controllers.Login",
+					"method":"app.controllers.Application.login",
 					"nav":[
 						{
 							"name":"login",
 							"label":"Login",
-							"class":"app.controllers.Login"
+							"method":"app.controllers.Application.login"
 						}	
 					]
 				},
 				{
 					"name":"sadas",
 					"label":"sadsadsadasd",
-					"class":"app.controllers.Login"
+					"method":"app.controllers.Application.login"
 				}	
 			]
 		},
 		{
 			"name":"upload",
 			"label":"Upload",
-			"class":"app.controllers.FileUpload"
+			"method":"app.controllers.Application.upload"
 		},
 		{
 			"name":"convert",
 			"label":"Convert",
-			"class":"app.controllers.Convert"
+			"method":"app.controllers.Application.convert"
 		},
 		{
 			"name":"login",
 			"label":"Login",
-			"class":"app.controllers.Login"
+			"method":"app.controllers.Application.login"
 		},
 		{
 			"name":"store",
 			"label":"Store",
-			"class":"app.controllers.Store"
+			"method":"app.controllers.Application.store"
 		}
 	]
 }

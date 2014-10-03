@@ -1,6 +1,8 @@
 package hidrogine.webserver;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.Socket;
 
 /**
@@ -37,22 +39,8 @@ public class HttpThread implements Runnable {
     public final void run() {
 
         try {
-
-            Request request = new Request(socket, server);
-
-            String filename = request.getFile().substring(1);
-
-            Controller page = filename.length() == 0 ? server.getIndex()
-                    : server.getPage(filename);
-
-            if (page == null) {
-                page = new FileController();
-            }
-            page.prepare(server, request);
-            Response response = page.process();
-            response.send(socket, page.getSession());
-
-        } catch (IOException e) {
+            server.process(socket);
+        } catch (IOException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             // e.printStackTrace();
         }
 

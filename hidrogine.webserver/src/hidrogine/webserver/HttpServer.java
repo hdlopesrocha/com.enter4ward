@@ -1,7 +1,10 @@
 package hidrogine.webserver;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -19,7 +22,7 @@ import org.json.JSONObject;
 public class HttpServer {
 
     /** The Constant VERSION. */
-    public static final String VERSION = "1.4.3";
+    public static final String VERSION = "1.4.4";
 
     /** The port. */
     private int port;
@@ -40,14 +43,13 @@ public class HttpServer {
     private JSONObject config = null;
 
     /** The index. */
-    private Node root, index;
+    private Node root;
 
     /** The Constant random. */
     private static final Random RANDOM = new Random();
 
     /** The Constant chars. */
-    private static final String CHARS =
-            "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
+    private static final String CHARS = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
 
     /**
      * Gets the session.
@@ -137,14 +139,12 @@ public class HttpServer {
                 for (int i = 0; i < arr.length(); ++i) {
                     j = arr.getJSONObject(i);
                     String n = j.getString("name");
-                    String c = j.getString("class");
+                    String m = j.getString("method");
                     String l = j.has("label") ? j.getString("label") : n;
 
-                    Node nn = new Node(node, n, l, c);
-                    if (index == null) {
-                        index = nn;
-                    }
+   
 
+                    Node nn = new Node(node, n, l, m);
                     buildNodes(j, nn);
 
                 }
@@ -162,9 +162,9 @@ public class HttpServer {
      */
     public HttpServer(final String configpath) {
         try {
-            root = new Node(null, null, null, null);
             config = new JSONObject(new String(Files.readAllBytes(Paths
                     .get(configpath))));
+            root = new Node(null, null, null, config.getString("method"));
             port = config.getInt("port");
             if (config.has("session")) {
                 session = config.getLong("session");
@@ -228,15 +228,6 @@ public class HttpServer {
     }
 
     /**
-     * Gets the index.
-     *
-     * @return the index
-     */
-    public final Controller getIndex() {
-        return index.getPage();
-    }
-
-    /**
      * Gets the root.
      *
      * @return the root
@@ -286,25 +277,49 @@ public class HttpServer {
 
     /**
      * Gets the page.
+     * 
+     * @param socket
      *
      * @param url
      *            the url
      * @return the page
+     * @throws IOException
+     * @throws SecurityException 
+     * @throws NoSuchMethodException 
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
+     * @throws InvocationTargetException 
+     * @throws IllegalArgumentException 
      */
-    public final Controller getPage(final String url) {
+    public final void process(Socket socket) throws IOException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        Request request = new Request(socket, this);
+
+        String url = request.getFile().substring(1);
+
         StringTokenizer ssPage = new StringTokenizer(url, "/");
         Node currentNode = root;
+        Controller controller = new FileController();
+        Method method = Controller.class.getMethod("process");
 
-        while (currentNode != null && ssPage.hasMoreElements()) {
-            String split = ssPage.nextToken();
-            currentNode = currentNode.getChild(split);
+        if (url.length() == 0) {
+            controller = (Controller) root.getClazz().newInstance();
+            method = root.getMethod();
+        } else {
+            while (currentNode != null && ssPage.hasMoreElements()) {
+                String split = ssPage.nextToken();
+                currentNode = currentNode.getChild(split);
+            }
+
+            if (currentNode != null) {
+                controller = (Controller) currentNode.getClazz().newInstance();
+                method = currentNode.getMethod();
+            }
+
         }
+        controller.prepare(this, request);
+        Response response = (Response) method.invoke(controller);
+        response.send(socket, controller.getSession());
 
-        if (currentNode != null) {
-            return currentNode.getPage();
-        }
-
-        return null;
     }
 
 }

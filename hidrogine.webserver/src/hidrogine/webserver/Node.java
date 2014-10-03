@@ -1,5 +1,6 @@
 package hidrogine.webserver;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
@@ -10,8 +11,10 @@ import java.util.TreeMap;
 public class Node {
 
     /** The clazz. */
-    private Class<?> clazz = null;
+    private Method  method= null;
+    private Class<?>  clazz= null;
 
+    
     /** The child. */
     private Map<String, Node> child = new TreeMap<String, Node>();
 
@@ -33,7 +36,7 @@ public class Node {
      * @param c
      *            the c
      */
-    public Node(final Node p, final String n, final String l, final String c) {
+    public Node(final Node p, final String n, final String l, final String m) {
         parent = p;
         label = l;
         name = n;
@@ -41,13 +44,21 @@ public class Node {
             parent.child.put(n, this);
 
         }
+        String className = m.substring(0, m.lastIndexOf('.'));
+        String methodName = m.substring(m.lastIndexOf('.') + 1,
+                m.length());
+        System.out.println(className);
+        System.out.println(methodName);
         try {
-            if (c != null) {
-                clazz = Class.forName(c);
-            }
-        } catch (ClassNotFoundException e) {
+            clazz = Class.forName(className);
+
+            method = clazz.getMethod(methodName);
+        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
+            
+        
     }
 
     /**
@@ -55,17 +66,15 @@ public class Node {
      *
      * @return the page
      */
-    public final Controller getPage() {
-        if (clazz != null) {
-            try {
-                return (Controller) clazz.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
+    public final Method getMethod() {
+        
+        return method;
     }
 
+    public final Class<?> getClazz(){
+        return clazz;
+    }
+    
     /**
      * Gets the url.
      *

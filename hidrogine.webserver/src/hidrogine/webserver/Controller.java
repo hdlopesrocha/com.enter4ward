@@ -38,12 +38,7 @@ public abstract class Controller {
     public Controller() {
     }
 
-    /**
-     * Process.
-     *
-     * @return the string
-     */
-    public abstract Response process();
+
 
     /**
      * Read.
