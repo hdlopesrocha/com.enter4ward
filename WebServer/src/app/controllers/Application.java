@@ -64,9 +64,9 @@ public class Application extends Controller {
 	public final Response store() {
 		String receivedText = getRequest().read("text");
 		if (receivedText != null) {
-			write("text", receivedText);
+			session("text", receivedText);
 		}
-		String storedText = (String) read("text");
+		String storedText = (String) session("text");
 		if (storedText == null) {
 			storedText = "";
 		}

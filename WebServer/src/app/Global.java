@@ -20,6 +20,6 @@ public final class Global {
      *            the arguments
      */
     public static void main(final String[] args) {
-    	new HttpServer("src/app/config.json").run();
+    	new HttpServer("config.json").run();
     }
 }

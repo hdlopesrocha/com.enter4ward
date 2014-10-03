@@ -315,7 +315,7 @@ public class HttpServer {
         
         controller.prepare(this, request);
         Response response = (Response) method.invoke(controller);
-        response.send(socket, controller.getSession());
+        response.send(socket, request.getSession());
 
     }
 

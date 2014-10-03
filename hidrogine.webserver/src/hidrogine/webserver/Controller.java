@@ -17,20 +17,8 @@ public abstract class Controller {
     /** The request. */
     private Request request;
 
-    /** The response. */
-    private Response response;
-
     /** The session. */
     private Session session;
-
-    /**
-     * Gets the session.
-     *
-     * @return the session
-     */
-    public final Session getSession() {
-        return session;
-    }
 
     /**
      * Instantiates a new controller.
@@ -47,7 +35,7 @@ public abstract class Controller {
      *            the key
      * @return the object
      */
-    public final Object read(final String key) {
+    public final Object session(final String key) {
         if (session == null) {
             session = request.getSession();
         }
@@ -62,7 +50,7 @@ public abstract class Controller {
      * @param value
      *            the value
      */
-    public final void write(final String key, final Object value) {
+    public final void session(final String key, final Object value) {
         if (session == null) {
             session = request.getSession();
             if (session == null) {
@@ -93,6 +81,7 @@ public abstract class Controller {
      * @return the response
      */
     public final Response ok(final String html) {
+        Response response = new Response(server, request);
         response.setContentType("text/html");
         response.setData(html.getBytes());
         return response;
@@ -107,6 +96,7 @@ public abstract class Controller {
      */
     public final Response ok(final File file) {
         StringTokenizer fileToks = new StringTokenizer(file.getName(), ".");
+        Response response = new Response(server, request);
 
         try {
             response.setData(read(file));
@@ -133,7 +123,7 @@ public abstract class Controller {
      * @return the response
      */
     public final Response ok(final File file, final String filename) {
-        ok(file);
+        Response response = ok(file);
         response.setContentDisposition("attachment; filename=\"" + filename
                 + "\"");
         return response;
@@ -178,7 +168,6 @@ public abstract class Controller {
     public final void prepare(final HttpServer s, final Request r) {
         server = s;
         request = r;
-        response = new Response(s, r);
     }
 
 }
