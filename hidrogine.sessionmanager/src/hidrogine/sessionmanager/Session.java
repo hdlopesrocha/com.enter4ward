@@ -1,4 +1,4 @@
-package hidrogine.webserver;
+package hidrogine.sessionmanager;
 
 import java.util.TreeMap;
 import java.util.concurrent.Delayed;

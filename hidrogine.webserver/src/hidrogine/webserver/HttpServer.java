@@ -1,5 +1,8 @@
 package hidrogine.webserver;
 
+import hidrogine.sessionmanager.Session;
+import hidrogine.sessionmanager.SessionManager;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -7,11 +10,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-import java.util.concurrent.DelayQueue;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,20 +22,12 @@ import org.json.JSONObject;
 public class HttpServer {
 
     /** The Constant VERSION. */
-    public static final String VERSION = "1.4.5";
+    public static final String VERSION = "1.4.6";
 
     /** The port. */
     private int port;
 
-    /** The session. */
-    private long session = 0;
-
-    /** The sessions. */
-    private HashMap<String, Session> sessions;
-
-    /** The cookie queue. */
-    private DelayQueue<Session> cookieQueue;
-
+    private SessionManager sessionManager;
     /** The resources. */
     private TreeMap<String, Controller> resources;
 
@@ -45,12 +37,7 @@ public class HttpServer {
     /** The index. */
     private Node root;
 
-    /** The Constant random. */
-    private static final Random RANDOM = new Random();
-
-    /** The Constant chars. */
-    private static final String CHARS = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
-
+  
     /**
      * Gets the session.
      *
@@ -59,23 +46,7 @@ public class HttpServer {
      * @return the session
      */
     public final Session getSession(final String sid) {
-        return sessions.get(sid);
-    }
-
-    /**
-     * Random string.
-     *
-     * @param size
-     *            the size
-     * @return the string
-     */
-    private String randomString(final int size) {
-        String str = "";
-        int charsLen = CHARS.length();
-        for (int i = 0; i < size; i++) {
-            str += CHARS.charAt(RANDOM.nextInt(charsLen));
-        }
-        return str;
+        return sessionManager.getSession(sid);
     }
 
     /**
@@ -84,42 +55,7 @@ public class HttpServer {
      * @return the session
      */
     public final Session generateSession() {
-        Session cookie = null;
-
-        long expireTime = System.currentTimeMillis() + session;
-
-        while (cookie == null) {
-            String s = randomString(32);
-            while (sessions.get(s) != null) {
-                s = randomString(32);
-            }
-            cookie = new Session(s, expireTime);
-
-            Session replacedCookie = sessions.put(s, cookie);
-            if (replacedCookie != null) {
-                sessions.put(s, replacedCookie);
-                cookie = null;
-            }
-
-        }
-
-        cookieQueue.add(cookie);
-        return cookie;
-    }
-
-    /**
-     * Garbage cookies.
-     */
-    public final void garbageCookies() {
-        while (true) {
-            try {
-                Session entry = cookieQueue.take();
-                sessions.remove(entry.getId());
-                System.out.println(entry.getId() + " expired!");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        return sessionManager.generateSession();
     }
 
     /**
@@ -167,7 +103,7 @@ public class HttpServer {
             root = new Node(null, null, null, config.getString("method"));
             port = config.getInt("port");
             if (config.has("session")) {
-                session = config.getLong("session");
+                sessionManager = new SessionManager(config.getLong("session"));
             }
 
             buildNodes(config, root);
@@ -188,15 +124,7 @@ public class HttpServer {
         System.out.println("Port: " + port);
 
         resources = new TreeMap<String, Controller>();
-        sessions = new HashMap<String, Session>();
-        cookieQueue = new DelayQueue<Session>();
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                garbageCookies();
-            }
-        }).start();
+    
     }
 
     /**

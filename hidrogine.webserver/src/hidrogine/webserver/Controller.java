@@ -1,5 +1,7 @@
 package hidrogine.webserver;
 
+import hidrogine.sessionmanager.Session;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
