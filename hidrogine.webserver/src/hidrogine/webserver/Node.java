@@ -71,8 +71,8 @@ public class Node {
         return method;
     }
 
-    public final Controller getController() throws InstantiationException, IllegalAccessException{
-        return clazz.newInstance();
+    public final Class<Controller> getController() {
+        return clazz;
     }
     
     /**

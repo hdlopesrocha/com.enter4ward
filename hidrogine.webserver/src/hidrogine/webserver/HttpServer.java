@@ -37,7 +37,6 @@ public class HttpServer {
     /** The index. */
     private Node root;
 
-  
     /**
      * Gets the session.
      *
@@ -78,8 +77,6 @@ public class HttpServer {
                     String m = j.getString("method");
                     String l = j.has("label") ? j.getString("label") : n;
 
-   
-
                     Node nn = new Node(node, n, l, m);
                     buildNodes(j, nn);
 
@@ -102,9 +99,8 @@ public class HttpServer {
                     .get(configpath))));
             root = new Node(null, null, null, config.getString("method"));
             port = config.getInt("port");
-            if (config.has("session")) {
-                sessionManager = new SessionManager(config.getLong("session"));
-            }
+            sessionManager = new SessionManager(
+                    config.has("session") ? config.getLong("session") : 360000);
 
             buildNodes(config, root);
         } catch (Exception e) {
@@ -124,7 +120,7 @@ public class HttpServer {
         System.out.println("Port: " + port);
 
         resources = new TreeMap<String, Controller>();
-    
+
     }
 
     /**
@@ -203,6 +199,28 @@ public class HttpServer {
         return res;
     }
 
+    
+    public Call getCall(String url) throws NoSuchMethodException {
+
+        StringTokenizer ssPage = new StringTokenizer(url, "/");
+        Node currentNode = root;
+        if (url.length() != 0) {
+            while (currentNode != null && ssPage.hasMoreElements()) {
+                currentNode = currentNode.getChild(ssPage.nextToken());
+            }
+        }
+        Class<?> controller = null;
+        Method method = null;
+        if (currentNode != null) {
+            controller = currentNode.getController();
+            method = currentNode.getMethod();
+        } else {
+            controller = FileController.class;
+            method = FileController.class.getMethod("process");
+        }
+        return new Call(controller,method);
+    }
+    
     /**
      * Gets the page.
      * 
@@ -212,39 +230,19 @@ public class HttpServer {
      *            the url
      * @return the page
      * @throws IOException
-     * @throws SecurityException 
-     * @throws NoSuchMethodException 
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
-     * @throws InvocationTargetException 
-     * @throws IllegalArgumentException 
+     * @throws SecurityException
+     * @throws NoSuchMethodException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     * @throws InvocationTargetException
+     * @throws IllegalArgumentException
      */
-    public final void process(Socket socket) throws Exception{
+    public final void process(Socket socket) throws Exception {
         Request request = new Request(socket, this);
         String url = request.getFile().substring(1);
-        StringTokenizer ssPage = new StringTokenizer(url, "/");
-        Node currentNode = root;
-        if (url.length() != 0) {
-            while (currentNode != null && ssPage.hasMoreElements()) {
-                currentNode = currentNode.getChild(ssPage.nextToken());
-            }
-        }
-        
-        Controller controller = null;
-        Method method = null;
-        if(currentNode!=null){
-            controller = currentNode.getController();
-            method = currentNode.getMethod();
-        }
-        else {
-            controller = new FileController();
-            method = FileController.class.getMethod("process");
-        }
-        
-        controller.prepare(this, request);
-        Response response = (Response) method.invoke(controller);
+        Call call = getCall(url);
+        Response response = call.invoke(this,request);
         response.send(socket, request.getSession());
-
     }
 
 }

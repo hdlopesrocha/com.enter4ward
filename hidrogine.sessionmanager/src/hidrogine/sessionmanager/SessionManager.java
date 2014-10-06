@@ -10,7 +10,7 @@ import java.util.concurrent.DelayQueue;
 public class SessionManager {
 
 	/** The session. */
-	private long session = 0;
+	private long duration = 0;
 
 	/** The sessions. */
 	private HashMap<String, Session> sessions;
@@ -59,7 +59,7 @@ public class SessionManager {
 	public final Session generateSession() {
 		Session cookie = null;
 
-		long expireTime = System.currentTimeMillis() + session;
+		long expireTime = System.currentTimeMillis() + duration;
 
 		while (cookie == null) {
 			String s = randomString(32);
@@ -101,8 +101,8 @@ public class SessionManager {
 	 * @param configpath
 	 *            the configpath
 	 */
-	public SessionManager(long duration) {
-		session = duration;
+	public SessionManager(long d) {
+		duration = d;
 		sessions = new HashMap<String, Session>();
 		cookieQueue = new DelayQueue<Session>();
 		new Thread(new Runnable() {
