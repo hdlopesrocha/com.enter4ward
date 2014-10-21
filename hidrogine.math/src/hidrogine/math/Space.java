@@ -1,6 +1,6 @@
 package hidrogine.math;
 
-import hidrogine.math.api.ISphere;
+import hidrogine.math.api.IObject3D;
 import hidrogine.math.api.IVector3;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.List;
 public class Space {
 
     class SpaceNode extends Box {
-        final List<ISphere> container= new ArrayList<ISphere>();
+        final List<IObject3D> container= new ArrayList<IObject3D>();
         SpaceNode left, right;
 
         public SpaceNode() {

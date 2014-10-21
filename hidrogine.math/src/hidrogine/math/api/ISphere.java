@@ -1,5 +1,6 @@
 package hidrogine.math.api;
 
+
 // TODO: Auto-generated Javadoc
 /**
  * The Interface ISphere.
@@ -51,5 +52,6 @@ public abstract class ISphere {
     public boolean contains(IVector3 vec) {
         return getPosition().distance(vec) <= getRadius();
     }
-
+ 
+    
 }

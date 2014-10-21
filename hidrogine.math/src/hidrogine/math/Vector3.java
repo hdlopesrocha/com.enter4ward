@@ -54,7 +54,9 @@ public class Vector3 extends IVector3 {
         z = vec.getZ();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see hidrogine.math.IVector3#getZ()
      */
     @Override
@@ -62,7 +64,9 @@ public class Vector3 extends IVector3 {
         return z;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see hidrogine.math.IVector3#setZ(float)
      */
     @Override
@@ -72,7 +76,9 @@ public class Vector3 extends IVector3 {
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see hidrogine.math.IVector3#getX()
      */
     @Override
@@ -80,7 +86,9 @@ public class Vector3 extends IVector3 {
         return x;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see hidrogine.math.IVector3#setX(float)
      */
     @Override
@@ -89,7 +97,9 @@ public class Vector3 extends IVector3 {
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see hidrogine.math.IVector3#getY()
      */
     @Override
@@ -97,7 +107,9 @@ public class Vector3 extends IVector3 {
         return y;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see hidrogine.math.IVector3#setY(float)
      */
     @Override
@@ -105,7 +117,5 @@ public class Vector3 extends IVector3 {
         y = yy;
         return this;
     }
-
-
 
 }

@@ -203,6 +203,20 @@ public abstract class IVector3 {
     }
 
     /**
+     * Sets the.
+     *
+     * @param vec
+     *            the vec
+     * @return the i vector3
+     */
+    public IVector3 set(IVector3 vec) {
+        setX(vec.getX());
+        setY(vec.getY());
+        setZ(vec.getZ());
+        return this;
+    }
+
+    /**
      * Dot.
      *
      * @param v1
