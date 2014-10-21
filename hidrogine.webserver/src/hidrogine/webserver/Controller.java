@@ -104,7 +104,7 @@ public abstract class Controller {
             response.setData(read(file));
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            // e.printStackTrace();
         }
         if (fileToks.countTokens() > 1) {
             fileToks.nextElement();

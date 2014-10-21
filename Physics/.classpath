@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="libs/lzma.jar"/>
 	<classpathentry kind="lib" path="libs/TWL.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/hidrogine.lwjgl"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/hidrogine.math"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

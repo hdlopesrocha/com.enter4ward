@@ -4,15 +4,13 @@ import hidrogine.lwjgl.Grid;
 import hidrogine.lwjgl.Group;
 import hidrogine.lwjgl.Material;
 import hidrogine.lwjgl.Model3D;
+import hidrogine.math.Space;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Vector3f;
-
-import de.matthiasmann.twl.renderer.Texture.Rotation;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -54,6 +52,8 @@ public class TheQuadExampleMoving extends Game {
      */
     @Override
     public void setup() {
+    	Space space = new Space();
+    	
         camera.lookAt(0, 0, 3, 0, 0, 0);
         car = new Model3D("car.mat", "car.geo", 1f);
         grid = new Grid(32);
@@ -150,7 +150,8 @@ public class TheQuadExampleMoving extends Game {
     
     @Override
     public void draw() {
-    	float mb = 1024*1024;
+    	/*
+    	 float mb = 1024*1024;
         
         //Getting the runtime reference from system
         Runtime runtime = Runtime.getRuntime();
@@ -158,7 +159,7 @@ public class TheQuadExampleMoving extends Game {
                  //Print used memory
        Display.setTitle("Used Memory:"
             + (runtime.totalMemory() - runtime.freeMemory()) / mb);
-    	
+    	*/
     	
     	
         program.use();

@@ -1,10 +1,12 @@
 package hidrogine.math;
 
+import hidrogine.math.api.IVector2;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Vector2.
  */
-public class Vector2 {
+public class Vector2 extends IVector2 {
 
     /** The x. */
     private float x;
@@ -39,99 +41,43 @@ public class Vector2 {
      * @param vec
      *            the vec
      */
-    public Vector2(final Vector2 vec) {
+    public Vector2(final IVector2 vec) {
         x = vec.getX();
         y = vec.getY();
     }
 
-    /**
-     * Gets the x.
-     *
-     * @return the x
+    /* (non-Javadoc)
+     * @see hidrogine.math.IVector2#getX()
      */
+    @Override
     public final float getX() {
         return x;
     }
 
-    /**
-     * Sets the x.
-     *
-     * @param xx
-     *            the new x
+    /* (non-Javadoc)
+     * @see hidrogine.math.IVector2#setX(float)
      */
+    @Override
     public final void setX(final float xx) {
         x = xx;
     }
 
-    /**
-     * Gets the y.
-     *
-     * @return the y
+    /* (non-Javadoc)
+     * @see hidrogine.math.IVector2#getY()
      */
+    @Override
     public final float getY() {
         return y;
     }
 
-    /**
-     * Sets the y.
-     *
-     * @param yy
-     *            the new y
+    /* (non-Javadoc)
+     * @see hidrogine.math.IVector2#setY(float)
      */
+    @Override
     public final void setY(final float yy) {
         y = yy;
     }
 
-    /**
-     * Adds the.
-     *
-     * @param vec
-     *            the vec
-     * @return the vector2
-     */
-    public final Vector2 add(final Vector2 vec) {
-        x += vec.getX();
-        y += vec.getY();
-        return this;
-    }
 
-    /**
-     * Subtract.
-     *
-     * @param vec
-     *            the vec
-     * @return the vector2
-     */
-    public final Vector2 subtract(final Vector2 vec) {
-        x -= vec.getX();
-        y -= vec.getY();
-        return this;
-    }
-
-    /**
-     * Multiply.
-     *
-     * @param vec
-     *            the vec
-     * @return the vector2
-     */
-    public final Vector2 multiply(final Vector2 vec) {
-        x *= vec.getX();
-        y *= vec.getY();
-        return this;
-    }
-
-    /**
-     * Divide.
-     *
-     * @param vec
-     *            the vec
-     * @return the vector2
-     */
-    public final Vector2 divide(final Vector2 vec) {
-        x /= vec.getX();
-        y /= vec.getY();
-        return this;
-    }
 
 }

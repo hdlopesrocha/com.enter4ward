@@ -33,7 +33,7 @@ public class Response {
     private String contentDisposition = null;
 
     /** The data. */
-    private byte[] data = null;
+    private byte[] data = new byte[0];
 
     /** The content type. */
     private String contentType = "";

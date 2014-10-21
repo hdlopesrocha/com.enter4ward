@@ -267,7 +267,7 @@ public class Model3D extends Model {
      * 
      * @see hidrogine.lwjgl.Model#draw(hidrogine.lwjgl.ShaderProgram)
      */
-    public static Box box = new Box();
+    public static DrawableBox box = new DrawableBox();
 
     public void draw(ShaderProgram shader) {
         for (Group g : groups) {

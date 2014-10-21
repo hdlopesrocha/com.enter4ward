@@ -22,7 +22,7 @@ import org.json.JSONObject;
 public class HttpServer {
 
     /** The Constant VERSION. */
-    public static final String VERSION = "1.4.6";
+    public static final String VERSION = "1.4.7";
 
     /** The port. */
     private int port;
