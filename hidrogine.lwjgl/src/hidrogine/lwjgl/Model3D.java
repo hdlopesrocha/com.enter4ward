@@ -1,9 +1,11 @@
 package hidrogine.lwjgl;
 
+import hidrogine.math.Sphere;
+import hidrogine.math.Vector2;
+import hidrogine.math.Vector3;
 import hidrogine.math.api.IModel3D;
 import hidrogine.math.api.ISphere;
-
-import java.io.File;
+import hidrogine.math.api.IVector3;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,16 +14,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.lwjgl.opengl.GL11;
-
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -31,6 +28,7 @@ public class Model3D extends IModel3D {
 
 	/** The groups. */
 	public List<Group> groups = new ArrayList<Group>();
+	private ISphere container;
 
 	/** The materials. */
 	public TreeMap<String, Material> materials = new TreeMap<String, Material>();
@@ -68,8 +66,7 @@ public class Model3D extends IModel3D {
 	 */
 	@Override
 	public ISphere getContainer() {
-		// TODO Auto-generated method stub
-		return null;
+		return container;
 	}
 
 	/**
@@ -150,102 +147,10 @@ public class Model3D extends IModel3D {
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	private void loadGeometry2(final String filename, final float scale)
-			throws JSONException, IOException {
-		final JsonFactory factory = new JsonFactory();
-		final JsonParser parser = factory.createParser(new File(filename));
-		if (parser.nextToken() == JsonToken.START_OBJECT) {
-			while (parser.nextToken() != JsonToken.END_OBJECT) {
-				if (parser.nextToken() == JsonToken.START_ARRAY) {
-					final Group group = new Group(parser.getCurrentName());
-					groups.add(group);
-					while (parser.nextToken() != JsonToken.END_ARRAY) {
-						final BufferObject buffer = new BufferObject();
-
-						while (true) {
-							final JsonToken token = parser.nextToken();
-							if (token == JsonToken.FIELD_NAME) {
-								switch (parser.getCurrentName()) {
-								case "mm":
-									buffer.setMaterial(materials.get(parser
-											.nextTextValue()));
-									break;
-								case "vv":
-									if (parser.nextToken() == JsonToken.START_ARRAY) {
-										while (parser.nextToken() != JsonToken.END_ARRAY) {
-											float vx = parser.getFloatValue()
-													* scale;
-											float vy = parser.getFloatValue()
-													* scale;
-											float vz = parser.getFloatValue()
-													* scale;
-											group.addVertex(vx, vy, vz);
-
-											buffer.addPosition(vx, vy, vz);
-										}
-									}
-									break;
-								case "vn":
-									if (parser.nextToken() == JsonToken.START_ARRAY) {
-										while (parser.nextToken() != JsonToken.END_ARRAY) {
-											buffer.addNormal(
-													parser.getFloatValue(),
-													parser.getFloatValue(),
-													parser.getFloatValue());
-										}
-									}
-									break;
-								case "vt":
-									if (parser.nextToken() == JsonToken.START_ARRAY) {
-										while (parser.nextToken() != JsonToken.END_ARRAY) {
-											buffer.addTextureCoord(
-													parser.getFloatValue(),
-													parser.getFloatValue());
-										}
-									}
-									break;
-								case "ii":
-									if (parser.nextToken() == JsonToken.START_ARRAY) {
-										while (parser.nextToken() != JsonToken.END_ARRAY) {
-											buffer.addIndex(parser
-													.getShortValue());
-										}
-									}
-									break;
-								default:
-									break;
-								}
-							} else if (token == JsonToken.END_OBJECT) {
-
-								break;
-							}
-
-						}
-
-						buffer.buildBuffer();
-						group.subGroups.add(buffer);
-					}
-				}
-			}
-		}
-		parser.close();
-	}
-
-	/**
-	 * Load geometry.
-	 *
-	 * @param filename
-	 *            the filename
-	 * @param scale
-	 *            the scale
-	 * @throws JSONException
-	 *             the JSON exception
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
 	@SuppressWarnings("unchecked")
 	private void loadGeometry(final String filename, final float scale)
 			throws JSONException, IOException {
+		final List<IVector3> points = new ArrayList<IVector3>();
 		final FileInputStream file = new FileInputStream(filename);
 		final JSONTokener tokener = new JSONTokener(file);
 		final JSONObject jObject = new JSONObject(tokener);
@@ -276,9 +181,13 @@ public class Model3D extends IModel3D {
 					float tx = (float) vt.getDouble(k * 2 + 0);
 					float ty = (float) vt.getDouble(k * 2 + 1);
 					currentGroup.addVertex(vx, vy, vz);
-					currentSubGroup.addPosition(vx, vy, vz);
-					currentSubGroup.addNormal(nx, ny, nz);
-					currentSubGroup.addTextureCoord(tx, ty);
+					Vector3 pos = new Vector3(vx, vy, vz);
+					Vector3 nrm = new Vector3(nx, ny, nz);
+					Vector2 tex = new Vector2(tx, ty);
+					points.add(pos);
+					currentSubGroup.addPosition(pos);
+					currentSubGroup.addNormal(nrm);
+					currentSubGroup.addTextureCoord(tex);
 
 				}
 				final JSONArray ii = jSubGroup.getJSONArray("ii");
@@ -289,6 +198,7 @@ public class Model3D extends IModel3D {
 			}
 		}
 		file.close();
+		container = Sphere.createFromPoints(points);
 	}
 
 	/**

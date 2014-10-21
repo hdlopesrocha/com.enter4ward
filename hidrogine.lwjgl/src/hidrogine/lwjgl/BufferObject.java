@@ -1,5 +1,8 @@
 package hidrogine.lwjgl;
 
+import hidrogine.math.api.IVector2;
+import hidrogine.math.api.IVector3;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -26,13 +29,13 @@ public class BufferObject {
     }
 
     /** The positions. */
-    private ArrayList<Float> positions = new ArrayList<Float>();
+    private ArrayList<IVector3> positions = new ArrayList<IVector3>();
     
     /** The normals. */
-    private ArrayList<Float> normals = new ArrayList<Float>();
+    private ArrayList<IVector3> normals = new ArrayList<IVector3>();
     
     /** The texture coords. */
-    private ArrayList<Float> textureCoords = new ArrayList<Float>();
+    private ArrayList<IVector2> textureCoords = new ArrayList<IVector2>();
 
     /** The index data. */
     private ArrayList<Short> indexData = new ArrayList<Short>();
@@ -75,29 +78,23 @@ public class BufferObject {
      * @param vy the vy
      * @param vz the vz
      */
-    public final void addPosition(final float vx, final float vy, final float vz) {
-        positions.add(vx);
-        positions.add(vy);
-        positions.add(vz);
+    public final void addPosition(final IVector3 vec) {
+        positions.add(vec);
 
     }
 
     /* (non-Javadoc)
      * @see hidrogine.lwjgl.IBufferObject#addNormal(float, float, float)
      */
-    public final void addNormal(final float nx, final float ny, final float nz) {
-        normals.add(nx);
-        normals.add(ny);
-        normals.add(nz);
+    public final void addNormal(final IVector3 vec) {
+        normals.add(vec);
     }
 
     /* (non-Javadoc)
      * @see hidrogine.lwjgl.IBufferObject#addTextureCoord(float, float)
      */
-    public final void addTextureCoord(final float tx, final float ty) {
-
-        textureCoords.add(tx);
-        textureCoords.add(1 - ty);
+    public final void addTextureCoord(final IVector2 vec) {
+        textureCoords.add(vec);
     }
 
     /**
@@ -117,14 +114,19 @@ public class BufferObject {
         final ArrayList<Float> packedVector = new ArrayList<Float>();
         while (positions.size() > 0 && normals.size() > 0
                 && textureCoords.size() > 0) {
-            packedVector.add(positions.remove(0));
-            packedVector.add(positions.remove(0));
-            packedVector.add(positions.remove(0));
-            packedVector.add(normals.remove(0));
-            packedVector.add(normals.remove(0));
-            packedVector.add(normals.remove(0));
-            packedVector.add(textureCoords.remove(0));
-            packedVector.add(textureCoords.remove(0));
+        	IVector3 pos = positions.remove(0);
+        	IVector3 nrm = normals.remove(0);
+        	IVector2 tex = textureCoords.remove(0);
+
+        	
+        	packedVector.add(pos.getX());
+            packedVector.add(pos.getY());
+            packedVector.add(pos.getZ());
+            packedVector.add(nrm.getX());
+            packedVector.add(nrm.getY());
+            packedVector.add(nrm.getZ());
+            packedVector.add(tex.getX());
+            packedVector.add(tex.getY());
         }
 
         indexCount = indexData.size();

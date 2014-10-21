@@ -1,5 +1,8 @@
 package hidrogine.lwjgl;
 
+import hidrogine.math.Vector2;
+import hidrogine.math.Vector3;
+
 import org.lwjgl.opengl.GL11;
 
 public class Grid {
@@ -15,9 +18,9 @@ public class Grid {
 		this.size = size;
 		for (int x = -size; x < size; ++x) {
 			for (int y = -size; y < size; ++y) {
-				obj.addPosition(x, y, 0);
-				obj.addNormal(0f, 0f, 1f);
-				obj.addTextureCoord((float) x, (float) y);
+				obj.addPosition(new Vector3(x, y, 0));
+				obj.addNormal(new Vector3(0f, 0f, 1f));
+				obj.addTextureCoord(new Vector2((float) x, (float) y));
 			}
 		}
 
