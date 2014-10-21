@@ -8,8 +8,6 @@ public class Object3D extends ISphere{
     public Object3D(IVector3 position) {
         this.position = position;
     }
-
-
     
     public float getRadius() {
         // TODO Auto-generated method stub

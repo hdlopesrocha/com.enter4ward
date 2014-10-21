@@ -1,5 +1,9 @@
 package hidrogine.math.api;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class IVector2.
+ */
 public abstract class IVector2 {
 
     /**
@@ -32,39 +36,75 @@ public abstract class IVector2 {
      */
     public abstract void setY(float yy);
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see hidrogine.math.IVector2#add(hidrogine.math.IVector2)
      */
+    /**
+     * Adds the.
+     *
+     * @param vec
+     *            the vec
+     * @return the i vector2
+     */
     public final IVector2 add(final IVector2 vec) {
-        setX(getX() +vec.getX());
-        setY(getY() +vec.getY());
+        setX(getX() + vec.getX());
+        setY(getY() + vec.getY());
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see hidrogine.math.IVector2#subtract(hidrogine.math.IVector2)
      */
+    /**
+     * Subtract.
+     *
+     * @param vec
+     *            the vec
+     * @return the i vector2
+     */
     public final IVector2 subtract(final IVector2 vec) {
-        setX(getX() -vec.getX());
-        setY(getY() -vec.getY());
+        setX(getX() - vec.getX());
+        setY(getY() - vec.getY());
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see hidrogine.math.IVector2#multiply(hidrogine.math.IVector2)
      */
+    /**
+     * Multiply.
+     *
+     * @param vec
+     *            the vec
+     * @return the i vector2
+     */
     public final IVector2 multiply(final IVector2 vec) {
-        setX(getX() *vec.getX());
-        setY(getY() *vec.getY());
+        setX(getX() * vec.getX());
+        setY(getY() * vec.getY());
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see hidrogine.math.IVector2#divide(hidrogine.math.IVector2)
      */
-      public final IVector2 divide(final IVector2 vec) {
-          setX(getX() /vec.getX());
-          setY(getY() /vec.getY());
+    /**
+     * Divide.
+     *
+     * @param vec
+     *            the vec
+     * @return the i vector2
+     */
+    public final IVector2 divide(final IVector2 vec) {
+        setX(getX() / vec.getX());
+        setY(getY() / vec.getY());
         return this;
     }
 
