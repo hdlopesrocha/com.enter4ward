@@ -257,7 +257,7 @@ public class Model3D extends IModel3D {
 			final JSONArray subGroups = jObject.getJSONArray(groupName);
 			for (int j = 0; j < subGroups.length(); ++j) {
 				final JSONObject jSubGroup = subGroups.getJSONObject(j);
-				final IBufferObject currentSubGroup = new BufferObject();
+				final BufferObject currentSubGroup = new BufferObject();
 				currentGroup.subGroups.add(currentSubGroup);
 				if (jSubGroup.has("mm")) {
 					currentSubGroup.setMaterial(materials.get(jSubGroup
@@ -301,7 +301,7 @@ public class Model3D extends IModel3D {
 		for (Group g : groups) {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 			box.draw(shader, g.getMin(), g.getMax());
-			for (IBufferObject sg : g.subGroups) {
+			for (BufferObject sg : g.subGroups) {
 				sg.bind(shader);
 				sg.draw(shader);
 			}
@@ -318,7 +318,7 @@ public class Model3D extends IModel3D {
 	 */
 	public void draw(ShaderProgram shader, DrawHandler handler) {
 		for (Group g : groups) {
-			for (IBufferObject sg : g.subGroups) {
+			for (BufferObject sg : g.subGroups) {
 				sg.bind(shader);
 				handler.beforeDraw(g, sg.getMaterial());
 				sg.draw(shader);

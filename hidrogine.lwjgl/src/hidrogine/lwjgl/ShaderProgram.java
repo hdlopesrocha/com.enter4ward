@@ -1,14 +1,33 @@
 package hidrogine.lwjgl;
 
+import static org.lwjgl.opengl.ARBShaderObjects.GL_OBJECT_COMPILE_STATUS_ARB;
+import static org.lwjgl.opengl.ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB;
+import static org.lwjgl.opengl.ARBShaderObjects.GL_OBJECT_LINK_STATUS_ARB;
+import static org.lwjgl.opengl.ARBShaderObjects.GL_OBJECT_VALIDATE_STATUS_ARB;
+import static org.lwjgl.opengl.ARBShaderObjects.glAttachObjectARB;
+import static org.lwjgl.opengl.ARBShaderObjects.glCompileShaderARB;
+import static org.lwjgl.opengl.ARBShaderObjects.glCreateProgramObjectARB;
+import static org.lwjgl.opengl.ARBShaderObjects.glCreateShaderObjectARB;
+import static org.lwjgl.opengl.ARBShaderObjects.glDeleteObjectARB;
+import static org.lwjgl.opengl.ARBShaderObjects.glGetInfoLogARB;
+import static org.lwjgl.opengl.ARBShaderObjects.glGetObjectParameteriARB;
+import static org.lwjgl.opengl.ARBShaderObjects.glGetUniformLocationARB;
+import static org.lwjgl.opengl.ARBShaderObjects.glLinkProgramARB;
+import static org.lwjgl.opengl.ARBShaderObjects.glShaderSourceARB;
+import static org.lwjgl.opengl.ARBShaderObjects.glUniform1fARB;
+import static org.lwjgl.opengl.ARBShaderObjects.glUniform1iARB;
+import static org.lwjgl.opengl.ARBShaderObjects.glUniform3fARB;
+import static org.lwjgl.opengl.ARBShaderObjects.glUniformMatrix4ARB;
+import static org.lwjgl.opengl.ARBShaderObjects.glUseProgramObjectARB;
+import static org.lwjgl.opengl.ARBShaderObjects.glValidateProgramARB;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
-import java.util.Stack;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBFragmentShader;
-import static org.lwjgl.opengl.ARBShaderObjects.*;
 import org.lwjgl.opengl.ARBVertexShader;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;

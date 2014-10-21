@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL30;
 /**
  * The Class BufferObject.
  */
-public class BufferObject implements IBufferObject {
+public class BufferObject {
 
     /* (non-Javadoc)
      * @see hidrogine.lwjgl.IBufferObject#getMaterial()
