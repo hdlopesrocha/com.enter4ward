@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Space {
+    private static final int LEFT = 0;
+    private static final int RIGHT = 1;
+    private static final int CENTER = 2;
 
     class SpaceNode extends Box {
-        private static final int LEFT = 0;
-        private static final int RIGHT = 1;
-        private static final int CENTER = 2;
 
         private final List<ISphere> container = new ArrayList<ISphere>();
         private SpaceNode[] child;
@@ -39,7 +39,7 @@ public class Space {
         }
 
         public void clear() {
-            this.child = new SpaceNode[3];
+            this.child = null;
         }
 
         private SpaceNode build(int i) {
@@ -88,8 +88,6 @@ public class Space {
         }
         
         public void insert(ISphere obj){
-            System.out.println(toString());
-
             IVector3 pos = obj.getPosition(); // XXX - MUST BE SPHERE
             if(canSplit()){
                 for(int i=0;i < 3 ; ++i){
@@ -102,9 +100,19 @@ public class Space {
                 }
             }
             else {
+                System.out.println("=== INSERTION ===");
+                System.out.println(toString());
                 container.add(obj);
             }
             ++count;
+            if(child!=null){
+                for(int i=0;i < 3 ; ++i){
+                    SpaceNode node = child[i];
+                    if(node!=null && node.count==0){
+                        node.clear();
+                    }
+                }
+            }
         }
 
         public SpaceNode expand(ISphere obj) {
@@ -154,17 +162,39 @@ public class Space {
 
     public void insert(ISphere obj) {
         IVector3 pos = obj.getPosition(); // XXX - MUST BE SPHERE
-        System.out.println("=== EXPANSION ===");
-        System.out.println(root.toString());
+
 
         // expand phase
         while (!root.contains(pos)) {
             root = root.expand(obj);
-            System.out.println(root.toString());
         }
-        System.out.println("=== INSERTION ===");
+        System.out.println("=== EXPANSION ===");
+        System.out.println(root.toString());
+        
+        
         // insertion
         root.insert(obj);
+   
+
+        
+        // root compression
+        while(true){
+            boolean emptyLeft = root.child[LEFT]==null || root.child[LEFT].count==0;
+            boolean emptyCenter = root.child[CENTER]==null || root.child[CENTER].count==0;
+            boolean emptyRight = root.child[RIGHT]==null || root.child[RIGHT].count==0;
+            
+            if(emptyLeft && emptyCenter && !emptyRight){
+                root = root.child[RIGHT];
+            } else if(emptyLeft && !emptyCenter && emptyRight){
+                root = root.child[CENTER];   
+            } else if(!emptyLeft && emptyCenter && !emptyRight){
+                root = root.child[LEFT];
+            } else {
+                break;
+            }
+        }
+        System.out.println("=== COMPRESSION ===");
+        System.out.println(root.toString());
     }
 
 }
