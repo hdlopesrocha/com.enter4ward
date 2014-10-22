@@ -4,13 +4,15 @@ import hidrogine.lwjgl.Grid;
 import hidrogine.lwjgl.Group;
 import hidrogine.lwjgl.Material;
 import hidrogine.lwjgl.Model3D;
+import hidrogine.math.Matrix;
 import hidrogine.math.Space;
+import hidrogine.math.Vector3;
+import hidrogine.math.api.IVector3;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.util.vector.Vector3f;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -57,11 +59,11 @@ public class TheQuadExampleMoving extends Game {
         camera.lookAt(0, 0, 3, 0, 0, 0);
         car = new Model3D("car.mat", "car.geo", 1f);
         grid = new Grid(32);
-        program.setLightPosition(0, new Vector3f(3, 3, 3));
+        program.setLightPosition(0, new Vector3(3, 3, 3));
         program.setAmbientColor(0, 0, 0);
         program.setDiffuseColor(1, 1, 1);
         program.setMaterialShininess(1000);
-        program.setLightColor(0, new Vector3f(1, 1, 1));
+        program.setLightColor(0, new Vector3(1, 1, 1));
 
         boxHandler = new DrawHandler() {
 
@@ -77,11 +79,10 @@ public class TheQuadExampleMoving extends Game {
                 if (group.getName().startsWith("w")
                         && group.getName().length() == 2) {
                     program.pushMatrix();
-                    Vector3f center = group.getCenter();
+                    IVector3 center = group.getCenter().multiply(-1f);
                     program.getModelMatrix().translate(center);
-                    program.getModelMatrix().rotate(time * 32,
-                            new Vector3f(1, 0, 0));
-                    center.negate();
+                    program.getModelMatrix().multiply(Matrix.createRotationX(time * 32));
+                    center.multiply(-1f);
                     program.getModelMatrix().translate(center);
 
                 }
@@ -136,7 +137,8 @@ public class TheQuadExampleMoving extends Game {
         if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
             camera.move(0, 0, sense);
         }
-        program.setLightPosition(0, camera.getPosition());
+        Vector3 camPos = camera.getPosition();
+        program.setLightPosition(0,  camPos);
        
         program.setTime(time*10);
 

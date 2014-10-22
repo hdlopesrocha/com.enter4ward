@@ -183,7 +183,7 @@ public class Model3D extends IModel3D {
 					currentGroup.addVertex(vx, vy, vz);
 					Vector3 pos = new Vector3(vx, vy, vz);
 					Vector3 nrm = new Vector3(nx, ny, nz);
-					Vector2 tex = new Vector2(tx, ty);
+					Vector2 tex = new Vector2(tx, 1f-ty);
 					points.add(pos);
 					currentSubGroup.addPosition(pos);
 					currentSubGroup.addNormal(nrm);

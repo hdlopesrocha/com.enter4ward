@@ -20,6 +20,8 @@ import static org.lwjgl.opengl.ARBShaderObjects.glUniform3fARB;
 import static org.lwjgl.opengl.ARBShaderObjects.glUniformMatrix4ARB;
 import static org.lwjgl.opengl.ARBShaderObjects.glUseProgramObjectARB;
 import static org.lwjgl.opengl.ARBShaderObjects.glValidateProgramARB;
+import hidrogine.math.Matrix;
+import hidrogine.math.Vector3;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -30,8 +32,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBVertexShader;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
 
 public class ShaderProgram {
 
@@ -54,10 +54,10 @@ public class ShaderProgram {
     private int[] lightPositionLocation = new int[10];
     private int[] lightSpecularColorLocation = new int[10];
     /** The model matrix. */
-    private Vector3f[] lightPosition = new Vector3f[10];
-    private Vector3f[] lightSpecularColor = new Vector3f[10];
+    private Vector3[] lightPosition = new Vector3[10];
+    private Vector3[] lightSpecularColor = new Vector3[10];
     private int stackPointer = 0;
-    Matrix4f [] matrixStack = new Matrix4f[128];
+    Matrix [] matrixStack = new Matrix[128];
     private FloatBuffer matrix44Buffer = null;
 
     private int program = 0;
@@ -67,8 +67,8 @@ public class ShaderProgram {
         // Create a FloatBuffer with the proper size to store our matrices later
         matrix44Buffer = BufferUtils.createFloatBuffer(16);
         for(int i=0; i < 128 ; ++i){
-        	matrixStack[i]=new Matrix4f();
-        	matrixStack[i].setIdentity();
+        	matrixStack[i]=Matrix.identity();
+       
         }
         // Load the vertex shader
         int vsId = this.createShader("vertex.glsl",
@@ -147,14 +147,17 @@ public class ShaderProgram {
         glUseProgramObjectARB(program);
     }
 
-    Matrix4f modelView = new Matrix4f();
+    Matrix modelView = new Matrix();
 
+
+      
+    
     /**
      * Sets the projection matrix.
      */
     public void update(Camera camera) {
 
-        Matrix4f.mul(camera.getViewMatrix(), matrixStack[stackPointer], modelView);
+    	modelView = Matrix.multiply(camera.getViewMatrix(), matrixStack[stackPointer]);
         // Upload matrices to the uniform variables
 
         camera.getProjectionMatrix().store(matrix44Buffer);
@@ -169,20 +172,20 @@ public class ShaderProgram {
         matrix44Buffer.flip();
         glUniformMatrix4ARB(modelMatrixLocation, false, matrix44Buffer);
 
-        Vector3f cameraPosition = camera.getPosition();
-        glUniform3fARB(cameraPositionLocation, cameraPosition.x,
-                cameraPosition.y, cameraPosition.z);
+        Vector3 cameraPosition = camera.getPosition();
+        glUniform3fARB(cameraPositionLocation, cameraPosition.getX(),
+                cameraPosition.getY(), cameraPosition.getZ());
 
         for (int i = 0; i < 10; ++i) {
-            Vector3f position = lightPosition[i];
-            Vector3f specularColor = lightSpecularColor[i];
+            Vector3 position = lightPosition[i];
+            Vector3 specularColor = lightSpecularColor[i];
             if (position != null) {
-                glUniform3fARB(lightPositionLocation[i], position.x,
-                        position.y, position.z);
+                glUniform3fARB(lightPositionLocation[i], position.getX(),
+                        position.getY(), position.getZ());
             }
             if (specularColor != null) {
-                glUniform3fARB(lightSpecularColorLocation[i], specularColor.x,
-                        specularColor.y, specularColor.z);
+                glUniform3fARB(lightSpecularColorLocation[i], specularColor.getX(),
+                        specularColor.getY(), specularColor.getZ());
             }
         }
     }
@@ -212,11 +215,11 @@ public class ShaderProgram {
         glUniform3fARB(diffuseColorLocation, r, g, b);
     }
 
-    public void setLightPosition(int index, Vector3f lightPosition) {
+    public void setLightPosition(int index, Vector3 lightPosition) {
         this.lightPosition[index] = lightPosition;
     }
 
-    public void setLightColor(int index, Vector3f lightColor) {
+    public void setLightColor(int index, Vector3 lightColor) {
         this.lightSpecularColor[index] = lightColor;
     }
 
@@ -313,7 +316,7 @@ public class ShaderProgram {
     }
 
     public void pushMatrix() {
-        Matrix4f.load(matrixStack[stackPointer], matrixStack[stackPointer+1]);
+        Matrix.load(matrixStack[stackPointer], matrixStack[stackPointer+1]);
         ++stackPointer;
     }
 
@@ -329,7 +332,7 @@ public class ShaderProgram {
     }
 
     public void setIdentity() {
-        Matrix4f.setIdentity(matrixStack[stackPointer]);
+    	matrixStack[stackPointer]=   Matrix.identity();
     }
 
     /**
@@ -337,7 +340,7 @@ public class ShaderProgram {
      *
      * @return the model matrix
      */
-    public Matrix4f getModelMatrix() {
+    public Matrix getModelMatrix() {
         return matrixStack[stackPointer];
     }
 

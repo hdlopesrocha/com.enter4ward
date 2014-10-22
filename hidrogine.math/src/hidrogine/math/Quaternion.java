@@ -6,7 +6,7 @@ import hidrogine.math.api.IVector3;
 /**
  * The Class Quaternion.
  */
-class Quaternion {
+public class Quaternion {
 
     /** The w. */
     private float X, Y, Z, W;
@@ -70,7 +70,7 @@ class Quaternion {
      *            the quaternion2
      * @return the quaternion
      */
-    public Quaternion add(Quaternion quaternion1, Quaternion quaternion2) {
+    public static Quaternion add(Quaternion quaternion1, Quaternion quaternion2) {
         quaternion1.X += quaternion2.X;
         quaternion1.Y += quaternion2.Y;
         quaternion1.Z += quaternion2.Z;
@@ -87,7 +87,7 @@ class Quaternion {
      *            the value2
      * @return the quaternion
      */
-    public Quaternion concatenate(Quaternion value1, Quaternion value2) {
+    public static Quaternion concatenate(Quaternion value1, Quaternion value2) {
         Quaternion quaternion = new Quaternion();
         quaternion.X = ((value2.X * value1.W) + (value1.X * value2.W))
                 + (value2.Y * value1.Z) - (value2.Z * value1.Y);
@@ -117,7 +117,7 @@ class Quaternion {
      *            the value
      * @return the quaternion
      */
-    public Quaternion conjugate(Quaternion value) {
+    public static Quaternion conjugate(Quaternion value) {
         Quaternion quaternion = new Quaternion();
         quaternion.X = -value.X;
         quaternion.Y = -value.Y;
@@ -175,7 +175,7 @@ class Quaternion {
      *            the angle
      * @return the quaternion
      */
-    public  Quaternion createFromAxisAngle(Vector3 axis, float angle) {
+    public static Quaternion createFromAxisAngle(Vector3 axis, float angle) {
         float sin_a = (float) Math.sin(angle / 2.0);
         return new Quaternion(axis.getX() * sin_a, axis.getY() * sin_a,
                 axis.getZ() * sin_a, (float) Math.cos(angle / 2.0));
@@ -239,7 +239,7 @@ class Quaternion {
      *            the quaternion2
      * @return the quaternion
      */
-    public Quaternion divide(Quaternion quaternion1, Quaternion quaternion2) {
+    public static Quaternion divide(Quaternion quaternion1, Quaternion quaternion2) {
         Quaternion result = new Quaternion();
 
         float w5 = 1f / ((quaternion2.X * quaternion2.X)
@@ -297,7 +297,7 @@ class Quaternion {
      *            the quaternion
      * @return the quaternion
      */
-    public Quaternion inverse(Quaternion quaternion) {
+    public static Quaternion inverse(Quaternion quaternion) {
         Quaternion result = new Quaternion();
         float m1 = 1f / ((quaternion.X * quaternion.X)
                 + (quaternion.Y * quaternion.Y) + (quaternion.Z * quaternion.Z) + (quaternion.W * quaternion.W));
@@ -338,7 +338,7 @@ class Quaternion {
      *            the amount
      * @return the quaternion
      */
-    public Quaternion lerp(Quaternion quaternion1, Quaternion quaternion2, float amount) {
+    public static Quaternion lerp(Quaternion quaternion1, Quaternion quaternion2, float amount) {
         Quaternion result = new Quaternion();
         float f2 = 1f - amount;
         if (((quaternion1.X * quaternion2.X) + (quaternion1.Y * quaternion2.Y)
@@ -374,7 +374,7 @@ class Quaternion {
      *            the amount
      * @return the quaternion
      */
-    public Quaternion slerp(Quaternion quaternion1, Quaternion quaternion2,
+    public static Quaternion slerp(Quaternion quaternion1, Quaternion quaternion2,
             float amount) {
         Quaternion result = new Quaternion();
         float q2, q3;
@@ -431,7 +431,7 @@ class Quaternion {
      *            the quaternion2
      * @return the quaternion
      */
-    public Quaternion multiply(Quaternion quaternion1, Quaternion quaternion2) {
+    public static Quaternion multiply(Quaternion quaternion1, Quaternion quaternion2) {
         Quaternion result = new Quaternion();
         float f12 = (quaternion1.Y * quaternion2.Z)
                 - (quaternion1.Z * quaternion2.Y);
@@ -461,7 +461,7 @@ class Quaternion {
      *            the scale factor
      * @return the quaternion
      */
-    public Quaternion multiply(Quaternion quaternion1, float scaleFactor) {
+    public static Quaternion multiply(Quaternion quaternion1, float scaleFactor) {
         quaternion1.X *= scaleFactor;
         quaternion1.Y *= scaleFactor;
         quaternion1.Z *= scaleFactor;
@@ -476,7 +476,7 @@ class Quaternion {
      *            the quaternion
      * @return the quaternion
      */
-    public Quaternion negate(Quaternion quaternion) {
+    public static Quaternion negate(Quaternion quaternion) {
         Quaternion result = new Quaternion();
         result.X = -quaternion.X;
         result.Y = -quaternion.Y;
@@ -488,13 +488,14 @@ class Quaternion {
     /**
      * Normalize.
      */
-    public void normalize() {
+    public Quaternion normalize() {
         float f1 = 1f / (float) Math
                 .sqrt((double) ((X * X) + (Y * Y) + (Z * Z) + (W * W)));
         X *= f1;
         Y *= f1;
         Z *= f1;
         W *= f1;
+        return this;
     }
 
     /**
@@ -504,7 +505,7 @@ class Quaternion {
      *            the quaternion
      * @return the quaternion
      */
-    public Quaternion normalize(Quaternion quaternion) {
+    public static Quaternion normalize(Quaternion quaternion) {
         Quaternion result = new Quaternion();
         float f1 = 1f / (float) Math
                 .sqrt((double) ((quaternion.X * quaternion.X)

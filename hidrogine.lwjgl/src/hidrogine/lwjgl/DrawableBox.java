@@ -2,9 +2,9 @@ package hidrogine.lwjgl;
 
 import hidrogine.math.Vector2;
 import hidrogine.math.Vector3;
+import hidrogine.math.api.IVector3;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector3f;
 
 public class DrawableBox {
 
@@ -50,10 +50,9 @@ public class DrawableBox {
 	 * @param shader
 	 *            the shader
 	 */
-	public final void draw(final ShaderProgram shader, Vector3f min,
-			Vector3f max) {
-		Vector3f dim = new Vector3f();
-		Vector3f.sub(max, min, dim);
+	public final void draw(final ShaderProgram shader, Vector3 min,
+			Vector3 max) {
+		IVector3 dim = Vector3.subtract(max,min, new Vector3());
 		shader.pushMatrix();
 		shader.getModelMatrix().translate(min);
 		shader.getModelMatrix().scale(dim);

@@ -142,6 +142,13 @@ public abstract class IVector3 {
         setZ(getZ() - vec.getZ());
         return this;
     }
+    
+    public static final IVector3 subtract(final IVector3 vec1 ,final IVector3 vec2, final IVector3 out) {
+        out.setX(vec1.getX() - vec2.getX());
+        out.setY(vec1.getY() - vec2.getY());
+        out.setZ(vec1.getZ() - vec2.getZ());
+        return out;
+    }
 
     /*
      * (non-Javadoc)
@@ -159,6 +166,25 @@ public abstract class IVector3 {
         setX(getX() * vec.getX());
         setY(getY() * vec.getY());
         setZ(getZ() * vec.getZ());
+        return this;
+    }
+
+    /**
+     * Sets the.
+     *
+     * @param posX
+     *            the pos x
+     * @param posY
+     *            the pos y
+     * @param posZ
+     *            the pos z
+     * @return the i vector3
+     */
+    public IVector3 set(float posX, float posY, float posZ) {
+
+        setX(posX);
+        setY(posY);
+        setZ(posZ);
         return this;
     }
 

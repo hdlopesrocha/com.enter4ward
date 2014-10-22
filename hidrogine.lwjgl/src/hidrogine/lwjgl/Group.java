@@ -1,5 +1,7 @@
 package hidrogine.lwjgl;
 
+import hidrogine.math.Vector3;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,8 +9,8 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class Group {
     public List<BufferObject> subGroups = new ArrayList<BufferObject>();
-    private Vector3f min;
-    private Vector3f max;
+    private Vector3 min;
+    private Vector3 max;
     
     private String name;
     
@@ -22,29 +24,29 @@ public class Group {
 
     public void addVertex(float vx, float vy, float vz) {
        if(max==null){
-           max = new Vector3f(vx,vy,vz);
-           min = new Vector3f(vx,vy,vz);
+           max = new Vector3(vx,vy,vz);
+           min = new Vector3(vx,vy,vz);
        }
        else {
-           max.x = Math.max(max.x, vx);
-           max.y = Math.max(max.y, vy);
-           max.z = Math.max(max.z, vz);
-           min.x = Math.min(min.x, vx);
-           min.y = Math.min(min.y, vy);
-           min.z = Math.min(min.z, vz);
+           max.setX(Math.max(max.getX(), vx));
+           max.setY(Math.max(max.getY(), vy));
+           max.setZ(Math.max(max.getZ(), vz));
+           min.setX(Math.min(min.getX(), vx));
+           min.setY(Math.min(min.getY(), vy));
+           min.setZ(Math.min(min.getZ(), vz));
        }
     }
 
-    public Vector3f getCenter(){
-        return new Vector3f((min.x+max.x)/2,(min.y+max.y)/2,(min.z+max.z)/2);
+    public Vector3 getCenter(){
+        return new Vector3((min.getX()+max.getX())/2,(min.getY()+max.getY())/2,(min.getZ()+max.getZ())/2);
         
     }
     
-    public Vector3f getMin() {
+    public Vector3 getMin() {
         return min;
     }
     
-    public Vector3f getMax() {
+    public Vector3 getMax() {
         return max;
     }
 }

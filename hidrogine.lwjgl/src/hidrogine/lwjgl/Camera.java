@@ -1,9 +1,8 @@
 package hidrogine.lwjgl;
-
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Quaternion;
-import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
+import hidrogine.math.Matrix;
+import hidrogine.math.Quaternion;
+import hidrogine.math.Vector3;
+import hidrogine.math.api.IVector3;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -15,13 +14,10 @@ public class Camera {
     private Quaternion rotation;
 
     /** The position. */
-    private Vector3f position;
+    private Vector3 position;
 
     /** The projection matrix. */
-    private Matrix4f projectionMatrix = null;
-
-
-    private Matrix4f viewMatrix = new Matrix4f();
+    private Matrix projectionMatrix = null;
 
     /** The height. */
     private int width, height;
@@ -31,40 +27,12 @@ public class Camera {
      *
      * @return the matrix
      */
-    private Vector3f negativePos = new Vector3f();
-    public Matrix4f getViewMatrix() {
-    	position.negate(negativePos);
-        Matrix4f result = convertQuaternionToMatrix4f(rotation);
-        result = result.translate(negativePos);
-        return result;
+    public Matrix getViewMatrix() {
+       IVector3 negativePos = new Vector3(position).multiply(-1f);
+       return Matrix.multiply( Matrix.createTranslation( negativePos),Matrix.createFromQuaternion(rotation));
+        
     }
 
-    private Matrix4f convertQuaternionToMatrix4f(Quaternion q) {
-        viewMatrix.m00 = 1.0f - 2.0f * (q.getY() * q.getY() + q.getZ() * q.getZ());
-        viewMatrix.m01 = 2.0f * (q.getX() * q.getY() + q.getZ() * q.getW());
-        viewMatrix.m02 = 2.0f * (q.getX() * q.getZ() - q.getY() * q.getW());
-        viewMatrix.m03 = 0.0f;
-
-        // Second row
-        viewMatrix.m10 = 2.0f * (q.getX() * q.getY() - q.getZ() * q.getW());
-        viewMatrix.m11 = 1.0f - 2.0f * (q.getX() * q.getX() + q.getZ() * q.getZ());
-        viewMatrix.m12 = 2.0f * (q.getZ() * q.getY() + q.getX() * q.getW());
-        viewMatrix.m13 = 0.0f;
-
-        // Third row
-        viewMatrix.m20 = 2.0f * (q.getX() * q.getZ() + q.getY() * q.getW());
-        viewMatrix.m21 = 2.0f * (q.getY() * q.getZ() - q.getX() * q.getW());
-        viewMatrix.m22 = 1.0f - 2.0f * (q.getX() * q.getX() + q.getY() * q.getY());
-        viewMatrix.m23 = 0.0f;
-
-        // Fourth row
-        viewMatrix.m30 = 0;
-        viewMatrix.m31 = 0;
-        viewMatrix.m32 = 0;
-        viewMatrix.m33 = 1.0f;
-
-        return viewMatrix;
-    }
 
     /**
      * Rotate.
@@ -78,11 +46,10 @@ public class Camera {
      * @param w
      *            the w
      */
-    private static final Quaternion newRot = new Quaternion().setIdentity();
     public void rotate(float x, float y, float z, float w) {
-        newRot.setFromAxisAngle(new Vector4f(x, y, z, w));
-        Quaternion.mul(newRot, rotation, rotation);
-        rotation.normalise();
+    	Quaternion newRot = Quaternion.createFromAxisAngle(new Vector3(x, y, z), w);
+        rotation = Quaternion.multiply(newRot, rotation);
+        rotation.normalize();
     }
 
     /**
@@ -94,12 +61,14 @@ public class Camera {
      *            the h
      */
     public Camera(int w, int h) {
-        position = new Vector3f();
-        rotation = new Quaternion().setIdentity();
+        position = new Vector3();
+        rotation = Quaternion.identity();
         width = w;
         height = h;
 
-        projectionMatrix = createProjectionMatrix(w, h);
+        projectionMatrix = Matrix.createPerspectiveFieldOfView((float)Math.toRadians(45f), (float)w/(float)h, 0.1f, 100f);
+   
+      
     }
 
     /**
@@ -148,54 +117,22 @@ public class Camera {
      * @param change
      *            the change
      */
-    public void move(Vector3f change) {
-        position.x += change.x;
-        position.y += change.y;
-        position.z += change.z;
+    public void move(Vector3 change) {
+        position.add(change);
     }
 
-    /**
-     * Creates the projection matrix.
-     *
-     * @param width
-     *            the width
-     * @param height
-     *            the height
-     * @return the matrix4f
-     */
-    private static Matrix4f createProjectionMatrix(int width, int height) {
-        // Setup projection matrix
-        Matrix4f matrix = new Matrix4f();
-        float fieldOfView = 45f;
-        float aspectRatio = (float) width / (float) height;
-        float near_plane = 0.1f;
-        float far_plane = 100f;
 
-        float y_scale = (float) (1f / Math
-                .tan(Math.toRadians(fieldOfView / 2f)));
-        float x_scale = y_scale / aspectRatio;
-        float frustum_length = far_plane - near_plane;
-
-        matrix.m00 = x_scale;
-        matrix.m11 = y_scale;
-        matrix.m22 = -((far_plane + near_plane) / frustum_length);
-        matrix.m23 = -1;
-        matrix.m32 = -((2 * near_plane * far_plane) / frustum_length);
-        matrix.m33 = 0;
-        return matrix;
-
-    }
 
     /**
      * Gets the projection matrix.
      *
      * @return the projection matrix
      */
-    public Matrix4f getProjectionMatrix() {
-        return projectionMatrix;
+    public Matrix getProjectionMatrix() {
+    	return projectionMatrix;
     }
 
-
+  
     /**
      * Move.
      *
@@ -207,40 +144,34 @@ public class Camera {
      *            the left
      */
     public void move(float front, float down, float left) {
-        Matrix4f trans = convertQuaternionToMatrix4f(rotation);
-        trans.invert();
+        Matrix trans = Matrix.invert(Matrix.createFromQuaternion(rotation));
+      
         if (front != 0) {
-            Vector4f frontVec = new Vector4f(0, 0, 1, 0);
-            Matrix4f.transform(trans, frontVec, frontVec);
-            frontVec.scale(front);
-            position.translate(frontVec.x, frontVec.y, frontVec.z);
+            IVector3 frontVec = new Vector3(0, 0, 1);
+            frontVec = Vector3.transform( frontVec,trans);
+            frontVec.multiply(front);
+            position.add(frontVec);
         }
 
         if (down != 0) {
-            Vector4f downVec = new Vector4f(0, 1, 0, 0);
-            Matrix4f.transform(trans, downVec, downVec);
-            downVec.scale(down);
-            position.translate(downVec.x, downVec.y, downVec.z);
+            IVector3 downVec = new Vector3(0, 1, 0);
+            downVec = Vector3.transform(downVec,trans);
+            downVec.multiply(down);
+            position.add(downVec);
         }
 
         if (left != 0) {
-            Vector4f leftVec = new Vector4f(1, 0, 0, 0);
-            Matrix4f.transform(trans, leftVec, leftVec);
-            leftVec.scale(left);
-            position.translate(leftVec.x, leftVec.y, leftVec.z);
+            IVector3 leftVec = new Vector3(1, 0, 0);
+            leftVec = Vector3.transform(leftVec,trans);
+            leftVec.multiply(left);
+            position.add(leftVec);
         }
     }
 
-    public Vector3f getPosition() {
+    public Vector3 getPosition() {
         // TODO Auto-generated method stub
         return position;
     }
 
-    private Vector3f getDirection() {
-        Matrix4f trans = convertQuaternionToMatrix4f(rotation);
-        trans.invert();
-        Vector4f frontVec = new Vector4f(0, 0, 1, 0);
-        Matrix4f.transform(trans, frontVec, frontVec);
-        return new Vector3f(frontVec.x, frontVec.y, frontVec.z);
-    }
+
 }
