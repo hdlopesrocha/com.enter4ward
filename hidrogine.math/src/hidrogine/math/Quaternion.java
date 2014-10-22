@@ -57,7 +57,7 @@ class Quaternion {
      *
      * @return the quaternion
      */
-    public Quaternion identity() {
+    public static Quaternion identity() {
         return new Quaternion(0, 0, 0, 1);
     }
 
@@ -188,7 +188,7 @@ class Quaternion {
      *            the matrix
      * @return the quaternion
      */
-    public Quaternion createFromRotationMatrix(Matrix matrix) {
+    public static Quaternion createFromRotationMatrix(Matrix matrix) {
         Quaternion result = new Quaternion();
         if ((matrix.M[0] + matrix.M[5] + matrix.M[10]) > 0.0) {
             float M1 = (float) Math.sqrt((double) (matrix.M[0] + matrix.M[5]
