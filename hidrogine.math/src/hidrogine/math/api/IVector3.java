@@ -1,7 +1,5 @@
 package hidrogine.math.api;
 
-import hidrogine.math.Vector3;
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class IVector3.
@@ -164,6 +162,31 @@ public abstract class IVector3 {
         return this;
     }
 
+    /**
+     * Multiply.
+     *
+     * @param vec
+     *            the vec
+     * @return the i vector3
+     */
+    public final IVector3 multiply(final float vec) {
+        setX(getX() * vec);
+        setY(getY() * vec);
+        setZ(getZ() * vec);
+        return this;
+    }
+
+    /**
+     * Normalize.
+     *
+     * @return the i vector3
+     */
+    public IVector3 normalize() {
+        divide(length());
+        return this;
+
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -239,26 +262,28 @@ public abstract class IVector3 {
      *            the v2
      * @param out
      *            the out
+     * @return the i vector3
      */
-    public static final void cross(final IVector3 v1, final IVector3 v2,
+    public static final IVector3 cross(final IVector3 v1, final IVector3 v2,
             final IVector3 out) {
         out.setX(v1.getY() * v2.getZ() - v2.getY() * v1.getZ());
         out.setX(v2.getX() * v1.getZ() - v1.getX() * v2.getZ());
         out.setX(v1.getX() * v2.getY() - v2.getX() * v1.getY());
+        return out;
     }
 
     /**
-     * Cross.
+     * Normalize.
      *
-     * @param v1
-     *            the v1
-     * @param v2
-     *            the v2
-     * @return the vector3
+     * @param in
+     *            the in
+     * @param out
+     *            the out
+     * @return the i vector3
      */
-    public static final IVector3 cross(final IVector3 v1, final IVector3 v2) {
-        IVector3 out = new Vector3();
-        cross(v1, v2, out);
+    public static final IVector3 normalize(final IVector3 in, final IVector3 out) {
+        out.set(in);
+        out.normalize();
         return out;
     }
 
@@ -272,8 +297,9 @@ public abstract class IVector3 {
      *
      * @return the double
      */
-    public double length() {
-        return Math.sqrt(getX() * getX() + getY() * getY() + getZ() * getZ());
+    public float length() {
+        return (float) Math.sqrt(getX() * getX() + getY() * getY() + getZ()
+                * getZ());
     }
 
     /*
