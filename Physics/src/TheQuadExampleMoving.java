@@ -6,6 +6,7 @@ import hidrogine.lwjgl.Material;
 import hidrogine.lwjgl.Model3D;
 import hidrogine.math.Matrix;
 import hidrogine.math.Space;
+import hidrogine.math.Sphere;
 import hidrogine.math.Vector3;
 import hidrogine.math.api.IVector3;
 
@@ -55,6 +56,7 @@ public class TheQuadExampleMoving extends Game {
     @Override
     public void setup() {
     	Space space = new Space();
+    	space.insert(new Sphere(new Vector3(253.1f,61.1f,125.1f),11));
     	
         camera.lookAt(0, 0, 3, 0, 0, 0);
         car = new Model3D("car.mat", "car.geo", 1f);

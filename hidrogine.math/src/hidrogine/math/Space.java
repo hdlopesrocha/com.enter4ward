@@ -1,6 +1,6 @@
 package hidrogine.math;
 
-import hidrogine.math.api.IObject3D;
+import hidrogine.math.api.ISphere;
 import hidrogine.math.api.IVector3;
 
 import java.util.ArrayList;
@@ -9,103 +9,162 @@ import java.util.List;
 public class Space {
 
     class SpaceNode extends Box {
-        final List<IObject3D> container= new ArrayList<IObject3D>();
-        SpaceNode left, right;
+        private static final int LEFT = 0;
+        private static final int RIGHT = 1;
+        private static final int CENTER = 2;
+
+        private final List<ISphere> container = new ArrayList<ISphere>();
+        private SpaceNode[] child;
+        private Long count;
 
         public SpaceNode() {
-            super(new Vector3(-1, -1, -1), new Vector3(1, 1, 1));
-            this.left = this.right = null;
+            super(new Vector3(0, 0, 0), new Vector3(1, 1, 1));
+            this.count = 0l;
         }
 
-        public SpaceNode(IVector3 min, IVector3 max) {
+        private SpaceNode(IVector3 min, IVector3 max) {
             super(min, max);
-            this.left = this.right = null;
+            this.count = 0l;
         }
 
-        public SpaceNode(SpaceNode left, SpaceNode right) {
-            super(left.getMin(), right.getMax());
-            this.left = left;
-            this.right = right;
+        private SpaceNode(SpaceNode old, int i, IVector3 min, IVector3 max) {
+            super(min, max);
+            this.child = new SpaceNode[3];
+            this.child[i] = old;
+            this.count = old.count;
         }
 
-        public void split() {
+        public String toString() {
+            return super.toString();
+        }
+
+        public void clear() {
+            this.child = new SpaceNode[3];
+        }
+
+        private SpaceNode build(int i) {
             float lenX = getLengthX();
             float lenY = getLengthY();
             float lenZ = getLengthZ();
-            float ctrX = getCenterX();
-            float ctrY = getCenterY();
-            float ctrZ = getCenterZ();
-
+            
             if (lenX >= lenY && lenX >= lenZ) {
-                left = new SpaceNode(getMin(), new Vector3(
-                        getMax()).setX(ctrX));
-                right = new SpaceNode(
-                        new Vector3(getMin()).setX(ctrX), getMax());
+                if (i == LEFT) {
+                    return new SpaceNode(getMin(), new Vector3(getMax()).addX(-lenX / 2));
+                } else if (i == RIGHT) {
+                    return new SpaceNode(new Vector3(getMin()).addX(lenX / 2), getMax());
+                } else {
+                    return new SpaceNode(new Vector3(getMin()).addX(lenX / 4), new Vector3(getMax()).addX(-lenX / 4));
+                }
             } else if (lenY >= lenZ) {
-                left = new SpaceNode(getMin(), new Vector3(
-                        getMax()).setY(ctrY));
-                right = new SpaceNode(
-                        new Vector3(getMin()).setY(ctrY), getMax());
+                if (i == LEFT) {
+                    return new SpaceNode(getMin(), new Vector3(getMax()).addY(-lenY / 2));
+                } else if (i == RIGHT) {
+                    return new SpaceNode(new Vector3(getMin()).addY(lenY / 2), getMax());
+                } else {
+                    return new SpaceNode(new Vector3(getMin()).addY(lenY / 4), new Vector3(getMax()).addY(-lenY / 4));
+                }
             } else {
-                left = new SpaceNode(getMin(), new Vector3(
-                        getMax()).setZ(ctrZ));
-                right = new SpaceNode(
-                        new Vector3(getMin()).setZ(ctrZ), getMax());
+                if (i == LEFT) {
+                    return new SpaceNode(getMin(), new Vector3(getMax()).addZ(-lenZ / 2));
+                } else if (i == RIGHT) {
+                    return new SpaceNode(new Vector3(getMin()).addZ(lenZ / 2), getMax());
+                } else {
+                    return new SpaceNode(new Vector3(getMin()).addZ(lenZ / 4), new Vector3(getMax()).addZ(-lenZ / 4));
+                }
             }
         }
 
-        public SpaceNode expand(IVector3 vec) {
-            float lenX = getLengthX();
-            float lenY = getLengthY();
-            float lenZ = getLengthZ();
-            float ctrX = getCenterX();
-            float ctrY = getCenterY();
-            float ctrZ = getCenterZ();
-
-            if (lenX <= lenY && lenX <= lenZ) {
-                if (vec.getX() >= ctrX) {
-                    return new SpaceNode(this, new SpaceNode(new Vector3(
-                            getMin()).addX(lenX),
-                            new Vector3(getMax()).addX(lenX)));
-                } else {
-                    return new SpaceNode(new SpaceNode(
-                            new Vector3(getMin()).addX(-lenX), new Vector3(
-                                    getMax()).addX(-lenX)), this);
+        public SpaceNode getChild(int i) {
+            if (canSplit()) {
+                if (child == null) {
+                    child = new SpaceNode[3];
                 }
-            } else if (lenY <= lenZ) {
-                if (vec.getY() >= ctrY) {
-                    return new SpaceNode(this, new SpaceNode(new Vector3(
-                            getMin()).addY(lenY),
-                            new Vector3(getMax()).addY(lenY)));
-                } else {
-                    return new SpaceNode(new SpaceNode(
-                            new Vector3(getMin()).addY(-lenY), new Vector3(
-                                    getMax()).addY(-lenY)), this);
+                if (child[i] == null) {
+                    child[i] = build(i);
                 }
-            } else {
-                if (vec.getZ() >= ctrZ) {
-                    return new SpaceNode(this, new SpaceNode(new Vector3(
-                            getMin()).addZ(lenZ),
-                            new Vector3(getMax()).addZ(lenZ)));
-                } else {
-                    return new SpaceNode(new SpaceNode(
-                            new Vector3(getMin()).addZ(-lenZ), new Vector3(
-                                    getMax()).addZ(-lenZ)), this);
-                }
+                return child[i];
             }
+            return null;
         }
         
-        public boolean canSplit(){
+        public void insert(ISphere obj){
+            System.out.println(toString());
+
+            IVector3 pos = obj.getPosition(); // XXX - MUST BE SPHERE
+            if(canSplit()){
+                for(int i=0;i < 3 ; ++i){
+
+                    SpaceNode node = getChild(i);
+                    if(node.contains(pos)){
+                        node.insert(obj);
+                        break;
+                    }
+                }
+            }
+            else {
+                container.add(obj);
+            }
+            ++count;
+        }
+
+        public SpaceNode expand(ISphere obj) {
+            IVector3 pos = obj.getPosition(); // XXX - MUST BE SPHERE
+
+            float lenX = getLengthX();
+            float lenY = getLengthY();
+            float lenZ = getLengthZ();
+
+            if (lenX <= lenY && lenX <= lenZ) {
+                if (pos.getX() >= getCenterX()) {
+                    return new SpaceNode(this, LEFT, getMin(), new Vector3(
+                            getMax()).addX(lenX));
+                } else {
+                    return new SpaceNode(this, RIGHT,
+                            new Vector3(getMin()).addX(-lenX), getMax());
+                }
+            } else if (lenY <= lenZ) {
+                if (pos.getY() >= getCenterY()) {
+                    return new SpaceNode(this, LEFT, getMin(), new Vector3(
+                            getMax()).addY(lenY));
+                } else {
+                    return new SpaceNode(this, RIGHT,
+                            new Vector3(getMin()).addY(-lenY), getMax());
+                }
+            } else {
+                if (pos.getZ() >= getCenterZ()) {
+                    return new SpaceNode(this, LEFT, getMin(), new Vector3(
+                            getMax()).addZ(lenZ));
+                } else {
+                    return new SpaceNode(this, RIGHT,
+                            new Vector3(getMin()).addZ(-lenZ), getMax());
+                }
+            }
+        }
+
+        public boolean canSplit() {
             return getMin().distance(getMax()) > 1f;
         }
     }
 
     private SpaceNode root;
-    
+
     public Space() {
         root = new SpaceNode();
-        root.split();
-        root = root.expand(new Vector3(1, 0, 0));
+    }
+
+    public void insert(ISphere obj) {
+        IVector3 pos = obj.getPosition(); // XXX - MUST BE SPHERE
+        System.out.println("=== EXPANSION ===");
+        System.out.println(root.toString());
+
+        // expand phase
+        while (!root.contains(pos)) {
+            root = root.expand(obj);
+            System.out.println(root.toString());
+        }
+        System.out.println("=== INSERTION ===");
+        // insertion
+        root.insert(obj);
     }
 
 }
