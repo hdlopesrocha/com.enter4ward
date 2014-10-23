@@ -1,5 +1,6 @@
 package hidrogine.math.api;
 
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class IVector3.
@@ -263,10 +264,7 @@ public abstract class IVector3 {
     /**
      * Dot.
      *
-     * @param v1
-     *            the v1
-     * @param v2
-     *            the v2
+     * @param v the v
      * @return the float
      */
     public final float dot(final IVector3 v) {
@@ -277,12 +275,7 @@ public abstract class IVector3 {
     /**
      * Cross.
      *
-     * @param v1
-     *            the v1
-     * @param v2
-     *            the v2
-     * @param out
-     *            the out
+     * @param v the v
      * @return the i vector3
      */
     public final IVector3 cross(final IVector3 v) {
@@ -343,5 +336,6 @@ public abstract class IVector3 {
     public String toString() {
         return "{X=" + getX() + ", Y=" + getY() + ", Z=" + getZ() + "}";
     }
+   
 
 }

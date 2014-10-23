@@ -1,7 +1,7 @@
 package hidrogine.math;
 
-import hidrogine.math.api.IObject3D;
 import hidrogine.math.api.IBoundingSphere;
+import hidrogine.math.api.IObject3D;
 import hidrogine.math.api.IVector3;
 
 import java.util.ArrayList;
@@ -94,7 +94,7 @@ public class Space {
                 for(int i=0;i < 3 ; ++i){
 
                     SpaceNode node = getChild(i);
-                    if(node.contains(obj)){
+                    if(node.contains(obj)==ContainmentType.Contains){
                         inserted=true;
                         node.insert(obj);
                         break;
@@ -166,7 +166,7 @@ public class Space {
 
     public void insert(IObject3D obj) {
         // expand phase
-        while (!root.contains(obj)) {
+        while (root.contains(obj)!=ContainmentType.Contains) {
             root = root.expand(obj);
         }
         System.out.println("=== EXPANSION ===");

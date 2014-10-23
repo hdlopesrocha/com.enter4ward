@@ -1159,24 +1159,50 @@ public class Matrix {
                 + " M[15]:" + M[15] + "} }";
     }
 
+    /**
+     * Store.
+     *
+     * @param buffer the buffer
+     */
     public void store(FloatBuffer buffer) {
         buffer.put(M);
     }
 
+    /**
+     * Load.
+     *
+     * @param matrix the matrix
+     * @param matrix2 the matrix2
+     */
     public static void load(Matrix matrix, Matrix matrix2) {
         for(int i=0;i <16; ++i)
             matrix2.M[i]=matrix.M[i];
         
     }
 
+    /**
+     * Multiply.
+     *
+     * @param mat the mat
+     */
     public void multiply(Matrix mat) {
         M= multiply(this, mat).M;
      }
     
+    /**
+     * Translate.
+     *
+     * @param min the min
+     */
     public void translate(IVector3 min) {
        multiply(Matrix.createTranslation(min));
     }
 
+    /**
+     * Scale.
+     *
+     * @param dim the dim
+     */
     public void scale(IVector3 dim) {
         multiply(Matrix.createScale(dim));
         

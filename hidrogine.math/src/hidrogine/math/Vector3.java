@@ -54,6 +54,12 @@ public class Vector3 extends IVector3 {
         z = vec.getZ();
     }
 
+    public Vector3(float value) {
+            x = value;
+            y = value;
+            z = value;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -143,6 +149,20 @@ public class Vector3 extends IVector3 {
         IVector3 p2 = new Vector3(value).multiply(s * s - u.dot(u));
         IVector3 p3 = new Vector3(u).cross(value).multiply(2.0f * s);
         return p1.add(p2).add(p3);
+    }
+    
+    static Vector3 max(IVector3 value1, IVector3 value2){
+        return new Vector3(
+            Math.max(value1.getX(), value2.getX()),
+            Math.max(value1.getY(), value2.getY()),
+            Math.max(value1.getZ(), value2.getZ()));
+    }
+
+    static Vector3 min(IVector3 min, IVector3 min2){
+        return new Vector3(
+            Math.min(min.getX(), min2.getX()),
+            Math.min(min.getY(), min2.getY()),
+            Math.min(min.getZ(), min2.getZ()));
     }
 
 }

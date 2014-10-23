@@ -3,9 +3,10 @@ package hidrogine.lwjgl;
 import hidrogine.math.BoundingSphere;
 import hidrogine.math.Vector2;
 import hidrogine.math.Vector3;
-import hidrogine.math.api.IModel3D;
 import hidrogine.math.api.IBoundingSphere;
+import hidrogine.math.api.IModel3D;
 import hidrogine.math.api.IVector3;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

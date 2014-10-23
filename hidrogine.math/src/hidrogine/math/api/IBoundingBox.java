@@ -1,5 +1,8 @@
 package hidrogine.math.api;
 
+import hidrogine.math.BoundingSphere;
+import hidrogine.math.ContainmentType;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class IBox.
@@ -36,24 +39,60 @@ public abstract class IBoundingBox {
      */
     public abstract void setMax(IVector3 max);
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see hidrogine.math.IBox#contains(hidrogine.math.IVector3)
-     */
-    /**
-     * Contains.
-     *
-     * @param vec
-     *            the vec
-     * @return true, if successful
-     */
-    public boolean contains(IVector3 vec) {
-        return vec.getX() >= getMin().getX() && vec.getX() <= getMax().getX()
-                && vec.getY() >= getMin().getY()
-                && vec.getY() <= getMax().getY()
-                && vec.getZ() >= getMin().getZ()
-                && vec.getZ() <= getMax().getZ();
+    
+    public ContainmentType contains(IVector3 point)
+    {
+        //first we get if point is out of box
+        if (point.getX() < getMin().getX()
+            || point.getX() > getMax().getX()
+            || point.getY() < getMin().getY()
+            || point.getY() > getMax().getY()
+            || point.getZ() < getMin().getZ()
+            || point.getZ() > getMax().getZ())
+        {
+            return ContainmentType.Disjoint;
+        }//or if point is on box because coordonate of point is lesser or equal
+        else if (point.getX() == getMin().getX()
+            || point.getX() == getMax().getX()
+            || point.getY() == getMin().getY()
+            || point.getY() == getMax().getY()
+            || point.getZ() == getMin().getZ()
+            || point.getZ() == getMax().getZ())
+            return ContainmentType.Intersects;
+        else
+            return ContainmentType.Contains;
+    }
+    
+    
+    public ContainmentType contains(BoundingSphere sphere)
+    {
+        if (sphere.getPosition().getX() - getMin().getX() > sphere.getRadius()
+            && sphere.getPosition().getY() - getMin().getY() > sphere.getRadius()
+            && sphere.getPosition().getZ() - getMin().getZ() > sphere.getRadius()
+            && getMax().getX() - sphere.getPosition().getX() > sphere.getRadius()
+            && getMax().getY() - sphere.getPosition().getY() > sphere.getRadius()
+            && getMax().getZ() - sphere.getPosition().getZ() > sphere.getRadius())
+            return ContainmentType.Contains;
+
+        double dmin = 0;
+
+        if (sphere.getPosition().getX() - getMin().getX() <= sphere.getRadius())
+            dmin += (sphere.getPosition().getX() - getMin().getX()) * (sphere.getPosition().getX() - getMin().getX());
+        else if (getMax().getX() - sphere.getPosition().getX() <= sphere.getRadius())
+            dmin += (sphere.getPosition().getX() - getMax().getX()) * (sphere.getPosition().getX() - getMin().getX());
+        if (sphere.getPosition().getY() - getMin().getY() <= sphere.getRadius())
+            dmin += (sphere.getPosition().getY() - getMin().getY()) * (sphere.getPosition().getY() - getMin().getY());
+        else if (getMax().getY() - sphere.getPosition().getY() <= sphere.getRadius())
+            dmin += (sphere.getPosition().getY() - getMax().getY()) * (sphere.getPosition().getY() - getMax().getY());
+        if (sphere.getPosition().getZ() - getMin().getZ() <= sphere.getRadius())
+            dmin += (sphere.getPosition().getZ() - getMin().getZ()) * (sphere.getPosition().getZ() - getMin().getZ());
+        else if (getMax().getZ() - sphere.getPosition().getZ() <= sphere.getRadius())
+            dmin += (sphere.getPosition().getZ() - getMax().getZ()) * (sphere.getPosition().getZ() - getMax().getZ());
+
+        if (dmin <= sphere.getRadius() * sphere.getRadius())
+            return ContainmentType.Intersects;
+
+        return ContainmentType.Disjoint;
     }
 
     /*
@@ -150,21 +189,5 @@ public abstract class IBoundingBox {
                 + "}";
     }
 
-    /**
-     * Contains.
-     *
-     * @param obj
-     *            the obj
-     * @return true, if successful
-     */
-    public boolean contains(IBoundingSphere obj) {
-        return (obj.getPosition().getX() - getMin().getX() > obj.getRadius()
-                && obj.getPosition().getY() - getMin().getY() > obj.getRadius()
-                && obj.getPosition().getZ() - getMin().getZ() > obj.getRadius()
-                && getMax().getX() - obj.getPosition().getX() > obj.getRadius()
-                && getMax().getY() - obj.getPosition().getY() > obj.getRadius() && getMax()
-                .getZ() - obj.getPosition().getZ() > obj.getRadius());
-
-    }
 
 }
