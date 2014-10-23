@@ -1,5 +1,6 @@
 package hidrogine.math.api;
 
+import hidrogine.math.Vector3;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -143,8 +144,6 @@ public abstract class IVector3 {
         setZ(getZ() - vec.getZ());
         return this;
     }
-    
-
 
     /*
      * (non-Javadoc)
@@ -264,18 +263,19 @@ public abstract class IVector3 {
     /**
      * Dot.
      *
-     * @param v the v
+     * @param v
+     *            the v
      * @return the float
      */
     public final float dot(final IVector3 v) {
-        return getX() * v.getX() + getY() * v.getY() + getZ()
-                * v.getZ();
+        return getX() * v.getX() + getY() * v.getY() + getZ() * v.getZ();
     }
 
     /**
      * Cross.
      *
-     * @param v the v
+     * @param v
+     *            the v
      * @return the i vector3
      */
     public final IVector3 cross(final IVector3 v) {
@@ -287,7 +287,6 @@ public abstract class IVector3 {
         setZ(z);
         return this;
     }
-
 
     /*
      * (non-Javadoc)
@@ -336,6 +335,34 @@ public abstract class IVector3 {
     public String toString() {
         return "{X=" + getX() + ", Y=" + getY() + ", Z=" + getZ() + "}";
     }
-   
 
+    /**
+     * Max.
+     *
+     * @param value2
+     *            the value2
+     * @return the i vector3
+     */
+    public IVector3 max(IVector3 value2) {
+
+        setX(Math.max(getX(), value2.getX()));
+        setY(Math.max(getY(), value2.getY()));
+        setZ(Math.max(getZ(), value2.getZ()));
+        return this;
+    }
+
+    /**
+     * Min.
+     *
+     * @param min2
+     *            the min2
+     * @return the i vector3
+     */
+    public IVector3 min(IVector3 min2) {
+
+        setX(Math.min(getX(), min2.getX()));
+        setY(Math.min(getY(), min2.getY()));
+        setZ(Math.min(getZ(), min2.getZ()));
+        return this;
+    }
 }

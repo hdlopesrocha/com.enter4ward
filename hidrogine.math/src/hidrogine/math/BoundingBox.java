@@ -71,7 +71,7 @@ public class BoundingBox extends IBoundingBox {
     
     
     
-    ContainmentType contains(BoundingBox box)
+   public ContainmentType contains(BoundingBox box)
     {
         //test if all corner is in the same side of a face by just checking min and max
         if (box.max.getX() < min.getX()
@@ -95,7 +95,7 @@ public class BoundingBox extends IBoundingBox {
     }
 
 
-    ContainmentType contains(BoundingFrustum frustum)
+    public ContainmentType contains(BoundingFrustum frustum)
     {
         //TODO: bad done here need a fix. 
         //Because question is not frustum contain box but reverse and this is not the same
@@ -166,7 +166,7 @@ public class BoundingBox extends IBoundingBox {
     }
 
 
-    ContainmentType contains(Vector3 point)
+    public ContainmentType contains(Vector3 point)
     {
         //first we get if point is out of box
         if (point.getX() < min.getX()
@@ -208,25 +208,25 @@ public class BoundingBox extends IBoundingBox {
         return BoundingBox(vector2, vector1);
     }
 */
-    BoundingBox createFromSphere(BoundingSphere sphere)
+    public BoundingBox createFromSphere(BoundingSphere sphere)
     {
         IVector3 vector1 =new Vector3(sphere.getRadius());
         return new BoundingBox(new Vector3(sphere.getPosition()).subtract(vector1), new Vector3(sphere.getPosition()).add(vector1));
     }
 
-    BoundingBox createMerged(BoundingBox original, BoundingBox additional)
+    public BoundingBox createMerged(BoundingBox original, BoundingBox additional)
     {
         return new BoundingBox(
-            Vector3.min(original.min, additional.min), Vector3.max(original.max, additional.max));
+            new Vector3(original.min).min(additional.min), new Vector3(original.max).max(additional.max));
     }
 
 
-    boolean equals(BoundingBox other)
+    public boolean equals(BoundingBox other)
     {
         return (min.equals(other.min)) && (max.equals(other.max));
     }
 
-    boolean intersects(BoundingBox box)
+    public boolean intersects(BoundingBox box)
     {
         if ((max.getX() >= box.min.getX()) && (min.getX() <= box.max.getX()))
         {
@@ -238,12 +238,12 @@ public class BoundingBox extends IBoundingBox {
     }
 
 
-    boolean intersects(BoundingFrustum frustum)
+    public boolean intersects(BoundingFrustum frustum)
     {
         return frustum.intersects(this);
     }
 
-    boolean intersects(BoundingSphere sphere)
+    public boolean intersects(BoundingSphere sphere)
     {
         if (sphere.getPosition().getX() - min.getX() > sphere.getRadius()
             && sphere.getPosition().getY() - min.getY() > sphere.getRadius()
@@ -276,7 +276,7 @@ public class BoundingBox extends IBoundingBox {
         return false;
     }
 
-    PlaneIntersectionType intersects(Plane plane)
+    public PlaneIntersectionType intersects(Plane plane)
     {
         //check all corner side of plane
         Vector3[] corners = getCorners();
