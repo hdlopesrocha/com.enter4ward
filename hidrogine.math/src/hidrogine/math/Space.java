@@ -155,9 +155,50 @@ public class Space {
             return getMin().distance(getMax()) > 1f;
         }
 
+        public void iterate(BoundingFrustum frustum, IteratorHandler<IObject3D> handler){
+            for(IObject3D obj : container){
+                if(frustum.contains(obj)!=ContainmentType.Disjoint){
+                    handler.handle(obj);
+                }
+            }
+            
+            if(child!=null){
+                for(int i=0; i < 2; ++i){
+                    if(child[i]!=null && frustum.contains(child[i])!=ContainmentType.Disjoint){
+                        child[i].iterate(frustum, handler);
+                    }
+                } 
+            }
+        }
    
+        public void iterate(IteratorHandler<IObject3D> handler){
+            for(IObject3D obj : container){
+                handler.handle(obj);
+            }
+            
+            if(child!=null){
+                for(int i=0; i < 2; ++i){
+                    if(child[i]!=null){
+                        child[i].iterate(handler);
+                    }
+                } 
+            }
+        }
+    
     }
 
+    public void iterate(BoundingFrustum frustum, IteratorHandler<IObject3D> handler){
+        if(root!=null){
+            root.iterate(frustum, handler);
+        }
+    }
+    
+    public void iterate(IteratorHandler<IObject3D> handler){
+        if(root!=null){
+            root.iterate(handler);
+        }
+    }    
+    
     private SpaceNode root;
 
     public Space() {

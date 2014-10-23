@@ -13,6 +13,25 @@ public abstract class IObject3D extends IBoundingSphere {
     private IModel3D model;
 
     /**
+     * Gets the model.
+     *
+     * @return the model
+     */
+    public IModel3D getModel() {
+        return model;
+    }
+
+    /**
+     * Sets the model.
+     *
+     * @param model
+     *            the new model
+     */
+    public void setModel(IModel3D model) {
+        this.model = model;
+    }
+
+    /**
      * Instantiates a new i object3 d.
      *
      * @param position
