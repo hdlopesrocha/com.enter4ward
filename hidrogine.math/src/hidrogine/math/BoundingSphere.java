@@ -1,13 +1,13 @@
 package hidrogine.math;
 
-import hidrogine.math.api.ISphere;
+import hidrogine.math.api.IBoundingSphere;
 import hidrogine.math.api.IVector3;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class Box.
  */
-public class Sphere extends ISphere {
+public class BoundingSphere extends IBoundingSphere {
 
     /** The max. */
     private IVector3 position;
@@ -23,7 +23,7 @@ public class Sphere extends ISphere {
      * @param radius
      *            the radius
      */
-    public Sphere(IVector3 position, float radius) {
+    public BoundingSphere(IVector3 position, float radius) {
         this.position = position;
         this.radius = radius;
     }
@@ -75,7 +75,7 @@ public class Sphere extends ISphere {
      *            the points
      * @return the sphere
      */
-    public static Sphere createFromPoints(Iterable<IVector3> points) {
+    public static BoundingSphere createFromPoints(Iterable<IVector3> points) {
         IVector3 min = new Vector3();
         IVector3 max = new Vector3();
         boolean inited = false;
@@ -93,7 +93,12 @@ public class Sphere extends ISphere {
             max.setY(Math.max(max.getY(), vec.getY()));
             max.setZ(Math.max(max.getZ(), vec.getZ()));
         }
-        return new Sphere(new Vector3(min).add(max).divide(2f),
+        return new BoundingSphere(new Vector3(min).add(max).divide(2f),
                 (float) (max.distance(min) / 2d));
+    }
+
+    public PlaneIntersectionType intersects(Plane plane) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

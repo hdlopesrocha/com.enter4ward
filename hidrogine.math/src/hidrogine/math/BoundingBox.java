@@ -1,13 +1,13 @@
 package hidrogine.math;
 
-import hidrogine.math.api.IBox;
+import hidrogine.math.api.IBoundingBox;
 import hidrogine.math.api.IVector3;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class Box.
  */
-public class Box extends IBox {
+public class BoundingBox extends IBoundingBox {
 
     /** The max. */
     private IVector3 min, max;
@@ -48,9 +48,14 @@ public class Box extends IBox {
      * @param max
      *            the max
      */
-    public Box(IVector3 min, IVector3 max) {
+    public BoundingBox(IVector3 min, IVector3 max) {
         this.min = min;
         this.max = max;
+    }
+
+    public PlaneIntersectionType intersects(Plane plane) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

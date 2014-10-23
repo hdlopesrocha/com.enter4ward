@@ -143,12 +143,7 @@ public abstract class IVector3 {
         return this;
     }
     
-    public static final IVector3 subtract(final IVector3 vec1 ,final IVector3 vec2, final IVector3 out) {
-        out.setX(vec1.getX() - vec2.getX());
-        out.setY(vec1.getY() - vec2.getY());
-        out.setZ(vec1.getZ() - vec2.getZ());
-        return out;
-    }
+
 
     /*
      * (non-Javadoc)
@@ -274,9 +269,9 @@ public abstract class IVector3 {
      *            the v2
      * @return the float
      */
-    public static final float dot(final IVector3 v1, final IVector3 v2) {
-        return v1.getX() * v2.getX() + v1.getY() * v2.getY() + v1.getZ()
-                * v2.getZ();
+    public final float dot(final IVector3 v) {
+        return getX() * v.getX() + getY() * v.getY() + getZ()
+                * v.getZ();
     }
 
     /**
@@ -290,28 +285,16 @@ public abstract class IVector3 {
      *            the out
      * @return the i vector3
      */
-    public static final IVector3 cross(final IVector3 v1, final IVector3 v2,
-            final IVector3 out) {
-        out.setX(v1.getY() * v2.getZ() - v2.getY() * v1.getZ());
-        out.setX(v2.getX() * v1.getZ() - v1.getX() * v2.getZ());
-        out.setX(v1.getX() * v2.getY() - v2.getX() * v1.getY());
-        return out;
+    public final IVector3 cross(final IVector3 v) {
+        float x = getY() * v.getZ() - v.getY() * getZ();
+        float y = v.getX() * getZ() - getX() * v.getZ();
+        float z = getX() * v.getY() - v.getX() * getY();
+        setX(x);
+        setY(y);
+        setZ(z);
+        return this;
     }
 
-    /**
-     * Normalize.
-     *
-     * @param in
-     *            the in
-     * @param out
-     *            the out
-     * @return the i vector3
-     */
-    public static final IVector3 normalize(final IVector3 in, final IVector3 out) {
-        out.set(in);
-        out.normalize();
-        return out;
-    }
 
     /*
      * (non-Javadoc)

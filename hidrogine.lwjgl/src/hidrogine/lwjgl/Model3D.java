@@ -1,10 +1,10 @@
 package hidrogine.lwjgl;
 
-import hidrogine.math.Sphere;
+import hidrogine.math.BoundingSphere;
 import hidrogine.math.Vector2;
 import hidrogine.math.Vector3;
 import hidrogine.math.api.IModel3D;
-import hidrogine.math.api.ISphere;
+import hidrogine.math.api.IBoundingSphere;
 import hidrogine.math.api.IVector3;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -28,7 +28,7 @@ public class Model3D extends IModel3D {
 
 	/** The groups. */
 	public List<Group> groups = new ArrayList<Group>();
-	private ISphere container;
+	private IBoundingSphere container;
 
 	/** The materials. */
 	public TreeMap<String, Material> materials = new TreeMap<String, Material>();
@@ -65,7 +65,7 @@ public class Model3D extends IModel3D {
 	 * @see hidrogine.math.api.IModel3D#getContainer()
 	 */
 	@Override
-	public ISphere getContainer() {
+	public IBoundingSphere getContainer() {
 		return container;
 	}
 
@@ -198,7 +198,7 @@ public class Model3D extends IModel3D {
 			}
 		}
 		file.close();
-		container = Sphere.createFromPoints(points);
+		container = BoundingSphere.createFromPoints(points);
 	}
 
 	/**

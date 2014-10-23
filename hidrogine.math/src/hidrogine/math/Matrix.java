@@ -248,9 +248,9 @@ public class Matrix {
         Matrix result;
         IVector3 x, y, z;
 
-        z = Vector3.normalize(forward, new Vector3());
-        x = Vector3.cross(forward, up, new Vector3());
-        y = Vector3.cross(x, forward, new Vector3());
+        z = new Vector3(forward).normalize();
+        x = new Vector3(forward).cross(up);
+        y = new Vector3(x).cross(forward);
 
         x.normalize();
         y.normalize();
@@ -400,10 +400,10 @@ public class Matrix {
         IVector3 translation = new Vector3(objectPosition)
                 .subtract(cameraPosition);
         IVector3 backwards, right, up;
-        backwards = Vector3.normalize(translation, new Vector3());
-        up = Vector3.normalize(cameraUpVector, new Vector3());
-        right = Vector3.cross(backwards, up, new Vector3());
-        up = Vector3.cross(backwards, right, new Vector3());
+        backwards = new Vector3(translation).normalize();
+        up = new Vector3(cameraUpVector).normalize();
+        right = new Vector3(backwards).cross(up);
+        up = new Vector3(backwards).cross(right);
         result = Matrix.identity();
         result.setBackward(backwards);
         result.setRight(right);
@@ -460,9 +460,8 @@ public class Matrix {
         // http://msdn.microsoft.com/en-us/library/bb205343(v=VS.85).aspx
 
         IVector3 vz = new Vector3(cameraDirection).multiply(-1f);
-        IVector3 vx = Vector3.cross(cameraUpVector, vz, new Vector3())
-                .normalize();
-        IVector3 vy = Vector3.cross(vz, vx, new Vector3());
+        IVector3 vx = new Vector3(cameraUpVector).cross(vz).normalize();
+        IVector3 vy = new Vector3(vz).cross(vx);
 
         result.M[0] = vx.getX();
         result.M[1] = vy.getX();
@@ -473,9 +472,9 @@ public class Matrix {
         result.M[8] = vx.getZ();
         result.M[9] = vy.getZ();
         result.M[10] = vz.getZ();
-        result.M[12] = -Vector3.dot(vx, cameraPosition);
-        result.M[13] = -Vector3.dot(vy, cameraPosition);
-        result.M[14] = -Vector3.dot(vz, cameraPosition);
+        result.M[12] = -vx.dot(cameraPosition);
+        result.M[13] = -vy.dot(cameraPosition);
+        result.M[14] = -vz.dot(cameraPosition);
         return result;
     }
 

@@ -4,7 +4,7 @@ package hidrogine.math.api;
 /**
  * The Class IObject3D.
  */
-public abstract class IObject3D extends ISphere {
+public abstract class IObject3D extends IBoundingSphere {
 
     /** The position. */
     private IVector3 position;

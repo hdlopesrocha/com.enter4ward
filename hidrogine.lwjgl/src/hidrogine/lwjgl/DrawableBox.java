@@ -52,7 +52,7 @@ public class DrawableBox {
 	 */
 	public final void draw(final ShaderProgram shader, Vector3 min,
 			Vector3 max) {
-		IVector3 dim = Vector3.subtract(max,min, new Vector3());
+		IVector3 dim = new Vector3(max).subtract(min);
 		shader.pushMatrix();
 		shader.getModelMatrix().translate(min);
 		shader.getModelMatrix().scale(dim);

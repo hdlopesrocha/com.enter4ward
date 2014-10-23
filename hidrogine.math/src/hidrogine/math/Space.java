@@ -1,6 +1,7 @@
 package hidrogine.math;
 
-import hidrogine.math.api.ISphere;
+import hidrogine.math.api.IObject3D;
+import hidrogine.math.api.IBoundingSphere;
 import hidrogine.math.api.IVector3;
 
 import java.util.ArrayList;
@@ -11,9 +12,9 @@ public class Space {
     private static final int RIGHT = 1;
     private static final int CENTER = 2;
 
-    private class SpaceNode extends Box {
+    private class SpaceNode extends BoundingBox {
 
-        private final List<ISphere> container = new ArrayList<ISphere>();
+        private final List<IObject3D> container = new ArrayList<IObject3D>();
         private SpaceNode[] child;
         private Long count;
 
@@ -87,7 +88,7 @@ public class Space {
             return null;
         }
         
-        public void insert(ISphere obj){
+        public void insert(IObject3D obj){
             boolean inserted=false;
             if(canSplit()){
                 for(int i=0;i < 3 ; ++i){
@@ -117,7 +118,7 @@ public class Space {
             }
         }
 
-        public SpaceNode expand(ISphere obj) {
+        public SpaceNode expand(IBoundingSphere obj) {
             IVector3 pos = obj.getPosition();
             float lenX = getLengthX();
             float lenY = getLengthY();
@@ -163,8 +164,7 @@ public class Space {
         root = new SpaceNode();
     }
 
-    public void insert(ISphere obj) {
-
+    public void insert(IObject3D obj) {
         // expand phase
         while (!root.contains(obj)) {
             root = root.expand(obj);

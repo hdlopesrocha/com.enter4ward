@@ -6,8 +6,11 @@ import hidrogine.lwjgl.Material;
 import hidrogine.lwjgl.Model3D;
 import hidrogine.math.Matrix;
 import hidrogine.math.Space;
-import hidrogine.math.Sphere;
+import hidrogine.math.BoundingSphere;
 import hidrogine.math.Vector3;
+import hidrogine.math.api.IModel3D;
+import hidrogine.math.api.IObject3D;
+import hidrogine.math.api.IBoundingSphere;
 import hidrogine.math.api.IVector3;
 
 import org.lwjgl.input.Keyboard;
@@ -21,6 +24,8 @@ import org.lwjgl.opengl.GL20;
  */
 public class TheQuadExampleMoving extends Game {
 
+
+	
     /**
      * Instantiates a new the quad example moving.
      */
@@ -55,8 +60,19 @@ public class TheQuadExampleMoving extends Game {
      */
     @Override
     public void setup() {
+    	
+    	IModel3D model = new IModel3D() {
+    		@Override
+    		public IBoundingSphere getContainer() {
+    			return new BoundingSphere(new Vector3(0f,6f,0f),46);
+    		}
+    	};
+    	
+    	IObject3D obj = new IObject3D(new Vector3(253.1f,61.1f,125.1f),model){
+    	};
+    	
     	Space space = new Space();
-    	space.insert(new Sphere(new Vector3(253.1f,61.1f,125.1f),46));
+    	space.insert(obj);
     	
         camera.lookAt(0, 0, 3, 0, 0, 0);
         car = new Model3D("car.mat", "car.geo", 1f);

@@ -11,5 +11,5 @@ public abstract class IModel3D {
      *
      * @return the container
      */
-    public abstract ISphere getContainer();
+    public abstract IBoundingSphere getContainer();
 }

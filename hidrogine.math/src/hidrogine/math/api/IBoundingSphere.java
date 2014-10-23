@@ -5,7 +5,7 @@ package hidrogine.math.api;
 /**
  * The Interface ISphere.
  */
-public abstract class ISphere {
+public abstract class IBoundingSphere {
 
     /**
      * Gets the radius.

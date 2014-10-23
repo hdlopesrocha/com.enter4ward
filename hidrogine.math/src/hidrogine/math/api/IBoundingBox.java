@@ -4,7 +4,7 @@ package hidrogine.math.api;
 /**
  * The Class IBox.
  */
-public abstract class IBox {
+public abstract class IBoundingBox {
 
     /**
      * Gets the getMin().
@@ -157,7 +157,7 @@ public abstract class IBox {
      *            the obj
      * @return true, if successful
      */
-    public boolean contains(ISphere obj) {
+    public boolean contains(IBoundingSphere obj) {
         return (obj.getPosition().getX() - getMin().getX() > obj.getRadius()
                 && obj.getPosition().getY() - getMin().getY() > obj.getRadius()
                 && obj.getPosition().getZ() - getMin().getZ() > obj.getRadius()
