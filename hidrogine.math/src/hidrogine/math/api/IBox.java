@@ -149,4 +149,22 @@ public abstract class IBox {
         return "{Min:" + getMin().toString() + " ,Max" + getMax().toString()
                 + "}";
     }
+
+    /**
+     * Contains.
+     *
+     * @param obj
+     *            the obj
+     * @return true, if successful
+     */
+    public boolean contains(ISphere obj) {
+        return (obj.getPosition().getX() - getMin().getX() > obj.getRadius()
+                && obj.getPosition().getY() - getMin().getY() > obj.getRadius()
+                && obj.getPosition().getZ() - getMin().getZ() > obj.getRadius()
+                && getMax().getX() - obj.getPosition().getX() > obj.getRadius()
+                && getMax().getY() - obj.getPosition().getY() > obj.getRadius() && getMax()
+                .getZ() - obj.getPosition().getZ() > obj.getRadius());
+
+    }
+
 }

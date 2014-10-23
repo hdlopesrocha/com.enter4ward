@@ -11,7 +11,7 @@ public class Space {
     private static final int RIGHT = 1;
     private static final int CENTER = 2;
 
-    class SpaceNode extends Box {
+    private class SpaceNode extends Box {
 
         private final List<ISphere> container = new ArrayList<ISphere>();
         private SpaceNode[] child;
@@ -27,11 +27,11 @@ public class Space {
             this.count = 0l;
         }
 
-        private SpaceNode(SpaceNode old, int i, IVector3 min, IVector3 max) {
+        private SpaceNode(SpaceNode node, int i, IVector3 min, IVector3 max) {
             super(min, max);
             this.child = new SpaceNode[3];
-            this.child[i] = old;
-            this.count = old.count;
+            this.child[i] = node;
+            this.count = node.count;
         }
 
         public String toString() {
@@ -88,18 +88,20 @@ public class Space {
         }
         
         public void insert(ISphere obj){
-            IVector3 pos = obj.getPosition(); // XXX - MUST BE SPHERE
+            boolean inserted=false;
             if(canSplit()){
                 for(int i=0;i < 3 ; ++i){
 
                     SpaceNode node = getChild(i);
-                    if(node.contains(pos)){
+                    if(node.contains(obj)){
+                        inserted=true;
                         node.insert(obj);
                         break;
                     }
                 }
             }
-            else {
+            
+            if(!inserted) {
                 System.out.println("=== INSERTION ===");
                 System.out.println(toString());
                 container.add(obj);
@@ -116,8 +118,7 @@ public class Space {
         }
 
         public SpaceNode expand(ISphere obj) {
-            IVector3 pos = obj.getPosition(); // XXX - MUST BE SPHERE
-
+            IVector3 pos = obj.getPosition();
             float lenX = getLengthX();
             float lenY = getLengthY();
             float lenZ = getLengthZ();
@@ -152,6 +153,8 @@ public class Space {
         public boolean canSplit() {
             return getMin().distance(getMax()) > 1f;
         }
+
+   
     }
 
     private SpaceNode root;
@@ -161,10 +164,9 @@ public class Space {
     }
 
     public void insert(ISphere obj) {
-        IVector3 pos = obj.getPosition(); // XXX - MUST BE SPHERE
 
         // expand phase
-        while (!root.contains(pos)) {
+        while (!root.contains(obj)) {
             root = root.expand(obj);
         }
         System.out.println("=== EXPANSION ===");
