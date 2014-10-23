@@ -163,7 +163,6 @@ public class Space {
     public void insert(ISphere obj) {
         IVector3 pos = obj.getPosition(); // XXX - MUST BE SPHERE
 
-
         // expand phase
         while (!root.contains(pos)) {
             root = root.expand(obj);
@@ -171,30 +170,35 @@ public class Space {
         System.out.println("=== EXPANSION ===");
         System.out.println(root.toString());
         
-        
         // insertion
         root.insert(obj);
-   
-
         
         // root compression
+        compress();
+        System.out.println("=== COMPRESSION ===");
+        System.out.println(root.toString());
+    }
+
+    private void compress() {
         while(true){
-            boolean emptyLeft = root.child[LEFT]==null || root.child[LEFT].count==0;
-            boolean emptyCenter = root.child[CENTER]==null || root.child[CENTER].count==0;
-            boolean emptyRight = root.child[RIGHT]==null || root.child[RIGHT].count==0;
-            
-            if(emptyLeft && emptyCenter && !emptyRight){
-                root = root.child[RIGHT];
-            } else if(emptyLeft && !emptyCenter && emptyRight){
-                root = root.child[CENTER];   
-            } else if(!emptyLeft && emptyCenter && !emptyRight){
-                root = root.child[LEFT];
+            if(root.container.size()==0){
+                boolean emptyLeft = root.child[LEFT]==null || root.child[LEFT].count==0;
+                boolean emptyCenter = root.child[CENTER]==null || root.child[CENTER].count==0;
+                boolean emptyRight = root.child[RIGHT]==null || root.child[RIGHT].count==0;
+                
+                if(emptyLeft && emptyCenter && !emptyRight){
+                    root = root.child[RIGHT];
+                } else if(emptyLeft && !emptyCenter && emptyRight){
+                    root = root.child[CENTER];   
+                } else if(!emptyLeft && emptyCenter && emptyRight){
+                    root = root.child[LEFT];
+                } else {
+                    break;
+                }
             } else {
                 break;
             }
-        }
-        System.out.println("=== COMPRESSION ===");
-        System.out.println(root.toString());
+        }        
     }
 
 }
