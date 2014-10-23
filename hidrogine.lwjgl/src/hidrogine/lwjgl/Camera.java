@@ -30,9 +30,10 @@ public class Camera {
 	 * @return the matrix
 	 */
 	public Matrix getViewMatrix() {
+	
+		
 		IVector3 negativePos = new Vector3(position).multiply(-1f);
-		return Matrix.multiply(Matrix.createTranslation(negativePos),
-				Matrix.createFromQuaternion(rotation));
+		return Matrix.createTranslation(negativePos).multiply(Matrix.createFromQuaternion(rotation));
 
 	}
 
@@ -42,8 +43,7 @@ public class Camera {
 	 * @return the bounding frustum
 	 */
 	public BoundingFrustum getBoundingFrustum() {
-		return new BoundingFrustum(Matrix.multiply(getViewMatrix(),
-				getProjectionMatrix()));
+		return new BoundingFrustum(new Matrix(getProjectionMatrix()).multiply(getViewMatrix()));
 
 	}
 

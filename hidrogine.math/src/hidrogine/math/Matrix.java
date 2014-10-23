@@ -20,6 +20,14 @@ public class Matrix {
         M[0] = M[1] = M[2] = M[3] = M[4] = M[5] = M[6] = M[7] = M[8] = M[9] = M[10] = M[11] = M[12] = M[13] = M[14] = M[15] = 0f;
     }
 
+    public Matrix(Matrix m) {
+        for(int i=0 ; i < 16 ; ++i){
+            M[i]=m.M[i];
+        }
+        
+    }
+
+    
     /**
      * Instantiates a new matrix.
      *
@@ -295,7 +303,7 @@ public class Matrix {
      */
     public Matrix transform(Matrix value, Quaternion rotation) {
         Matrix matrix = createFromQuaternion(rotation);
-        Matrix result = multiply(value, matrix);
+        Matrix result = new Matrix(value).multiply(matrix);
         return result;
     }
 
@@ -940,52 +948,67 @@ public class Matrix {
      *            the matrix2
      * @return the matrix
      */
-    public static Matrix multiply(Matrix matrix1, Matrix matrix2) {
-        Matrix result = new Matrix();
+    public Matrix multiply(Matrix matrix2) {
+        
+        float M0 = M[0] * matrix2.M[0] + M[1] * matrix2.M[4]
+                + M[2] * matrix2.M[8] + M[3] * matrix2.M[12];
+        float M1 = M[0] * matrix2.M[1] + M[1] * matrix2.M[5]
+                + M[2] * matrix2.M[9] + M[3] * matrix2.M[13];
+        float M2 = M[0] * matrix2.M[2] + M[1] * matrix2.M[6]
+                + M[2] * matrix2.M[10] + M[3] * matrix2.M[14];
+        float M3 = M[0] * matrix2.M[3] + M[1] * matrix2.M[7]
+                + M[2] * matrix2.M[11] + M[3] * matrix2.M[15];
 
-        result.M[0] = matrix1.M[0] * matrix2.M[0] + matrix1.M[1] * matrix2.M[4]
-                + matrix1.M[2] * matrix2.M[8] + matrix1.M[3] * matrix2.M[12];
-        result.M[1] = matrix1.M[0] * matrix2.M[1] + matrix1.M[1] * matrix2.M[5]
-                + matrix1.M[2] * matrix2.M[9] + matrix1.M[3] * matrix2.M[13];
-        result.M[2] = matrix1.M[0] * matrix2.M[2] + matrix1.M[1] * matrix2.M[6]
-                + matrix1.M[2] * matrix2.M[10] + matrix1.M[3] * matrix2.M[14];
-        result.M[3] = matrix1.M[0] * matrix2.M[3] + matrix1.M[1] * matrix2.M[7]
-                + matrix1.M[2] * matrix2.M[11] + matrix1.M[3] * matrix2.M[15];
+        float M4 = M[4] * matrix2.M[0] + M[5] * matrix2.M[4]
+                + M[6] * matrix2.M[8] + M[7] * matrix2.M[12];
+        float M5 = M[4] * matrix2.M[1] + M[5] * matrix2.M[5]
+                + M[6] * matrix2.M[9] + M[7] * matrix2.M[13];
+        float M6 = M[4] * matrix2.M[2] + M[5] * matrix2.M[6]
+                + M[6] * matrix2.M[10] + M[7] * matrix2.M[14];
+        float M7 = M[4] * matrix2.M[3] + M[5] * matrix2.M[7]
+                + M[6] * matrix2.M[11] + M[7] * matrix2.M[15];
 
-        result.M[4] = matrix1.M[4] * matrix2.M[0] + matrix1.M[5] * matrix2.M[4]
-                + matrix1.M[6] * matrix2.M[8] + matrix1.M[7] * matrix2.M[12];
-        result.M[5] = matrix1.M[4] * matrix2.M[1] + matrix1.M[5] * matrix2.M[5]
-                + matrix1.M[6] * matrix2.M[9] + matrix1.M[7] * matrix2.M[13];
-        result.M[6] = matrix1.M[4] * matrix2.M[2] + matrix1.M[5] * matrix2.M[6]
-                + matrix1.M[6] * matrix2.M[10] + matrix1.M[7] * matrix2.M[14];
-        result.M[7] = matrix1.M[4] * matrix2.M[3] + matrix1.M[5] * matrix2.M[7]
-                + matrix1.M[6] * matrix2.M[11] + matrix1.M[7] * matrix2.M[15];
-
-        result.M[8] = matrix1.M[8] * matrix2.M[0] + matrix1.M[9] * matrix2.M[4]
-                + matrix1.M[10] * matrix2.M[8] + matrix1.M[11] * matrix2.M[12];
-        result.M[9] = matrix1.M[8] * matrix2.M[1] + matrix1.M[9] * matrix2.M[5]
-                + matrix1.M[10] * matrix2.M[9] + matrix1.M[11] * matrix2.M[13];
-        result.M[10] = matrix1.M[8] * matrix2.M[2] + matrix1.M[9]
-                * matrix2.M[6] + matrix1.M[10] * matrix2.M[10] + matrix1.M[11]
+        float M8 = M[8] * matrix2.M[0] + M[9] * matrix2.M[4]
+                + M[10] * matrix2.M[8] + M[11] * matrix2.M[12];
+        float M9 = M[8] * matrix2.M[1] + M[9] * matrix2.M[5]
+                + M[10] * matrix2.M[9] + M[11] * matrix2.M[13];
+        float M10 = M[8] * matrix2.M[2] + M[9]
+                * matrix2.M[6] + M[10] * matrix2.M[10] + M[11]
                 * matrix2.M[14];
-        result.M[11] = matrix1.M[8] * matrix2.M[3] + matrix1.M[9]
-                * matrix2.M[7] + matrix1.M[10] * matrix2.M[11] + matrix1.M[11]
+        float M11 = M[8] * matrix2.M[3] + M[9]
+                * matrix2.M[7] + M[10] * matrix2.M[11] + M[11]
                 * matrix2.M[15];
 
-        result.M[12] = matrix1.M[12] * matrix2.M[0] + matrix1.M[13]
-                * matrix2.M[4] + matrix1.M[14] * matrix2.M[8] + matrix1.M[15]
+        float M12 = M[12] * matrix2.M[0] + M[13]
+                * matrix2.M[4] + M[14] * matrix2.M[8] + M[15]
                 * matrix2.M[12];
-        result.M[13] = matrix1.M[12] * matrix2.M[1] + matrix1.M[13]
-                * matrix2.M[5] + matrix1.M[14] * matrix2.M[9] + matrix1.M[15]
+        float M13 = M[12] * matrix2.M[1] + M[13]
+                * matrix2.M[5] + M[14] * matrix2.M[9] + M[15]
                 * matrix2.M[13];
-        result.M[14] = matrix1.M[12] * matrix2.M[2] + matrix1.M[13]
-                * matrix2.M[6] + matrix1.M[14] * matrix2.M[10] + matrix1.M[15]
+        float M14 = M[12] * matrix2.M[2] + M[13]
+                * matrix2.M[6] + M[14] * matrix2.M[10] + M[15]
                 * matrix2.M[14];
-        result.M[15] = matrix1.M[12] * matrix2.M[3] + matrix1.M[13]
-                * matrix2.M[7] + matrix1.M[14] * matrix2.M[11] + matrix1.M[15]
+        float M15 = M[12] * matrix2.M[3] + M[13]
+                * matrix2.M[7] + M[14] * matrix2.M[11] + M[15]
                 * matrix2.M[15];
 
-        return result;
+        M[0]=M0;
+        M[1]=M1;
+        M[2]=M2;
+        M[3]=M3;
+        M[4]=M4;
+        M[5]=M5;
+        M[6]=M6;
+        M[7]=M7;
+        M[8]=M8;
+        M[9]=M9;
+        M[10]=M10;
+        M[11]=M11;
+        M[12]=M12;
+        M[13]=M13;
+        M[14]=M14;
+        M[15]=M15;
+        return this;
     }
 
     /**
@@ -1180,14 +1203,6 @@ public class Matrix {
         
     }
 
-    /**
-     * Multiply.
-     *
-     * @param mat the mat
-     */
-    public void multiply(Matrix mat) {
-        M= multiply(this, mat).M;
-     }
     
     /**
      * Translate.

@@ -21,8 +21,6 @@ public class BoundingFrustum {
         return null;
     }
 
-    /** The matrix. */
-    private Matrix matrix;
 
     /** The planes. */
     private Plane[] planes = new Plane[6];
@@ -37,7 +35,6 @@ public class BoundingFrustum {
      * Instantiates a new bounding frustum.
      */
     public BoundingFrustum() {
-        matrix = new Matrix();
     }
 
     /**
@@ -47,8 +44,7 @@ public class BoundingFrustum {
      *            the value
      */
     public BoundingFrustum(Matrix value) {
-        matrix = value;
-        createPlanes();
+        createPlanes(value);
         createCorners();
 
     }
@@ -80,14 +76,7 @@ public class BoundingFrustum {
         return planes[2];
     }
 
-    /**
-     * Gets the matrix.
-     *
-     * @return the matrix
-     */
-    public Matrix GetMatrix() {
-        return matrix;
-    }
+
 
     /**
      * Sets the matrix.
@@ -96,8 +85,7 @@ public class BoundingFrustum {
      *            the value
      */
     public void SetMatrix(Matrix value) {
-        matrix = value;
-        createPlanes(); // FIXME: The odds are the planes will be used a lot
+        createPlanes(value); // FIXME: The odds are the planes will be used a lot
                         // more often than the matrix
         createCorners(); // is updated, so this should help performance. I hope
                          // ;)
@@ -239,7 +227,7 @@ public class BoundingFrustum {
      * @return true, if successful
      */
     public boolean equals(BoundingFrustum other) {
-        return matrix == other.matrix;
+        return this == other;
     }
 
     /**
@@ -251,15 +239,16 @@ public class BoundingFrustum {
         return corners;
     }
 
-    /*
-     * string ToString() { StringBuilder sb = StringBuilder(256);
-     * sb.Append("{Near:"); sb.Append(planes[4].ToString()); sb.Append(" Far:");
-     * sb.Append(planes[1].ToString()); sb.Append(" Left:");
-     * sb.Append(planes[2].ToString()); sb.Append(" Right:");
-     * sb.Append(planes[3].ToString()); sb.Append(" Top:");
-     * sb.Append(planes[5].ToString()); sb.Append(" Bottom:");
-     * sb.Append(planes[0].ToString()); sb.Append("}"); return sb.ToString(); }
-     */
+    public String toString() {
+       return corners[0].toString();
+        /*
+        return "{Near:" + planes[4].toString() + " Far:" + planes[1].toString()
+                + " Left:" + planes[2].toString() + " Right:"
+                + planes[3].toString() + " Top:" + planes[5].toString()
+                + " Bottom:" + planes[0].toString() + "}";
+        */
+    }
+
     /**
      * Creates the corners.
      */
@@ -278,7 +267,7 @@ public class BoundingFrustum {
     /**
      * Creates the planes.
      */
-    void createPlanes() {
+    void createPlanes(Matrix matrix) {
         // Pre-calculate the different planes needed
         planes[2] = new Plane(-matrix.M[3] - matrix.M[0], -matrix.M[7]
                 - matrix.M[4], -matrix.M[11] - matrix.M[8], -matrix.M[15]
@@ -303,12 +292,12 @@ public class BoundingFrustum {
                 - matrix.M[7], matrix.M[10] - matrix.M[11], matrix.M[14]
                 - matrix.M[15]);
 
-        normalizePlane(planes[2]);
-        normalizePlane(planes[3]);
-        normalizePlane(planes[5]);
-        normalizePlane(planes[0]);
-        normalizePlane(planes[4]);
-        normalizePlane(planes[1]);
+        planes[2].normalize();
+        planes[3].normalize();
+        planes[5].normalize();
+        planes[0].normalize();
+        planes[4].normalize();
+        planes[1].normalize();
     }
 
     /**
@@ -333,29 +322,18 @@ public class BoundingFrustum {
         // dot product. '*' means cross product
 
         IVector3 v1, v2, v3;
-        float f = -a.Normal.dot(new Vector3(b.Normal).cross(c.Normal));
+        float f = -a.getNormal().dot(new Vector3(b.getNormal()).cross(c.getNormal()));
 
-        v1 = new Vector3(b.Normal).cross(c.Normal).multiply(a.D);
-        v2 = new Vector3(c.Normal).cross(a.Normal).multiply(b.D);
-        v3 = new Vector3(a.Normal).cross(b.Normal).multiply(c.D);
+        v1 = new Vector3(b.getNormal()).cross(c.getNormal()).multiply(a.getDistance());
+        v2 = new Vector3(c.getNormal()).cross(a.getNormal()).multiply(b.getDistance());
+        v3 = new Vector3(a.getNormal()).cross(b.getNormal()).multiply(c.getDistance());
 
         Vector3 vec = new Vector3(v1.getX() + v2.getX() + v3.getX(), v1.getY()
                 + v2.getY() + v3.getY(), v1.getZ() + v2.getZ() + v3.getZ());
         return vec.divide(f);
     }
 
-    /**
-     * Normalize plane.
-     *
-     * @param p
-     *            the p
-     */
-    public void normalizePlane(Plane p) {
-        float factor = 1f / p.Normal.length();
-        p.Normal.multiply(factor);
-
-        p.D *= factor;
-    }
+ 
 
     /**
      * Intersects.

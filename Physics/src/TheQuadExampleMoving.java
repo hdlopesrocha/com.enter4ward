@@ -186,6 +186,7 @@ public class TheQuadExampleMoving extends Game {
 	@Override
 	public void draw() {
 		BoundingFrustum frustum = camera.getBoundingFrustum();
+		System.out.println(frustum.toString());
 		draws =0;
 		final IteratorHandler<IObject3D> iterator = new IteratorHandler<IObject3D>() {
 			@Override
@@ -204,9 +205,9 @@ public class TheQuadExampleMoving extends Game {
 		program.setOpaque(true);
 		grid.draw(program);
 		program.pushMatrix();
-		space.iterate(frustum,iterator);
+		space.iterate(iterator);
 		program.setOpaque(false);
-		space.iterate(frustum,iterator);
+		space.iterate(iterator);
 		program.popMatrix();
 		GL20.glUseProgram(0);
 //	System.out.println("draws:"+draws);

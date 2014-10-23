@@ -11,7 +11,7 @@ public class PlaneHelper {
     /// <returns>Greater than zero if on the positive side, less than zero if on the negative size, 0 otherwise</returns>
     public static float classifyPoint(IVector3 point, Plane plane)
     {
-        return point.getX() * plane.Normal.getX() + point.getY() * plane.Normal.getY() + point.getZ() * plane.Normal.getZ() + plane.D;
+        return point.getX() * plane.getNormal().getX() + point.getY() * plane.getNormal().getY() + point.getZ() * plane.getNormal().getZ() + plane.getDistance();
     }
 
     /// <summary>
@@ -23,7 +23,6 @@ public class PlaneHelper {
     public static float perpendicularDistance(IVector3 point, Plane plane)
     {
         // dist = (ax + by + cz + d) / sqrt(a*a + b*b + c*c)
-        float result = plane.D+ plane.Normal.dot(point);
-        return -result;
+        return -(plane.getDistance()+ plane.getNormal().dot(point));
     }
 }

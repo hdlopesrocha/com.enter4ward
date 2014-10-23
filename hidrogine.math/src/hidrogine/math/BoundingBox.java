@@ -370,10 +370,10 @@ public class BoundingBox extends IBoundingBox {
     public PlaneIntersectionType intersects(Plane plane) {
         // check all corner side of plane
         Vector3[] corners = getCorners();
-        float lastdistance = plane.Normal.dot(corners[0]) + plane.D;
+        float lastdistance = plane.getNormal().dot(corners[0]) + plane.getDistance();
 
         for (int i = 1; i < corners.length; i++) {
-            float distance = plane.Normal.dot(corners[i]) + plane.D;
+            float distance = plane.getNormal().dot(corners[i]) + plane.getDistance();
             if ((distance <= 0.0 && lastdistance > 0.0)
                     || (distance >= 0.0 && lastdistance < 0.0))
                 return PlaneIntersectionType.Intersecting;

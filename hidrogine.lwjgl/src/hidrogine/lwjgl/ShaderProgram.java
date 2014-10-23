@@ -157,7 +157,7 @@ public class ShaderProgram {
      */
     public void update(Camera camera) {
 
-    	modelView = Matrix.multiply(camera.getViewMatrix(), matrixStack[stackPointer]);
+    	modelView = camera.getViewMatrix().multiply(matrixStack[stackPointer]);
         // Upload matrices to the uniform variables
 
         camera.getProjectionMatrix().store(matrix44Buffer);
