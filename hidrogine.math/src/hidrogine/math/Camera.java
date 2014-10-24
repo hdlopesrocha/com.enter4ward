@@ -150,22 +150,14 @@ public class Camera {
      * @param right
      *            the left
      */
-    public void move(float front, float up, float right) {
-        
+    public void move(float front, float down, float right) {
         Matrix trans = Matrix.invert(Matrix.createFromQuaternion(rotation));
-        System.out.println("#################");
-        System.out.println(trans.getForward());
-        System.out.println(trans.getUp());
-        System.out.println(trans.getRight());
-
         if (front != 0) {
             position.add(new Vector3(trans.getForward()).multiply(front));
         }
-
-        if (up != 0) {
-            position.add(new Vector3(trans.getDown()).multiply(up));
+        if (down != 0) {
+            position.add(new Vector3(trans.getDown()).multiply(down));
         }
-
         if (right != 0) {
             position.add(new Vector3(trans.getLeft()).multiply(right));
         }
