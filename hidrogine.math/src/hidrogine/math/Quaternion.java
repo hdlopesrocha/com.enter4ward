@@ -14,7 +14,7 @@ public class Quaternion {
     /**
      * Instantiates a new quaternion.
      */
-   public Quaternion() {
+    public Quaternion() {
         X = Y = Z = W = 0;
     }
 
@@ -137,7 +137,8 @@ public class Quaternion {
      *            the roll
      * @return the quaternion
      */
-    public static Quaternion createFromYawPitchRoll(float yaw, float pitch, float roll) {
+    public static Quaternion createFromYawPitchRoll(float yaw, float pitch,
+            float roll) {
         Quaternion quaternion = new Quaternion();
         quaternion.X = (((float) Math.cos((double) (yaw * 0.5)) * (float) Math
                 .sin((double) (pitch * 0.5))) * (float) Math
@@ -239,7 +240,8 @@ public class Quaternion {
      *            the quaternion2
      * @return the quaternion
      */
-    public static Quaternion divide(Quaternion quaternion1, Quaternion quaternion2) {
+    public static Quaternion divide(Quaternion quaternion1,
+            Quaternion quaternion2) {
         Quaternion result = new Quaternion();
 
         float w5 = 1f / ((quaternion2.X * quaternion2.X)
@@ -338,7 +340,8 @@ public class Quaternion {
      *            the amount
      * @return the quaternion
      */
-    public static Quaternion lerp(Quaternion quaternion1, Quaternion quaternion2, float amount) {
+    public static Quaternion lerp(Quaternion quaternion1,
+            Quaternion quaternion2, float amount) {
         Quaternion result = new Quaternion();
         float f2 = 1f - amount;
         if (((quaternion1.X * quaternion2.X) + (quaternion1.Y * quaternion2.Y)
@@ -374,8 +377,8 @@ public class Quaternion {
      *            the amount
      * @return the quaternion
      */
-    public static Quaternion slerp(Quaternion quaternion1, Quaternion quaternion2,
-            float amount) {
+    public static Quaternion slerp(Quaternion quaternion1,
+            Quaternion quaternion2, float amount) {
         Quaternion result = new Quaternion();
         float q2, q3;
 
@@ -431,25 +434,21 @@ public class Quaternion {
      *            the quaternion2
      * @return the quaternion
      */
-    public static Quaternion multiply(Quaternion quaternion1, Quaternion quaternion2) {
-        Quaternion result = new Quaternion();
-        float f12 = (quaternion1.Y * quaternion2.Z)
-                - (quaternion1.Z * quaternion2.Y);
-        float f11 = (quaternion1.Z * quaternion2.X)
-                - (quaternion1.X * quaternion2.Z);
-        float f10 = (quaternion1.X * quaternion2.Y)
-                - (quaternion1.Y * quaternion2.X);
-        float f9 = (quaternion1.X * quaternion2.X)
-                + (quaternion1.Y * quaternion2.Y)
-                + (quaternion1.Z * quaternion2.Z);
-        result.X = (quaternion1.X * quaternion2.W)
-                + (quaternion2.X * quaternion1.W) + f12;
-        result.Y = (quaternion1.Y * quaternion2.W)
-                + (quaternion2.Y * quaternion1.W) + f11;
-        result.Z = (quaternion1.Z * quaternion2.W)
-                + (quaternion2.Z * quaternion1.W) + f10;
-        result.W = (quaternion1.W * quaternion2.W) - f9;
-        return result;
+    public Quaternion multiply(Quaternion quaternion2) {
+        float x = (X * quaternion2.W) + (quaternion2.X * W)
+                + (Y * quaternion2.Z) - (Z * quaternion2.Y);
+        float y = (Y * quaternion2.W) + (quaternion2.Y * W)
+                + (Z * quaternion2.X) - (X * quaternion2.Z);
+        float z = (Z * quaternion2.W) + (quaternion2.Z * W)
+                + (X * quaternion2.Y) - (Y * quaternion2.X);
+        float w = (W * quaternion2.W) - (X * quaternion2.X)
+                - (Y * quaternion2.Y) - (Z * quaternion2.Z);
+        X = x;
+        Y = y;
+        Z = z;
+        W = w;
+
+        return this;
     }
 
     /**
@@ -536,10 +535,11 @@ public class Quaternion {
     public float getY() {
         return Y;
     }
-    
+
     public float getZ() {
         return Z;
     }
+
     public float getW() {
         return W;
     }

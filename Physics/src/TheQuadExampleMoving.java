@@ -186,7 +186,7 @@ public class TheQuadExampleMoving extends Game {
 	@Override
 	public void draw() {
 		BoundingFrustum frustum = camera.getBoundingFrustum();
-		System.out.println(frustum.toString());
+		//System.out.println(frustum.toString());
 		draws =0;
 		final IteratorHandler<IObject3D> iterator = new IteratorHandler<IObject3D>() {
 			@Override

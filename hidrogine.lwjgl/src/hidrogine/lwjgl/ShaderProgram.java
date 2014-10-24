@@ -20,6 +20,7 @@ import static org.lwjgl.opengl.ARBShaderObjects.glUniform3fARB;
 import static org.lwjgl.opengl.ARBShaderObjects.glUniformMatrix4ARB;
 import static org.lwjgl.opengl.ARBShaderObjects.glUseProgramObjectARB;
 import static org.lwjgl.opengl.ARBShaderObjects.glValidateProgramARB;
+import hidrogine.math.Camera;
 import hidrogine.math.Matrix;
 import hidrogine.math.Vector3;
 
