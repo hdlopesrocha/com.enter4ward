@@ -28,8 +28,7 @@ public class Camera {
     public Matrix getViewMatrix() {
 
         IVector3 negativePos = new Vector3(position).multiply(-1f);
-        return Matrix.createTranslation(negativePos).multiply(
-                Matrix.createFromQuaternion(rotation));
+        return new Matrix().createTranslation(negativePos).multiply(new Matrix().createFromQuaternion(rotation));
 
     }
 
@@ -40,7 +39,7 @@ public class Camera {
      */
     public BoundingFrustum getBoundingFrustum() {
         return new BoundingFrustum(
-                new Matrix(getProjectionMatrix()).multiply(getViewMatrix()));
+                new Matrix(getViewMatrix()).multiply(getProjectionMatrix()));
 
     }
 
@@ -75,8 +74,7 @@ public class Camera {
         rotation = Quaternion.identity();
         width = w;
         height = h;
-
-        projectionMatrix = Matrix.createPerspectiveFieldOfView(
+        projectionMatrix = new Matrix().createPerspectiveFieldOfView(
                 (float) Math.toRadians(45f), (float) w / (float) h, 0.1f, 100f);
 
     }
@@ -151,7 +149,7 @@ public class Camera {
      *            the left
      */
     public void move(float front, float down, float right) {
-        Matrix trans = Matrix.invert(Matrix.createFromQuaternion(rotation));
+        Matrix trans = Matrix.invert(new Matrix().createFromQuaternion(rotation));
         if (front != 0) {
             position.add(new Vector3(trans.getForward()).multiply(front));
         }

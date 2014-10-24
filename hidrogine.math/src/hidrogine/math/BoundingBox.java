@@ -299,93 +299,9 @@ public class BoundingBox extends IBoundingBox {
         return false;
     }
 
-    /**
-     * Intersects.
-     *
-     * @param frustum
-     *            the frustum
-     * @return true, if successful
-     */
-    public boolean intersects(BoundingFrustum frustum) {
-        return frustum.intersects(this);
-    }
 
-    /**
-     * Intersects.
-     *
-     * @param sphere
-     *            the sphere
-     * @return true, if successful
-     */
-    public boolean intersects(BoundingSphere sphere) {
-        if (sphere.getPosition().getX() - min.getX() > sphere.getRadius()
-                && sphere.getPosition().getY() - min.getY() > sphere
-                        .getRadius()
-                && sphere.getPosition().getZ() - min.getZ() > sphere
-                        .getRadius()
-                && max.getX() - sphere.getPosition().getX() > sphere
-                        .getRadius()
-                && max.getY() - sphere.getPosition().getY() > sphere
-                        .getRadius()
-                && max.getZ() - sphere.getPosition().getZ() > sphere
-                        .getRadius())
-            return true;
 
-        double dmin = 0;
 
-        if (sphere.getPosition().getX() - min.getX() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getX() - min.getX())
-                    * (sphere.getPosition().getX() - min.getX());
-        else if (max.getX() - sphere.getPosition().getX() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getX() - max.getX())
-                    * (sphere.getPosition().getX() - max.getX());
-
-        if (sphere.getPosition().getY() - min.getY() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getY() - min.getY())
-                    * (sphere.getPosition().getY() - min.getY());
-        else if (max.getY() - sphere.getPosition().getY() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getY() - max.getY())
-                    * (sphere.getPosition().getY() - max.getY());
-
-        if (sphere.getPosition().getZ() - min.getZ() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getZ() - min.getZ())
-                    * (sphere.getPosition().getZ() - min.getZ());
-        else if (max.getZ() - sphere.getPosition().getZ() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getZ() - max.getZ())
-                    * (sphere.getPosition().getZ() - max.getZ());
-
-        if (dmin <= sphere.getRadius() * sphere.getRadius())
-            return true;
-
-        return false;
-    }
-
-    /**
-     * Intersects.
-     *
-     * @param plane
-     *            the plane
-     * @return the plane intersection type
-     */
-    public PlaneIntersectionType intersects(Plane plane) {
-        // check all corner side of plane
-        Vector3[] corners = getCorners();
-        float lastdistance = plane.getNormal().dot(corners[0]) + plane.getDistance();
-
-        for (int i = 1; i < corners.length; i++) {
-            float distance = plane.getNormal().dot(corners[i]) + plane.getDistance();
-            if ((distance <= 0.0 && lastdistance > 0.0)
-                    || (distance >= 0.0 && lastdistance < 0.0))
-                return PlaneIntersectionType.Intersecting;
-            lastdistance = distance;
-        }
-
-        if (lastdistance > 0.0)
-            return PlaneIntersectionType.Front;
-
-        return PlaneIntersectionType.Back;
-
-    }
 
     /*
      * (non-Javadoc)

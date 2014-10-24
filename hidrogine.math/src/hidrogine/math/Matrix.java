@@ -90,8 +90,24 @@ public class Matrix {
      *
      * @return the matrix
      */
-    public static Matrix identity() {
-        return new Matrix(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    public Matrix identity() {
+        M[0]=1;
+        M[1]=0;
+        M[2]=0;
+        M[3]=0;
+        M[4]=0;
+        M[5]=1;
+        M[6]=0;
+        M[7]=0;
+        M[8]=0;
+        M[9]=0;
+        M[10]=1;
+        M[11]=0;
+        M[12]=0;
+        M[13]=0;
+        M[14]=0;
+        M[15]=1;
+        return this;
     }
 
     /**
@@ -404,7 +420,6 @@ public class Matrix {
      */
     public Matrix createBillboard(Vector3 objectPosition, Vector3 cameraPosition,
             Vector3 cameraUpVector, Vector3 cameraForwardVector) {
-        Matrix result = Matrix.identity();
         IVector3 translation = new Vector3(objectPosition)
                 .subtract(cameraPosition);
         IVector3 backwards, right, up;
@@ -412,12 +427,12 @@ public class Matrix {
         up = new Vector3(cameraUpVector).normalize();
         right = new Vector3(backwards).cross(up);
         up = new Vector3(backwards).cross(right);
-        result = Matrix.identity();
-        result.setBackward(backwards);
-        result.setRight(right);
-        result.setUp(up);
-        result.setTranslation(translation);
-        return result;
+        identity();
+        setBackward(backwards);
+        setRight(right);
+        setUp(up);
+        setTranslation(translation);
+        return this;
     }
 
     /**
@@ -427,28 +442,28 @@ public class Matrix {
      *            the quaternion
      * @return the matrix
      */
-    public static Matrix createFromQuaternion(Quaternion quaternion) {
-        Matrix result = Matrix.identity();
+    public Matrix createFromQuaternion(Quaternion quaternion) {
+        identity();
 
-        result.M[0] = 1 - 2 * (quaternion.getY() * quaternion.getY() + quaternion
-                .getZ() * quaternion.getZ());
-        result.M[1] = 2 * (quaternion.getX() * quaternion.getY() + quaternion
+        M[0] = 1 - 2 * (quaternion.getY() * quaternion.getY() + quaternion
+               .getZ() * quaternion.getZ());
+        M[1] = 2 * (quaternion.getX() * quaternion.getY() + quaternion
                 .getW() * quaternion.getZ());
-        result.M[2] = 2 * (quaternion.getX() * quaternion.getZ() - quaternion
+        M[2] = 2 * (quaternion.getX() * quaternion.getZ() - quaternion
                 .getW() * quaternion.getY());
-        result.M[4] = 2 * (quaternion.getX() * quaternion.getY() - quaternion
+        M[4] = 2 * (quaternion.getX() * quaternion.getY() - quaternion
                 .getW() * quaternion.getZ());
-        result.M[5] = 1 - 2 * (quaternion.getX() * quaternion.getX() + quaternion
+        M[5] = 1 - 2 * (quaternion.getX() * quaternion.getX() + quaternion
                 .getZ() * quaternion.getZ());
-        result.M[6] = 2 * (quaternion.getY() * quaternion.getZ() + quaternion
+        M[6] = 2 * (quaternion.getY() * quaternion.getZ() + quaternion
                 .getW() * quaternion.getX());
-        result.M[8] = 2 * (quaternion.getX() * quaternion.getZ() + quaternion
-                .getW() * quaternion.getY());
-        result.M[9] = 2 * (quaternion.getY() * quaternion.getZ() - quaternion
+        M[8] = 2 * (quaternion.getX() * quaternion.getZ() + quaternion
+               .getW() * quaternion.getY());
+        M[9] = 2 * (quaternion.getY() * quaternion.getZ() - quaternion
                 .getW() * quaternion.getX());
-        result.M[10] = 1 - 2 * (quaternion.getX() * quaternion.getX() + quaternion
+        M[10] = 1 - 2 * (quaternion.getX() * quaternion.getX() + quaternion
                 .getY() * quaternion.getY());
-        return result;
+        return this;
     }
 
     /**
@@ -464,26 +479,26 @@ public class Matrix {
      */
     public Matrix createLookAt(Vector3 cameraPosition, Vector3 cameraDirection,
             Vector3 cameraUpVector) {
-        Matrix result = Matrix.identity();
+        identity();
         // http://msdn.microsoft.com/en-us/library/bb205343(v=VS.85).aspx
 
         IVector3 vz = new Vector3(cameraDirection).multiply(-1f);
         IVector3 vx = new Vector3(cameraUpVector).cross(vz).normalize();
         IVector3 vy = new Vector3(vz).cross(vx);
 
-        result.M[0] = vx.getX();
-        result.M[1] = vy.getX();
-        result.M[2] = vz.getX();
-        result.M[4] = vx.getY();
-        result.M[5] = vy.getY();
-        result.M[6] = vz.getY();
-        result.M[8] = vx.getZ();
-        result.M[9] = vy.getZ();
-        result.M[10] = vz.getZ();
-        result.M[12] = -vx.dot(cameraPosition);
-        result.M[13] = -vy.dot(cameraPosition);
-        result.M[14] = -vz.dot(cameraPosition);
-        return result;
+        M[0] = vx.getX();
+        M[1] = vy.getX();
+        M[2] = vz.getX();
+        M[4] = vx.getY();
+        M[5] = vy.getY();
+        M[6] = vz.getY();
+        M[8] = vx.getZ();
+        M[9] = vy.getZ();
+        M[10] = vz.getZ();
+        M[12] = -vx.dot(cameraPosition);
+        M[13] = -vy.dot(cameraPosition);
+        M[14] = -vz.dot(cameraPosition);
+        return this;
     }
 
     /**
@@ -560,6 +575,11 @@ public class Matrix {
         return result;
     }
 
+    private void clear(){
+        for(int i = 0; i < 16 ; ++i){
+            M[i]=0f;
+        }
+    }
     /**
      * Creates the perspective field of view.
      *
@@ -573,11 +593,9 @@ public class Matrix {
      *            the far plane distance
      * @return the matrix
      */
-    public static Matrix createPerspectiveFieldOfView(float fieldOfView, float aspectRatio,
+    public Matrix createPerspectiveFieldOfView(float fieldOfView, float aspectRatio,
             float nearPlaneDistance, float farPlaneDistance) {
-        Matrix result = new Matrix();
-        // http://msdn.microsoft.com/en-us/library/bb205351(v=VS.85).aspx
-        // http://msdn.microsoft.com/en-us/library/bb195665.aspx
+        clear();
         if (fieldOfView < 0 || fieldOfView > Math.PI)
             throw new RuntimeException(
                     "fieldOfView, fieldOfView takes a value between 0 and Pi (180 degrees) in radians.");
@@ -597,14 +615,14 @@ public class Matrix {
         float yscale = (float) 1 / (float) Math.tan(fieldOfView / 2);
         float xscale = yscale / aspectRatio;
 
-        result.M[0] = xscale;
-        result.M[5] = yscale;
-        result.M[10] = farPlaneDistance
+        M[0] = xscale;
+        M[5] = yscale;
+        M[10] = farPlaneDistance
                 / (nearPlaneDistance - farPlaneDistance);
-        result.M[11] = -1;
-        result.M[14] = nearPlaneDistance * farPlaneDistance
+        M[11] = -1;
+        M[14] = nearPlaneDistance * farPlaneDistance
                 / (nearPlaneDistance - farPlaneDistance);
-        return result;
+        return this;
     }
 
     /**
@@ -614,15 +632,14 @@ public class Matrix {
      *            the radians
      * @return the matrix
      */
-    public static Matrix createRotationX(float radians) {
-        Matrix returnMatrix = Matrix.identity();
+    public Matrix createRotationX(float radians) {
+       identity();
+        M[5] = (float) Math.cos(radians);
+        M[6] = (float) Math.sin(radians);
+        M[9] = -M[6];
+        M[10] = M[5];
 
-        returnMatrix.M[5] = (float) Math.cos(radians);
-        returnMatrix.M[6] = (float) Math.sin(radians);
-        returnMatrix.M[9] = -returnMatrix.M[6];
-        returnMatrix.M[10] = returnMatrix.M[5];
-
-        return returnMatrix;
+        return this;
     }
 
     /**
@@ -632,15 +649,15 @@ public class Matrix {
      *            the radians
      * @return the matrix
      */
-    public static  Matrix createRotationY(float radians) {
-        Matrix returnMatrix = Matrix.identity();
+    public Matrix createRotationY(float radians) {
+        identity();
 
-        returnMatrix.M[0] = (float) Math.cos(radians);
-        returnMatrix.M[2] = (float) Math.sin(radians);
-        returnMatrix.M[8] = -returnMatrix.M[2];
-        returnMatrix.M[10] = returnMatrix.M[0];
+        M[0] = (float) Math.cos(radians);
+        M[2] = (float) Math.sin(radians);
+        M[8] = -M[2];
+        M[10] = M[0];
 
-        return returnMatrix;
+        return this;
     }
 
     /**
@@ -650,15 +667,15 @@ public class Matrix {
      *            the radians
      * @return the matrix
      */
-    public static Matrix createRotationZ(float radians) {
-        Matrix returnMatrix = Matrix.identity();
+    public Matrix createRotationZ(float radians) {
+        identity();
 
-        returnMatrix.M[0] = (float) Math.cos(radians);
-        returnMatrix.M[1] = (float) Math.sin(radians);
-        returnMatrix.M[4] = -returnMatrix.M[1];
-        returnMatrix.M[5] = returnMatrix.M[0];
+        M[0] = (float) Math.cos(radians);
+        M[1] = (float) Math.sin(radians);
+        M[4] = -M[1];
+        M[5] = M[0];
 
-        return returnMatrix;
+        return this;
     }
 
     /**
@@ -668,14 +685,14 @@ public class Matrix {
      *            the scale
      * @return the matrix
      */
-    public static Matrix createScale(float scale) {
-        Matrix returnMatrix = Matrix.identity();
+    public Matrix createScale(float scale) {
+        identity();
 
-        returnMatrix.M[0] = scale;
-        returnMatrix.M[5] = scale;
-        returnMatrix.M[10] = scale;
+        M[0] = scale;
+        M[5] = scale;
+        M[10] = scale;
 
-        return returnMatrix;
+        return this;
     }
 
     /**
@@ -689,14 +706,14 @@ public class Matrix {
      *            the z scale
      * @return the matrix
      */
-    public static Matrix createScale(float xScale, float yScale, float zScale) {
-        Matrix returnMatrix = Matrix.identity();
+    public Matrix createScale(float xScale, float yScale, float zScale) {
+        identity();
 
-        returnMatrix.M[0] = xScale;
-        returnMatrix.M[5] = yScale;
-        returnMatrix.M[10] = zScale;
+        M[0] = xScale;
+        M[5] = yScale;
+        M[10] = zScale;
 
-        return returnMatrix;
+        return this;
     }
 
     /**
@@ -706,14 +723,14 @@ public class Matrix {
      *            the scales
      * @return the matrix
      */
-    public static Matrix createScale(IVector3 scales) {
-        Matrix returnMatrix = Matrix.identity();
+    public Matrix createScale(IVector3 scales) {
+        identity();
 
-        returnMatrix.M[0] = scales.getX();
-        returnMatrix.M[5] = scales.getY();
-        returnMatrix.M[10] = scales.getZ();
+        M[0] = scales.getX();
+        M[5] = scales.getY();
+        M[10] = scales.getZ();
 
-        return returnMatrix;
+        return this;
     }
 
     /**
@@ -728,13 +745,13 @@ public class Matrix {
      * @return the matrix
      */
     public  Matrix createTranslation(float xPosition, float yPosition, float zPosition) {
-        Matrix returnMatrix = Matrix.identity();
+        identity();
 
-        returnMatrix.M[12] = xPosition;
-        returnMatrix.M[13] = yPosition;
-        returnMatrix.M[14] = zPosition;
+        M[12] = xPosition;
+        M[13] = yPosition;
+        M[14] = zPosition;
 
-        return returnMatrix;
+        return this;
     }
 
     /**
@@ -744,14 +761,14 @@ public class Matrix {
      *            the position
      * @return the matrix
      */
-    public static Matrix createTranslation(IVector3 position) {
-        Matrix returnMatrix = Matrix.identity();
+    public Matrix createTranslation(IVector3 position) {
+        identity();
 
-        returnMatrix.M[12] = position.getX();
-        returnMatrix.M[13] = position.getY();
-        returnMatrix.M[14] = position.getZ();
+        M[12] = position.getX();
+        M[13] = position.getY();
+        M[14] = position.getZ();
 
-        return returnMatrix;
+        return this;
     }
 
     /**
@@ -1210,7 +1227,7 @@ public class Matrix {
      * @param min the min
      */
     public void translate(IVector3 min) {
-       multiply(Matrix.createTranslation(min));
+       multiply(new Matrix().createTranslation(min));
     }
 
     /**
@@ -1218,9 +1235,9 @@ public class Matrix {
      *
      * @param dim the dim
      */
-    public void scale(IVector3 dim) {
-        multiply(Matrix.createScale(dim));
-        
+    public Matrix scale(IVector3 dim) {
+        multiply(new Matrix().createScale(dim));
+        return this;
     }
 
 }

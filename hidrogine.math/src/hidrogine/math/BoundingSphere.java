@@ -28,6 +28,10 @@ public class BoundingSphere extends IBoundingSphere {
         this.radius = radius;
     }
 
+    public BoundingSphere() {
+        this.position = new Vector3();
+        this.radius = 0f;
+    }
     /*
      * (non-Javadoc)
      * 
@@ -68,37 +72,7 @@ public class BoundingSphere extends IBoundingSphere {
         this.radius = radius;
     }
 
-    /**
-     * Creates the from points.
-     *
-     * @param points
-     *            the points
-     * @return the sphere
-     */
-    public static BoundingSphere createFromPoints(Iterable<IVector3> points) {
-        IVector3 min = new Vector3();
-        IVector3 max = new Vector3();
-        boolean inited = false;
 
-        for (IVector3 vec : points) {
-            if (!inited) {
-                min.set(vec);
-                max.set(vec);
-                inited = true;
-            }
-            min.setX(Math.min(min.getX(), vec.getX()));
-            min.setY(Math.min(min.getY(), vec.getY()));
-            min.setZ(Math.min(min.getZ(), vec.getZ()));
-            max.setX(Math.max(max.getX(), vec.getX()));
-            max.setY(Math.max(max.getY(), vec.getY()));
-            max.setZ(Math.max(max.getZ(), vec.getZ()));
-        }
-        return new BoundingSphere(new Vector3(min).add(max).divide(2f),
-                (float) (max.distance(min) / 2d));
-    }
 
-    public PlaneIntersectionType intersects(Plane plane) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+
 }

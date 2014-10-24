@@ -200,7 +200,7 @@ public class Model3D extends IModel3D {
 			}
 		}
 		file.close();
-		container = BoundingSphere.createFromPoints(points);
+		container = new BoundingSphere().createFromPoints(points);
 	}
 
 	/**
@@ -235,6 +235,7 @@ public class Model3D extends IModel3D {
 				handler.beforeDraw(g, sg.getMaterial());
 				sg.draw(shader);
 				handler.afterDraw(g, sg.getMaterial());
+
 			}
 		}
 	}

@@ -1,5 +1,7 @@
 package hidrogine.math;
 
+import hidrogine.math.api.IBoundingBox;
+import hidrogine.math.api.IBoundingSphere;
 import hidrogine.math.api.IVector3;
 
 // TODO: Auto-generated Javadoc
@@ -141,7 +143,7 @@ public class Plane {
      *            the box
      * @return the plane intersection type
      */
-    public PlaneIntersectionType intersects(BoundingBox box) {
+    public PlaneIntersectionType intersects(IBoundingBox box) {
         return box.intersects(this);
     }
 
@@ -163,7 +165,7 @@ public class Plane {
      *            the sphere
      * @return the plane intersection type
      */
-    public PlaneIntersectionType intersects(BoundingSphere sphere) {
+    public PlaneIntersectionType intersects(IBoundingSphere sphere) {
         return sphere.intersects(this);
     }
 

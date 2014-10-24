@@ -1,5 +1,7 @@
 package hidrogine.math.api;
 
+import hidrogine.math.Plane;
+import hidrogine.math.PlaneIntersectionType;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -52,6 +54,46 @@ public abstract class IBoundingSphere {
     public boolean contains(IVector3 vec) {
         return getPosition().distance(vec) <= getRadius();
     }
- 
-    
+
+    /**
+     * Creates the from points.
+     *
+     * @param points
+     *            the points
+     * @return the sphere
+     */
+    public IBoundingSphere createFromPoints(Iterable<IVector3> points) {
+        float maxX = 0, maxY = 0, maxZ = 0, minX = 0, minY = 0, minZ = 0;
+
+        boolean inited = false;
+
+        for (IVector3 vec : points) {
+            if (!inited) {
+                minX = maxX = vec.getX();
+                minY = maxY = vec.getY();
+                minZ = maxZ = vec.getZ();
+
+                inited = true;
+            }
+            minX = Math.min(minX, vec.getX());
+            minY = Math.min(minY, vec.getY());
+            minZ = Math.min(minZ, vec.getZ());
+            maxX = Math.max(maxX, vec.getX());
+            maxY = Math.max(maxY, vec.getY());
+            maxZ = Math.max(maxZ, vec.getZ());
+        }
+        getPosition().setX((minX + maxX) / 2f);
+        getPosition().setY((minY + maxY) / 2f);
+        getPosition().setZ((minZ + maxZ) / 2f);
+
+        setRadius((float) (Math
+                .sqrt((maxX - minX) * (maxX - minX) + (maxY - minY)
+                        * (maxY - minY) + (maxZ - minZ) * (maxZ - minZ)) / 2d));
+        return this;
+    }
+
+    public PlaneIntersectionType intersects(Plane plane) {
+        // TODO Auto-generated method stub
+        return plane.intersects(this);
+    }
 }

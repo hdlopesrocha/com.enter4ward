@@ -1,7 +1,12 @@
 package hidrogine.math.api;
 
+import hidrogine.math.BoundingBox;
+import hidrogine.math.BoundingFrustum;
 import hidrogine.math.BoundingSphere;
 import hidrogine.math.ContainmentType;
+import hidrogine.math.Plane;
+import hidrogine.math.PlaneIntersectionType;
+import hidrogine.math.Vector3;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -189,5 +194,102 @@ public abstract class IBoundingBox {
                 + "}";
     }
 
+    /**
+     * Intersects.
+     *
+     * @param plane
+     *            the plane
+     * @return the plane intersection type
+     */
+    public PlaneIntersectionType intersects(Plane plane) {
+        // check all corner side of plane
+        Vector3[] corners = getCorners();
+        float lastdistance = plane.getNormal().dot(corners[0]) + plane.getDistance();
 
+        for (int i = 1; i < corners.length; i++) {
+            float distance = plane.getNormal().dot(corners[i]) + plane.getDistance();
+            if ((distance <= 0.0 && lastdistance > 0.0)
+                    || (distance >= 0.0 && lastdistance < 0.0))
+                return PlaneIntersectionType.Intersecting;
+            lastdistance = distance;
+        }
+
+        if (lastdistance > 0.0)
+            return PlaneIntersectionType.Front;
+
+        return PlaneIntersectionType.Back;
+
+    }
+
+
+    /**
+     * Intersects.
+     *
+     * @param sphere
+     *            the sphere
+     * @return true, if successful
+     */
+    public boolean intersects(BoundingSphere sphere) {
+        if (sphere.getPosition().getX() - getMin().getX() > sphere.getRadius()
+                && sphere.getPosition().getY() - getMin().getY() > sphere
+                        .getRadius()
+                && sphere.getPosition().getZ() - getMin().getZ() > sphere
+                        .getRadius()
+                && getMax().getX() - sphere.getPosition().getX() > sphere
+                        .getRadius()
+                && getMax().getY() - sphere.getPosition().getY() > sphere
+                        .getRadius()
+                && getMax().getZ() - sphere.getPosition().getZ() > sphere
+                        .getRadius())
+            return true;
+
+        double dmin = 0;
+
+        if (sphere.getPosition().getX() - getMin().getX() <= sphere.getRadius())
+            dmin += (sphere.getPosition().getX() - getMin().getX())
+                    * (sphere.getPosition().getX() - getMin().getX());
+        else if (getMax().getX() - sphere.getPosition().getX() <= sphere.getRadius())
+            dmin += (sphere.getPosition().getX() - getMax().getX())
+                    * (sphere.getPosition().getX() - getMax().getX());
+
+        if (sphere.getPosition().getY() - getMin().getY() <= sphere.getRadius())
+            dmin += (sphere.getPosition().getY() - getMin().getY())
+                    * (sphere.getPosition().getY() - getMin().getY());
+        else if (getMax().getY() - sphere.getPosition().getY() <= sphere.getRadius())
+            dmin += (sphere.getPosition().getY() - getMax().getY())
+                    * (sphere.getPosition().getY() - getMax().getY());
+
+        if (sphere.getPosition().getZ() - getMin().getZ() <= sphere.getRadius())
+            dmin += (sphere.getPosition().getZ() - getMin().getZ())
+                    * (sphere.getPosition().getZ() - getMin().getZ());
+        else if (getMax().getZ() - sphere.getPosition().getZ() <= sphere.getRadius())
+            dmin += (sphere.getPosition().getZ() - getMax().getZ())
+                    * (sphere.getPosition().getZ() - getMax().getZ());
+
+        if (dmin <= sphere.getRadius() * sphere.getRadius())
+            return true;
+
+        return false;
+    }
+
+    /**
+     * Intersects.
+     *
+     * @param box
+     *            the box
+     * @return true, if successful
+     */
+    public boolean intersects(BoundingBox box) {
+        if ((getMax().getX() >= box.getMin().getX()) && (getMin().getX() <= box.getMax().getX())) {
+            if ((getMax().getY() < box.getMin().getY()) || (getMin().getY() > box.getMax().getY()))
+                return false;
+            return (getMax().getZ() >= box.getMin().getZ())
+                    && (getMin().getZ() <= box.getMax().getZ());
+        }
+        return false;
+    }
+
+
+    
+    protected abstract Vector3[] getCorners();
 }

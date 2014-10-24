@@ -46,7 +46,13 @@ public class BoundingFrustum {
     public BoundingFrustum(Matrix value) {
         createPlanes(value);
         createCorners();
+        Vector3 add = new Vector3();
+        for(int i=0; i < 8; ++i){
+            add.add(corners[i]);
+        }
 
+        System.out.println(add.divide(8));
+        
     }
 
     /**
@@ -335,14 +341,4 @@ public class BoundingFrustum {
 
  
 
-    /**
-     * Intersects.
-     *
-     * @param boundingBox
-     *            the bounding box
-     * @return true, if successful
-     */
-    public boolean intersects(BoundingBox boundingBox) {
-        throw new RuntimeException("Not Implemented!");
-    }
 }

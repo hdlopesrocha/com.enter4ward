@@ -1,6 +1,5 @@
 package hidrogine.math.api;
 
-import hidrogine.math.Vector3;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -23,6 +23,9 @@ import org.lwjgl.opengl.GL20;
  * The Class TheQuadExampleMoving.
  */
 public class TheQuadExampleMoving extends Game {
+	public static final Matrix IDENTITY = new Matrix().identity(); 
+	public static final Matrix ROTATION = new Matrix(); 
+	public static final Matrix TRANSLATION = new Matrix(); 
 
 	/**
 	 * Instantiates a new the quad example moving.
@@ -94,24 +97,23 @@ public class TheQuadExampleMoving extends Game {
 				}
 				if (group.getName().startsWith("w")
 						&& group.getName().length() == 2) {
-					program.pushMatrix();
-					IVector3 center = group.getCenter().multiply(-1f);
-					program.getModelMatrix().translate(center);
-					program.getModelMatrix().multiply(
-							Matrix.createRotationX(time * 32));
+					IVector3 center = new Vector3(group.getCenter()).multiply(-1f);
+					Matrix matrix = TRANSLATION.createTranslation(center).multiply(ROTATION.createRotationX(time * 32));
 					center.multiply(-1f);
-					program.getModelMatrix().translate(center);
-
+					matrix.translate(center);
+					program.setModelMatrix(matrix);
 				}
 			}
-
+			
 			@Override
 			public void afterDraw(Group group, Material material) {
 				if (group.getName().startsWith("w")
 						&& group.getName().length() == 2) {
-					program.popMatrix();
+					program.setModelMatrix(IDENTITY);
 				}
 			}
+
+	
 		};
 
 	}
@@ -198,17 +200,14 @@ public class TheQuadExampleMoving extends Game {
 		};
 
 		program.use();
-		program.setIdentity();
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		useDefaultShader();
 		program.setOpaque(true);
 		grid.draw(program);
-		program.pushMatrix();
-		space.iterate(iterator);
+		space.iterate(frustum,iterator);
 		program.setOpaque(false);
 		space.iterate(iterator);
-		program.popMatrix();
 		GL20.glUseProgram(0);
 //	System.out.println("draws:"+draws);
 	}
