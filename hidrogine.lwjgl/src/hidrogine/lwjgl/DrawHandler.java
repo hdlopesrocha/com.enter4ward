@@ -1,9 +1,11 @@
 package hidrogine.lwjgl;
 
+import hidrogine.math.Matrix;
+import hidrogine.math.api.IObject3D;
+
 public interface DrawHandler {
 
-    public void beforeDraw(Group group, Material material);
-    
-    public void afterDraw(Group group, Material material);
-    
+	public Matrix onDraw(IObject3D obj, Group group, Material material);
+
+
 }

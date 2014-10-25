@@ -45,10 +45,7 @@ public class BoundingFrustum {
     public BoundingFrustum(Matrix value) {
         createPlanes(value);
         createCorners();
-        System.out.println("************************");
-        for (int i = 0; i < 8; ++i) {
-           System.out.println(corners[i]);
-        }
+      
 
     }
 
@@ -134,15 +131,18 @@ public class BoundingFrustum {
             return ContainmentType.Disjoint;
         }
 
+        if(box.contains(this)!=ContainmentType.Disjoint){
+            return ContainmentType.Intersects;
+        }
+
+        
         int i;
-        ContainmentType contained;
         Vector3[] corners = box.getCorners();
 
         // First we assume completely disjoint. So if we find a point that is
         // contained, we break out of this loop
         for (i = 0; i < corners.length; i++) {
-            contained = contains(corners[i]);
-            if (contained != ContainmentType.Disjoint)
+            if (contains(corners[i]) != ContainmentType.Disjoint)
                 break;
         }
 
@@ -165,12 +165,14 @@ public class BoundingFrustum {
         // exit immediately saying that the result is Intersects
         i++;
         for (; i < corners.length; i++) {
-            contained = contains(corners[i]);
-            if (contained != ContainmentType.Contains) {
+            if (contains(corners[i]) != ContainmentType.Contains) {
                 return ContainmentType.Intersects;
             }
         }
 
+        
+        
+        
         // If we get here, then we know all the points were actually contained,
         // therefore result is Contains
         return ContainmentType.Contains;
@@ -290,13 +292,10 @@ public class BoundingFrustum {
         planes[5] = new Plane(matrix.M[1] - matrix.M[3], matrix.M[5]
                 - matrix.M[7], matrix.M[9] - matrix.M[11], matrix.M[13]
                 - matrix.M[15]);
-
-        planes[0].normalize();
-        planes[1].normalize();
-        planes[2].normalize();
-        planes[3].normalize();
-        planes[4].normalize();
-        planes[5].normalize();
+    
+        for(int i=0; i < 6 ; ++i){
+            planes[i].normalize();
+        }
     }
 
     /**

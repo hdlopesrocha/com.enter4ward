@@ -45,7 +45,7 @@ public class TheQuadExampleMoving extends Game {
 		new TheQuadExampleMoving();
 	}
 
-
+	IteratorHandler<IObject3D> iterator;
 
 	/** The grid. */
 	Grid grid;
@@ -70,11 +70,9 @@ public class TheQuadExampleMoving extends Game {
 
 		/** The box. */
 		Model3D car = new Model3D("car.mat", "car.geo", 1f);
-
-		IObject3D obj = new IObject3D(new Vector3(253.1f, 61.1f, 125.1f), car) {
-		};
-
-		space.insert(obj);
+		space.insert(new IObject3D(new Vector3(0f, 0f, 0f), car) {});
+		space.insert(new IObject3D(new Vector3(3f, 0f, 0f), car) {});
+		space.insert(new IObject3D(new Vector3(-3f, 0f, 0f), car) {});
 
 		camera.lookAt(0, 0, 3, 0, 0, 0);
 		grid = new Grid(32);
@@ -85,9 +83,9 @@ public class TheQuadExampleMoving extends Game {
 		program.setLightColor(0, new Vector3(1, 1, 1));
 
 		boxHandler = new DrawHandler() {
-
 			@Override
-			public void beforeDraw(Group group, Material material) {
+			public Matrix onDraw(IObject3D obj, Group group, Material material) {
+				Matrix matrix = TRANSLATION.identity();
 				if (material.getName().equals("c0")) {
 					program.setDiffuseColor(
 							(float) (Math.sin(time) + 1) / 2f,
@@ -98,22 +96,25 @@ public class TheQuadExampleMoving extends Game {
 				if (group.getName().startsWith("w")
 						&& group.getName().length() == 2) {
 					IVector3 center = new Vector3(group.getCenter()).multiply(-1f);
-					Matrix matrix = TRANSLATION.createTranslation(center).multiply(ROTATION.createRotationX(time * 32));
+					matrix.translate(center).multiply(ROTATION.createRotationX(time * 32));
 					center.multiply(-1f);
 					matrix.translate(center);
-					program.setModelMatrix(matrix);
 				}
+				matrix.translate(obj.getPosition());
+				return matrix;
 			}
 			
-			@Override
-			public void afterDraw(Group group, Material material) {
-				if (group.getName().startsWith("w")
-						&& group.getName().length() == 2) {
-					program.setModelMatrix(IDENTITY);
-				}
-			}
+		
 
 	
+		};
+		
+		iterator = new IteratorHandler<IObject3D>() {
+			@Override
+			public void handle(IObject3D obj) {
+				Model3D model = (Model3D) obj.getModel();
+				model.draw(obj,program, boxHandler);
+			}
 		};
 
 	}
@@ -177,6 +178,7 @@ public class TheQuadExampleMoving extends Game {
 				+ (runtime.totalMemory() - runtime.freeMemory()) / mb);
 
 	}
+	
 
 	/*
 	 * (non-Javadoc)
@@ -184,21 +186,10 @@ public class TheQuadExampleMoving extends Game {
 	 * @see hidrogine.lwjgl.Game#draw()
 	 */
 
-	int draws=0;
 	@Override
 	public void draw() {
+		program.setModelMatrix(IDENTITY);
 		BoundingFrustum frustum = camera.getBoundingFrustum();
-		//System.out.println(frustum.toString());
-		draws =0;
-		final IteratorHandler<IObject3D> iterator = new IteratorHandler<IObject3D>() {
-			@Override
-			public void handle(IObject3D obj) {
-				Model3D model = (Model3D) obj.getModel();
-				model.draw(program, boxHandler);
-				++draws;
-			}
-		};
-
 		program.use();
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
@@ -207,9 +198,8 @@ public class TheQuadExampleMoving extends Game {
 		grid.draw(program);
 		space.iterate(frustum,iterator);
 		program.setOpaque(false);
-		space.iterate(iterator);
+		space.iterate(frustum,iterator);
 		GL20.glUseProgram(0);
-//	System.out.println("draws:"+draws);
 	}
 
 }

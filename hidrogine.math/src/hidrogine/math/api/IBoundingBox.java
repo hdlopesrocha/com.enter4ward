@@ -153,7 +153,7 @@ public abstract class IBoundingBox {
      * @return the center x
      */
     public float getCenterX() {
-        return (getMin().getX() + getLengthX()) / 2f;
+        return getMin().getX() + getLengthX() / 2f;
     }
 
     /*
@@ -167,7 +167,7 @@ public abstract class IBoundingBox {
      * @return the center y
      */
     public float getCenterY() {
-        return (getMin().getY() + getLengthY()) / 2f;
+        return getMin().getY() + getLengthY() / 2f;
     }
 
     /*
@@ -181,7 +181,7 @@ public abstract class IBoundingBox {
      * @return the center z
      */
     public float getCenterZ() {
-        return (getMin().getZ() + getLengthZ()) / 2f;
+        return getMin().getZ() + getLengthZ() / 2f;
     }
 
     /*

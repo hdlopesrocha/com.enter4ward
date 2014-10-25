@@ -51,6 +51,7 @@ public class Plane {
         normal = ab.cross(ac);
         this.distance = -(normal.dot(a));
         normal.normalize();
+        
     }
 
     /**
@@ -123,7 +124,7 @@ public class Plane {
         float factor = 1f / normal.length();
         normal.normalize();
         distance *= factor;
-        
+        toString();
     }
 
     /**

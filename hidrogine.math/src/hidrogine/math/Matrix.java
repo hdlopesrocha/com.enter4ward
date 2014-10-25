@@ -1243,8 +1243,9 @@ public class Matrix {
      *
      * @param min the min
      */
-    public void translate(IVector3 min) {
+    public Matrix translate(IVector3 min) {
        multiply(new Matrix().createTranslation(min));
+       return this;
     }
 
     /**

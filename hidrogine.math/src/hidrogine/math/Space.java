@@ -89,20 +89,20 @@ public class Space {
         }
         
         public void insert(IObject3D obj){
-            boolean inserted=false;
+            boolean childContains=false;
+            
             if(canSplit()){
                 for(int i=0;i < 3 ; ++i){
-
                     SpaceNode node = getChild(i);
                     if(node.contains(obj)==ContainmentType.Contains){
-                        inserted=true;
+                        childContains=true;
                         node.insert(obj);
                         break;
                     }
                 }
             }
             
-            if(!inserted) {
+            if(!canSplit() || !childContains) {
                 System.out.println("=== INSERTION ===");
                 System.out.println(toString());
                 container.add(obj);
@@ -164,26 +164,15 @@ public class Space {
             
             if(child!=null){
                 for(int i=0; i < 2; ++i){
-                    if(child[i]!=null && frustum.contains(child[i])!=ContainmentType.Disjoint){
-                        child[i].iterate(frustum, handler);
+                    SpaceNode node = child[i];
+                    if(node!=null && frustum.contains(node)!=ContainmentType.Disjoint){
+                        node.iterate(frustum, handler);
                     }
                 } 
             }
         }
    
-        public void iterate(IteratorHandler<IObject3D> handler){
-            for(IObject3D obj : container){
-                handler.handle(obj);
-            }
-            
-            if(child!=null){
-                for(int i=0; i < 2; ++i){
-                    if(child[i]!=null){
-                        child[i].iterate(handler);
-                    }
-                } 
-            }
-        }
+
     
     }
 
@@ -193,11 +182,6 @@ public class Space {
         }
     }
     
-    public void iterate(IteratorHandler<IObject3D> handler){
-        if(root!=null){
-            root.iterate(handler);
-        }
-    }    
     
     private SpaceNode root;
 
@@ -207,11 +191,13 @@ public class Space {
 
     public void insert(IObject3D obj) {
         // expand phase
-        while (root.contains(obj)!=ContainmentType.Contains) {
-            root = root.expand(obj);
-        }
         System.out.println("=== EXPANSION ===");
         System.out.println(root.toString());
+        while (root.contains(obj)!=ContainmentType.Contains) {
+            root = root.expand(obj);
+            System.out.println(root.toString());
+
+        }
         
         // insertion
         root.insert(obj);

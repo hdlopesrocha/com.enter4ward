@@ -23,5 +23,5 @@ void main(void) {
 	vPosition = mat3(modelMatrix)*in_Position;
 	vNormal = mat3(modelMatrix)*in_Normal;
 	vTexCoord = in_TextureCoord;
-	gl_Position = modelViewProjection * vec4(in_Position+vec3(0,0,0.05*sin((in_Position.x+ftime)*5.0)+0.05*cos((in_Position.y+ftime)*5.0)),1.0);
+	gl_Position = modelViewProjection * vec4(in_Position,1.0);
 }
