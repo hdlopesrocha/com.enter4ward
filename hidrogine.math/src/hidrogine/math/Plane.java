@@ -122,7 +122,8 @@ public class Plane {
     public void normalize() {
         float factor = 1f / normal.length();
         normal.normalize();
-        this.distance *= factor;
+        distance *= factor;
+        
     }
 
     /**

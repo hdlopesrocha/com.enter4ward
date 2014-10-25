@@ -239,9 +239,9 @@ public abstract class IVector3 {
      * @return the i vector3
      */
     public final IVector3 divide(final float vec) {
-        setX(getX() + vec);
-        setY(getY() + vec);
-        setZ(getZ() + vec);
+        setX(getX() / vec);
+        setY(getY() / vec);
+        setZ(getZ() / vec);
         return this;
     }
 
