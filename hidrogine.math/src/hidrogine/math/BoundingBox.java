@@ -212,7 +212,7 @@ public class BoundingBox extends IBoundingBox {
                 || point.getY() < min.getY() || point.getY() > max.getY()
                 || point.getZ() < min.getZ() || point.getZ() > max.getZ()) {
             return ContainmentType.Disjoint;
-        }// or if point is on box because coordonate of point is lesser or equal
+        }// or if point is on box because coordinate of point is lesser or equal
         else if (point.getX() == min.getX() || point.getX() == max.getX()
                 || point.getY() == min.getY() || point.getY() == max.getY()
                 || point.getZ() == min.getZ() || point.getZ() == max.getZ())

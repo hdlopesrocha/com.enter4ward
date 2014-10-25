@@ -781,7 +781,7 @@ public class Matrix {
      * @return the matrix
      */
     public Matrix divide(Matrix matrix1, Matrix matrix2) {
-        Matrix inverse = Matrix.invert(matrix2);
+        Matrix inverse = new Matrix(matrix2).invert();
         Matrix result = new Matrix();
 
         result.M[0] = matrix1.M[0] * inverse.M[0] + matrix1.M[1] * inverse.M[4]
@@ -868,7 +868,7 @@ public class Matrix {
      *            the matrix
      * @return the matrix
      */
-    public static Matrix invert(Matrix matrix) {
+    public Matrix invert() {
         // Use Laplace expansion theorem to calculate the inverse of a 4x4
         // matrix
         //
@@ -878,76 +878,93 @@ public class Matrix {
         // I
         // 3. Divide adjugate matrix with the determinant to find the inverse
 
-        float det1 = matrix.M[0] * matrix.M[5] - matrix.M[1] * matrix.M[4];
-        float det2 = matrix.M[0] * matrix.M[6] - matrix.M[2] * matrix.M[4];
-        float det3 = matrix.M[0] * matrix.M[7] - matrix.M[3] * matrix.M[4];
-        float det4 = matrix.M[1] * matrix.M[6] - matrix.M[2] * matrix.M[5];
-        float det5 = matrix.M[1] * matrix.M[7] - matrix.M[3] * matrix.M[5];
-        float det6 = matrix.M[2] * matrix.M[7] - matrix.M[3] * matrix.M[6];
-        float det7 = matrix.M[8] * matrix.M[13] - matrix.M[9] * matrix.M[12];
-        float det8 = matrix.M[8] * matrix.M[14] - matrix.M[10] * matrix.M[12];
-        float det9 = matrix.M[8] * matrix.M[15] - matrix.M[11] * matrix.M[12];
-        float det10 = matrix.M[9] * matrix.M[14] - matrix.M[10] * matrix.M[13];
-        float det11 = matrix.M[9] * matrix.M[15] - matrix.M[11] * matrix.M[13];
-        float det12 = matrix.M[10] * matrix.M[15] - matrix.M[11] * matrix.M[14];
+        float det1 = M[0] * M[5] - M[1] * M[4];
+        float det2 = M[0] * M[6] - M[2] * M[4];
+        float det3 = M[0] * M[7] - M[3] * M[4];
+        float det4 = M[1] * M[6] - M[2] * M[5];
+        float det5 = M[1] * M[7] - M[3] * M[5];
+        float det6 = M[2] * M[7] - M[3] * M[6];
+        float det7 = M[8] * M[13] - M[9] * M[12];
+        float det8 = M[8] * M[14] - M[10] * M[12];
+        float det9 = M[8] * M[15] - M[11] * M[12];
+        float det10 = M[9] * M[14] - M[10] * M[13];
+        float det11 = M[9] * M[15] - M[11] * M[13];
+        float det12 = M[10] * M[15] - M[11] * M[14];
 
         float detMatrix = (float) (det1 * det12 - det2 * det11 + det3 * det10
                 + det4 * det9 - det5 * det8 + det6 * det7);
 
         float invDetMatrix = 1f / detMatrix;
 
-        Matrix ret = new Matrix();
 
-        ret.M[0] = (matrix.M[5] * det12 - matrix.M[6] * det11 + matrix.M[7]
+        float M0 = (M[5] * det12 - M[6] * det11 + M[7]
                 * det10)
                 * invDetMatrix;
-        ret.M[1] = (-matrix.M[1] * det12 + matrix.M[2] * det11 - matrix.M[3]
+        float M1 = (-M[1] * det12 + M[2] * det11 - M[3]
                 * det10)
                 * invDetMatrix;
-        ret.M[2] = (matrix.M[13] * det6 - matrix.M[14] * det5 + matrix.M[15]
+        float M2 = (M[13] * det6 - M[14] * det5 + M[15]
                 * det4)
                 * invDetMatrix;
-        ret.M[3] = (-matrix.M[9] * det6 + matrix.M[10] * det5 - matrix.M[11]
+        float M3 = (-M[9] * det6 + M[10] * det5 - M[11]
                 * det4)
                 * invDetMatrix;
-        ret.M[4] = (-matrix.M[4] * det12 + matrix.M[6] * det9 - matrix.M[7]
+        float M4 = (-M[4] * det12 + M[6] * det9 - M[7]
                 * det8)
                 * invDetMatrix;
-        ret.M[5] = (matrix.M[0] * det12 - matrix.M[2] * det9 + matrix.M[3]
+        float M5 = (M[0] * det12 - M[2] * det9 + M[3]
                 * det8)
                 * invDetMatrix;
-        ret.M[6] = (-matrix.M[12] * det6 + matrix.M[14] * det3 - matrix.M[15]
+        float M6 = (-M[12] * det6 + M[14] * det3 - M[15]
                 * det2)
                 * invDetMatrix;
-        ret.M[7] = (matrix.M[8] * det6 - matrix.M[10] * det3 + matrix.M[11]
+        float M7 = (M[8] * det6 - M[10] * det3 + M[11]
                 * det2)
                 * invDetMatrix;
-        ret.M[8] = (matrix.M[4] * det11 - matrix.M[5] * det9 + matrix.M[7]
+        float M8 = (M[4] * det11 - M[5] * det9 + M[7]
                 * det7)
                 * invDetMatrix;
-        ret.M[9] = (-matrix.M[0] * det11 + matrix.M[1] * det9 - matrix.M[3]
+        float M9 = (-M[0] * det11 + M[1] * det9 - M[3]
                 * det7)
                 * invDetMatrix;
-        ret.M[10] = (matrix.M[12] * det5 - matrix.M[13] * det3 + matrix.M[15]
+        float M10 = (M[12] * det5 - M[13] * det3 + M[15]
                 * det1)
                 * invDetMatrix;
-        ret.M[11] = (-matrix.M[8] * det5 + matrix.M[9] * det3 - matrix.M[11]
+        float M11 = (-M[8] * det5 + M[9] * det3 - M[11]
                 * det1)
                 * invDetMatrix;
-        ret.M[12] = (-matrix.M[4] * det10 + matrix.M[5] * det8 - matrix.M[6]
+        float M12 = (-M[4] * det10 + M[5] * det8 - M[6]
                 * det7)
                 * invDetMatrix;
-        ret.M[13] = (matrix.M[0] * det10 - matrix.M[1] * det8 + matrix.M[2]
+        float M13 = (M[0] * det10 - M[1] * det8 + M[2]
                 * det7)
                 * invDetMatrix;
-        ret.M[14] = (-matrix.M[12] * det4 + matrix.M[13] * det2 - matrix.M[14]
+        float M14 = (-M[12] * det4 + M[13] * det2 - M[14]
                 * det1)
                 * invDetMatrix;
-        ret.M[15] = (matrix.M[8] * det4 - matrix.M[9] * det2 + matrix.M[10]
+        float M15 = (M[8] * det4 - M[9] * det2 + M[10]
                 * det1)
                 * invDetMatrix;
 
-        return ret;
+        M[0]=M0;
+        M[1]=M1;
+        M[2]=M2;
+        M[3]=M3;
+        M[4]=M4;
+        M[5]=M5;
+        M[6]=M6;
+        M[7]=M7;
+        M[8]=M8;
+        M[9]=M9;
+        M[10]=M10;
+        M[11]=M11;
+        M[12]=M12;
+        M[13]=M13;
+        M[14]=M14;
+        M[15]=M15;
+        
+        
+        return this;
     }
 
     /*
@@ -1214,9 +1231,9 @@ public class Matrix {
      * @param matrix the matrix
      * @param matrix2 the matrix2
      */
-    public static void load(Matrix matrix, Matrix matrix2) {
+    public void set(Matrix matrix) {
         for(int i=0;i <16; ++i)
-            matrix2.M[i]=matrix.M[i];
+            M[i]=matrix.M[i];
         
     }
 

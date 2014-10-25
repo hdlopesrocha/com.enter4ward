@@ -149,7 +149,7 @@ public class Camera {
      *            the left
      */
     public void move(float front, float down, float right) {
-        Matrix trans = Matrix.invert(new Matrix().createFromQuaternion(rotation));
+        Matrix trans = new Matrix().createFromQuaternion(rotation).invert();
         if (front != 0) {
             position.add(new Vector3(trans.getForward()).multiply(front));
         }
