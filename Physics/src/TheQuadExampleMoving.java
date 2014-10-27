@@ -15,6 +15,7 @@ import hidrogine.math.Matrix;
 import hidrogine.math.NodeIteratorHandler;
 import hidrogine.math.ObjectIterator;
 import hidrogine.math.Space;
+import hidrogine.math.SpaceNode;
 import hidrogine.math.Vector3;
 
 import org.lwjgl.input.Keyboard;
@@ -78,7 +79,7 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		(moving = new IObject3D(new Vector3(), car) {
 		}).insert(space);
 
-		camera.lookAt(0, 0, 64, 0, 0, 0);
+		camera.lookAt(0, 0, 48, 0, 0, 0);
 		grid = new Grid(32);
 		program.setLightPosition(0, new Vector3(3, 3, 3));
 		program.setAmbientColor(0, 0, 0);
@@ -146,7 +147,8 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 
 		// Print used memory
 		Display.setTitle("Used Memory:"
-				+ (runtime.totalMemory() - runtime.freeMemory()) / mb);
+				+ (runtime.totalMemory() - runtime.freeMemory()) / mb
+				+ " Draws:" + draws);
 
 	}
 
@@ -175,21 +177,28 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		space.iterate(frustum, new NodeIteratorHandler() {
 			@Override
 			public void handle2(IBoundingBox obj) {
-				ContainmentType ct = frustum.contains((BoundingBox) obj);
-				if (ct == ContainmentType.Contains) {
-					program.setAmbientColor(0f, 1f, 0f);
-				} else {
-					program.setAmbientColor(1f, 1f, 1f);
+				if (((SpaceNode) obj).getStoredObjectsCount() > 0) {
+					program.setAmbientColor(0f, 0f, 1f);
+					program.setMaterialAlpha(.5f);
 				}
-				program.setMaterialAlpha(.1f);
+				else {
+	                                ContainmentType ct = frustum.contains((BoundingBox) obj);
+	                                if (ct == ContainmentType.Contains) {
+	                                        program.setAmbientColor(0f, 1f, 0f);
+	                                } else {
+	                                        program.setAmbientColor(1f, 1f, 1f);
+	                                }
+
+				    program.setMaterialAlpha(.1f);				    
+				}
 				box.draw(program, obj.getMin(), obj.getMax());
 			}
 		});
 		program.setMaterialAlpha(1f);
 		program.setAmbientColor(0f, 0f, 0f);
-		// space.iterate(frustum, this);
+		space.iterate(frustum, this);
 		GL20.glUseProgram(0);
-		System.out.println("Draws: " + draws);
+		setTitle();
 	}
 
 	@Override
@@ -219,7 +228,7 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 	}
 
 	@Override
-	public void handleObject(IObject3D obj) {
+	public void onObjectVisible(IObject3D obj) {
 		draws++;
 		Model3D model = (Model3D) obj.getModel();
 		model.draw(obj, program, TheQuadExampleMoving.this);

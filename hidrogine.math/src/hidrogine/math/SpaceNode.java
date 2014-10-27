@@ -3,7 +3,7 @@ package hidrogine.math;
 import java.util.ArrayList;
 import java.util.List;
 
-class SpaceNode extends BoundingBox {
+public class SpaceNode extends BoundingBox {
 
     static final int LEFT = 0;
     static final int RIGHT = 1;
@@ -34,6 +34,10 @@ class SpaceNode extends BoundingBox {
         node.parent = this;
     }
 
+   public int getStoredObjectsCount(){
+       return container.size();
+   }
+    
     public String toString() {
         return super.toString();
     }
@@ -150,7 +154,7 @@ class SpaceNode extends BoundingBox {
     public void iterate(BoundingFrustum frustum, ObjectIterator handler){
         for(IObject3D obj : container){
             if(frustum.contains(obj)!=ContainmentType.Disjoint){
-                handler.handleObject(obj);
+                handler.onObjectVisible(obj);
             }
         }
         

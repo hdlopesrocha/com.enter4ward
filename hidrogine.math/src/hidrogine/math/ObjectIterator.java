@@ -2,5 +2,5 @@ package hidrogine.math;
 
 
 public interface ObjectIterator {
-    public void handleObject(IObject3D obj);
+    public void onObjectVisible(IObject3D obj);
 }

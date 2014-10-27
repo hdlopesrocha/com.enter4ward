@@ -40,7 +40,9 @@ public class Space {
             expandRoot(obj);
             node = root;
         }
-        
+        else {
+            node.count--;
+        }
        insert(obj, node);
     }
     
