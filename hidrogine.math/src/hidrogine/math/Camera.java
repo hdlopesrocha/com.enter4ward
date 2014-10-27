@@ -28,7 +28,7 @@ public class Camera {
     public Matrix getViewMatrix() {
 
         IVector3 negativePos = new Vector3(position).multiply(-1f);
-        return new Matrix().createTranslation(negativePos).multiply(new Matrix().createFromQuaternion(rotation));
+        return new Matrix().identity().createTranslation(negativePos).multiply(new Matrix().createFromQuaternion(rotation));
 
     }
 

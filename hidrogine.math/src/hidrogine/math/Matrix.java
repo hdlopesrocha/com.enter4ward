@@ -763,10 +763,7 @@ public class Matrix {
      */
     public Matrix createTranslation(IVector3 position) {
         identity();
-
-        M[12] = position.getX();
-        M[13] = position.getY();
-        M[14] = position.getZ();
+        setTranslation(position);
 
         return this;
     }

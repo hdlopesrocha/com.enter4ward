@@ -17,6 +17,7 @@ public class Space {
         private final List<IObject3D> container = new ArrayList<IObject3D>();
         private SpaceNode[] child;
         private Long count;
+        private Boolean expanded = false;
 
         public SpaceNode() {
             super(new Vector3(0, 0, 0), new Vector3(1, 1, 1));
@@ -39,14 +40,18 @@ public class Space {
             return super.toString();
         }
 
-        public void clear() {
-            this.child = null;
-        }
 
         private SpaceNode build(int i) {
             float lenX = getLengthX();
             float lenY = getLengthY();
             float lenZ = getLengthZ();
+            
+            if(getCenterX()==-1f && getCenterY()==-1f && getCenterZ()==-1f){
+                System.out.println("#### "+lenX+" | "+lenY+" | "+lenZ +" ####");
+                
+                
+            }
+            
             
             if (lenX >= lenY && lenX >= lenZ) {
                 if (i == LEFT) {
@@ -101,18 +106,19 @@ public class Space {
                     }
                 }
             }
+            ++count;
             
             if(!canSplit() || !childContains) {
                 System.out.println("=== INSERTION ===");
                 System.out.println(toString());
                 container.add(obj);
             }
-            ++count;
+            
             if(child!=null){
                 for(int i=0;i < 3 ; ++i){
                     SpaceNode node = child[i];
                     if(node!=null && node.count==0){
-                        node.clear();
+                        node.child = null;
                     }
                 }
             }
@@ -123,30 +129,24 @@ public class Space {
             float lenX = getLengthX();
             float lenY = getLengthY();
             float lenZ = getLengthZ();
-
+expanded=true;
             if (lenX <= lenY && lenX <= lenZ) {
                 if (pos.getX() >= getCenterX()) {
-                    return new SpaceNode(this, LEFT, getMin(), new Vector3(
-                            getMax()).addX(lenX));
+                    return new SpaceNode(this, LEFT, getMin(), new Vector3(getMax()).addX(lenX));
                 } else {
-                    return new SpaceNode(this, RIGHT,
-                            new Vector3(getMin()).addX(-lenX), getMax());
+                    return new SpaceNode(this, RIGHT,new Vector3(getMin()).addX(-lenX), getMax());
                 }
             } else if (lenY <= lenZ) {
                 if (pos.getY() >= getCenterY()) {
-                    return new SpaceNode(this, LEFT, getMin(), new Vector3(
-                            getMax()).addY(lenY));
+                    return new SpaceNode(this, LEFT, getMin(), new Vector3(getMax()).addY(lenY));
                 } else {
-                    return new SpaceNode(this, RIGHT,
-                            new Vector3(getMin()).addY(-lenY), getMax());
+                    return new SpaceNode(this, RIGHT,new Vector3(getMin()).addY(-lenY), getMax());
                 }
             } else {
                 if (pos.getZ() >= getCenterZ()) {
-                    return new SpaceNode(this, LEFT, getMin(), new Vector3(
-                            getMax()).addZ(lenZ));
+                    return new SpaceNode(this, LEFT, getMin(), new Vector3(getMax()).addZ(lenZ));
                 } else {
-                    return new SpaceNode(this, RIGHT,
-                            new Vector3(getMin()).addZ(-lenZ), getMax());
+                    return new SpaceNode(this, RIGHT,new Vector3(getMin()).addZ(-lenZ), getMax());
                 }
             }
         }
@@ -155,7 +155,26 @@ public class Space {
             return getMin().distance(getMax()) > 1f;
         }
 
-        public void iterate(BoundingFrustum frustum, IteratorHandler<IObject3D> handler){
+        public void iterate(NodeIteratorHandler nodeh ,int j){
+            String tabs = "";
+            for(int k = 0; k < j; ++k){
+                tabs += "  |  ";
+            }
+            nodeh.handle2(this);
+       //     System.out.println(tabs+"["+container.size()+"/"+count+"] "+toString()+" "+expanded);
+            
+            if(child!=null){
+                for(int i=0; i < 3; ++i){
+                    SpaceNode node = child[i];
+                    if(node!=null){
+                        node.iterate(nodeh,1+j);
+                    }
+                } 
+            }
+        }
+   
+        
+        public void iterate(BoundingFrustum frustum, IteratorHandler handler){
             for(IObject3D obj : container){
                 if(frustum.contains(obj)!=ContainmentType.Disjoint){
                     handler.handle(obj);
@@ -176,12 +195,19 @@ public class Space {
     
     }
 
-    public void iterate(BoundingFrustum frustum, IteratorHandler<IObject3D> handler){
+    public void iterate(BoundingFrustum frustum, IteratorHandler handler){
         if(root!=null){
             root.iterate(frustum, handler);
         }
     }
+
     
+
+    public void iterate(NodeIteratorHandler nodeh){
+        if(root!=null){
+            root.iterate(nodeh,0);
+        }
+    }
     
     private SpaceNode root;
 

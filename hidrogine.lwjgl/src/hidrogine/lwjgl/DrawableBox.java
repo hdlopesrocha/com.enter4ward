@@ -23,9 +23,19 @@ public class DrawableBox {
 				0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0,
 				1, 0, 1, 0, -1, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, 1,
 				-1, 0, 0, 1, 1, 0, 1, 1, -1, 0, 0, 0, 1 };
-		short[] ii = { 0, 1, 2, 2, 3, 0, 4, 5, 6, 6, 7, 4, 8, 9, 10, 10, 11, 8,
-				12, 13, 14, 14, 15, 12, 16, 17, 18, 18, 19, 16, 20, 21, 22, 22,
-				23, 20 };
+		short[] ii = { 0, 1, 1,		1, 1, 2, 
+					   2, 3, 3,		3, 3, 0, 
+					   4, 5, 5,		5, 5, 6, 
+					   6, 7, 7,		7, 7, 4, 
+					   8, 9, 9,		9, 9, 10, 
+					   10, 11, 11,	11, 11, 8,
+					   12, 13, 13,	13, 13, 14, 
+					   14, 15, 15,	15, 15, 12, 
+					   16, 17, 17,	17, 17, 18, 
+					   18, 19, 19,	19, 19, 16, 
+					   20, 21, 21,	21, 21, 22, 
+					   22, 23, 23,	23, 23, 20 
+					   };
 
 		for (int i = 0; i < packedVector.length; i += 8) {
 			obj.addPosition(new Vector3(packedVector[i + 0],
@@ -51,14 +61,20 @@ public class DrawableBox {
 	 * @param shader
 	 *            the shader
 	 */
-	public final void draw(final ShaderProgram shader, Vector3 min,
-			Vector3 max) {
+	public final void draw(final ShaderProgram shader, IVector3 min,
+			IVector3 max) {
+		//System.out.println(min.toString()+" : "+max.toString());
+		GL11.glDisable(GL11.GL_CULL_FACE);
 		IVector3 dim = new Vector3(max).subtract(min);
-		shader.setModelMatrix(new Matrix().createTranslation(min).scale(dim));
+		shader.setModelMatrix(new Matrix().createScale(dim).multiply(new Matrix().createTranslation(min)));
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 		shader.setAmbientColor(1f, 1f, 1f);
 		obj.draw(shader);
 		shader.setAmbientColor(0f, 0f, 0f);
+		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+		shader.setModelMatrix(new Matrix().identity());
+
+		GL11.glEnable(GL11.GL_CULL_FACE);
 	}
 
 }

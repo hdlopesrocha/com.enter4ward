@@ -1,4 +1,5 @@
 import hidrogine.lwjgl.DrawHandler;
+import hidrogine.lwjgl.DrawableBox;
 import hidrogine.lwjgl.Game;
 import hidrogine.lwjgl.Grid;
 import hidrogine.lwjgl.Group;
@@ -7,8 +8,10 @@ import hidrogine.lwjgl.Model3D;
 import hidrogine.math.BoundingFrustum;
 import hidrogine.math.IteratorHandler;
 import hidrogine.math.Matrix;
+import hidrogine.math.NodeIteratorHandler;
 import hidrogine.math.Space;
 import hidrogine.math.Vector3;
+import hidrogine.math.api.IBoundingBox;
 import hidrogine.math.api.IObject3D;
 import hidrogine.math.api.IVector3;
 
@@ -22,10 +25,11 @@ import org.lwjgl.opengl.GL20;
 /**
  * The Class TheQuadExampleMoving.
  */
-public class TheQuadExampleMoving extends Game {
+public class TheQuadExampleMoving extends Game  implements DrawHandler,IteratorHandler{
 	public static final Matrix IDENTITY = new Matrix().identity(); 
 	public static final Matrix ROTATION = new Matrix(); 
 	public static final Matrix TRANSLATION = new Matrix(); 
+	public DrawableBox box;
 
 	/**
 	 * Instantiates a new the quad example moving.
@@ -45,16 +49,12 @@ public class TheQuadExampleMoving extends Game {
 		new TheQuadExampleMoving();
 	}
 
-	IteratorHandler<IObject3D> iterator;
 
 	/** The grid. */
 	Grid grid;
 
 	/** The space. */
 	Space space;
-
-	/** The box handler. */
-	DrawHandler boxHandler;
 
 	/** The time. */
 	float time = 0;
@@ -67,7 +67,7 @@ public class TheQuadExampleMoving extends Game {
 	@Override
 	public void setup() {
 		space = new Space();
-
+		box = new DrawableBox();
 		/** The box. */
 		Model3D car = new Model3D("car.mat", "car.geo", 1f);
 		space.insert(new IObject3D(new Vector3(0f, 0f, 0f), car) {});
@@ -82,40 +82,7 @@ public class TheQuadExampleMoving extends Game {
 		program.setMaterialShininess(1000);
 		program.setLightColor(0, new Vector3(1, 1, 1));
 
-		boxHandler = new DrawHandler() {
-			@Override
-			public Matrix onDraw(IObject3D obj, Group group, Material material) {
-				Matrix matrix = TRANSLATION.identity();
-				if (material.getName().equals("c0")) {
-					program.setDiffuseColor(
-							(float) (Math.sin(time) + 1) / 2f,
-							(float) (Math.cos(time * Math.E / 2) + 1) / 2f,
-							(float) (Math.sin(time * Math.PI / 2)
-									* Math.cos(time * Math.PI / 2) + 1) / 2f);
-				}
-				if (group.getName().startsWith("w")
-						&& group.getName().length() == 2) {
-					IVector3 center = new Vector3(group.getCenter()).multiply(-1f);
-					matrix.translate(center).multiply(ROTATION.createRotationX(time * 32));
-					center.multiply(-1f);
-					matrix.translate(center);
-				}
-				matrix.translate(obj.getPosition());
-				return matrix;
-			}
-			
-		
 
-	
-		};
-		
-		iterator = new IteratorHandler<IObject3D>() {
-			@Override
-			public void handle(IObject3D obj) {
-				Model3D model = (Model3D) obj.getModel();
-				model.draw(obj,program, boxHandler);
-			}
-		};
 
 	}
 
@@ -128,7 +95,7 @@ public class TheQuadExampleMoving extends Game {
 	public void update() {
 		time += 0.003f;
 
-		float sense = 0.03f;
+		float sense = 0.06f;
 		if (Mouse.isButtonDown(0)) {
 			camera.rotate(0, 1, 0, Mouse.getDX() * sense * 0.2f);
 			camera.rotate(1, 0, 0, -Mouse.getDY() * sense * 0.2f);
@@ -195,11 +162,53 @@ public class TheQuadExampleMoving extends Game {
 
 		useDefaultShader();
 		program.setOpaque(true);
-		grid.draw(program);
-		space.iterate(frustum,iterator);
+
+		space.iterate(new NodeIteratorHandler() {
+			@Override
+			public void handle2(IBoundingBox obj) {
+				// TODO Auto-generated method stub
+				box.draw(program, obj.getMin(), obj.getMax());
+			}
+		});
+		
+		
+	//	grid.draw(program);
+		space.iterate(frustum,this);
 		program.setOpaque(false);
-		space.iterate(frustum,iterator);
+		space.iterate(frustum,this);
+		
+
+		
 		GL20.glUseProgram(0);
 	}
+
+	@Override
+	public Matrix onDraw(IObject3D obj, Group group, Material material) {
+		Matrix matrix = TRANSLATION.identity();
+		if (material.getName().equals("c0")) {
+			program.setDiffuseColor(
+					(float) (Math.sin(time) + 1) / 2f,
+					(float) (Math.cos(time * Math.E / 2) + 1) / 2f,
+					(float) (Math.sin(time * Math.PI / 2)
+							* Math.cos(time * Math.PI / 2) + 1) / 2f);
+		}
+		if (group.getName().startsWith("w")
+				&& group.getName().length() == 2) {
+			IVector3 center = new Vector3(group.getCenter()).multiply(-1f);
+			matrix.translate(center).multiply(ROTATION.createRotationX(time * 32));
+			center.multiply(-1f);
+			matrix.translate(center);
+		}
+		matrix.translate(obj.getPosition());
+		return matrix;
+	}
+
+	@Override
+	public void handle(IObject3D obj) {
+		Model3D model = (Model3D) obj.getModel();
+		model.draw(obj,program, TheQuadExampleMoving.this);
+	//	model.drawBoxs(program);
+	}
+	
 
 }
