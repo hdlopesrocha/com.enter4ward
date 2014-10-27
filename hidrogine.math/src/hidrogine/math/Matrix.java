@@ -1,7 +1,5 @@
 package hidrogine.math;
 
-import hidrogine.math.api.IVector3;
-
 import java.nio.FloatBuffer;
 
 // TODO: Auto-generated Javadoc

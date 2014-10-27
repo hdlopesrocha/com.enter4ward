@@ -1,12 +1,5 @@
-package hidrogine.math.api;
+package hidrogine.math;
 
-import hidrogine.math.BoundingBox;
-import hidrogine.math.BoundingFrustum;
-import hidrogine.math.BoundingSphere;
-import hidrogine.math.ContainmentType;
-import hidrogine.math.Plane;
-import hidrogine.math.PlaneIntersectionType;
-import hidrogine.math.Vector3;
 
 // TODO: Auto-generated Javadoc
 /**

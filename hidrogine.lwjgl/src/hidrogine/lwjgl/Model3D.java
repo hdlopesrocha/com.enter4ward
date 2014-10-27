@@ -1,13 +1,13 @@
 package hidrogine.lwjgl;
 
 import hidrogine.math.BoundingSphere;
+import hidrogine.math.IBoundingSphere;
+import hidrogine.math.IModel3D;
+import hidrogine.math.IObject3D;
+import hidrogine.math.IVector3;
 import hidrogine.math.Matrix;
 import hidrogine.math.Vector2;
 import hidrogine.math.Vector3;
-import hidrogine.math.api.IBoundingSphere;
-import hidrogine.math.api.IModel3D;
-import hidrogine.math.api.IObject3D;
-import hidrogine.math.api.IVector3;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -1,7 +1,5 @@
 package hidrogine.math;
 
-import hidrogine.math.api.IBoundingSphere;
-import hidrogine.math.api.IVector3;
 
 // TODO: Auto-generated Javadoc
 /**

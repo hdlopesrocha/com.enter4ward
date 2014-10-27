@@ -1,6 +1,5 @@
 package hidrogine.math;
 
-import hidrogine.math.api.IVector3;
 
 public class PlaneHelper {
     /// <summary>

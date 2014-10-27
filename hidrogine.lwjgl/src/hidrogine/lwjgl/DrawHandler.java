@@ -1,7 +1,7 @@
 package hidrogine.lwjgl;
 
+import hidrogine.math.IObject3D;
 import hidrogine.math.Matrix;
-import hidrogine.math.api.IObject3D;
 
 public interface DrawHandler {
 

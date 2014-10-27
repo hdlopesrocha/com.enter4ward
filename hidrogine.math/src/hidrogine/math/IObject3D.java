@@ -1,4 +1,5 @@
-package hidrogine.math.api;
+package hidrogine.math;
+
 
 // TODO: Auto-generated Javadoc
 /**
@@ -12,6 +13,7 @@ public abstract class IObject3D extends IBoundingSphere {
     /** The model. */
     private IModel3D model;
 
+    private SpaceNode node;
     /**
      * Gets the model.
      *
@@ -80,4 +82,13 @@ public abstract class IObject3D extends IBoundingSphere {
         this.position = position;
     }
 
+    public void insert(Space space){
+        node= space.insert(this);
+        
+    }
+    
+    public void remove(){
+        node.remove(this);
+    }
+    
 }

@@ -1,7 +1,5 @@
-package hidrogine.math.api;
+package hidrogine.math;
 
-import hidrogine.math.Plane;
-import hidrogine.math.PlaneIntersectionType;
 
 // TODO: Auto-generated Javadoc
 /**

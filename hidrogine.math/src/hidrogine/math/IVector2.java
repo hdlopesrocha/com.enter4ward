@@ -1,4 +1,4 @@
-package hidrogine.math.api;
+package hidrogine.math;
 
 // TODO: Auto-generated Javadoc
 /**

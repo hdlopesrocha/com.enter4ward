@@ -1,7 +1,7 @@
 package hidrogine.lwjgl;
 
-import hidrogine.math.api.IVector2;
-import hidrogine.math.api.IVector3;
+import hidrogine.math.IVector2;
+import hidrogine.math.IVector3;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

@@ -1,9 +1,9 @@
 package hidrogine.lwjgl;
 
+import hidrogine.math.IVector3;
 import hidrogine.math.Matrix;
 import hidrogine.math.Vector2;
 import hidrogine.math.Vector3;
-import hidrogine.math.api.IVector3;
 
 import org.lwjgl.opengl.GL11;
 

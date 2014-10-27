@@ -5,17 +5,16 @@ import hidrogine.lwjgl.Grid;
 import hidrogine.lwjgl.Group;
 import hidrogine.lwjgl.Material;
 import hidrogine.lwjgl.Model3D;
-import hidrogine.math.BoundingBox;
 import hidrogine.math.BoundingFrustum;
-import hidrogine.math.ContainmentType;
-import hidrogine.math.ObjectIterator;
+import hidrogine.math.IObject3D;
+import hidrogine.math.IVector3;
 import hidrogine.math.Matrix;
-import hidrogine.math.NodeIteratorHandler;
+import hidrogine.math.ObjectIterator;
 import hidrogine.math.Space;
 import hidrogine.math.Vector3;
-import hidrogine.math.api.IBoundingBox;
-import hidrogine.math.api.IObject3D;
-import hidrogine.math.api.IVector3;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -71,15 +70,26 @@ public class TheQuadExampleMoving extends Game  implements DrawHandler,ObjectIte
 		box = new DrawableBox();
 		/** The box. */
 		Model3D car = new Model3D("box.mat", "box.geo", 1f);
-		int size=16;
-		for(int i=-size; i< size ; ++i){
-			for(int j=-size; j< size ; ++j){
-				for(int k=-size; k< size ; ++k){
-			
-					space.insert(new IObject3D(new Vector3(i*8, j*8, k*8), car) {});
+		int size=8;
+		List<IObject3D> removed = new ArrayList<IObject3D>();
+		
+		for(int i=-size; i<= size ; ++i){
+			for(int j=-size; j<= size ; ++j){
+				for(int k=-size; k<= size ; ++k){
+					IVector3 vec = new Vector3(i, j, k);
+					IObject3D obj = new IObject3D(vec, car) {};
+					obj.insert(space);
+					
+					if(vec.length()<9){
+						removed.add(obj);
+					}
 				}
 			}		}
 
+		for(IObject3D obj : removed){
+			obj.remove();
+		}
+		
 		camera.lookAt(0, 0, 3, 0, 0, 0);
 		grid = new Grid(32);
 		program.setLightPosition(0, new Vector3(3, 3, 3));
