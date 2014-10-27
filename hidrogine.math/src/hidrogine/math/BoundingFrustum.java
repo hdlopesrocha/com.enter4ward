@@ -125,57 +125,44 @@ public class BoundingFrustum {
      * @return the containment type
      */
     public ContainmentType contains(BoundingBox box) {
-        // FIXME: Is this a bug?
-        // If the bounding box is of W * D * H = 0, then return disjoint
-        if (box.getMin().equals(box.getMax())) {
-            return ContainmentType.Disjoint;
-        }
-
-        if(box.contains(this)!=ContainmentType.Disjoint){
-            return ContainmentType.Intersects;
-        }
-
+        int contains=0;
+        int disjoints =0;
         
-        int i;
-        Vector3[] corners = box.getCorners();
+        IVector3[] corners = box.getCorners();
 
-        // First we assume completely disjoint. So if we find a point that is
-        // contained, we break out of this loop
-        for (i = 0; i < corners.length; i++) {
-            if (contains(corners[i]) != ContainmentType.Disjoint)
-                break;
+        // First we check if box is in frustum
+        for (IVector3 vec : corners) {
+            ContainmentType ct = contains(vec);
+            if(ct==ContainmentType.Disjoint){
+                ++disjoints;
+            }
+            else {
+                ++contains;
+            }
+     
+      
+            if(disjoints>0 && contains>0){
+                // one corner outside and one inside
+                return ContainmentType.Intersects;
+            }
+            else if(contains==corners.length){
+                // all corners inside
+                return ContainmentType.Contains;
+            }
+            
         }
-
-        if (i == corners.length) // This means we checked all the corners and
-                                 // they were all disjoint
-        {
-            return ContainmentType.Disjoint;
-        }
-
-        if (i != 0) // if i is not equal to zero, we can fastpath and say that
-                    // this box intersects
-        { // because we know at least one point is outside and one is inside.
-            return ContainmentType.Intersects;
-        }
-
-        // If we get here, it means the first (and only) point we checked was
-        // actually contained in the frustum.
-        // So we assume that all other points will also be contained. If one of
-        // the points is disjoint, we can
-        // exit immediately saying that the result is Intersects
-        i++;
-        for (; i < corners.length; i++) {
-            if (contains(corners[i]) != ContainmentType.Contains) {
+        // is the box containing this frustum?
+        corners = this.getCorners();
+        for (IVector3 vec : corners) {
+            ContainmentType ct = box.contains(vec);
+            if(ct!=ContainmentType.Disjoint){
                 return ContainmentType.Intersects;
             }
         }
-
         
+        // XXX - this is not true points cannot conclude everything...
         
-        
-        // If we get here, then we know all the points were actually contained,
-        // therefore result is Contains
-        return ContainmentType.Contains;
+        return ContainmentType.Disjoint;
 
     }
 
@@ -209,7 +196,7 @@ public class BoundingFrustum {
      *            the point
      * @return the containment type
      */
-    public ContainmentType contains(Vector3 point) {
+    public ContainmentType contains(IVector3 point) {
         // If a point is on the POSITIVE side of the plane, then the point is
         // not contained within the frustum
         for (int i = 0; i < 6; ++i) {

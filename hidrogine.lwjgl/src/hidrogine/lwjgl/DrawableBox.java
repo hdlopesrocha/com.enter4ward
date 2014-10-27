@@ -68,9 +68,7 @@ public class DrawableBox {
 		IVector3 dim = new Vector3(max).subtract(min);
 		shader.setModelMatrix(new Matrix().createScale(dim).multiply(new Matrix().createTranslation(min)));
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
-		shader.setAmbientColor(1f, 1f, 1f);
 		obj.draw(shader);
-		shader.setAmbientColor(0f, 0f, 0f);
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
 		shader.setModelMatrix(new Matrix().identity());
 

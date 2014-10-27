@@ -111,44 +111,45 @@ public class BoundingBox extends IBoundingBox {
      * @return the containment type
      */
     public ContainmentType contains(BoundingFrustum frustum) {
-        // TODO: bad done here need a fix.
-        // Because question is not frustum contain box but reverse and this is
-        // not the same
-        int i;
-        ContainmentType contained;
+        int contains=0;
+        int disjoints =0;
+        
         IVector3[] corners = frustum.getCorners();
 
         // First we check if frustum is in box
-        for (i = 0; i < corners.length; i++) {
-            contained = contains(corners[i]);
-            if (contained == ContainmentType.Disjoint)
-                break;
-        }
-
-        if (i == corners.length) // This means we checked all the corners and
-                                 // they were all contain or instersect
-            return ContainmentType.Contains;
-
-        if (i != 0) // if i is not equal to zero, we can fastpath and say that
-                    // this box intersects
-            return ContainmentType.Intersects;
-
-        // If we get here, it means the first (and only) point we checked was
-        // actually contained in the frustum.
-        // So we assume that all other points will also be contained. If one of
-        // the points is disjoint, we can
-        // exit immediately saying that the result is Intersects
-        i++;
-        for (; i < corners.length; i++) {
-            contained = contains(corners[i]);
-            if (contained != ContainmentType.Contains)
+        for (IVector3 vec : corners) {
+            ContainmentType ct = contains(vec);
+            if(ct==ContainmentType.Disjoint){
+                ++disjoints;
+            }
+            else {
+                ++contains;
+            }
+     
+      
+            if(disjoints>0 && contains>0){
+                // one corner outside and one inside
                 return ContainmentType.Intersects;
-
+            }
+            else if(contains==corners.length){
+                // all corners inside
+                return ContainmentType.Contains;
+            }
+            
         }
+        // is the frustum containing this box?
+        corners = this.getCorners();
+        for (IVector3 vec : corners) {
+            ContainmentType ct = frustum.contains(vec);
+            if(ct!=ContainmentType.Disjoint){
+                return ContainmentType.Intersects;
+            }
+        }
+        
+        // XXX - this is not true points cannot conclude everything...
 
-        // If we get here, then we know all the points were actually contained,
-        // therefore result is Contains
-        return ContainmentType.Contains;
+        return ContainmentType.Disjoint;
+ 
     }
 
     /**

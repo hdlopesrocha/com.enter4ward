@@ -5,7 +5,9 @@ import hidrogine.lwjgl.Grid;
 import hidrogine.lwjgl.Group;
 import hidrogine.lwjgl.Material;
 import hidrogine.lwjgl.Model3D;
+import hidrogine.math.BoundingBox;
 import hidrogine.math.BoundingFrustum;
+import hidrogine.math.ContainmentType;
 import hidrogine.math.IteratorHandler;
 import hidrogine.math.Matrix;
 import hidrogine.math.NodeIteratorHandler;
@@ -156,7 +158,7 @@ public class TheQuadExampleMoving extends Game  implements DrawHandler,IteratorH
 	@Override
 	public void draw() {
 		program.setModelMatrix(IDENTITY);
-		BoundingFrustum frustum = camera.getBoundingFrustum();
+		final BoundingFrustum frustum = camera.getBoundingFrustum();
 		program.use();
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
@@ -167,7 +169,20 @@ public class TheQuadExampleMoving extends Game  implements DrawHandler,IteratorH
 			@Override
 			public void handle2(IBoundingBox obj) {
 				// TODO Auto-generated method stub
+				if(frustum.contains((BoundingBox) obj)==ContainmentType.Contains){
+					program.setAmbientColor(0f, 1f, 0f);
+				}
+				else if(frustum.contains((BoundingBox) obj)==ContainmentType.Intersects){
+					program.setAmbientColor(0f, 0f, 1f);
+				}
+				else {
+					program.setAmbientColor(1f, 0f, 0f);
+
+				}
+				
 				box.draw(program, obj.getMin(), obj.getMax());
+				program.setAmbientColor(0f, 0f, 0f);
+
 			}
 		});
 		
