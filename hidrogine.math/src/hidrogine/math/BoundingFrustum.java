@@ -45,7 +45,6 @@ public class BoundingFrustum {
     public BoundingFrustum(Matrix value) {
         createPlanes(value);
         createCorners();
-      
 
     }
 
@@ -124,46 +123,64 @@ public class BoundingFrustum {
      *            the box
      * @return the containment type
      */
+    public ContainmentType contains2(BoundingBox box) {
+        if (box.contains(this) != ContainmentType.Disjoint) {
+            return ContainmentType.Intersects;
+        }
+
+        IVector3[] vCorner = box.getCorners();
+        int iTotalIn = 0;
+
+        // test all 8 corners against the 6 sides
+        // if all points are behind 1 specific plane, we are out
+        // if we are in with all points, then we are fully in
+        for (int p = 0; p < 6; ++p) {
+
+            int iInCount = 8;
+            int iPtIn = 1;
+
+            for (int i = 0; i < 8; ++i) {
+
+                // test this point against the planes
+                if (planes[p].dotCoordinate(vCorner[i]) > 0) {
+                    iPtIn = 0;
+                    --iInCount;
+                }
+            }
+
+            // were all the points outside of plane p?
+            if (iInCount == 0)
+                return ContainmentType.Disjoint;
+
+            // check if they were all on the right side of the plane
+            iTotalIn += iPtIn;
+        }
+
+        // so if iTotalIn is 6, then all are inside the view
+        if (iTotalIn == 6)
+            return ContainmentType.Contains;
+
+        // we must be partly in then otherwise                return;
+
+        return ContainmentType.Intersects;
+    }
+
+    // MONOGAME
     public ContainmentType contains(BoundingBox box) {
-        int contains=0;
-        int disjoints =0;
-        
-        IVector3[] corners = box.getCorners();
-
-        // First we check if box is in frustum
-        for (IVector3 vec : corners) {
-            ContainmentType ct = contains(vec);
-            if(ct==ContainmentType.Disjoint){
-                ++disjoints;
-            }
-            else {
-                ++contains;
-            }
-     
-      
-            if(disjoints>0 && contains>0){
-                // one corner outside and one inside
-                return ContainmentType.Intersects;
-            }
-            else if(contains==corners.length){
-                // all corners inside
-                return ContainmentType.Contains;
-            }
+        Boolean intersects = false;
+        for (int i = 0; i < 6; ++i) {
+            PlaneIntersectionType planeIntersectionType = box.intersects(this.planes[i]);
+            if (planeIntersectionType==PlaneIntersectionType.Front) {
             
-        }
-        // is the box containing this frustum?
-        corners = this.getCorners();
-        for (IVector3 vec : corners) {
-            ContainmentType ct = box.contains(vec);
-            if(ct!=ContainmentType.Disjoint){
-                return ContainmentType.Intersects;
+                return ContainmentType.Disjoint;
             }
-        }
-        
-        // XXX - this is not true points cannot conclude everything...
-        
-        return ContainmentType.Disjoint;
+            if (planeIntersectionType== PlaneIntersectionType.Intersecting){
+                intersects = true;
+            }
 
+        }
+        return intersects ? ContainmentType.Intersects
+                : ContainmentType.Contains;
     }
 
     /**
@@ -259,11 +276,11 @@ public class BoundingFrustum {
         // Pre-calculate the different planes needed
         planes[0] = new Plane(-matrix.M[3] - matrix.M[1], -matrix.M[7]
                 - matrix.M[5], -matrix.M[11] - matrix.M[9], -matrix.M[15]
-                        - matrix.M[13]);
+                - matrix.M[13]);
 
         planes[1] = new Plane(matrix.M[2] - matrix.M[3], matrix.M[6]
                 - matrix.M[7], matrix.M[10] - matrix.M[11], matrix.M[14]
-                        - matrix.M[15]);
+                - matrix.M[15]);
 
         planes[2] = new Plane(-matrix.M[3] - matrix.M[0], -matrix.M[7]
                 - matrix.M[4], -matrix.M[11] - matrix.M[8], -matrix.M[15]
@@ -279,8 +296,8 @@ public class BoundingFrustum {
         planes[5] = new Plane(matrix.M[1] - matrix.M[3], matrix.M[5]
                 - matrix.M[7], matrix.M[9] - matrix.M[11], matrix.M[13]
                 - matrix.M[15]);
-    
-        for(int i=0; i < 6 ; ++i){
+
+        for (int i = 0; i < 6; ++i) {
             planes[i].normalize();
         }
     }

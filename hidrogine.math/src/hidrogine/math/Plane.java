@@ -78,13 +78,13 @@ public class Plane {
     /**
      * Dot coordinate.
      *
-     * @param value
+     * @param vCorner
      *            the value
      * @return the float
      */
-    public float dotCoordinate(Vector3 value) {
-        return ((((normal.getX() * value.getX()) + (normal.getY() * value
-                .getY())) + (normal.getZ() * value.getZ())) + distance);
+    public float dotCoordinate(IVector3 vCorner) {
+        return ((((normal.getX() * vCorner.getX()) + (normal.getY() * vCorner
+                .getY())) + (normal.getZ() * vCorner.getZ())) + distance);
     }
 
     /**

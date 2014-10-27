@@ -111,8 +111,8 @@ public class BoundingBox extends IBoundingBox {
      * @return the containment type
      */
     public ContainmentType contains(BoundingFrustum frustum) {
-        int contains=0;
-        int disjoints =0;
+        int ins=0;
+        int outs =0;
         
         IVector3[] corners = frustum.getCorners();
 
@@ -120,18 +120,17 @@ public class BoundingBox extends IBoundingBox {
         for (IVector3 vec : corners) {
             ContainmentType ct = contains(vec);
             if(ct==ContainmentType.Disjoint){
-                ++disjoints;
+                ++outs;
             }
             else {
-                ++contains;
+                ++ins;
             }
      
-      
-            if(disjoints>0 && contains>0){
+            if(outs>0 && ins>0){
                 // one corner outside and one inside
                 return ContainmentType.Intersects;
             }
-            else if(contains==corners.length){
+            else if(ins==corners.length){
                 // all corners inside
                 return ContainmentType.Contains;
             }
