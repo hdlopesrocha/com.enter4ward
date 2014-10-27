@@ -14,6 +14,10 @@ public abstract class IObject3D extends IBoundingSphere {
     private IModel3D model;
 
     private SpaceNode node;
+    protected void setNode(SpaceNode node) {
+        this.node = node;
+    }
+
     /**
      * Gets the model.
      *
@@ -89,6 +93,14 @@ public abstract class IObject3D extends IBoundingSphere {
     
     public void remove(){
         node.remove(this);
+    }
+
+    protected SpaceNode getNode() {
+        return node;
+    }
+
+    public void update(Space space) {
+        space.update(this);
     }
     
 }

@@ -5,16 +5,17 @@ import hidrogine.lwjgl.Grid;
 import hidrogine.lwjgl.Group;
 import hidrogine.lwjgl.Material;
 import hidrogine.lwjgl.Model3D;
+import hidrogine.math.BoundingBox;
 import hidrogine.math.BoundingFrustum;
+import hidrogine.math.ContainmentType;
+import hidrogine.math.IBoundingBox;
 import hidrogine.math.IObject3D;
 import hidrogine.math.IVector3;
 import hidrogine.math.Matrix;
+import hidrogine.math.NodeIteratorHandler;
 import hidrogine.math.ObjectIterator;
 import hidrogine.math.Space;
 import hidrogine.math.Vector3;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -25,11 +26,13 @@ import org.lwjgl.opengl.GL20;
 /**
  * The Class TheQuadExampleMoving.
  */
-public class TheQuadExampleMoving extends Game  implements DrawHandler,ObjectIterator{
-	public static final Matrix IDENTITY = new Matrix().identity(); 
-	public static final Matrix ROTATION = new Matrix(); 
-	public static final Matrix TRANSLATION = new Matrix(); 
+public class TheQuadExampleMoving extends Game implements DrawHandler,
+		ObjectIterator {
+	public static final Matrix IDENTITY = new Matrix().identity();
+	public static final Matrix ROTATION = new Matrix();
+	public static final Matrix TRANSLATION = new Matrix();
 	public DrawableBox box;
+	public IObject3D moving;
 
 	/**
 	 * Instantiates a new the quad example moving.
@@ -48,7 +51,6 @@ public class TheQuadExampleMoving extends Game  implements DrawHandler,ObjectIte
 	public static void main(String[] args) {
 		new TheQuadExampleMoving();
 	}
-
 
 	/** The grid. */
 	Grid grid;
@@ -69,36 +71,20 @@ public class TheQuadExampleMoving extends Game  implements DrawHandler,ObjectIte
 		space = new Space();
 		box = new DrawableBox();
 		/** The box. */
-		Model3D car = new Model3D("box.mat", "box.geo", 1f);
-		int size=8;
-		List<IObject3D> removed = new ArrayList<IObject3D>();
-		
-		for(int i=-size; i<= size ; ++i){
-			for(int j=-size; j<= size ; ++j){
-				for(int k=-size; k<= size ; ++k){
-					IVector3 vec = new Vector3(i, j, k);
-					IObject3D obj = new IObject3D(vec, car) {};
-					obj.insert(space);
-					
-					if(vec.length()<9){
-						removed.add(obj);
-					}
-				}
-			}		}
+		Model3D car = new Model3D("car.mat", "car.geo", 1f);
 
-		for(IObject3D obj : removed){
-			obj.remove();
-		}
-		
-		camera.lookAt(0, 0, 3, 0, 0, 0);
+		(new IObject3D(new Vector3(0, 0, 0), car) {
+		}).insert(space);
+		(moving = new IObject3D(new Vector3(), car) {
+		}).insert(space);
+
+		camera.lookAt(0, 0, 64, 0, 0, 0);
 		grid = new Grid(32);
 		program.setLightPosition(0, new Vector3(3, 3, 3));
 		program.setAmbientColor(0, 0, 0);
 		program.setDiffuseColor(1, 1, 1);
 		program.setMaterialShininess(1000);
 		program.setLightColor(0, new Vector3(1, 1, 1));
-
-
 
 	}
 
@@ -110,7 +96,11 @@ public class TheQuadExampleMoving extends Game  implements DrawHandler,ObjectIte
 	@Override
 	public void update() {
 		time += 0.003f;
-
+		// / moving.remove();
+		moving.setPosition(new Vector3((float) (10 * Math.cos(time * 4)),
+				(float) (10 * Math.sin(time * 4)), 0f));
+		moving.update(space);
+		// moving.insert(space);
 		float sense = 0.06f;
 		if (Mouse.isButtonDown(0)) {
 			camera.rotate(0, 1, 0, Mouse.getDX() * sense * 0.2f);
@@ -159,8 +149,9 @@ public class TheQuadExampleMoving extends Game  implements DrawHandler,ObjectIte
 				+ (runtime.totalMemory() - runtime.freeMemory()) / mb);
 
 	}
-	
-int draws = 0;
+
+	int draws = 0;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -169,7 +160,7 @@ int draws = 0;
 
 	@Override
 	public void draw() {
-		draws =0 ;
+		draws = 0;
 		program.setModelMatrix(IDENTITY);
 		final BoundingFrustum frustum = camera.getBoundingFrustum();
 		program.use();
@@ -177,38 +168,34 @@ int draws = 0;
 
 		useDefaultShader();
 
-	//	grid.draw(program);
+		// grid.draw(program);
 		program.setOpaque(true);
 		space.iterate(frustum, this);
 		program.setOpaque(false);
-		program.setMaterialAlpha(.2f);
-	/*	space.iterate(frustum, new NodeIteratorHandler() {
+		space.iterate(frustum, new NodeIteratorHandler() {
 			@Override
 			public void handle2(IBoundingBox obj) {
 				ContainmentType ct = frustum.contains((BoundingBox) obj);
-				if(ct==ContainmentType.Contains) {
+				if (ct == ContainmentType.Contains) {
 					program.setAmbientColor(0f, 1f, 0f);
+				} else {
+					program.setAmbientColor(1f, 1f, 1f);
 				}
-				else if(ct==ContainmentType.Intersects) {
-					program.setAmbientColor(0f, 0f, 1f);
-				}
-				else {
-					program.setAmbientColor(1f, 0f, 0f);
-				}
-				program.setMaterialAlpha(.5f);
+				program.setMaterialAlpha(.1f);
 				box.draw(program, obj.getMin(), obj.getMax());
 			}
-		});*/
+		});
 		program.setMaterialAlpha(1f);
 		program.setAmbientColor(0f, 0f, 0f);
-		space.iterate(frustum,this);
+		// space.iterate(frustum, this);
 		GL20.glUseProgram(0);
-		System.out.println("Draws: "+draws);
+		System.out.println("Draws: " + draws);
 	}
 
 	@Override
 	public Matrix onDraw(IObject3D obj, Group group, Material material) {
 		Matrix matrix = TRANSLATION.identity();
+
 		if (material.getName().equals("c0")) {
 			program.setDiffuseColor(
 					(float) (Math.sin(time) + 1) / 2f,
@@ -216,23 +203,27 @@ int draws = 0;
 					(float) (Math.sin(time * Math.PI / 2)
 							* Math.cos(time * Math.PI / 2) + 1) / 2f);
 		}
-		if (group.getName().startsWith("w")	&& group.getName().length() == 2) {
-			IVector3 center = new Vector3(group.getCenter()).multiply(-1f);
-			matrix.translate(center).multiply(ROTATION.createRotationX(time * 32));
-			center.multiply(-1f);
-			matrix.translate(center);
+		if (obj.equals(moving)) {
+			if (group.getName().startsWith("w")
+					&& group.getName().length() == 2) {
+				IVector3 center = new Vector3(group.getCenter()).multiply(-1f);
+				matrix.translate(center).multiply(
+						ROTATION.createRotationX(time * 48));
+				center.multiply(-1f);
+				matrix.translate(center);
+			}
+			matrix.multiply(new Matrix()
+					.createRotationZ((float) (Math.PI + time * 4)));
 		}
-		matrix.translate(obj.getPosition());
-		return matrix;
+		return matrix.translate(obj.getPosition());
 	}
 
 	@Override
 	public void handleObject(IObject3D obj) {
 		draws++;
 		Model3D model = (Model3D) obj.getModel();
-		model.draw(obj,program, TheQuadExampleMoving.this);
-	//	model.drawBoxs(program);
+		model.draw(obj, program, TheQuadExampleMoving.this);
+		// model.drawBoxs(program);
 	}
-	
 
 }

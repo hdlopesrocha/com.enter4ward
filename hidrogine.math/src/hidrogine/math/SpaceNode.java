@@ -85,35 +85,9 @@ class SpaceNode extends BoundingBox {
         return null;
     }
     
-    public SpaceNode insert(IObject3D obj){
-        boolean childContains=false;
-        SpaceNode ret=null;
-        
-        
-        if(canSplit()){
-            for(int i=0;i < 3 ; ++i){
-                SpaceNode node = getChild(i);
-                if(node.contains(obj)==ContainmentType.Contains){
-                    childContains=true;
-                    ret=node.insert(obj);
-                    break;
-                }
-            }
-        }
-        ++count;
-        
-        if(!canSplit() || !childContains) {
-           // System.out.println("=== INSERTION ===");
-           // System.out.println(toString());
-            container.add(obj);
-            ret = this;
-        }
-        clearChild();
-  
-        return ret;
-    }
 
-    private void clearChild(){
+
+    protected void clearChild(){
         if(child!=null){
             for(int i=0;i < 3 ; ++i){
                 SpaceNode node = child[i];
@@ -150,22 +124,22 @@ class SpaceNode extends BoundingBox {
         }
     }
 
-    public boolean canSplit() {
+    protected boolean canSplit() {
         return getMin().distance(getMax()) > 1f;
     }
 
     public void iterate(BoundingFrustum frustum, NodeIteratorHandler nodeh ,int j){
-        /*String tabs = "";
-        for(int k = 0; k < j; ++k){
-            tabs += "  |  ";
-        }*/
+     //  String tabs = "";
+      //  for(int k = 0; k < j; ++k){
+      //      tabs += "  |  ";
+      //  }
         nodeh.handle2(this);
-       // System.out.println(tabs+"["+container.size()+"/"+count+"] "+toString()+" "+expanded);
+       // System.out.println(tabs+"["+container.size()+"/"+count+"] "+toString());
         
         if(child!=null){
             for(int i=0; i < 3; ++i){
                 SpaceNode node = child[i];
-                if(node!=null && frustum.contains(node)!=ContainmentType.Disjoint){
+                if(node!=null && node.count>0 && frustum.contains(node)!=ContainmentType.Disjoint){
                     node.iterate(frustum,nodeh,1+j);
                 }
             } 
@@ -183,16 +157,16 @@ class SpaceNode extends BoundingBox {
         if(child!=null){
             for(int i=0; i < 3; ++i){
                 SpaceNode node = child[i];
-                if(node!=null && frustum.contains(node)!=ContainmentType.Disjoint){
+                if(node!=null && node.count>0 && frustum.contains(node)!=ContainmentType.Disjoint){
                     node.iterate(frustum, handler);
                 }
             } 
         }
     }
 
-    public void remove(IObject3D iObject3D) {
+    public void remove(IObject3D obj) {
         SpaceNode node = this;
-        container.remove(iObject3D);
+        container.remove(obj);
         
         
         while(node!=null){

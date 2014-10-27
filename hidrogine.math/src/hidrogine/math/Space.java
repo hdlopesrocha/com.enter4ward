@@ -25,24 +25,86 @@ public class Space {
         root = new SpaceNode();
     }
 
-    protected SpaceNode insert(IObject3D obj) {
-        // expand phase
-      //  System.out.println("=== EXPANSION ===");
-      //  System.out.println(root.toString());
-        while (root.contains(obj)!=ContainmentType.Contains) {
-            root = root.expand(obj);
-        //    System.out.println(root.toString());
-
+    protected void update(IObject3D obj){
+        SpaceNode node = obj.getNode();
+        node.container.remove(obj);
+        
+        
+        while(node!=null && node.contains(obj)!=ContainmentType.Contains){
+            node.count--;
+            node.clearChild();
+            node = node.parent;
         }
         
+        if(node==null){
+            expandRoot(obj);
+            node = root;
+        }
+        
+       insert(obj, node);
+    }
+    
+    
+    private void expandRoot(IObject3D obj){
+        //  System.out.println("=== EXPANSION ===");
+        //  System.out.println(root.toString());
+          while (root.contains(obj)!=ContainmentType.Contains) {
+              root.clearChild();
+              root = root.expand(obj);
+              
+          //    System.out.println(root.toString());
+
+          }
+    }
+
+    
+    protected SpaceNode insert(IObject3D obj, SpaceNode node) {
         // insertion
-        SpaceNode node = root.insert(obj);
+        while(true){
+            ++node.count;
+
+            boolean childContains=false;
+            boolean canSplit = node.canSplit();
+            if(canSplit){
+                for(int i=0;i < 3 ; ++i){
+                    SpaceNode child = node.getChild(i);
+                    if(child.contains(obj)==ContainmentType.Contains){
+                        childContains=true;
+                        node=child;
+                        break;
+                    }
+                }
+            }
+            
+            if(!canSplit || !childContains) {
+               // System.out.println("=== INSERTION ===");
+               // System.out.println(toString());
+                obj.setNode(node);
+                node.container.add(obj);
+                break;
+            }
+      
+        }
+        for(SpaceNode s =node; s!=null;s=s.parent){
+            s.clearChild();
+        }
         
         // root compression
         compress();
        // System.out.println("=== COMPRESSION ===");
        // System.out.println(root.toString());
         return node;
+    }
+
+    
+    
+    
+    protected SpaceNode insert(IObject3D obj) {
+        // expand phase
+        expandRoot(obj);
+        
+        // insertion
+        return insert(obj, root);
     }
 
     private void compress() {
@@ -64,7 +126,8 @@ public class Space {
             } else {
                 break;
             }
-        }        
+        }
+        root.parent=null;
     }
 
 }
