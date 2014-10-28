@@ -73,9 +73,19 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		box = new DrawableBox();
 		/** The box. */
 		Model3D car = new Model3D("car.mat", "car.geo", 1f);
+		// Model3D box = new Model3D("box.mat", "box.geo", 1f);
 
 		(new IObject3D(new Vector3(0, 0, 0), car) {
 		}).insert(space);
+
+		// (new IObject3D(new Vector3(14, 0, 0), box) {}).insert(space);
+
+		// (new IObject3D(new Vector3(-14, 0, 0), box) {}).insert(space);
+
+		// (new IObject3D(new Vector3(0, 14, 0), box) {}).insert(space);
+
+		// (new IObject3D(new Vector3(0, -14, 0), box) { }).insert(space);
+
 		(moving = new IObject3D(new Vector3(), car) {
 		}).insert(space);
 
@@ -180,16 +190,15 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 				if (((SpaceNode) obj).getStoredObjectsCount() > 0) {
 					program.setAmbientColor(0f, 0f, 1f);
 					program.setMaterialAlpha(.5f);
-				}
-				else {
-	                                ContainmentType ct = frustum.contains((BoundingBox) obj);
-	                                if (ct == ContainmentType.Contains) {
-	                                        program.setAmbientColor(0f, 1f, 0f);
-	                                } else {
-	                                        program.setAmbientColor(1f, 1f, 1f);
-	                                }
+				} else {
+					ContainmentType ct = frustum.contains((BoundingBox) obj);
+					if (ct == ContainmentType.Contains) {
+						program.setAmbientColor(0f, 1f, 0f);
+					} else {
+						program.setAmbientColor(1f, 1f, 1f);
+					}
 
-				    program.setMaterialAlpha(.1f);				    
+					program.setMaterialAlpha(.1f);
 				}
 				box.draw(program, obj.getMin(), obj.getMax());
 			}

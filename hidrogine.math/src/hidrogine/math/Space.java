@@ -129,6 +129,9 @@ public class Space {
         compress();
         // System.out.println("=== COMPRESSION ===");
         // System.out.println(root.toString());
+        
+      
+        
         return node;
     }
 
