@@ -246,18 +246,18 @@ public class SpaceNode extends BoundingBox {
      */
     public void iterate(BoundingFrustum frustum, NodeIteratorHandler nodeh,
             int j) {
-         String tabs = "";
-         for(int k = 0; k < j; ++k){
-         tabs += "  |  ";
-         }
+         //String tabs = "";
+         //for(int k = 0; k < j; ++k){
+         //tabs += "  |  ";
+        // }
         nodeh.handle2(this);
-         System.out.println(tabs+"["+container.size()+"/"+count+"] "+toString());
+        // System.out.println(tabs+"["+container.size()+"/"+count+"] "+toString());
 
         if (child != null) {
             int intersections=0;
             for (int i = 0; i < 3; ++i) {
                 SpaceNode node = child[i];
-                if (node != null /*&& node.count > 0*/
+                if (node != null &&  node.count > 0
                         && (intersections==2 || frustum.contains(node) != ContainmentType.Disjoint)) {
                     ++intersections;
                     node.iterate(frustum, nodeh, 1 + j);
