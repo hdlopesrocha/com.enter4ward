@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * The Class SpaceNode.
  */
-public class SpaceNode extends BoundingBox {
+class SpaceNode extends BoundingBox {
 
     /** The Constant LEFT. */
     static final int LEFT = 0;
@@ -242,7 +242,7 @@ public class SpaceNode extends BoundingBox {
         // for(int k = 0; k < j; ++k){
         // tabs += "  |  ";
         // }
-        nodeh.onNodeVisible(this);
+        nodeh.onNodeVisible(this,getStoredObjectsCount());
         // System.out.println(tabs+"["+container.size()+"/"+count+"] "+toString());
 
         if (child != null) {

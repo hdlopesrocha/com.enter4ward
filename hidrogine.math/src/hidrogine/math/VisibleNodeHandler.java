@@ -12,5 +12,5 @@ public interface VisibleNodeHandler {
      * @param obj
      *            the obj
      */
-    public void onNodeVisible(IBoundingBox obj);
+    public void onNodeVisible(IBoundingBox obj, int storedObjectsCount);
 }

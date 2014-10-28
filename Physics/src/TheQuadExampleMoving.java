@@ -12,11 +12,10 @@ import hidrogine.math.IBoundingBox;
 import hidrogine.math.IObject3D;
 import hidrogine.math.IVector3;
 import hidrogine.math.Matrix;
+import hidrogine.math.Space;
+import hidrogine.math.Vector3;
 import hidrogine.math.VisibleNodeHandler;
 import hidrogine.math.VisibleObjectHandler;
-import hidrogine.math.Space;
-import hidrogine.math.SpaceNode;
-import hidrogine.math.Vector3;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -72,7 +71,7 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		space = new Space();
 		box = new DrawableBox();
 		/** The box. */
-		Model3D car = new Model3D("car.mat", "car.geo", 1f);
+		//Model3D car = new Model3D("car.mat", "car.geo", 1f);
 	    Model3D box = new Model3D("box.mat", "box.geo", 1f);
 
 		(new IObject3D(new Vector3(0, 0, 0), box) {
@@ -179,8 +178,8 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		program.setOpaque(false);
 		space.iterate(frustum, new VisibleNodeHandler() {
 			@Override
-			public void onNodeVisible(IBoundingBox obj) {
-				if (((SpaceNode) obj).getStoredObjectsCount() > 0) {
+			public void onNodeVisible(IBoundingBox obj, int storedObjectsCount) {
+				if (storedObjectsCount > 0) {
 					program.setAmbientColor(0f, 0f, 1f);
 					program.setMaterialAlpha(.5f);
 				} else {
