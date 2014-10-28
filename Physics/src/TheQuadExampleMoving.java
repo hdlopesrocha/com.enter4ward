@@ -7,6 +7,7 @@ import hidrogine.lwjgl.Material;
 import hidrogine.lwjgl.Model3D;
 import hidrogine.math.BoundingBox;
 import hidrogine.math.BoundingFrustum;
+import hidrogine.math.Camera;
 import hidrogine.math.ContainmentType;
 import hidrogine.math.IBoundingBox;
 import hidrogine.math.IObject3D;
@@ -33,7 +34,7 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 	public static final Matrix TRANSLATION = new Matrix();
 	public DrawableBox box;
 	public IObject3D moving;
-
+	public Camera camera;
 	/**
 	 * Instantiates a new the quad example moving.
 	 */
@@ -68,6 +69,8 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 	 */
 	@Override
 	public void setup() {
+		camera = new Camera(1280, 720);
+
 		space = new Space();
 		box = new DrawableBox();
 		/** The box. */
@@ -82,11 +85,11 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 
 		camera.lookAt(0, 0, 48, 0, 0, 0);
 		grid = new Grid(32);
-		program.setLightPosition(0, new Vector3(3, 3, 3));
-		program.setAmbientColor(0, 0, 0);
-		program.setDiffuseColor(1, 1, 1);
-		program.setMaterialShininess(1000);
-		program.setLightColor(0, new Vector3(1, 1, 1));
+		getProgram().setLightPosition(0, new Vector3(3, 3, 3));
+		getProgram().setAmbientColor(0, 0, 0);
+		getProgram().setDiffuseColor(1, 1, 1);
+		getProgram().setMaterialShininess(1000);
+		getProgram().setLightColor(0, new Vector3(1, 1, 1));
 
 	}
 
@@ -134,8 +137,9 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 			camera.move(0, 0, -sense);
 		}
 		Vector3 camPos = camera.getPosition();
-		program.setLightPosition(0, camPos);
-		program.setTime(time * 10);
+		getProgram().setLightPosition(0, camPos);
+		getProgram().setTime(time * 10);
+		getProgram().update(camera);
 	}
 
 	/**
@@ -164,39 +168,40 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 
 	@Override
 	public void draw() {
-		draws = 0;
-		program.setModelMatrix(IDENTITY);
 		final BoundingFrustum frustum = camera.getBoundingFrustum();
-		program.use();
+
+		draws = 0;
+		getProgram().setModelMatrix(IDENTITY);
+		getProgram().use();
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		useDefaultShader();
 
 		// grid.draw(program);
-		program.setOpaque(true);
+		getProgram().setOpaque(true);
 		space.iterate(frustum, this);
-		program.setOpaque(false);
+		getProgram().setOpaque(false);
 		space.iterate(frustum, new VisibleNodeHandler() {
 			@Override
 			public void onNodeVisible(IBoundingBox obj, int storedObjectsCount) {
 				if (storedObjectsCount > 0) {
-					program.setAmbientColor(0f, 0f, 1f);
-					program.setMaterialAlpha(.5f);
+					getProgram().setAmbientColor(0f, 0f, 1f);
+					getProgram().setMaterialAlpha(.5f);
 				} else {
 					ContainmentType ct = frustum.contains((BoundingBox) obj);
 					if (ct == ContainmentType.Contains) {
-						program.setAmbientColor(0f, 1f, 0f);
+						getProgram().setAmbientColor(0f, 1f, 0f);
 					} else {
-						program.setAmbientColor(1f, 1f, 1f);
+						getProgram().setAmbientColor(1f, 1f, 1f);
 					}
 
-					program.setMaterialAlpha(.1f);
+					getProgram().setMaterialAlpha(.1f);
 				}
-				box.draw(program, obj.getMin(), obj.getMax());
+				box.draw(getProgram(), obj.getMin(), obj.getMax());
 			}
 		});
-		program.setMaterialAlpha(1f);
-		program.setAmbientColor(0f, 0f, 0f);
+		getProgram().setMaterialAlpha(1f);
+		getProgram().setAmbientColor(0f, 0f, 0f);
 		space.iterate(frustum, this);
 		GL20.glUseProgram(0);
 		setTitle();
@@ -207,7 +212,7 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		Matrix matrix = TRANSLATION.identity();
 
 		if (material.getName().equals("c0")) {
-			program.setDiffuseColor(
+			getProgram().setDiffuseColor(
 					(float) (Math.sin(time) + 1) / 2f,
 					(float) (Math.cos(time * Math.E / 2) + 1) / 2f,
 					(float) (Math.sin(time * Math.PI / 2)
@@ -232,7 +237,7 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 	public void onObjectVisible(IObject3D obj) {
 		draws++;
 		Model3D model = (Model3D) obj.getModel();
-		model.draw(obj, program, TheQuadExampleMoving.this);
+		model.draw(obj, getProgram(), TheQuadExampleMoving.this);
 		// model.drawBoxs(program);
 	}
 
