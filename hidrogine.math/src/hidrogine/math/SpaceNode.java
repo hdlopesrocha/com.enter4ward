@@ -237,7 +237,8 @@ class SpaceNode extends BoundingBox {
      * @param j
      *            the j
      */
-    public void iterate(BoundingFrustum frustum, VisibleNodeHandler nodeh, int j) {
+    @Deprecated
+    public void handleVisibleNodes(BoundingFrustum frustum, VisibleNodeHandler nodeh, int j) {
         // String tabs = "";
         // for(int k = 0; k < j; ++k){
         // tabs += "  |  ";
@@ -253,7 +254,7 @@ class SpaceNode extends BoundingBox {
                         && node.count > 0
                         && (intersections == 2 || frustum.contains(node) != ContainmentType.Disjoint)) {
                     ++intersections;
-                    node.iterate(frustum, nodeh, 1 + j);
+                    node.handleVisibleNodes(frustum, nodeh, 1 + j);
                 }
             }
         }
@@ -267,7 +268,7 @@ class SpaceNode extends BoundingBox {
      * @param handler
      *            the handler
      */
-    public void iterate(BoundingFrustum frustum, VisibleObjectHandler handler) {
+    public void handleVisibleObjects(BoundingFrustum frustum, VisibleObjectHandler handler) {
         for (IBoundingSphere obj : container) {
             if (frustum.contains(obj) != ContainmentType.Disjoint) {
                 handler.onObjectVisible(obj);
@@ -283,7 +284,7 @@ class SpaceNode extends BoundingBox {
                         && node.count > 0
                         && (intersections == 2 || frustum.contains(node) != ContainmentType.Disjoint)) {
                     ++intersections;
-                    node.iterate(frustum, handler);
+                    node.handleVisibleObjects(frustum, handler);
                 }
             }
         }
@@ -297,7 +298,7 @@ class SpaceNode extends BoundingBox {
      * @param handler
      *            the handler
      */
-    public void iterate(IBoundingSphere obj1, ObjectCollisionHandler handler) {
+    public void handleObjectCollisions(IBoundingSphere obj1, ObjectCollisionHandler handler) {
         for (IBoundingSphere obj2 : container) {
             if (!obj2.equals(obj1) && obj1.intersects(obj2)) {
                 handler.onObjectCollision(obj1, obj2);
@@ -312,7 +313,7 @@ class SpaceNode extends BoundingBox {
                         && node.count > 0
                         && (intersections == 2 || node.contains(obj1) != ContainmentType.Disjoint)) {
                     ++intersections;
-                    node.iterate(obj1, handler);
+                    node.handleObjectCollisions(obj1, handler);
                 }
             }
         }

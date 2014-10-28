@@ -16,7 +16,7 @@ public class Space {
      */
     public void handleVisibleObjects(BoundingFrustum frustum, VisibleObjectHandler handler) {
         if (root != null) {
-            root.iterate(frustum, handler);
+            root.handleVisibleObjects(frustum, handler);
         }
     }
 
@@ -31,13 +31,13 @@ public class Space {
     @Deprecated
     public void handleVisibleNodes(BoundingFrustum frustum, VisibleNodeHandler handler) {
         if (root != null) {
-            root.iterate(frustum, handler, 0);
+            root.handleVisibleNodes(frustum, handler, 0);
         }
     }
 
     public void handleObjectCollisions(IBoundingSphere sphere, ObjectCollisionHandler handler) {
         if (root != null) {
-            root.iterate(sphere, handler);
+            root.handleObjectCollisions(sphere, handler);
         }
     }
     
