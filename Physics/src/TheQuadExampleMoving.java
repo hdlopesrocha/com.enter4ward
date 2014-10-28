@@ -34,7 +34,6 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 	public static final Matrix TRANSLATION = new Matrix();
 	public DrawableBox box;
 	public IObject3D moving;
-	public IObject3D moving2;
 
 	/**
 	 * Instantiates a new the quad example moving.
@@ -78,17 +77,6 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 
 		(new IObject3D(new Vector3(0, 0, 0), car) {
 		}).insert(space);
-
-		// (new IObject3D(new Vector3(14, 0, 0), box) {}).insert(space);
-
-		// (new IObject3D(new Vector3(-14, 0, 0), box) {}).insert(space);
-
-		// (new IObject3D(new Vector3(0, 14, 0), box) {}).insert(space);
-
-		// (new IObject3D(new Vector3(0, -14, 0), box) { }).insert(space);
-
-		(moving2 = new IObject3D(new Vector3(0,-5,0), car) {
-		}).insert(space);
 		
 		(moving = new IObject3D(new Vector3(), car) {
 		}).insert(space);
@@ -115,9 +103,6 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		moving.setPosition(new Vector3((float) (10 * Math.cos(time * 4)),
 				(float) (10 * Math.sin(time * 4)), 0f));
 		moving.update(space);
-		
-		moving2.getPosition().addY(-0.1f);
-		moving2.update(space);
 		
 		// moving.insert(space);
 		float sense = 0.06f;

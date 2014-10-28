@@ -112,7 +112,7 @@ public abstract class IBoundingBox {
      * @return the length x
      */
     public float getLengthX() {
-        return Math.abs(getMax().getX() - getMin().getX());
+        return getMax().getX() - getMin().getX();
     }
 
     /*
@@ -126,7 +126,7 @@ public abstract class IBoundingBox {
      * @return the length y
      */
     public float getLengthY() {
-        return Math.abs(getMax().getY() - getMin().getY());
+        return getMax().getY() - getMin().getY();
     }
 
     /*
@@ -140,7 +140,7 @@ public abstract class IBoundingBox {
      * @return the length z
      */
     public float getLengthZ() {
-        return Math.abs(getMax().getZ() - getMin().getZ());
+        return getMax().getZ() - getMin().getZ();
     }
 
     /*
