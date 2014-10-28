@@ -1,6 +1,5 @@
 package hidrogine.math;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class Plane.
@@ -48,7 +47,7 @@ public class Plane {
         normal = ab.cross(ac);
         this.distance = -(normal.dot(a));
         normal.normalize();
-        
+
     }
 
     /**

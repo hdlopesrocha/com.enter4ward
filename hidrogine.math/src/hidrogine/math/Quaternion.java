@@ -1,6 +1,5 @@
 package hidrogine.math;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class Quaternion.
@@ -427,8 +426,6 @@ public class Quaternion {
     /**
      * Multiply.
      *
-     * @param quaternion1
-     *            the quaternion1
      * @param quaternion2
      *            the quaternion2
      * @return the quaternion
@@ -485,6 +482,8 @@ public class Quaternion {
 
     /**
      * Normalize.
+     *
+     * @return the quaternion
      */
     public Quaternion normalize() {
         float f1 = 1f / (float) Math
@@ -527,18 +526,38 @@ public class Quaternion {
 
     }
 
+    /**
+     * Gets the x.
+     *
+     * @return the x
+     */
     public float getX() {
         return X;
     }
 
+    /**
+     * Gets the y.
+     *
+     * @return the y
+     */
     public float getY() {
         return Y;
     }
 
+    /**
+     * Gets the z.
+     *
+     * @return the z
+     */
     public float getZ() {
         return Z;
     }
 
+    /**
+     * Gets the w.
+     *
+     * @return the w
+     */
     public float getW() {
         return W;
     }

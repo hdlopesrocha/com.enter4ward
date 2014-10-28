@@ -1,6 +1,5 @@
 package hidrogine.math;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Interface ISphere.
@@ -90,8 +89,27 @@ public abstract class IBoundingSphere {
         return this;
     }
 
+    /**
+     * Intersects.
+     *
+     * @param plane
+     *            the plane
+     * @return the plane intersection type
+     */
     public PlaneIntersectionType intersects(Plane plane) {
         // TODO Auto-generated method stub
         return plane.intersects(this);
+    }
+
+    /**
+     * Intersects.
+     *
+     * @param sphere
+     *            the sphere
+     * @return the boolean
+     */
+    public Boolean intersects(IBoundingSphere sphere) {
+        return getPosition().distance(sphere.getPosition()) < getRadius()
+                + sphere.getRadius();
     }
 }

@@ -1,6 +1,5 @@
 package hidrogine.math;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class Vector3.
@@ -53,10 +52,16 @@ public class Vector3 extends IVector3 {
         z = vec.getZ();
     }
 
+    /**
+     * Instantiates a new vector3.
+     *
+     * @param value
+     *            the value
+     */
     public Vector3(float value) {
-            x = value;
-            y = value;
-            z = value;
+        x = value;
+        y = value;
+        z = value;
     }
 
     /*
@@ -123,6 +128,15 @@ public class Vector3 extends IVector3 {
         return this;
     }
 
+    /**
+     * Transform.
+     *
+     * @param frontVec
+     *            the front vec
+     * @param matrix
+     *            the matrix
+     * @return the i vector3
+     */
     public static IVector3 transform(IVector3 frontVec, Matrix matrix) {
         Vector3 result;
 
@@ -139,17 +153,23 @@ public class Vector3 extends IVector3 {
         return result;
     }
 
+    /**
+     * Transform.
+     *
+     * @param value
+     *            the value
+     * @param rotation
+     *            the rotation
+     * @return the i vector3
+     */
     public static IVector3 transform(IVector3 value, Quaternion rotation) {
         Vector3 u = new Vector3(rotation.getX(), rotation.getY(),
                 rotation.getZ());
         float s = rotation.getW();
-        IVector3 p1 = new Vector3(u).multiply(2f).multiply(
-              u.dot(value));
+        IVector3 p1 = new Vector3(u).multiply(2f).multiply(u.dot(value));
         IVector3 p2 = new Vector3(value).multiply(s * s - u.dot(u));
         IVector3 p3 = new Vector3(u).cross(value).multiply(2.0f * s);
         return p1.add(p2).add(p3);
     }
-    
-
 
 }

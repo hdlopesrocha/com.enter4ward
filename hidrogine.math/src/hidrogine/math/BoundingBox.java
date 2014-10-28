@@ -1,6 +1,5 @@
 package hidrogine.math;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class Box.
@@ -108,44 +107,42 @@ public class BoundingBox extends IBoundingBox {
      * @return the containment type
      */
     public ContainmentType contains(BoundingFrustum frustum) {
-        int ins=0;
-        int outs =0;
-        
+        int ins = 0;
+        int outs = 0;
+
         IVector3[] corners = frustum.getCorners();
 
         // First we check if frustum is in box
         for (IVector3 vec : corners) {
             ContainmentType ct = contains(vec);
-            if(ct==ContainmentType.Disjoint){
+            if (ct == ContainmentType.Disjoint) {
                 ++outs;
-            }
-            else {
+            } else {
                 ++ins;
             }
-     
-            if(outs>0 && ins>0){
+
+            if (outs > 0 && ins > 0) {
                 // one corner outside and one inside
                 return ContainmentType.Intersects;
-            }
-            else if(ins==corners.length){
+            } else if (ins == corners.length) {
                 // all corners inside
                 return ContainmentType.Contains;
             }
-            
+
         }
         // is the frustum containing this box?
         corners = this.getCorners();
         for (IVector3 vec : corners) {
             ContainmentType ct = frustum.contains(vec);
-            if(ct!=ContainmentType.Disjoint){
+            if (ct != ContainmentType.Disjoint) {
                 return ContainmentType.Intersects;
             }
         }
-        
+
         // XXX - this is not true points cannot conclude everything...
 
         return ContainmentType.Disjoint;
- 
+
     }
 
     /**
@@ -295,10 +292,6 @@ public class BoundingBox extends IBoundingBox {
         }
         return false;
     }
-
-
-
-
 
     /*
      * (non-Javadoc)

@@ -1,6 +1,5 @@
 package hidrogine.math;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class Box.
@@ -26,10 +25,14 @@ public class BoundingSphere extends IBoundingSphere {
         this.radius = radius;
     }
 
+    /**
+     * Instantiates a new bounding sphere.
+     */
     public BoundingSphere() {
         this.position = new Vector3();
         this.radius = 0f;
     }
+
     /*
      * (non-Javadoc)
      * 
@@ -69,8 +72,5 @@ public class BoundingSphere extends IBoundingSphere {
     public void setRadius(float radius) {
         this.radius = radius;
     }
-
-
-
 
 }

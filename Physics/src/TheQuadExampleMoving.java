@@ -12,8 +12,8 @@ import hidrogine.math.IBoundingBox;
 import hidrogine.math.IObject3D;
 import hidrogine.math.IVector3;
 import hidrogine.math.Matrix;
-import hidrogine.math.NodeIteratorHandler;
-import hidrogine.math.ObjectIterator;
+import hidrogine.math.VisibleNodeHandler;
+import hidrogine.math.VisibleObjectHandler;
 import hidrogine.math.Space;
 import hidrogine.math.SpaceNode;
 import hidrogine.math.Vector3;
@@ -28,7 +28,7 @@ import org.lwjgl.opengl.GL20;
  * The Class TheQuadExampleMoving.
  */
 public class TheQuadExampleMoving extends Game implements DrawHandler,
-		ObjectIterator {
+		VisibleObjectHandler {
 	public static final Matrix IDENTITY = new Matrix().identity();
 	public static final Matrix ROTATION = new Matrix();
 	public static final Matrix TRANSLATION = new Matrix();
@@ -73,12 +73,12 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		box = new DrawableBox();
 		/** The box. */
 		Model3D car = new Model3D("car.mat", "car.geo", 1f);
-		// Model3D box = new Model3D("box.mat", "box.geo", 1f);
+	    Model3D box = new Model3D("box.mat", "box.geo", 1f);
 
-		(new IObject3D(new Vector3(0, 0, 0), car) {
+		(new IObject3D(new Vector3(0, 0, 0), box) {
 		}).insert(space);
 		
-		(moving = new IObject3D(new Vector3(), car) {
+		(moving = new IObject3D(new Vector3(), box) {
 		}).insert(space);
 
 		camera.lookAt(0, 0, 48, 0, 0, 0);
@@ -177,9 +177,9 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		program.setOpaque(true);
 		space.iterate(frustum, this);
 		program.setOpaque(false);
-		space.iterate(frustum, new NodeIteratorHandler() {
+		space.iterate(frustum, new VisibleNodeHandler() {
 			@Override
-			public void handle2(IBoundingBox obj) {
+			public void onNodeVisible(IBoundingBox obj) {
 				if (((SpaceNode) obj).getStoredObjectsCount() > 0) {
 					program.setAmbientColor(0f, 0f, 1f);
 					program.setMaterialAlpha(.5f);

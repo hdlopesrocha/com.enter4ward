@@ -1,6 +1,5 @@
 package hidrogine.math;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class BoundingFrustum.
@@ -158,21 +157,29 @@ public class BoundingFrustum {
         if (iTotalIn == 6)
             return ContainmentType.Contains;
 
-        // we must be partly in then otherwise                return;
+        // we must be partly in then otherwise return;
 
         return ContainmentType.Intersects;
     }
 
     // MONOGAME
+    /**
+     * Contains.
+     *
+     * @param box
+     *            the box
+     * @return the containment type
+     */
     public ContainmentType contains(BoundingBox box) {
         Boolean intersects = false;
         for (int i = 0; i < 6; ++i) {
-            PlaneIntersectionType planeIntersectionType = box.intersects(this.planes[i]);
-            if (planeIntersectionType==PlaneIntersectionType.Front) {
-            
+            PlaneIntersectionType planeIntersectionType = box
+                    .intersects(this.planes[i]);
+            if (planeIntersectionType == PlaneIntersectionType.Front) {
+
                 return ContainmentType.Disjoint;
             }
-            if (planeIntersectionType== PlaneIntersectionType.Intersecting){
+            if (planeIntersectionType == PlaneIntersectionType.Intersecting) {
                 intersects = true;
             }
 
@@ -245,6 +252,11 @@ public class BoundingFrustum {
         return corners;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
     public String toString() {
         return "{Near:" + planes[4].toString() + " Far:" + planes[1].toString()
                 + " Left:" + planes[2].toString() + " Right:"
@@ -269,6 +281,9 @@ public class BoundingFrustum {
 
     /**
      * Creates the planes.
+     *
+     * @param matrix
+     *            the matrix
      */
     void createPlanes(Matrix matrix) {
         // Pre-calculate the different planes needed

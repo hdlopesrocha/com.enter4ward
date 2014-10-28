@@ -1,6 +1,5 @@
 package hidrogine.math;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class Vector2.
@@ -45,7 +44,9 @@ public class Vector2 extends IVector2 {
         y = vec.getY();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see hidrogine.math.IVector2#getX()
      */
     @Override
@@ -53,7 +54,9 @@ public class Vector2 extends IVector2 {
         return x;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see hidrogine.math.IVector2#setX(float)
      */
     @Override
@@ -61,7 +64,9 @@ public class Vector2 extends IVector2 {
         x = xx;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see hidrogine.math.IVector2#getY()
      */
     @Override
@@ -69,14 +74,14 @@ public class Vector2 extends IVector2 {
         return y;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see hidrogine.math.IVector2#setY(float)
      */
     @Override
     public final void setY(final float yy) {
         y = yy;
     }
-
-
 
 }

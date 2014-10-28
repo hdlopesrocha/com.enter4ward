@@ -18,14 +18,19 @@ public class Matrix {
         M[0] = M[1] = M[2] = M[3] = M[4] = M[5] = M[6] = M[7] = M[8] = M[9] = M[10] = M[11] = M[12] = M[13] = M[14] = M[15] = 0f;
     }
 
+    /**
+     * Instantiates a new matrix.
+     *
+     * @param m
+     *            the m
+     */
     public Matrix(Matrix m) {
-        for(int i=0 ; i < 16 ; ++i){
-            M[i]=m.M[i];
+        for (int i = 0; i < 16; ++i) {
+            M[i] = m.M[i];
         }
-        
+
     }
 
-    
     /**
      * Instantiates a new matrix.
      *
@@ -89,22 +94,22 @@ public class Matrix {
      * @return the matrix
      */
     public Matrix identity() {
-        M[0]=1;
-        M[1]=0;
-        M[2]=0;
-        M[3]=0;
-        M[4]=0;
-        M[5]=1;
-        M[6]=0;
-        M[7]=0;
-        M[8]=0;
-        M[9]=0;
-        M[10]=1;
-        M[11]=0;
-        M[12]=0;
-        M[13]=0;
-        M[14]=0;
-        M[15]=1;
+        M[0] = 1;
+        M[1] = 0;
+        M[2] = 0;
+        M[3] = 0;
+        M[4] = 0;
+        M[5] = 1;
+        M[6] = 0;
+        M[7] = 0;
+        M[8] = 0;
+        M[9] = 0;
+        M[10] = 1;
+        M[11] = 0;
+        M[12] = 0;
+        M[13] = 0;
+        M[14] = 0;
+        M[15] = 1;
         return this;
     }
 
@@ -218,7 +223,7 @@ public class Matrix {
      *
      * @return the translation
      */
-    public  IVector3 getTranslation() {
+    public IVector3 getTranslation() {
         return new Vector3(M[12], M[13], M[14]);
     }
 
@@ -239,7 +244,7 @@ public class Matrix {
      *
      * @return the up
      */
-    public  IVector3 getUp() {
+    public IVector3 getUp() {
         return new Vector3(M[4], M[5], M[6]);
     }
 
@@ -266,7 +271,8 @@ public class Matrix {
      *            the up
      * @return the matrix
      */
-    public static Matrix createWorld(Vector3 position, Vector3 forward, Vector3 up) {
+    public static Matrix createWorld(Vector3 position, Vector3 forward,
+            Vector3 up) {
         Matrix result;
         IVector3 x, y, z;
 
@@ -332,7 +338,8 @@ public class Matrix {
      *            the translation
      * @return true, if successful
      */
-    public  boolean decompose(Vector3 scale, Quaternion rotation, Vector3 translation) {
+    public boolean decompose(Vector3 scale, Quaternion rotation,
+            Vector3 translation) {
         translation.setX(M[12]);
         translation.setY(M[13]);
         translation.setZ(M[14]);
@@ -383,7 +390,7 @@ public class Matrix {
      *            the matrix2
      * @return the matrix
      */
-    public  Matrix add(Matrix matrix1, Matrix matrix2) {
+    public Matrix add(Matrix matrix1, Matrix matrix2) {
         matrix1.M[0] += matrix2.M[0];
         matrix1.M[1] += matrix2.M[1];
         matrix1.M[2] += matrix2.M[2];
@@ -416,8 +423,9 @@ public class Matrix {
      *            the camera forward vector
      * @return the matrix
      */
-    public Matrix createBillboard(Vector3 objectPosition, Vector3 cameraPosition,
-            Vector3 cameraUpVector, Vector3 cameraForwardVector) {
+    public Matrix createBillboard(Vector3 objectPosition,
+            Vector3 cameraPosition, Vector3 cameraUpVector,
+            Vector3 cameraForwardVector) {
         IVector3 translation = new Vector3(objectPosition)
                 .subtract(cameraPosition);
         IVector3 backwards, right, up;
@@ -444,21 +452,21 @@ public class Matrix {
         identity();
 
         M[0] = 1 - 2 * (quaternion.getY() * quaternion.getY() + quaternion
-               .getZ() * quaternion.getZ());
-        M[1] = 2 * (quaternion.getX() * quaternion.getY() + quaternion
-                .getW() * quaternion.getZ());
-        M[2] = 2 * (quaternion.getX() * quaternion.getZ() - quaternion
-                .getW() * quaternion.getY());
-        M[4] = 2 * (quaternion.getX() * quaternion.getY() - quaternion
-                .getW() * quaternion.getZ());
+                .getZ() * quaternion.getZ());
+        M[1] = 2 * (quaternion.getX() * quaternion.getY() + quaternion.getW()
+                * quaternion.getZ());
+        M[2] = 2 * (quaternion.getX() * quaternion.getZ() - quaternion.getW()
+                * quaternion.getY());
+        M[4] = 2 * (quaternion.getX() * quaternion.getY() - quaternion.getW()
+                * quaternion.getZ());
         M[5] = 1 - 2 * (quaternion.getX() * quaternion.getX() + quaternion
                 .getZ() * quaternion.getZ());
-        M[6] = 2 * (quaternion.getY() * quaternion.getZ() + quaternion
-                .getW() * quaternion.getX());
-        M[8] = 2 * (quaternion.getX() * quaternion.getZ() + quaternion
-               .getW() * quaternion.getY());
-        M[9] = 2 * (quaternion.getY() * quaternion.getZ() - quaternion
-                .getW() * quaternion.getX());
+        M[6] = 2 * (quaternion.getY() * quaternion.getZ() + quaternion.getW()
+                * quaternion.getX());
+        M[8] = 2 * (quaternion.getX() * quaternion.getZ() + quaternion.getW()
+                * quaternion.getY());
+        M[9] = 2 * (quaternion.getY() * quaternion.getZ() - quaternion.getW()
+                * quaternion.getX());
         M[10] = 1 - 2 * (quaternion.getX() * quaternion.getX() + quaternion
                 .getY() * quaternion.getY());
         return this;
@@ -512,8 +520,8 @@ public class Matrix {
      *            the z far plane
      * @return the matrix
      */
-    public  Matrix createOrthographic(float width, float height, float zNearPlane,
-            float zFarPlane) {
+    public Matrix createOrthographic(float width, float height,
+            float zNearPlane, float zFarPlane) {
         Matrix result = new Matrix();
         result.M[0] = 2 / width;
         result.M[1] = 0;
@@ -551,8 +559,8 @@ public class Matrix {
      *            the z far plane
      * @return the matrix
      */
-    public Matrix createOrthographicOffCenter(float left, float right, float bottom,
-            float top, float zNearPlane, float zFarPlane) {
+    public Matrix createOrthographicOffCenter(float left, float right,
+            float bottom, float top, float zNearPlane, float zFarPlane) {
         Matrix result = new Matrix();
         result.M[0] = 2 / (right - left);
         result.M[1] = 0;
@@ -573,11 +581,15 @@ public class Matrix {
         return result;
     }
 
-    private void clear(){
-        for(int i = 0; i < 16 ; ++i){
-            M[i]=0f;
+    /**
+     * Clear.
+     */
+    private void clear() {
+        for (int i = 0; i < 16; ++i) {
+            M[i] = 0f;
         }
     }
+
     /**
      * Creates the perspective field of view.
      *
@@ -591,8 +603,8 @@ public class Matrix {
      *            the far plane distance
      * @return the matrix
      */
-    public Matrix createPerspectiveFieldOfView(float fieldOfView, float aspectRatio,
-            float nearPlaneDistance, float farPlaneDistance) {
+    public Matrix createPerspectiveFieldOfView(float fieldOfView,
+            float aspectRatio, float nearPlaneDistance, float farPlaneDistance) {
         clear();
         if (fieldOfView < 0 || fieldOfView > Math.PI)
             throw new RuntimeException(
@@ -615,8 +627,7 @@ public class Matrix {
 
         M[0] = xscale;
         M[5] = yscale;
-        M[10] = farPlaneDistance
-                / (nearPlaneDistance - farPlaneDistance);
+        M[10] = farPlaneDistance / (nearPlaneDistance - farPlaneDistance);
         M[11] = -1;
         M[14] = nearPlaneDistance * farPlaneDistance
                 / (nearPlaneDistance - farPlaneDistance);
@@ -631,7 +642,7 @@ public class Matrix {
      * @return the matrix
      */
     public Matrix createRotationX(float radians) {
-       identity();
+        identity();
         M[5] = (float) Math.cos(radians);
         M[6] = (float) Math.sin(radians);
         M[9] = -M[6];
@@ -742,7 +753,8 @@ public class Matrix {
      *            the z position
      * @return the matrix
      */
-    public  Matrix createTranslation(float xPosition, float yPosition, float zPosition) {
+    public Matrix createTranslation(float xPosition, float yPosition,
+            float zPosition) {
         identity();
 
         M[12] = xPosition;
@@ -833,7 +845,7 @@ public class Matrix {
      *            the divider
      * @return the matrix
      */
-    public  Matrix divide(Matrix matrix1, float divider) {
+    public Matrix divide(Matrix matrix1, float divider) {
         float inverseDivider = 1f / divider;
 
         matrix1.M[0] = matrix1.M[0] * inverseDivider;
@@ -859,8 +871,6 @@ public class Matrix {
     /**
      * Invert.
      *
-     * @param matrix
-     *            the matrix
      * @return the matrix
      */
     public Matrix invert() {
@@ -891,74 +901,41 @@ public class Matrix {
 
         float invDetMatrix = 1f / detMatrix;
 
+        float M0 = (M[5] * det12 - M[6] * det11 + M[7] * det10) * invDetMatrix;
+        float M1 = (-M[1] * det12 + M[2] * det11 - M[3] * det10) * invDetMatrix;
+        float M2 = (M[13] * det6 - M[14] * det5 + M[15] * det4) * invDetMatrix;
+        float M3 = (-M[9] * det6 + M[10] * det5 - M[11] * det4) * invDetMatrix;
+        float M4 = (-M[4] * det12 + M[6] * det9 - M[7] * det8) * invDetMatrix;
+        float M5 = (M[0] * det12 - M[2] * det9 + M[3] * det8) * invDetMatrix;
+        float M6 = (-M[12] * det6 + M[14] * det3 - M[15] * det2) * invDetMatrix;
+        float M7 = (M[8] * det6 - M[10] * det3 + M[11] * det2) * invDetMatrix;
+        float M8 = (M[4] * det11 - M[5] * det9 + M[7] * det7) * invDetMatrix;
+        float M9 = (-M[0] * det11 + M[1] * det9 - M[3] * det7) * invDetMatrix;
+        float M10 = (M[12] * det5 - M[13] * det3 + M[15] * det1) * invDetMatrix;
+        float M11 = (-M[8] * det5 + M[9] * det3 - M[11] * det1) * invDetMatrix;
+        float M12 = (-M[4] * det10 + M[5] * det8 - M[6] * det7) * invDetMatrix;
+        float M13 = (M[0] * det10 - M[1] * det8 + M[2] * det7) * invDetMatrix;
+        float M14 = (-M[12] * det4 + M[13] * det2 - M[14] * det1)
+                * invDetMatrix;
+        float M15 = (M[8] * det4 - M[9] * det2 + M[10] * det1) * invDetMatrix;
 
-        float M0 = (M[5] * det12 - M[6] * det11 + M[7]
-                * det10)
-                * invDetMatrix;
-        float M1 = (-M[1] * det12 + M[2] * det11 - M[3]
-                * det10)
-                * invDetMatrix;
-        float M2 = (M[13] * det6 - M[14] * det5 + M[15]
-                * det4)
-                * invDetMatrix;
-        float M3 = (-M[9] * det6 + M[10] * det5 - M[11]
-                * det4)
-                * invDetMatrix;
-        float M4 = (-M[4] * det12 + M[6] * det9 - M[7]
-                * det8)
-                * invDetMatrix;
-        float M5 = (M[0] * det12 - M[2] * det9 + M[3]
-                * det8)
-                * invDetMatrix;
-        float M6 = (-M[12] * det6 + M[14] * det3 - M[15]
-                * det2)
-                * invDetMatrix;
-        float M7 = (M[8] * det6 - M[10] * det3 + M[11]
-                * det2)
-                * invDetMatrix;
-        float M8 = (M[4] * det11 - M[5] * det9 + M[7]
-                * det7)
-                * invDetMatrix;
-        float M9 = (-M[0] * det11 + M[1] * det9 - M[3]
-                * det7)
-                * invDetMatrix;
-        float M10 = (M[12] * det5 - M[13] * det3 + M[15]
-                * det1)
-                * invDetMatrix;
-        float M11 = (-M[8] * det5 + M[9] * det3 - M[11]
-                * det1)
-                * invDetMatrix;
-        float M12 = (-M[4] * det10 + M[5] * det8 - M[6]
-                * det7)
-                * invDetMatrix;
-        float M13 = (M[0] * det10 - M[1] * det8 + M[2]
-                * det7)
-                * invDetMatrix;
-        float M14 = (-M[12] * det4 + M[13] * det2 - M[14]
-                * det1)
-                * invDetMatrix;
-        float M15 = (M[8] * det4 - M[9] * det2 + M[10]
-                * det1)
-                * invDetMatrix;
+        M[0] = M0;
+        M[1] = M1;
+        M[2] = M2;
+        M[3] = M3;
+        M[4] = M4;
+        M[5] = M5;
+        M[6] = M6;
+        M[7] = M7;
+        M[8] = M8;
+        M[9] = M9;
+        M[10] = M10;
+        M[11] = M11;
+        M[12] = M12;
+        M[13] = M13;
+        M[14] = M14;
+        M[15] = M15;
 
-        M[0]=M0;
-        M[1]=M1;
-        M[2]=M2;
-        M[3]=M3;
-        M[4]=M4;
-        M[5]=M5;
-        M[6]=M6;
-        M[7]=M7;
-        M[8]=M8;
-        M[9]=M9;
-        M[10]=M10;
-        M[11]=M11;
-        M[12]=M12;
-        M[13]=M13;
-        M[14]=M14;
-        M[15]=M15;
-        
-        
         return this;
     }
 
@@ -971,72 +948,64 @@ public class Matrix {
     /**
      * Multiply.
      *
-     * @param matrix1
-     *            the matrix1
      * @param matrix2
      *            the matrix2
      * @return the matrix
      */
     public Matrix multiply(Matrix matrix2) {
-        
-        float M0 = M[0] * matrix2.M[0] + M[1] * matrix2.M[4]
-                + M[2] * matrix2.M[8] + M[3] * matrix2.M[12];
-        float M1 = M[0] * matrix2.M[1] + M[1] * matrix2.M[5]
-                + M[2] * matrix2.M[9] + M[3] * matrix2.M[13];
-        float M2 = M[0] * matrix2.M[2] + M[1] * matrix2.M[6]
-                + M[2] * matrix2.M[10] + M[3] * matrix2.M[14];
-        float M3 = M[0] * matrix2.M[3] + M[1] * matrix2.M[7]
-                + M[2] * matrix2.M[11] + M[3] * matrix2.M[15];
 
-        float M4 = M[4] * matrix2.M[0] + M[5] * matrix2.M[4]
-                + M[6] * matrix2.M[8] + M[7] * matrix2.M[12];
-        float M5 = M[4] * matrix2.M[1] + M[5] * matrix2.M[5]
-                + M[6] * matrix2.M[9] + M[7] * matrix2.M[13];
-        float M6 = M[4] * matrix2.M[2] + M[5] * matrix2.M[6]
-                + M[6] * matrix2.M[10] + M[7] * matrix2.M[14];
-        float M7 = M[4] * matrix2.M[3] + M[5] * matrix2.M[7]
-                + M[6] * matrix2.M[11] + M[7] * matrix2.M[15];
+        float M0 = M[0] * matrix2.M[0] + M[1] * matrix2.M[4] + M[2]
+                * matrix2.M[8] + M[3] * matrix2.M[12];
+        float M1 = M[0] * matrix2.M[1] + M[1] * matrix2.M[5] + M[2]
+                * matrix2.M[9] + M[3] * matrix2.M[13];
+        float M2 = M[0] * matrix2.M[2] + M[1] * matrix2.M[6] + M[2]
+                * matrix2.M[10] + M[3] * matrix2.M[14];
+        float M3 = M[0] * matrix2.M[3] + M[1] * matrix2.M[7] + M[2]
+                * matrix2.M[11] + M[3] * matrix2.M[15];
 
-        float M8 = M[8] * matrix2.M[0] + M[9] * matrix2.M[4]
-                + M[10] * matrix2.M[8] + M[11] * matrix2.M[12];
-        float M9 = M[8] * matrix2.M[1] + M[9] * matrix2.M[5]
-                + M[10] * matrix2.M[9] + M[11] * matrix2.M[13];
-        float M10 = M[8] * matrix2.M[2] + M[9]
-                * matrix2.M[6] + M[10] * matrix2.M[10] + M[11]
-                * matrix2.M[14];
-        float M11 = M[8] * matrix2.M[3] + M[9]
-                * matrix2.M[7] + M[10] * matrix2.M[11] + M[11]
-                * matrix2.M[15];
+        float M4 = M[4] * matrix2.M[0] + M[5] * matrix2.M[4] + M[6]
+                * matrix2.M[8] + M[7] * matrix2.M[12];
+        float M5 = M[4] * matrix2.M[1] + M[5] * matrix2.M[5] + M[6]
+                * matrix2.M[9] + M[7] * matrix2.M[13];
+        float M6 = M[4] * matrix2.M[2] + M[5] * matrix2.M[6] + M[6]
+                * matrix2.M[10] + M[7] * matrix2.M[14];
+        float M7 = M[4] * matrix2.M[3] + M[5] * matrix2.M[7] + M[6]
+                * matrix2.M[11] + M[7] * matrix2.M[15];
 
-        float M12 = M[12] * matrix2.M[0] + M[13]
-                * matrix2.M[4] + M[14] * matrix2.M[8] + M[15]
-                * matrix2.M[12];
-        float M13 = M[12] * matrix2.M[1] + M[13]
-                * matrix2.M[5] + M[14] * matrix2.M[9] + M[15]
-                * matrix2.M[13];
-        float M14 = M[12] * matrix2.M[2] + M[13]
-                * matrix2.M[6] + M[14] * matrix2.M[10] + M[15]
-                * matrix2.M[14];
-        float M15 = M[12] * matrix2.M[3] + M[13]
-                * matrix2.M[7] + M[14] * matrix2.M[11] + M[15]
-                * matrix2.M[15];
+        float M8 = M[8] * matrix2.M[0] + M[9] * matrix2.M[4] + M[10]
+                * matrix2.M[8] + M[11] * matrix2.M[12];
+        float M9 = M[8] * matrix2.M[1] + M[9] * matrix2.M[5] + M[10]
+                * matrix2.M[9] + M[11] * matrix2.M[13];
+        float M10 = M[8] * matrix2.M[2] + M[9] * matrix2.M[6] + M[10]
+                * matrix2.M[10] + M[11] * matrix2.M[14];
+        float M11 = M[8] * matrix2.M[3] + M[9] * matrix2.M[7] + M[10]
+                * matrix2.M[11] + M[11] * matrix2.M[15];
 
-        M[0]=M0;
-        M[1]=M1;
-        M[2]=M2;
-        M[3]=M3;
-        M[4]=M4;
-        M[5]=M5;
-        M[6]=M6;
-        M[7]=M7;
-        M[8]=M8;
-        M[9]=M9;
-        M[10]=M10;
-        M[11]=M11;
-        M[12]=M12;
-        M[13]=M13;
-        M[14]=M14;
-        M[15]=M15;
+        float M12 = M[12] * matrix2.M[0] + M[13] * matrix2.M[4] + M[14]
+                * matrix2.M[8] + M[15] * matrix2.M[12];
+        float M13 = M[12] * matrix2.M[1] + M[13] * matrix2.M[5] + M[14]
+                * matrix2.M[9] + M[15] * matrix2.M[13];
+        float M14 = M[12] * matrix2.M[2] + M[13] * matrix2.M[6] + M[14]
+                * matrix2.M[10] + M[15] * matrix2.M[14];
+        float M15 = M[12] * matrix2.M[3] + M[13] * matrix2.M[7] + M[14]
+                * matrix2.M[11] + M[15] * matrix2.M[15];
+
+        M[0] = M0;
+        M[1] = M1;
+        M[2] = M2;
+        M[3] = M3;
+        M[4] = M4;
+        M[5] = M5;
+        M[6] = M6;
+        M[7] = M7;
+        M[8] = M8;
+        M[9] = M9;
+        M[10] = M10;
+        M[11] = M11;
+        M[12] = M12;
+        M[13] = M13;
+        M[14] = M14;
+        M[15] = M15;
         return this;
     }
 
@@ -1076,7 +1045,7 @@ public class Matrix {
      *            the matrix
      * @return the matrix
      */
-    public  Matrix negate(Matrix matrix) {
+    public Matrix negate(Matrix matrix) {
         matrix.M[0] = -matrix.M[0];
         matrix.M[1] = -matrix.M[1];
         matrix.M[2] = -matrix.M[2];
@@ -1105,7 +1074,7 @@ public class Matrix {
      *            the matrix2
      * @return the matrix
      */
-    public  Matrix subtract(Matrix matrix1, Matrix matrix2) {
+    public Matrix subtract(Matrix matrix1, Matrix matrix2) {
         matrix1.M[0] -= matrix2.M[0];
         matrix1.M[1] -= matrix2.M[1];
         matrix1.M[2] -= matrix2.M[2];
@@ -1214,7 +1183,8 @@ public class Matrix {
     /**
      * Store.
      *
-     * @param buffer the buffer
+     * @param buffer
+     *            the buffer
      */
     public void store(FloatBuffer buffer) {
         buffer.put(M);
@@ -1223,30 +1193,33 @@ public class Matrix {
     /**
      * Load.
      *
-     * @param matrix the matrix
-     * @param matrix2 the matrix2
+     * @param matrix
+     *            the matrix
      */
     public void set(Matrix matrix) {
-        for(int i=0;i <16; ++i)
-            M[i]=matrix.M[i];
-        
+        for (int i = 0; i < 16; ++i)
+            M[i] = matrix.M[i];
+
     }
 
-    
     /**
      * Translate.
      *
-     * @param min the min
+     * @param min
+     *            the min
+     * @return the matrix
      */
     public Matrix translate(IVector3 min) {
-       multiply(new Matrix().createTranslation(min));
-       return this;
+        multiply(new Matrix().createTranslation(min));
+        return this;
     }
 
     /**
      * Scale.
      *
-     * @param dim the dim
+     * @param dim
+     *            the dim
+     * @return the matrix
      */
     public Matrix scale(IVector3 dim) {
         multiply(new Matrix().createScale(dim));

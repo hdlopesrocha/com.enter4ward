@@ -1,6 +1,5 @@
 package hidrogine.math;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class IBox.
@@ -37,6 +36,13 @@ public abstract class IBoundingBox {
      */
     public abstract void setMax(IVector3 max);
 
+    /**
+     * Contains.
+     *
+     * @param point
+     *            the point
+     * @return the containment type
+     */
     public ContainmentType contains(IVector3 point) {
         // first we get if point is out of box
         if (point.getX() < getMin().getX() || point.getX() > getMax().getX()
@@ -57,6 +63,13 @@ public abstract class IBoundingBox {
             return ContainmentType.Contains;
     }
 
+    /**
+     * Contains.
+     *
+     * @param sphere
+     *            the sphere
+     * @return the containment type
+     */
     public ContainmentType contains(BoundingSphere sphere) {
         if (sphere.getPosition().getX() - getMin().getX() > sphere.getRadius()
                 && sphere.getPosition().getY() - getMin().getY() > sphere
@@ -223,8 +236,15 @@ public abstract class IBoundingBox {
         return PlaneIntersectionType.Back;
 
     }
-    
+
     // MONOGAME
+    /**
+     * Intersects.
+     *
+     * @param plane
+     *            the plane
+     * @return the plane intersection type
+     */
     public PlaneIntersectionType intersects(Plane plane) {
         // See
         // http://zach.in.tu-clausthal.de/teaching/cg_literatur/lighthouse3d_view_frustum_culling/index.html
@@ -337,5 +357,10 @@ public abstract class IBoundingBox {
         return false;
     }
 
+    /**
+     * Gets the corners.
+     *
+     * @return the corners
+     */
     protected abstract Vector3[] getCorners();
 }

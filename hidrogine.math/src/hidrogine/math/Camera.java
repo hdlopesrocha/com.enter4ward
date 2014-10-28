@@ -1,6 +1,5 @@
 package hidrogine.math;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class Camera.
@@ -27,7 +26,8 @@ public class Camera {
     public Matrix getViewMatrix() {
 
         IVector3 negativePos = new Vector3(position).multiply(-1f);
-        return new Matrix().identity().createTranslation(negativePos).multiply(new Matrix().createFromQuaternion(rotation));
+        return new Matrix().identity().createTranslation(negativePos)
+                .multiply(new Matrix().createFromQuaternion(rotation));
 
     }
 
@@ -55,7 +55,8 @@ public class Camera {
      *            the w
      */
     public void rotate(float x, float y, float z, float w) {
-        Quaternion newRot = Quaternion.createFromAxisAngle(new Vector3(x, y, z), w);
+        Quaternion newRot = Quaternion.createFromAxisAngle(
+                new Vector3(x, y, z), w);
         rotation = newRot.multiply(rotation);
         rotation.normalize();
     }

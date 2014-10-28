@@ -100,5 +100,6 @@ public abstract class IObject3D extends IBoundingSphere {
     public void update(Space space) {
         node = space.update(this);
     }
-    
+
+  
 }

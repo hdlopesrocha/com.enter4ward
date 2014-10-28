@@ -14,7 +14,7 @@ public class Space {
      * @param handler
      *            the handler
      */
-    public void iterate(BoundingFrustum frustum, ObjectIterator handler) {
+    public void iterate(BoundingFrustum frustum, VisibleObjectHandler handler) {
         if (root != null) {
             root.iterate(frustum, handler);
         }
@@ -28,7 +28,7 @@ public class Space {
      * @param nodeh
      *            the nodeh
      */
-    public void iterate(BoundingFrustum frustum, NodeIteratorHandler nodeh) {
+    public void iterate(BoundingFrustum frustum, VisibleNodeHandler nodeh) {
         if (root != null) {
             root.iterate(frustum, nodeh, 0);
         }
