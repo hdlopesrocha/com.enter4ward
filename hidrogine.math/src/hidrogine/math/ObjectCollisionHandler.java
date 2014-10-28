@@ -14,5 +14,5 @@ public interface ObjectCollisionHandler {
      * @param obj2
      *            the obj2
      */
-    public void onObjectCollision(IObject3D obj1, IObject3D obj2);
+    public void onObjectCollision(IBoundingSphere obj1, IBoundingSphere obj2);
 }

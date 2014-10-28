@@ -14,7 +14,7 @@ public class Space {
      * @param handler
      *            the handler
      */
-    public void iterate(BoundingFrustum frustum, VisibleObjectHandler handler) {
+    public void handleVisibleObjects(BoundingFrustum frustum, VisibleObjectHandler handler) {
         if (root != null) {
             root.iterate(frustum, handler);
         }
@@ -28,12 +28,18 @@ public class Space {
      * @param nodeh
      *            the nodeh
      */
-    public void iterate(BoundingFrustum frustum, VisibleNodeHandler nodeh) {
+    public void handleVisibleNodes(BoundingFrustum frustum, VisibleNodeHandler handler) {
         if (root != null) {
-            root.iterate(frustum, nodeh, 0);
+            root.iterate(frustum, handler, 0);
         }
     }
 
+    public void handleObjectCollisions(IBoundingSphere sphere, ObjectCollisionHandler handler) {
+        if (root != null) {
+            root.iterate(sphere, handler);
+        }
+    }
+    
     /** The root. */
     private SpaceNode root;
 

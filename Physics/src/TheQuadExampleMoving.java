@@ -1,3 +1,5 @@
+import javax.jws.Oneway;
+
 import hidrogine.lwjgl.DrawHandler;
 import hidrogine.lwjgl.DrawableBox;
 import hidrogine.lwjgl.Game;
@@ -10,9 +12,11 @@ import hidrogine.math.BoundingFrustum;
 import hidrogine.math.Camera;
 import hidrogine.math.ContainmentType;
 import hidrogine.math.IBoundingBox;
+import hidrogine.math.IBoundingSphere;
 import hidrogine.math.IObject3D;
 import hidrogine.math.IVector3;
 import hidrogine.math.Matrix;
+import hidrogine.math.ObjectCollisionHandler;
 import hidrogine.math.Space;
 import hidrogine.math.Vector3;
 import hidrogine.math.VisibleNodeHandler;
@@ -28,7 +32,7 @@ import org.lwjgl.opengl.GL20;
  * The Class TheQuadExampleMoving.
  */
 public class TheQuadExampleMoving extends Game implements DrawHandler,
-		VisibleObjectHandler {
+		VisibleObjectHandler, ObjectCollisionHandler, VisibleNodeHandler {
 	public static final Matrix IDENTITY = new Matrix().identity();
 	public static final Matrix ROTATION = new Matrix();
 	public static final Matrix TRANSLATION = new Matrix();
@@ -61,6 +65,8 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 
 	/** The time. */
 	float time = 0;
+	
+	IObject3D hitedObject;
 
 	/*
 	 * (non-Javadoc)
@@ -78,6 +84,9 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 	    Model3D box = new Model3D("box.mat", "box.geo", 1f);
 
 		(new IObject3D(new Vector3(0, 0, 0), box) {
+		}).insert(space);
+	
+		(new IObject3D(new Vector3(-10, 0, 0), box) {
 		}).insert(space);
 		
 		(moving = new IObject3D(new Vector3(), box) {
@@ -105,6 +114,8 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		moving.setPosition(new Vector3((float) (10 * Math.cos(time * 4)),
 				(float) (10 * Math.sin(time * 4)), 0f));
 		moving.update(space);
+		hitedObject = null;
+		space.handleObjectCollisions(moving,this);
 		
 		// moving.insert(space);
 		float sense = 0.06f;
@@ -159,7 +170,7 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 	}
 
 	int draws = 0;
-
+	BoundingFrustum frustum;
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -168,7 +179,7 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 
 	@Override
 	public void draw() {
-		final BoundingFrustum frustum = camera.getBoundingFrustum();
+		frustum = camera.getBoundingFrustum();
 
 		draws = 0;
 		getProgram().setModelMatrix(IDENTITY);
@@ -179,30 +190,13 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 
 		// grid.draw(program);
 		getProgram().setOpaque(true);
-		space.iterate(frustum, this);
+		space.handleVisibleObjects(frustum, this);
 		getProgram().setOpaque(false);
-		space.iterate(frustum, new VisibleNodeHandler() {
-			@Override
-			public void onNodeVisible(IBoundingBox obj, int storedObjectsCount) {
-				if (storedObjectsCount > 0) {
-					getProgram().setAmbientColor(0f, 0f, 1f);
-					getProgram().setMaterialAlpha(.5f);
-				} else {
-					ContainmentType ct = frustum.contains((BoundingBox) obj);
-					if (ct == ContainmentType.Contains) {
-						getProgram().setAmbientColor(0f, 1f, 0f);
-					} else {
-						getProgram().setAmbientColor(1f, 1f, 1f);
-					}
+		space.handleVisibleObjects(frustum, this);
 
-					getProgram().setMaterialAlpha(.1f);
-				}
-				box.draw(getProgram(), obj.getMin(), obj.getMax());
-			}
-		});
+		space.handleVisibleNodes(frustum, this);
 		getProgram().setMaterialAlpha(1f);
 		getProgram().setAmbientColor(0f, 0f, 0f);
-		space.iterate(frustum, this);
 		GL20.glUseProgram(0);
 		setTitle();
 	}
@@ -211,6 +205,14 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 	public Matrix onDraw(IObject3D obj, Group group, Material material) {
 		Matrix matrix = TRANSLATION.identity();
 
+		if(obj.equals(hitedObject)){
+			getProgram().setDiffuseColor(1,0,0);
+		}else {
+			getProgram().setDiffuseColor(1,1,1);
+
+		}
+		
+		
 		if (material.getName().equals("c0")) {
 			getProgram().setDiffuseColor(
 					(float) (Math.sin(time) + 1) / 2f,
@@ -241,4 +243,26 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		// model.drawBoxs(program);
 	}
 
+	@Override
+	public void onObjectCollision(IBoundingSphere obj1, IBoundingSphere obj2) {
+		hitedObject = (IObject3D) obj2;
+	}
+
+	@Override
+	public void onNodeVisible(IBoundingBox obj, int storedObjectsCount) {
+		if (storedObjectsCount > 0) {
+			getProgram().setAmbientColor(0f, 0f, 1f);
+			getProgram().setMaterialAlpha(.5f);
+		} else {
+			ContainmentType ct = frustum.contains((BoundingBox) obj);
+			if (ct == ContainmentType.Contains) {
+				getProgram().setAmbientColor(0f, 1f, 0f);
+			} else {
+				getProgram().setAmbientColor(1f, 1f, 1f);
+			}
+
+			getProgram().setMaterialAlpha(.2f);
+		}
+		box.draw(getProgram(), obj.getMin(), obj.getMax());
+	}
 }

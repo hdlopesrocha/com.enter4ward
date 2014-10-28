@@ -297,7 +297,7 @@ class SpaceNode extends BoundingBox {
      * @param handler
      *            the handler
      */
-    public void iterate(IObject3D obj1, ObjectCollisionHandler handler) {
+    public void iterate(IBoundingSphere obj1, ObjectCollisionHandler handler) {
         for (IObject3D obj2 : container) {
             if (!obj2.equals(obj1) && obj1.intersects(obj2)) {
                 handler.onObjectCollision(obj1, obj2);
