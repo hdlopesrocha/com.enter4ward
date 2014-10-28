@@ -1,6 +1,5 @@
 package hidrogine.math;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class IObject3D.
@@ -13,8 +12,8 @@ public abstract class IObject3D extends IBoundingSphere {
     /** The model. */
     private IModel3D model;
 
+    /** The node. */
     private SpaceNode node;
-
 
     /**
      * Gets the model.
@@ -84,22 +83,41 @@ public abstract class IObject3D extends IBoundingSphere {
         this.position = position;
     }
 
-    public void insert(Space space){
-        node= space.insert(this);
-        
+    /**
+     * Insert.
+     *
+     * @param space
+     *            the space
+     */
+    public void insert(Space space) {
+        node = space.insert(this);
+
     }
-    
-    public void remove(){
+
+    /**
+     * Removes the.
+     */
+    public void remove() {
         node.remove(this);
     }
 
+    /**
+     * Gets the node.
+     *
+     * @return the node
+     */
     protected SpaceNode getNode() {
         return node;
     }
 
+    /**
+     * Update.
+     *
+     * @param space
+     *            the space
+     */
     public void update(Space space) {
-        node = space.update(this);
+        node = space.update(this, node);
     }
 
-  
 }

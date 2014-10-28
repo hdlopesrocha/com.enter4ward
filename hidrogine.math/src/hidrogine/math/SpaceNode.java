@@ -19,7 +19,7 @@ class SpaceNode extends BoundingBox {
     static final int CENTER = 2;
 
     /** The container. */
-    List<IObject3D> container = new ArrayList<IObject3D>();
+    List<IBoundingSphere> container = new ArrayList<IBoundingSphere>();
 
     /** The child. */
     SpaceNode[] child;
@@ -268,7 +268,7 @@ class SpaceNode extends BoundingBox {
      *            the handler
      */
     public void iterate(BoundingFrustum frustum, VisibleObjectHandler handler) {
-        for (IObject3D obj : container) {
+        for (IBoundingSphere obj : container) {
             if (frustum.contains(obj) != ContainmentType.Disjoint) {
                 handler.onObjectVisible(obj);
             }
@@ -298,7 +298,7 @@ class SpaceNode extends BoundingBox {
      *            the handler
      */
     public void iterate(IBoundingSphere obj1, ObjectCollisionHandler handler) {
-        for (IObject3D obj2 : container) {
+        for (IBoundingSphere obj2 : container) {
             if (!obj2.equals(obj1) && obj1.intersects(obj2)) {
                 handler.onObjectCollision(obj1, obj2);
             }
@@ -324,7 +324,7 @@ class SpaceNode extends BoundingBox {
      * @param obj
      *            the obj
      */
-    public void remove(IObject3D obj) {
+    public void remove(IBoundingSphere obj) {
         SpaceNode node = this;
         container.remove(obj);
 

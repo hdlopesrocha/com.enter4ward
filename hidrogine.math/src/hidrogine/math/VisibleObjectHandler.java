@@ -12,5 +12,5 @@ public interface VisibleObjectHandler {
      * @param obj
      *            the obj
      */
-    public void onObjectVisible(IObject3D obj);
+    public void onObjectVisible(IBoundingSphere obj);
 }

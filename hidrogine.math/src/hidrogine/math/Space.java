@@ -58,8 +58,7 @@ public class Space {
      *            the obj
      * @return the space node
      */
-    protected SpaceNode update(IObject3D obj) {
-        SpaceNode node = obj.getNode();
+    protected SpaceNode update(IBoundingSphere obj, SpaceNode node) {
         node.container.remove(obj);
 
         while (node != null && node.contains(obj) != ContainmentType.Contains) {
@@ -83,7 +82,7 @@ public class Space {
      * @param obj
      *            the obj
      */
-    private void expand(IObject3D obj) {
+    private void expand(IBoundingSphere obj) {
         // System.out.println("=== EXPANSION ===");
         // System.out.println(root.toString());
         while (root.contains(obj) != ContainmentType.Contains) {
@@ -104,7 +103,7 @@ public class Space {
      *            the node
      * @return the space node
      */
-    protected SpaceNode insert(IObject3D obj, SpaceNode node) {
+    protected SpaceNode insert(IBoundingSphere obj, SpaceNode node) {
         // insertion
         while (true) {
             ++node.count;
@@ -149,7 +148,7 @@ public class Space {
      *            the obj
      * @return the space node
      */
-    protected SpaceNode insert(IObject3D obj) {
+    protected SpaceNode insert(IBoundingSphere obj) {
         // expand phase
         expand(obj);
 

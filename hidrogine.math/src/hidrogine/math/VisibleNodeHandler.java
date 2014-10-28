@@ -4,6 +4,7 @@ package hidrogine.math;
 /**
  * The Interface VisibleNodeHandler.
  */
+@Deprecated
 public interface VisibleNodeHandler {
 
     /**
@@ -12,5 +13,6 @@ public interface VisibleNodeHandler {
      * @param obj
      *            the obj
      */
+    @Deprecated
     public void onNodeVisible(IBoundingBox obj, int storedObjectsCount);
 }

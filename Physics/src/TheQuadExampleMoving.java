@@ -26,17 +26,48 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class TheQuadExampleMoving.
  */
 public class TheQuadExampleMoving extends Game implements DrawHandler,
 		VisibleObjectHandler, ObjectCollisionHandler, VisibleNodeHandler {
+
+	/** The Constant IDENTITY. */
 	public static final Matrix IDENTITY = new Matrix().identity();
+
+	/** The Constant ROTATION. */
 	public static final Matrix ROTATION = new Matrix();
+
+	/** The Constant TRANSLATION. */
 	public static final Matrix TRANSLATION = new Matrix();
+
+	/** The box. */
 	public DrawableBox box;
+
+	/** The moving. */
 	public IObject3D moving;
+
+	/** The camera. */
 	public Camera camera;
+	/** The grid. */
+	Grid grid;
+
+	/** The space. */
+	Space space;
+
+	/** The time. */
+	float time = 0;
+
+	/** The hited object. */
+	IObject3D hitedObject;
+
+	/** The draws. */
+	int draws = 0;
+
+	/** The frustum. */
+	BoundingFrustum frustum;
+
 	/**
 	 * Instantiates a new the quad example moving.
 	 */
@@ -55,17 +86,6 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		new TheQuadExampleMoving();
 	}
 
-	/** The grid. */
-	Grid grid;
-
-	/** The space. */
-	Space space;
-
-	/** The time. */
-	float time = 0;
-	
-	IObject3D hitedObject;
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -78,15 +98,15 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		space = new Space();
 		box = new DrawableBox();
 		/** The box. */
-		//Model3D car = new Model3D("car.mat", "car.geo", 1f);
-	    Model3D box = new Model3D("box.mat", "box.geo", 1f);
+		// Model3D car = new Model3D("car.mat", "car.geo", 1f);
+		Model3D box = new Model3D("box.mat", "box.geo", 1f);
 
 		(new IObject3D(new Vector3(0, 0, 0), box) {
 		}).insert(space);
-	
+
 		(new IObject3D(new Vector3(-10, 0, 0), box) {
 		}).insert(space);
-		
+
 		(moving = new IObject3D(new Vector3(), box) {
 		}).insert(space);
 
@@ -113,8 +133,8 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 				(float) (10 * Math.sin(time * 4)), 0f));
 		moving.update(space);
 		hitedObject = null;
-		space.handleObjectCollisions(moving,this);
-		
+		space.handleObjectCollisions(moving, this);
+
 		// moving.insert(space);
 		float sense = 0.06f;
 		if (Mouse.isButtonDown(0)) {
@@ -167,8 +187,6 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 
 	}
 
-	int draws = 0;
-	BoundingFrustum frustum;
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -199,18 +217,23 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		setTitle();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hidrogine.lwjgl.DrawHandler#onDraw(hidrogine.math.IObject3D,
+	 * hidrogine.lwjgl.Group, hidrogine.lwjgl.Material)
+	 */
 	@Override
 	public Matrix onDraw(IObject3D obj, Group group, Material material) {
 		Matrix matrix = TRANSLATION.identity();
 
-		if(obj.equals(hitedObject)){
-			getProgram().setDiffuseColor(1,0,0);
-		}else {
-			getProgram().setDiffuseColor(1,1,1);
+		if (obj.equals(hitedObject)) {
+			getProgram().setDiffuseColor(1, 0, 0);
+		} else {
+			getProgram().setDiffuseColor(1, 1, 1);
 
 		}
-		
-		
+
 		if (material.getName().equals("c0")) {
 			getProgram().setDiffuseColor(
 					(float) (Math.sin(time) + 1) / 2f,
@@ -233,19 +256,41 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		return matrix.translate(obj.getPosition());
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hidrogine.math.VisibleObjectHandler#onObjectVisible(hidrogine.math.
+	 * IBoundingSphere)
+	 */
 	@Override
-	public void onObjectVisible(IObject3D obj) {
+	public void onObjectVisible(IBoundingSphere obj) {
+		IObject3D obj3d = (IObject3D) obj;
+
 		draws++;
-		Model3D model = (Model3D) obj.getModel();
-		model.draw(obj, getProgram(), TheQuadExampleMoving.this);
+		Model3D model = (Model3D) obj3d.getModel();
+		model.draw(obj3d, getProgram(), TheQuadExampleMoving.this);
 		// model.drawBoxs(program);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * hidrogine.math.ObjectCollisionHandler#onObjectCollision(hidrogine.math
+	 * .IBoundingSphere, hidrogine.math.IBoundingSphere)
+	 */
 	@Override
 	public void onObjectCollision(IBoundingSphere obj1, IBoundingSphere obj2) {
 		hitedObject = (IObject3D) obj2;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * hidrogine.math.VisibleNodeHandler#onNodeVisible(hidrogine.math.IBoundingBox
+	 * , int)
+	 */
 	@Override
 	public void onNodeVisible(IBoundingBox obj, int storedObjectsCount) {
 		if (storedObjectsCount > 0) {
