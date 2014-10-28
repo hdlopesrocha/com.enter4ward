@@ -197,17 +197,17 @@ public class SpaceNode extends BoundingBox {
         float lenX = getLengthX();
         float lenY = getLengthY();
         float lenZ = getLengthZ();
-   
-        if (lenZ <= lenY && lenZ < lenX) {
-            if (pos.getZ() > getCenterZ()) {
+        
+        if (lenX < lenY && lenX < lenZ) {
+            if (pos.getX() >= getCenterX()) {
                 return new SpaceNode(this, LEFT, getMin(),
-                        new Vector3(getMax()).addZ(lenZ));
+                        new Vector3(getMax()).addX(lenX));
             } else {
                 return new SpaceNode(this, RIGHT,
-                        new Vector3(getMin()).addZ(-lenZ), getMax());
+                        new Vector3(getMin()).addX(-lenX), getMax());
             }
-        } else if (lenY <= lenZ) {
-            if (pos.getY() > getCenterY()) {
+        } else if (lenY < lenZ) {
+            if (pos.getY() >= getCenterY()) {
                 return new SpaceNode(this, LEFT, getMin(),
                         new Vector3(getMax()).addY(lenY));
             } else {
@@ -215,12 +215,12 @@ public class SpaceNode extends BoundingBox {
                         new Vector3(getMin()).addY(-lenY), getMax());
             } 
         } else {
-            if (pos.getX() > getCenterX()) {
+            if (pos.getZ() >= getCenterZ()) {
                 return new SpaceNode(this, LEFT, getMin(),
-                        new Vector3(getMax()).addX(lenX));
+                        new Vector3(getMax()).addZ(lenZ));
             } else {
                 return new SpaceNode(this, RIGHT,
-                        new Vector3(getMin()).addX(-lenX), getMax());
+                        new Vector3(getMin()).addZ(-lenZ), getMax());
             }
         }
     }
