@@ -1,5 +1,3 @@
-import javax.jws.Oneway;
-
 import hidrogine.lwjgl.DrawHandler;
 import hidrogine.lwjgl.DrawableBox;
 import hidrogine.lwjgl.Game;

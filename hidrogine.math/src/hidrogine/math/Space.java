@@ -28,6 +28,7 @@ public class Space {
      * @param nodeh
      *            the nodeh
      */
+    @Deprecated
     public void handleVisibleNodes(BoundingFrustum frustum, VisibleNodeHandler handler) {
         if (root != null) {
             root.iterate(frustum, handler, 0);
