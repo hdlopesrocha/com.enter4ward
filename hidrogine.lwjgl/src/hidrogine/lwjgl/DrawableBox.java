@@ -1,5 +1,6 @@
 package hidrogine.lwjgl;
 
+import hidrogine.math.IBoundingSphere;
 import hidrogine.math.IVector3;
 import hidrogine.math.Matrix;
 import hidrogine.math.Vector2;
@@ -75,4 +76,11 @@ public class DrawableBox {
 		GL11.glEnable(GL11.GL_CULL_FACE);
 	}
 
+	public final void draw(final ShaderProgram shader, IBoundingSphere sph) {
+		draw(shader, new Vector3(sph.getCenter()).subtract(new Vector3(
+								sph.getRadius())),
+								new Vector3(sph.getCenter()).add(new Vector3(sph
+										.getRadius())));
+	}
+	
 }

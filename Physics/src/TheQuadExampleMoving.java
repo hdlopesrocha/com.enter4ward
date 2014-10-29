@@ -11,6 +11,7 @@ import hidrogine.math.IBoundingBox;
 import hidrogine.math.IBoundingSphere;
 import hidrogine.math.Matrix;
 import hidrogine.math.ObjectCollisionHandler;
+import hidrogine.math.Quaternion;
 import hidrogine.math.Space;
 import hidrogine.math.Vector3;
 import hidrogine.math.VisibleNodeHandler;
@@ -97,7 +98,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		Model3D surface = new Model3D("surface.mat", "surface.geo", 1f, true);
 
 		
-		MyObject3D obj1 = new MyObject3D(new Vector3(0, -2, 0), surface) {
+		Object3D obj1 = new Object3D(new Vector3(0, -2, 0), surface) {
 		};
 		
 		MyObject3D obj2 = new MyObject3D(new Vector3(-10, 0, 0), box) {
@@ -110,13 +111,14 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		obj2.insert(space);
 		moving.insert(space);
 
-		objects.add(obj1);
 		objects.add(obj2);
 		objects.add(moving);
 		
 
 		(concreteCar = new MyCar3D(new Vector3(0, 0, 0), car) {
 		}).insert(space);
+
+		concreteCar.getRotation().set(new Quaternion().createFromAxisAngle(new Vector3(1,0, 0),(float) (-Math.PI/2)));
 
 		camera.lookAt(0, 6, 24, 0, 0, 0);
 		grid = new Grid(32);
@@ -140,16 +142,18 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		}
 		
 		time += 0.003f;
-		concreteCar.addTime(0.003f);
 
+		concreteCar.getRotation().multiply(new Quaternion().createFromAxisAngle(new Vector3(0, 0, 1),-0.003f * 4)).normalize();
+
+		
 		// / moving.remove();
-		moving.setPosition(new Vector3((float) (10 * Math.cos(time * 4)), 0f,
-				(float) (10 * Math.sin(time * 4))));
-		moving.getRotation().createFromAxisAngle(new Vector3(0, 1, 0),
-				(float) -(Math.PI + time * 4));
+		moving.setPosition(new Vector3((float) (10 * Math.cos(time * 4)), 0f,(float) (10 * Math.sin(time * 4))));
+		moving.getRotation().createFromAxisAngle(new Vector3(0, 1, 0),(float) -(Math.PI + time * 4));
 		moving.update(space);
 		space.handleObjectCollisions(moving, this);
 
+	
+		
 		// moving.insert(space);
 		float sense = 0.06f;
 		if (Mouse.isButtonDown(0)) {

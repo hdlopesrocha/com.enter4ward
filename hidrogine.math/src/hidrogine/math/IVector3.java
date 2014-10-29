@@ -363,4 +363,28 @@ public abstract class IVector3 {
         setZ(Math.min(getZ(), min2.getZ()));
         return this;
     }
+    
+    /**
+     * Transform.
+     *
+     * @param rotation
+     *            the rotation
+     * @return the i vector3
+     */
+
+    public IVector3 transform(Quaternion rotation) {
+        float x = 2 * (rotation.getY() * getZ() - rotation.getZ() * getY());
+        float y = 2 * (rotation.getZ() * getX() - rotation.getX() * getZ());
+        float z = 2 * (rotation.getX() * getY() - rotation.getY() * getX());
+        float rx = getX() + x * rotation.getW()
+                + (rotation.getY() * z - rotation.getZ() * y);
+        float ry = getY() + y * rotation.getW()
+                + (rotation.getZ() * x - rotation.getX() * z);
+        float rz = getZ() + z * rotation.getW()
+                + (rotation.getX() * y - rotation.getY() * x);
+        setX(rx);
+        setY(ry);
+        setZ(rz);
+        return this;
+    }
 }

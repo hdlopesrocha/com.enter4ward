@@ -88,12 +88,12 @@ public class Quaternion {
      *            the quaternion2
      * @return the quaternion
      */
-    public static Quaternion add(Quaternion quaternion1, Quaternion quaternion2) {
-        quaternion1.X += quaternion2.X;
-        quaternion1.Y += quaternion2.Y;
-        quaternion1.Z += quaternion2.Z;
-        quaternion1.W += quaternion2.W;
-        return quaternion1;
+    public Quaternion add(Quaternion quaternion1) {
+        X += quaternion1.X;
+        Y += quaternion1.Y;
+        Z += quaternion1.Z;
+        W += quaternion1.W;
+        return this;
     }
 
     /**
@@ -198,6 +198,7 @@ public class Quaternion {
         float sin_a = (float) Math.sin(angle / 2.0);
         return setX(axis.getX() * sin_a).setY(axis.getY() * sin_a).setZ(axis.getZ() * sin_a).setW( (float) Math.cos(angle / 2.0));
     }
+
 
     /**
      * Creates the from rotation matrix.
@@ -434,12 +435,12 @@ public class Quaternion {
      *            the quaternion2
      * @return the quaternion
      */
-    public Quaternion subtract(Quaternion quaternion1, Quaternion quaternion2) {
-        quaternion1.X -= quaternion2.X;
-        quaternion1.Y -= quaternion2.Y;
-        quaternion1.Z -= quaternion2.Z;
-        quaternion1.W -= quaternion2.W;
-        return quaternion1;
+    public Quaternion subtract(Quaternion quaternion2) {
+        X -= quaternion2.X;
+        Y -= quaternion2.Y;
+        Z -= quaternion2.Z;
+        W -= quaternion2.W;
+        return this;
     }
 
     /**
@@ -579,6 +580,14 @@ public class Quaternion {
      */
     public float getW() {
         return W;
+    }
+
+    public Quaternion set(Quaternion quat) {
+        setX(quat.getX());
+        setY(quat.getY());
+        setZ(quat.getZ());
+        setW(quat.getW());
+        return this;
     }
 
 }

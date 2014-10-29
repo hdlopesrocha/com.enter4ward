@@ -153,21 +153,6 @@ public class Vector3 extends IVector3 {
         return this;
     }
 
-    /**
-     * Transform.
-     *
-     * @param rotation
-     *            the rotation
-     * @return the i vector3
-     */
-    public IVector3 transform(Quaternion rotation) {
-        Vector3 u = new Vector3(rotation.getX(), rotation.getY(),
-                rotation.getZ());
-        float s = rotation.getW();
-        IVector3 p1 = new Vector3(u).multiply(2f).multiply(u.dot(this));
-        IVector3 p2 = new Vector3(this).multiply(s * s - u.dot(u));
-        IVector3 p3 = new Vector3(u).cross(this).multiply(2.0f * s);
-        return this.add(p1).add(p2).add(p3);
-    }
+
 
 }
