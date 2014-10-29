@@ -1,5 +1,6 @@
 import hidrogine.lwjgl.BufferObject;
 import hidrogine.lwjgl.DrawableBox;
+import hidrogine.lwjgl.DrawableSphere;
 import hidrogine.lwjgl.Group;
 import hidrogine.lwjgl.Material;
 import hidrogine.lwjgl.Model3D;
@@ -18,7 +19,7 @@ public class MyCar3D extends Object3D {
 	private static final Matrix IDENTITY = new Matrix().identity();
 	/** The Constant ROTATION. */
 	private static final Matrix ROTATION = new Matrix();
-	private static final DrawableBox box = new DrawableBox();
+	private static final DrawableSphere sphere = new DrawableSphere();
 
 	public MyCar3D(IVector3 position, Model3D model) {
 		super(position, model);
@@ -35,13 +36,13 @@ public class MyCar3D extends Object3D {
 		for (Group g : model.getGroups()) {
 			
 			final BoundingSphere groupSphere = new BoundingSphere(g);
-			groupSphere.getCenter().transform(getRotation());
+			groupSphere.getCenter().transform(getRotation()).add(getPosition());
 						
 			if (frustum.contains(groupSphere) != ContainmentType.Disjoint) {
 				for (BufferObject b : g.getBuffers()) {
 			
 					final BoundingSphere bufferSphere = new BoundingSphere(b);
-					((Vector3)bufferSphere.getCenter()).transform(getRotation());
+					((Vector3)bufferSphere.getCenter()).transform(getRotation()).add(getPosition());
 					
 					if (frustum.contains(bufferSphere) != ContainmentType.Disjoint) {
 
@@ -70,9 +71,9 @@ public class MyCar3D extends Object3D {
 						TheQuadExampleMoving.draws++;
 						b.draw(program);
 						program.setModelMatrix(IDENTITY);
-						box.draw(program, bufferSphere);
 					}
 				}
+				sphere.draw(program, groupSphere);
 			}
 		}
 	}

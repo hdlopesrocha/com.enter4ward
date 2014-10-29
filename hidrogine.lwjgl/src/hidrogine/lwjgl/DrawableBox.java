@@ -1,6 +1,5 @@
 package hidrogine.lwjgl;
 
-import hidrogine.math.IBoundingSphere;
 import hidrogine.math.IVector3;
 import hidrogine.math.Matrix;
 import hidrogine.math.Vector2;
@@ -65,6 +64,8 @@ public class DrawableBox {
 	public final void draw(final ShaderProgram shader, IVector3 min,
 			IVector3 max) {
 		//System.out.println(min.toString()+" : "+max.toString());
+		shader.setMaterialAlpha(0.2f);
+
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		IVector3 dim = new Vector3(max).subtract(min);
 		shader.setModelMatrix(new Matrix().createScale(dim).multiply(new Matrix().createTranslation(min)));
@@ -74,13 +75,10 @@ public class DrawableBox {
 		shader.setModelMatrix(new Matrix().identity());
 
 		GL11.glEnable(GL11.GL_CULL_FACE);
+		shader.setMaterialAlpha(1f);
+
 	}
 
-	public final void draw(final ShaderProgram shader, IBoundingSphere sph) {
-		draw(shader, new Vector3(sph.getCenter()).subtract(new Vector3(
-								sph.getRadius())),
-								new Vector3(sph.getCenter()).add(new Vector3(sph
-										.getRadius())));
-	}
+
 	
 }

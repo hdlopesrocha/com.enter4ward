@@ -1,4 +1,5 @@
 import hidrogine.lwjgl.DrawableBox;
+import hidrogine.lwjgl.DrawableSphere;
 import hidrogine.lwjgl.Game;
 import hidrogine.lwjgl.Grid;
 import hidrogine.lwjgl.Model3D;
@@ -37,8 +38,10 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	private static final Matrix IDENTITY = new Matrix().identity();
 
 	/** The box. */
+	private DrawableSphere sphere;
 	private DrawableBox box;
 
+	
 	/** The moving. */
 	private MyObject3D moving;
 
@@ -91,6 +94,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		camera = new Camera(1280, 720);
 		objects = new ArrayList<MyObject3D>();
 		space = new Space();
+		sphere = new DrawableSphere();
 		box = new DrawableBox();
 		/** The box. */
 		Model3D car = new Model3D("car.mat", "car.geo", 1f, true);
@@ -103,14 +107,18 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		
 		MyObject3D obj2 = new MyObject3D(new Vector3(-10, 0, 0), box) {
 		};
+	
+		MyObject3D obj3 = new MyObject3D(new Vector3(10.6f, 0, 0), box) {
+		};
 		
 		moving = new MyObject3D(new Vector3(), box) {
 		};
 		
 		obj1.insert(space);
 		obj2.insert(space);
+		obj3.insert(space);
 		moving.insert(space);
-
+		objects.add(obj3);
 		objects.add(obj2);
 		objects.add(moving);
 		
@@ -251,8 +259,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		obj3d.draw(getProgram(), frustum);
 		// model.drawBoxs(program);
 		Vector3 dim = new Vector3(obj3d.getRadius());
-		box.draw(getProgram(), new Vector3(obj3d.getCenter()).subtract(dim),
-				new Vector3(obj3d.getCenter()).add(dim));
+		sphere.draw(getProgram(), obj3d);
 
 	}
 
@@ -267,6 +274,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	public void onObjectCollision(IBoundingSphere obj1, IBoundingSphere obj2) {
 		if(obj2 instanceof MyObject3D){
 			((MyObject3D)obj2).collided = true;
+			((MyObject3D)obj1).collided = true;
 		}
 	}
 
@@ -281,7 +289,6 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	public void onNodeVisible(IBoundingBox obj, int storedObjectsCount) {
 		if (storedObjectsCount > 0) {
 			getProgram().setAmbientColor(0f, 0f, 1f);
-			getProgram().setMaterialAlpha(.5f);
 		} else {
 			ContainmentType ct = frustum.contains((BoundingBox) obj);
 			if (ct == ContainmentType.Contains) {
@@ -289,8 +296,6 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 			} else {
 				getProgram().setAmbientColor(1f, 1f, 1f);
 			}
-
-			getProgram().setMaterialAlpha(.2f);
 		}
 		box.draw(getProgram(), obj.getMin(), obj.getMax());
 	}

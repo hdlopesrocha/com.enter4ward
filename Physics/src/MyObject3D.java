@@ -22,36 +22,32 @@ public class MyObject3D extends Object3D {
 
 	@Override
 	public void draw(ShaderProgram program, BoundingFrustum frustum) {
-		Matrix matrix = getModelMatrix();
-		Model3D model = (Model3D) getModel();
+		final Matrix modelMatrix = getModelMatrix();
+		final Model3D model = (Model3D) getModel();
 
 		if (collided) {
 			program.setAmbientColor(1, 0, 0);
 		} else {
 			program.setAmbientColor(0, 0, 0);
 		}
+		program.setModelMatrix(modelMatrix);
 
 		for (Group g : model.getGroups()) {
 			final BoundingSphere groupSphere = new BoundingSphere(g);
-			groupSphere.getCenter().transform(getRotation());
-
+			groupSphere.getCenter().transform(getRotation()).add(getPosition());
 			if (frustum.contains(groupSphere) != ContainmentType.Disjoint) {
-
 				for (BufferObject b : g.getBuffers()) {
+					b.bind(program);
 					final BoundingSphere bufferSphere = new BoundingSphere(b);
-					bufferSphere.getCenter().transform(getRotation());
-
+					bufferSphere.getCenter().transform(getRotation()).add(getPosition());
 					if (frustum.contains(bufferSphere) != ContainmentType.Disjoint) {
-						b.bind(program);
-						program.setModelMatrix(matrix);
 						TheQuadExampleMoving.draws++;
 						b.draw(program);
-						program.setModelMatrix(IDENTITY);
 					}
 				}
 			}
 		}
-
+		program.setModelMatrix(IDENTITY);
 		program.setAmbientColor(0, 0, 0);
 
 	}
