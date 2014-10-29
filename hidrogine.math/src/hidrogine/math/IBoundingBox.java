@@ -71,42 +71,42 @@ public abstract class IBoundingBox {
      * @return the containment type
      */
     public ContainmentType contains(BoundingSphere sphere) {
-        if (sphere.getPosition().getX() - getMin().getX() > sphere.getRadius()
-                && sphere.getPosition().getY() - getMin().getY() > sphere
+        if (sphere.getCenter().getX() - getMin().getX() > sphere.getRadius()
+                && sphere.getCenter().getY() - getMin().getY() > sphere
                         .getRadius()
-                && sphere.getPosition().getZ() - getMin().getZ() > sphere
+                && sphere.getCenter().getZ() - getMin().getZ() > sphere
                         .getRadius()
-                && getMax().getX() - sphere.getPosition().getX() > sphere
+                && getMax().getX() - sphere.getCenter().getX() > sphere
                         .getRadius()
-                && getMax().getY() - sphere.getPosition().getY() > sphere
+                && getMax().getY() - sphere.getCenter().getY() > sphere
                         .getRadius()
-                && getMax().getZ() - sphere.getPosition().getZ() > sphere
+                && getMax().getZ() - sphere.getCenter().getZ() > sphere
                         .getRadius())
             return ContainmentType.Contains;
 
         double dmin = 0;
 
-        if (sphere.getPosition().getX() - getMin().getX() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getX() - getMin().getX())
-                    * (sphere.getPosition().getX() - getMin().getX());
-        else if (getMax().getX() - sphere.getPosition().getX() <= sphere
+        if (sphere.getCenter().getX() - getMin().getX() <= sphere.getRadius())
+            dmin += (sphere.getCenter().getX() - getMin().getX())
+                    * (sphere.getCenter().getX() - getMin().getX());
+        else if (getMax().getX() - sphere.getCenter().getX() <= sphere
                 .getRadius())
-            dmin += (sphere.getPosition().getX() - getMax().getX())
-                    * (sphere.getPosition().getX() - getMin().getX());
-        if (sphere.getPosition().getY() - getMin().getY() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getY() - getMin().getY())
-                    * (sphere.getPosition().getY() - getMin().getY());
-        else if (getMax().getY() - sphere.getPosition().getY() <= sphere
+            dmin += (sphere.getCenter().getX() - getMax().getX())
+                    * (sphere.getCenter().getX() - getMin().getX());
+        if (sphere.getCenter().getY() - getMin().getY() <= sphere.getRadius())
+            dmin += (sphere.getCenter().getY() - getMin().getY())
+                    * (sphere.getCenter().getY() - getMin().getY());
+        else if (getMax().getY() - sphere.getCenter().getY() <= sphere
                 .getRadius())
-            dmin += (sphere.getPosition().getY() - getMax().getY())
-                    * (sphere.getPosition().getY() - getMax().getY());
-        if (sphere.getPosition().getZ() - getMin().getZ() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getZ() - getMin().getZ())
-                    * (sphere.getPosition().getZ() - getMin().getZ());
-        else if (getMax().getZ() - sphere.getPosition().getZ() <= sphere
+            dmin += (sphere.getCenter().getY() - getMax().getY())
+                    * (sphere.getCenter().getY() - getMax().getY());
+        if (sphere.getCenter().getZ() - getMin().getZ() <= sphere.getRadius())
+            dmin += (sphere.getCenter().getZ() - getMin().getZ())
+                    * (sphere.getCenter().getZ() - getMin().getZ());
+        else if (getMax().getZ() - sphere.getCenter().getZ() <= sphere
                 .getRadius())
-            dmin += (sphere.getPosition().getZ() - getMax().getZ())
-                    * (sphere.getPosition().getZ() - getMax().getZ());
+            dmin += (sphere.getCenter().getZ() - getMax().getZ())
+                    * (sphere.getCenter().getZ() - getMax().getZ());
 
         if (dmin <= sphere.getRadius() * sphere.getRadius())
             return ContainmentType.Intersects;
@@ -293,44 +293,44 @@ public abstract class IBoundingBox {
      * @return true, if successful
      */
     public boolean intersects(BoundingSphere sphere) {
-        if (sphere.getPosition().getX() - getMin().getX() > sphere.getRadius()
-                && sphere.getPosition().getY() - getMin().getY() > sphere
+        if (sphere.getCenter().getX() - getMin().getX() > sphere.getRadius()
+                && sphere.getCenter().getY() - getMin().getY() > sphere
                         .getRadius()
-                && sphere.getPosition().getZ() - getMin().getZ() > sphere
+                && sphere.getCenter().getZ() - getMin().getZ() > sphere
                         .getRadius()
-                && getMax().getX() - sphere.getPosition().getX() > sphere
+                && getMax().getX() - sphere.getCenter().getX() > sphere
                         .getRadius()
-                && getMax().getY() - sphere.getPosition().getY() > sphere
+                && getMax().getY() - sphere.getCenter().getY() > sphere
                         .getRadius()
-                && getMax().getZ() - sphere.getPosition().getZ() > sphere
+                && getMax().getZ() - sphere.getCenter().getZ() > sphere
                         .getRadius())
             return true;
 
         double dmin = 0;
 
-        if (sphere.getPosition().getX() - getMin().getX() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getX() - getMin().getX())
-                    * (sphere.getPosition().getX() - getMin().getX());
-        else if (getMax().getX() - sphere.getPosition().getX() <= sphere
+        if (sphere.getCenter().getX() - getMin().getX() <= sphere.getRadius())
+            dmin += (sphere.getCenter().getX() - getMin().getX())
+                    * (sphere.getCenter().getX() - getMin().getX());
+        else if (getMax().getX() - sphere.getCenter().getX() <= sphere
                 .getRadius())
-            dmin += (sphere.getPosition().getX() - getMax().getX())
-                    * (sphere.getPosition().getX() - getMax().getX());
+            dmin += (sphere.getCenter().getX() - getMax().getX())
+                    * (sphere.getCenter().getX() - getMax().getX());
 
-        if (sphere.getPosition().getY() - getMin().getY() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getY() - getMin().getY())
-                    * (sphere.getPosition().getY() - getMin().getY());
-        else if (getMax().getY() - sphere.getPosition().getY() <= sphere
+        if (sphere.getCenter().getY() - getMin().getY() <= sphere.getRadius())
+            dmin += (sphere.getCenter().getY() - getMin().getY())
+                    * (sphere.getCenter().getY() - getMin().getY());
+        else if (getMax().getY() - sphere.getCenter().getY() <= sphere
                 .getRadius())
-            dmin += (sphere.getPosition().getY() - getMax().getY())
-                    * (sphere.getPosition().getY() - getMax().getY());
+            dmin += (sphere.getCenter().getY() - getMax().getY())
+                    * (sphere.getCenter().getY() - getMax().getY());
 
-        if (sphere.getPosition().getZ() - getMin().getZ() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getZ() - getMin().getZ())
-                    * (sphere.getPosition().getZ() - getMin().getZ());
-        else if (getMax().getZ() - sphere.getPosition().getZ() <= sphere
+        if (sphere.getCenter().getZ() - getMin().getZ() <= sphere.getRadius())
+            dmin += (sphere.getCenter().getZ() - getMin().getZ())
+                    * (sphere.getCenter().getZ() - getMin().getZ());
+        else if (getMax().getZ() - sphere.getCenter().getZ() <= sphere
                 .getRadius())
-            dmin += (sphere.getPosition().getZ() - getMax().getZ())
-                    * (sphere.getPosition().getZ() - getMax().getZ());
+            dmin += (sphere.getCenter().getZ() - getMax().getZ())
+                    * (sphere.getCenter().getZ() - getMax().getZ());
 
         if (dmin <= sphere.getRadius() * sphere.getRadius())
             return true;

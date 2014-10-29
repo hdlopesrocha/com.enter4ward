@@ -7,7 +7,7 @@ package hidrogine.math;
 public class Camera {
 
     /** The matrix. */
-    private Quaternion rotation;
+    private Quaternion rotation = new Quaternion();
 
     /** The position. */
     private Vector3 position;
@@ -55,9 +55,7 @@ public class Camera {
      *            the w
      */
     public void rotate(float x, float y, float z, float w) {
-        Quaternion newRot = Quaternion.createFromAxisAngle(
-                new Vector3(x, y, z), w);
-        rotation = newRot.multiply(rotation);
+        rotation = new Quaternion().createFromAxisAngle(new Vector3(x, y, z), w).multiply(rotation);
         rotation.normalize();
     }
 

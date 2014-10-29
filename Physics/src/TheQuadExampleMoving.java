@@ -254,10 +254,12 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 				center.multiply(-1f);
 				matrix.translate(center);
 			}
-			matrix.multiply(new Matrix()
-					.createRotationY((float) (Math.PI + time * 4)));
+			obj.getRotation().createFromAxisAngle(new Vector3(0,1,0),(float) -(Math.PI + time * 4));
+	
 		}
-		return matrix.translate(obj.getPosition());
+		
+		
+		return obj.getModelMatrix();
 	}
 
 	/*

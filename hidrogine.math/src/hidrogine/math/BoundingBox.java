@@ -153,39 +153,39 @@ public class BoundingBox extends IBoundingBox {
      * @return the containment type
      */
     public ContainmentType contains(IBoundingSphere sphere) {
-        if (sphere.getPosition().getX() - min.getX() > sphere.getRadius()
-                && sphere.getPosition().getY() - min.getY() > sphere
+        if (sphere.getCenter().getX() - min.getX() > sphere.getRadius()
+                && sphere.getCenter().getY() - min.getY() > sphere
                         .getRadius()
-                && sphere.getPosition().getZ() - min.getZ() > sphere
+                && sphere.getCenter().getZ() - min.getZ() > sphere
                         .getRadius()
-                && max.getX() - sphere.getPosition().getX() > sphere
+                && max.getX() - sphere.getCenter().getX() > sphere
                         .getRadius()
-                && max.getY() - sphere.getPosition().getY() > sphere
+                && max.getY() - sphere.getCenter().getY() > sphere
                         .getRadius()
-                && max.getZ() - sphere.getPosition().getZ() > sphere
+                && max.getZ() - sphere.getCenter().getZ() > sphere
                         .getRadius())
             return ContainmentType.Contains;
 
         double dmin = 0;
 
-        if (sphere.getPosition().getX() - min.getX() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getX() - min.getX())
-                    * (sphere.getPosition().getX() - min.getX());
-        else if (max.getX() - sphere.getPosition().getX() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getX() - max.getX())
-                    * (sphere.getPosition().getX() - max.getX());
-        if (sphere.getPosition().getY() - min.getY() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getY() - min.getY())
-                    * (sphere.getPosition().getY() - min.getY());
-        else if (max.getY() - sphere.getPosition().getY() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getY() - max.getY())
-                    * (sphere.getPosition().getY() - max.getY());
-        if (sphere.getPosition().getZ() - min.getZ() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getZ() - min.getZ())
-                    * (sphere.getPosition().getZ() - min.getZ());
-        else if (max.getZ() - sphere.getPosition().getZ() <= sphere.getRadius())
-            dmin += (sphere.getPosition().getZ() - max.getZ())
-                    * (sphere.getPosition().getZ() - max.getZ());
+        if (sphere.getCenter().getX() - min.getX() <= sphere.getRadius())
+            dmin += (sphere.getCenter().getX() - min.getX())
+                    * (sphere.getCenter().getX() - min.getX());
+        else if (max.getX() - sphere.getCenter().getX() <= sphere.getRadius())
+            dmin += (sphere.getCenter().getX() - max.getX())
+                    * (sphere.getCenter().getX() - max.getX());
+        if (sphere.getCenter().getY() - min.getY() <= sphere.getRadius())
+            dmin += (sphere.getCenter().getY() - min.getY())
+                    * (sphere.getCenter().getY() - min.getY());
+        else if (max.getY() - sphere.getCenter().getY() <= sphere.getRadius())
+            dmin += (sphere.getCenter().getY() - max.getY())
+                    * (sphere.getCenter().getY() - max.getY());
+        if (sphere.getCenter().getZ() - min.getZ() <= sphere.getRadius())
+            dmin += (sphere.getCenter().getZ() - min.getZ())
+                    * (sphere.getCenter().getZ() - min.getZ());
+        else if (max.getZ() - sphere.getCenter().getZ() <= sphere.getRadius())
+            dmin += (sphere.getCenter().getZ() - max.getZ())
+                    * (sphere.getCenter().getZ() - max.getZ());
 
         if (dmin <= sphere.getRadius() * sphere.getRadius())
             return ContainmentType.Intersects;
@@ -247,8 +247,8 @@ public class BoundingBox extends IBoundingBox {
     public BoundingBox createFromSphere(BoundingSphere sphere) {
         IVector3 vector1 = new Vector3(sphere.getRadius());
         return new BoundingBox(
-                new Vector3(sphere.getPosition()).subtract(vector1),
-                new Vector3(sphere.getPosition()).add(vector1));
+                new Vector3(sphere.getCenter()).subtract(vector1),
+                new Vector3(sphere.getCenter()).add(vector1));
     }
 
     /**

@@ -7,7 +7,7 @@ package hidrogine.math;
 public class BoundingSphere extends IBoundingSphere {
 
     /** The max. */
-    private IVector3 position;
+    private IVector3 center;
 
     /** The radius. */
     private float radius;
@@ -21,7 +21,7 @@ public class BoundingSphere extends IBoundingSphere {
      *            the radius
      */
     public BoundingSphere(IVector3 position, float radius) {
-        this.position = position;
+        this.center = position;
         this.radius = radius;
     }
 
@@ -29,7 +29,7 @@ public class BoundingSphere extends IBoundingSphere {
      * Instantiates a new bounding sphere.
      */
     public BoundingSphere() {
-        this.position = new Vector3();
+        this.center = new Vector3();
         this.radius = 0f;
     }
 
@@ -39,8 +39,8 @@ public class BoundingSphere extends IBoundingSphere {
      * @see hidrogine.math.ISphere#getCenter()
      */
     @Override
-    public IVector3 getPosition() {
-        return position;
+    public IVector3 getCenter() {
+        return center;
     }
 
     /*
@@ -49,8 +49,8 @@ public class BoundingSphere extends IBoundingSphere {
      * @see hidrogine.math.ISphere#setCenter(hidrogine.math.IVector3)
      */
     @Override
-    public void setPosition(IVector3 position) {
-        this.position = position;
+    public void setCenter(IVector3 position) {
+        this.center = position;
     }
 
     /*

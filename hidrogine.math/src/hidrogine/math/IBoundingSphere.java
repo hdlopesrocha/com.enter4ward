@@ -27,14 +27,14 @@ public abstract class IBoundingSphere {
      * @param position
      *            the new position
      */
-    public abstract void setPosition(IVector3 position);
+    public abstract void setCenter(IVector3 position);
 
     /**
      * Gets the position.
      *
      * @return the position
      */
-    public abstract IVector3 getPosition();
+    public abstract IVector3 getCenter();
 
     /*
      * (non-Javadoc)
@@ -49,7 +49,7 @@ public abstract class IBoundingSphere {
      * @return true, if successful
      */
     public boolean contains(IVector3 vec) {
-        return getPosition().distance(vec) <= getRadius();
+        return getCenter().distance(vec) <= getRadius();
     }
 
     /**
@@ -79,9 +79,9 @@ public abstract class IBoundingSphere {
             maxY = Math.max(maxY, vec.getY());
             maxZ = Math.max(maxZ, vec.getZ());
         }
-        getPosition().setX((minX + maxX) / 2f);
-        getPosition().setY((minY + maxY) / 2f);
-        getPosition().setZ((minZ + maxZ) / 2f);
+        getCenter().setX((minX + maxX) / 2f);
+        getCenter().setY((minY + maxY) / 2f);
+        getCenter().setZ((minZ + maxZ) / 2f);
 
         setRadius((float) (Math
                 .sqrt((maxX - minX) * (maxX - minX) + (maxY - minY)
@@ -109,7 +109,7 @@ public abstract class IBoundingSphere {
      * @return the boolean
      */
     public Boolean intersects(IBoundingSphere sphere) {
-        return getPosition().distance(sphere.getPosition()) < getRadius()
+        return getCenter().distance(sphere.getCenter()) < getRadius()
                 + sphere.getRadius();
     }
 }

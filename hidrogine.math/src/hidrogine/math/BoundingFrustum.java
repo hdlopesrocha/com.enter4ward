@@ -200,7 +200,7 @@ public class BoundingFrustum {
         ContainmentType result = ContainmentType.Contains;
 
         for (int i = 0; i < 6; ++i) {
-            val = PlaneHelper.perpendicularDistance(sphere.getPosition(),
+            val = PlaneHelper.perpendicularDistance(sphere.getCenter(),
                     planes[i]);
             if (val < -sphere.getRadius())
                 return ContainmentType.Disjoint;

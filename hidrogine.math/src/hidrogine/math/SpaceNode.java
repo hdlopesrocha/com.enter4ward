@@ -186,7 +186,7 @@ class SpaceNode extends BoundingBox {
      * @return the space node
      */
     public SpaceNode expand(IBoundingSphere obj) {
-        IVector3 pos = obj.getPosition();
+        IVector3 pos = obj.getCenter();
         float lenX = getLengthX();
         float lenY = getLengthY();
         float lenZ = getLengthZ();
