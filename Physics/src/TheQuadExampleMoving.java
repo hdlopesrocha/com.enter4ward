@@ -276,6 +276,9 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		Model3D model = (Model3D) obj3d.getModel();
 		model.draw(obj3d, getProgram(), TheQuadExampleMoving.this);
 		// model.drawBoxs(program);
+		Vector3 dim = new Vector3(obj3d.getRadius());
+		box.draw(getProgram(), new Vector3(obj3d.getCenter()).subtract(dim), new Vector3(obj3d.getCenter()).add(dim));
+
 	}
 
 	/*
