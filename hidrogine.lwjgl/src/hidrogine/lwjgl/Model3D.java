@@ -29,21 +29,23 @@ import org.lwjgl.opengl.GL11;
  * The Class Model3D.
  */
 public class Model3D extends IModel3D {
-	public static final Matrix IDENTITY = new Matrix().identity(); 
+	private static final Matrix IDENTITY = new Matrix().identity(); 
 
 	/** The groups. */
-	public List<Group> groups = new ArrayList<Group>();
+	private List<Group> groups = new ArrayList<Group>();
 	private IBoundingSphere container;
 
 	/** The materials. */
-	public TreeMap<String, Material> materials = new TreeMap<String, Material>();
+	private TreeMap<String, Material> materials = new TreeMap<String, Material>();
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see hidrogine.lwjgl.Model#draw(hidrogine.lwjgl.ShaderProgram)
 	 */
 	/** The box. */
-	public static DrawableBox box = new DrawableBox();
+	private static DrawableBox box = new DrawableBox();
+	
+	
 
 	/**
 	 * Instantiates a new model3 d.
@@ -55,10 +57,10 @@ public class Model3D extends IModel3D {
 	 * @param scale
 	 *            the scale
 	 */
-	public Model3D(String materials, String geometry, float scale) {
+	public Model3D(String materials, String geometry, float scale, boolean explodeTriangles) {
 		try {
 			loadMaterials(materials);
-			loadGeometry(geometry, scale);
+			loadGeometry(geometry, scale,explodeTriangles);
 		} catch (JSONException | IOException e) {
 			e.printStackTrace();
 		}
@@ -157,7 +159,7 @@ public class Model3D extends IModel3D {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@SuppressWarnings("unchecked")
-	private void loadGeometry(final String filename, final float scale)
+	private void loadGeometry(final String filename, final float scale, final boolean explodeTriangles)
 			throws JSONException, IOException {
 		final List<IVector3> points = new ArrayList<IVector3>();
 		final FileInputStream file = new FileInputStream(filename);
@@ -167,12 +169,14 @@ public class Model3D extends IModel3D {
 		while (groupNames.hasNext()) {
 			final String groupName = groupNames.next();
 			final Group currentGroup = new Group(groupName);
+			final List<IVector3> groupPoints = new ArrayList<IVector3>();
+			
 			groups.add(currentGroup);
 			final JSONArray subGroups = jObject.getJSONArray(groupName);
 			for (int j = 0; j < subGroups.length(); ++j) {
 				final JSONObject jSubGroup = subGroups.getJSONObject(j);
-				final BufferObject currentSubGroup = new BufferObject();
-				currentGroup.subGroups.add(currentSubGroup);
+				final BufferObject currentSubGroup = new BufferObject(explodeTriangles);
+				currentGroup.addBuffer(currentSubGroup);
 				if (jSubGroup.has("mm")) {
 					currentSubGroup.setMaterial(materials.get(jSubGroup
 							.getString("mm")));
@@ -189,10 +193,10 @@ public class Model3D extends IModel3D {
 					float nz = (float) vn.getDouble(k * 3 + 2);
 					float tx = (float) vt.getDouble(k * 2 + 0);
 					float ty = (float) vt.getDouble(k * 2 + 1);
-					currentGroup.addVertex(vx, vy, vz);
 					Vector3 pos = new Vector3(vx, vy, vz);
 					Vector3 nrm = new Vector3(nx, ny, nz);
 					Vector2 tex = new Vector2(tx, 1f-ty);
+					groupPoints.add(pos);
 					points.add(pos);
 					currentSubGroup.addPosition(pos);
 					currentSubGroup.addNormal(nrm);
@@ -205,27 +209,14 @@ public class Model3D extends IModel3D {
 				}
 				currentSubGroup.buildBuffer();
 			}
+			
+			currentGroup.createFromPoints(groupPoints);
 		}
 		file.close();
 		container = new BoundingSphere().createFromPoints(points);
 	}
 
-	/**
-	 * Draw.
-	 *
-	 * @param shader
-	 *            the shader
-	 */
-	public void draw(ShaderProgram shader) {
-		for (Group g : groups) {
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
-			box.draw(shader, g.getMin(), g.getMax());
-			for (BufferObject sg : g.subGroups) {
-				sg.bind(shader);
-				sg.draw(shader);
-			}
-		}
-	}
+
 
 	/**
 	 * Draw.
@@ -237,13 +228,14 @@ public class Model3D extends IModel3D {
 	 */
 	public void draw(IObject3D obj, ShaderProgram shader, DrawHandler handler) {
 		for (Group g : groups) {
-			for (BufferObject sg : g.subGroups) {
+			for (BufferObject sg : g.getBuffers()) {
 				sg.bind(shader);
 				Matrix mat=	handler.onDraw(obj,g, sg.getMaterial());
-				shader.setModelMatrix(mat);	
-				sg.draw(shader);
-				shader.setModelMatrix(IDENTITY);	
-
+				if(mat!=null){
+					shader.setModelMatrix(mat);	
+					sg.draw(shader);
+					shader.setModelMatrix(IDENTITY);	
+				}
 			}
 		}
 		
@@ -258,7 +250,7 @@ public class Model3D extends IModel3D {
 	public void drawBoxs(ShaderProgram shader) {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		for (Group g : groups) {
-			box.draw(shader, g.getMin(), g.getMax());
+			box.draw(shader, new Vector3(g.getCenter()).subtract(new Vector3(g.getRadius())), new Vector3(g.getCenter()).add(new Vector3(g.getRadius())));
 		}
 	}
 

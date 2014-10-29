@@ -18,6 +18,11 @@ public abstract class IObject3D extends IBoundingSphere {
     /** The node. */
     private SpaceNode node;
 
+    /**
+     * Gets the model matrix.
+     *
+     * @return the model matrix
+     */
     public Matrix getModelMatrix() {
         return new Matrix().createFromQuaternion(rotation).translate(position);
     }
@@ -78,13 +83,27 @@ public abstract class IObject3D extends IBoundingSphere {
      * @see hidrogine.math.api.ISphere#getPosition()
      */
     public IVector3 getCenter() {
-        return new Matrix().createTranslation(model.getContainer().getCenter()).multiply(getModelMatrix()).getTranslation();
+        // return new
+        // Vector3(model.getContainer().getCenter()).transform(rotation).add(position);
+        return new Matrix().createTranslation(model.getContainer().getCenter())
+                .multiply(getModelMatrix()).getTranslation();
     }
 
+    /**
+     * Gets the position.
+     *
+     * @return the position
+     */
     public IVector3 getPosition() {
         return position;
     }
 
+    /**
+     * Sets the position.
+     *
+     * @param position
+     *            the new position
+     */
     public void setPosition(IVector3 position) {
         this.position = position;
     }
@@ -135,6 +154,11 @@ public abstract class IObject3D extends IBoundingSphere {
         node = space.update(this, node);
     }
 
+    /**
+     * Gets the rotation.
+     *
+     * @return the rotation
+     */
     public Quaternion getRotation() {
         return rotation;
     }

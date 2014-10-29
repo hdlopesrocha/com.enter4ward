@@ -6,7 +6,7 @@ import hidrogine.math.Vector3;
 import org.lwjgl.opengl.GL11;
 
 public class Grid {
-	BufferObject obj = new BufferObject();
+	BufferObject obj = new BufferObject(false);
 
 	private short getIndex(int x, int y) {
 		return (short) ((x + size) + (y + size) * (size * 2));

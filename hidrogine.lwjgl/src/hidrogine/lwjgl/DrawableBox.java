@@ -9,7 +9,7 @@ import org.lwjgl.opengl.GL11;
 
 public class DrawableBox {
 
-	BufferObject obj = new BufferObject();
+	BufferObject obj = new BufferObject(false);
 
 	public DrawableBox() {
 

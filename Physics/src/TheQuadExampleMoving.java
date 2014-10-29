@@ -34,39 +34,39 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		VisibleObjectHandler, ObjectCollisionHandler, VisibleNodeHandler {
 
 	/** The Constant IDENTITY. */
-	public static final Matrix IDENTITY = new Matrix().identity();
+	private static final Matrix IDENTITY = new Matrix().identity();
 
 	/** The Constant ROTATION. */
-	public static final Matrix ROTATION = new Matrix();
+	private static final Matrix ROTATION = new Matrix();
 
 	/** The Constant TRANSLATION. */
-	public static final Matrix TRANSLATION = new Matrix();
+	private static final Matrix TRANSLATION = new Matrix();
 
 	/** The box. */
-	public DrawableBox box;
+	private DrawableBox box;
 
 	/** The moving. */
-	public IObject3D moving, surf;
+	private IObject3D moving, surf;
 
 	/** The camera. */
-	public Camera camera;
+	private Camera camera;
 	/** The grid. */
-	Grid grid;
+	private Grid grid;
 
 	/** The space. */
-	Space space;
+	private Space space;
 
 	/** The time. */
-	float time = 0;
+	private float time = 0;
 
 	/** The hited object. */
-	IObject3D hitedObject;
+	private IObject3D hitedObject;
 
 	/** The draws. */
-	int draws = 0;
+	private int draws = 0;
 
 	/** The frustum. */
-	BoundingFrustum frustum;
+	private BoundingFrustum frustum;
 
 	/**
 	 * Instantiates a new the quad example moving.
@@ -99,8 +99,8 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		box = new DrawableBox();
 		/** The box. */
 		// Model3D car = new Model3D("car.mat", "car.geo", 1f);
-		Model3D box = new Model3D("box.mat", "box.geo", 1f);
-		Model3D surface = new Model3D("surface.mat", "surface.geo", 1f);
+		Model3D box = new Model3D("box.mat", "box.geo", 1f,true);
+		Model3D surface = new Model3D("surface.mat", "surface.geo", 1f,true);
 
 		(surf = new IObject3D(new Vector3(0, -2, 0), surface) {
 		}).insert(space);
@@ -229,6 +229,7 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 	 */
 	@Override
 	public Matrix onDraw(IObject3D obj, Group group, Material material) {
+		
 		Matrix matrix = TRANSLATION.identity();
 
 		if (obj.equals(hitedObject)) {
