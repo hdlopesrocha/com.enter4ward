@@ -6,7 +6,7 @@ public class Material {
     public Float[] Ka;
     public Float[] Kd;
     public Float[] Ks;
-    public Float Tf;
+    public Float []Tf;
     public Float illum;
     public Float d;
     public Float Ns;

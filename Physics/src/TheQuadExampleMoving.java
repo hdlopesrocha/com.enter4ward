@@ -46,7 +46,7 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 	public DrawableBox box;
 
 	/** The moving. */
-	public IObject3D moving;
+	public IObject3D moving, surf;
 
 	/** The camera. */
 	public Camera camera;
@@ -100,6 +100,10 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		/** The box. */
 		// Model3D car = new Model3D("car.mat", "car.geo", 1f);
 		Model3D box = new Model3D("box.mat", "box.geo", 1f);
+		Model3D surface = new Model3D("surface.mat", "surface.geo", 1f);
+
+		(surf = new IObject3D(new Vector3(0, -2, 0), surface) {
+		}).insert(space);
 
 		(new IObject3D(new Vector3(0, 0, 0), box) {
 		}).insert(space);
@@ -110,7 +114,7 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		(moving = new IObject3D(new Vector3(), box) {
 		}).insert(space);
 
-		camera.lookAt(0, 0, 48, 0, 0, 0);
+		camera.lookAt(0, 6, 24, 0, 0, 0);
 		grid = new Grid(32);
 		getProgram().setLightPosition(0, new Vector3(3, 3, 3));
 		getProgram().setAmbientColor(0, 0, 0);
@@ -130,7 +134,7 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		time += 0.003f;
 		// / moving.remove();
 		moving.setPosition(new Vector3((float) (10 * Math.cos(time * 4)),
-				(float) (10 * Math.sin(time * 4)), 0f));
+				 0f,(float) (10 * Math.sin(time * 4))));
 		moving.update(space);
 		hitedObject = null;
 		space.handleObjectCollisions(moving, this);
@@ -251,7 +255,7 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 				matrix.translate(center);
 			}
 			matrix.multiply(new Matrix()
-					.createRotationZ((float) (Math.PI + time * 4)));
+					.createRotationY((float) (Math.PI + time * 4)));
 		}
 		return matrix.translate(obj.getPosition());
 	}
@@ -281,7 +285,9 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 	 */
 	@Override
 	public void onObjectCollision(IBoundingSphere obj1, IBoundingSphere obj2) {
-		hitedObject = (IObject3D) obj2;
+		if (!obj2.equals(surf)) {
+			hitedObject = (IObject3D) obj2;
+		}
 	}
 
 	/*

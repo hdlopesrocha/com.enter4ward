@@ -120,7 +120,11 @@ public class Model3D extends IModel3D {
 					currentMaterial.Ks[j] = (float) array.getDouble(j);
 			}
 			if (jMat.has("Tf")) {
-				currentMaterial.Tf = (float) jMat.getDouble("Tf");
+				final JSONArray array = jMat.getJSONArray("Tf");
+				currentMaterial.Tf = new Float[3];
+				for (int j = 0; j < 3; ++j)
+					currentMaterial.Tf[j] = (float) array.getDouble(j);
+				
 			}
 			if (jMat.has("illum")) {
 				currentMaterial.illum = (float) jMat.getDouble("illum");
