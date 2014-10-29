@@ -58,8 +58,7 @@ public class DrawableSphere {
 		shader.setModelMatrix(new Matrix().identity());
 
 		GL11.glEnable(GL11.GL_CULL_FACE);
-		shader.setAmbientColor(0, 0, 0);
-		shader.setMaterialAlpha(1f);
+
 
 	}
 

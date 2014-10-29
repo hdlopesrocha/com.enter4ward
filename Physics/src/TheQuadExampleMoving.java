@@ -1,7 +1,6 @@
 import hidrogine.lwjgl.DrawableBox;
 import hidrogine.lwjgl.DrawableSphere;
 import hidrogine.lwjgl.Game;
-import hidrogine.lwjgl.Grid;
 import hidrogine.lwjgl.Model3D;
 import hidrogine.lwjgl.Object3D;
 import hidrogine.math.BoundingBox;
@@ -49,8 +48,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	private MyCar3D concreteCar;
 	/** The camera. */
 	private Camera camera;
-	/** The grid. */
-	private Grid grid;
+
 
 	private List<MyObject3D> objects;
 	
@@ -129,7 +127,6 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		concreteCar.getRotation().set(new Quaternion().createFromAxisAngle(new Vector3(1,0, 0),(float) (-Math.PI/2)));
 
 		camera.lookAt(0, 6, 24, 0, 0, 0);
-		grid = new Grid(32);
 		getProgram().setLightPosition(0, new Vector3(3, 3, 3));
 		getProgram().setAmbientColor(0, 0, 0);
 		getProgram().setDiffuseColor(1, 1, 1);
@@ -192,8 +189,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			camera.move(0, 0, -sense);
 		}
-		Vector3 camPos = camera.getPosition();
-		getProgram().setLightPosition(0, camPos);
+		getProgram().setLightPosition(0, new Vector3(128,128,128));
 		getProgram().setTime(time * 10);
 		getProgram().update(camera);
 	}
@@ -253,14 +249,8 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	@Override
 	public void onObjectVisible(IBoundingSphere obj) {
 		Object3D obj3d = (Object3D) obj;
-		// Model3D model = (Model3D) obj3d.getModel();
-
-		// model.draw(obj3d, getProgram(), TheQuadExampleMoving.this);
 		obj3d.draw(getProgram(), frustum);
-		// model.drawBoxs(program);
-		Vector3 dim = new Vector3(obj3d.getRadius());
 		sphere.draw(getProgram(), obj3d);
-
 	}
 
 	/*

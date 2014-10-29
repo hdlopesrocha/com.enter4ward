@@ -22,14 +22,12 @@ public class MyObject3D extends Object3D {
 
 	@Override
 	public void draw(ShaderProgram program, BoundingFrustum frustum) {
+
+		program.reset();
 		final Matrix modelMatrix = getModelMatrix();
 		final Model3D model = (Model3D) getModel();
 
-		if (collided) {
-			program.setAmbientColor(1, 0, 0);
-		} else {
-			program.setAmbientColor(0, 0, 0);
-		}
+		program.setAmbientColor(collided? 1:0, 0, 0);
 		program.setModelMatrix(modelMatrix);
 
 		for (Group g : model.getGroups()) {
@@ -47,9 +45,6 @@ public class MyObject3D extends Object3D {
 				}
 			}
 		}
-		program.setModelMatrix(IDENTITY);
-		program.setAmbientColor(0, 0, 0);
-
 	}
 
 }

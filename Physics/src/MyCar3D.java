@@ -30,9 +30,10 @@ public class MyCar3D extends Object3D {
 
 	@Override
 	public void draw(final ShaderProgram program, final BoundingFrustum frustum) {
-		time += 0.003f;
+		time += 0.003f;				
 		final Matrix modelMatrix = getModelMatrix();
 		final Model3D model = (Model3D) getModel();
+		
 		for (Group g : model.getGroups()) {
 			
 			final BoundingSphere groupSphere = new BoundingSphere(g);
@@ -45,7 +46,7 @@ public class MyCar3D extends Object3D {
 					((Vector3)bufferSphere.getCenter()).transform(getRotation()).add(getPosition());
 					
 					if (frustum.contains(bufferSphere) != ContainmentType.Disjoint) {
-
+						program.reset();
 						b.bind(program);
 						final Material m = b.getMaterial();
 						final Matrix matrix = new Matrix().identity();
@@ -70,10 +71,12 @@ public class MyCar3D extends Object3D {
 						program.setModelMatrix(matrix.multiply(modelMatrix));
 						TheQuadExampleMoving.draws++;
 						b.draw(program);
-						program.setModelMatrix(IDENTITY);
 					}
 				}
+				program.setModelMatrix(IDENTITY);
 				sphere.draw(program, groupSphere);
+				
+				
 			}
 		}
 	}

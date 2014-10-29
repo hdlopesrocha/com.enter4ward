@@ -312,7 +312,5 @@ public class BufferObject extends BoundingSphere {
 		GL20.glDisableVertexAttribArray(1);
 		GL20.glDisableVertexAttribArray(2);
 		GL30.glBindVertexArray(0);
-		shader.setMaterialAlpha(1f);
-
 	}
 }

@@ -75,8 +75,8 @@ public class DrawableBox {
 		shader.setModelMatrix(new Matrix().identity());
 
 		GL11.glEnable(GL11.GL_CULL_FACE);
-		shader.setMaterialAlpha(1f);
-
+		
+		
 	}
 
 

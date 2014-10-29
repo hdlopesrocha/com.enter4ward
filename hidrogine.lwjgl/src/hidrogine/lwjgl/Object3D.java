@@ -9,7 +9,6 @@ import hidrogine.math.IVector3;
 import hidrogine.math.Matrix;
 
 public class Object3D extends IObject3D{
-	private static final Matrix IDENTITY = new Matrix().identity();
 
 	public Object3D(IVector3 position, IModel3D model) {
 		super(position, model);
@@ -17,17 +16,18 @@ public class Object3D extends IObject3D{
 	}
 
 	public void draw(ShaderProgram program, BoundingFrustum frustum){
-		Matrix matrix = getModelMatrix();
-		Model3D model = (Model3D) getModel();
+		program.reset();
+
+		final Matrix matrix = getModelMatrix();
+		final Model3D model = (Model3D) getModel();
 		for(Group g : model.getGroups()){
 			for(BufferObject b : g.getBuffers()){
-				BoundingSphere sph = new BoundingSphere(b);
+				final BoundingSphere sph = new BoundingSphere(b);
 				sph.getCenter().add(matrix.getTranslation());
 				if (frustum.contains(sph) != ContainmentType.Disjoint) {
 					b.bind(program);
 					program.setModelMatrix(matrix);	
 					b.draw(program);
-					program.setModelMatrix(IDENTITY);
 				}
 			}
 		}		

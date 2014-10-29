@@ -40,6 +40,8 @@ import org.lwjgl.opengl.GL11;
  */
 public class ShaderProgram {
 
+	private static final Matrix IDENTITY = new Matrix().identity();
+
 	/** The m position handle. */
 	public int mPositionHandle;
 
@@ -458,6 +460,11 @@ public class ShaderProgram {
 	}
 
 
-
+	public void reset(){
+		setModelMatrix(IDENTITY);
+		setDiffuseColor(1,1,1);
+		setMaterialAlpha(1f);
+		setAmbientColor(0, 0, 0);
+	}
 
 }
