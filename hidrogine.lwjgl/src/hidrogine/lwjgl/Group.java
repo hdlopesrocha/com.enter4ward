@@ -23,7 +23,7 @@ public class Group extends BoundingSphere {
     	subGroups.add(buffer);
     }
     
-    public List<BufferObject> getBuffers(){
+    public Iterable<BufferObject> getBuffers(){
     	return subGroups;
     }
   

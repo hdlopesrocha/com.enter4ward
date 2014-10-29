@@ -1,18 +1,14 @@
-import hidrogine.lwjgl.DrawHandler;
 import hidrogine.lwjgl.DrawableBox;
 import hidrogine.lwjgl.Game;
 import hidrogine.lwjgl.Grid;
-import hidrogine.lwjgl.Group;
-import hidrogine.lwjgl.Material;
 import hidrogine.lwjgl.Model3D;
+import hidrogine.lwjgl.Object3D;
 import hidrogine.math.BoundingBox;
 import hidrogine.math.BoundingFrustum;
 import hidrogine.math.Camera;
 import hidrogine.math.ContainmentType;
 import hidrogine.math.IBoundingBox;
 import hidrogine.math.IBoundingSphere;
-import hidrogine.math.IObject3D;
-import hidrogine.math.IVector3;
 import hidrogine.math.Matrix;
 import hidrogine.math.ObjectCollisionHandler;
 import hidrogine.math.Space;
@@ -30,24 +26,20 @@ import org.lwjgl.opengl.GL20;
 /**
  * The Class TheQuadExampleMoving.
  */
-public class TheQuadExampleMoving extends Game implements DrawHandler,
-		VisibleObjectHandler, ObjectCollisionHandler, VisibleNodeHandler {
+public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
+		ObjectCollisionHandler, VisibleNodeHandler {
 
 	/** The Constant IDENTITY. */
 	private static final Matrix IDENTITY = new Matrix().identity();
-
-	/** The Constant ROTATION. */
-	private static final Matrix ROTATION = new Matrix();
-
-	/** The Constant TRANSLATION. */
-	private static final Matrix TRANSLATION = new Matrix();
 
 	/** The box. */
 	private DrawableBox box;
 
 	/** The moving. */
-	private IObject3D moving, surf;
+	private MyObject3D moving;
 
+	/** The concrete car. */
+	private MyCar3D concreteCar;
 	/** The camera. */
 	private Camera camera;
 	/** The grid. */
@@ -59,11 +51,8 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 	/** The time. */
 	private float time = 0;
 
-	/** The hited object. */
-	private IObject3D hitedObject;
-
 	/** The draws. */
-	private int draws = 0;
+	public static int draws = 0;
 
 	/** The frustum. */
 	private BoundingFrustum frustum;
@@ -98,20 +87,20 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 		space = new Space();
 		box = new DrawableBox();
 		/** The box. */
-		// Model3D car = new Model3D("car.mat", "car.geo", 1f);
-		Model3D box = new Model3D("box.mat", "box.geo", 1f,true);
-		Model3D surface = new Model3D("surface.mat", "surface.geo", 1f,true);
+		Model3D car = new Model3D("car.mat", "car.geo", 1f, true);
+		Model3D box = new Model3D("box.mat", "box.geo", 1f, true);
+		Model3D surface = new Model3D("surface.mat", "surface.geo", 1f, true);
 
-		(surf = new IObject3D(new Vector3(0, -2, 0), surface) {
+		(new MyObject3D(new Vector3(0, -2, 0), surface) {
 		}).insert(space);
 
-		(new IObject3D(new Vector3(0, 0, 0), box) {
+		(concreteCar = new MyCar3D(new Vector3(0, 0, 0), car) {
 		}).insert(space);
 
-		(new IObject3D(new Vector3(-10, 0, 0), box) {
+		(new MyObject3D(new Vector3(-10, 0, 0), box) {
 		}).insert(space);
 
-		(moving = new IObject3D(new Vector3(), box) {
+		(moving = new MyObject3D(new Vector3(), box) {
 		}).insert(space);
 
 		camera.lookAt(0, 6, 24, 0, 0, 0);
@@ -132,11 +121,14 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 	@Override
 	public void update() {
 		time += 0.003f;
+		concreteCar.addTime(0.003f);
+
 		// / moving.remove();
-		moving.setPosition(new Vector3((float) (10 * Math.cos(time * 4)),
-				 0f,(float) (10 * Math.sin(time * 4))));
+		moving.setPosition(new Vector3((float) (10 * Math.cos(time * 4)), 0f,
+				(float) (10 * Math.sin(time * 4))));
+		moving.getRotation().createFromAxisAngle(new Vector3(0, 1, 0),
+				(float) -(Math.PI + time * 4));
 		moving.update(space);
-		hitedObject = null;
 		space.handleObjectCollisions(moving, this);
 
 		// moving.insert(space);
@@ -224,61 +216,20 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see hidrogine.lwjgl.DrawHandler#onDraw(hidrogine.math.IObject3D,
-	 * hidrogine.lwjgl.Group, hidrogine.lwjgl.Material)
-	 */
-	@Override
-	public Matrix onDraw(IObject3D obj, Group group, Material material) {
-		
-		Matrix matrix = TRANSLATION.identity();
-
-		if (obj.equals(hitedObject)) {
-			getProgram().setDiffuseColor(1, 0, 0);
-		} else {
-			getProgram().setDiffuseColor(1, 1, 1);
-
-		}
-
-		if (material.getName().equals("c0")) {
-			getProgram().setDiffuseColor(
-					(float) (Math.sin(time) + 1) / 2f,
-					(float) (Math.cos(time * Math.E / 2) + 1) / 2f,
-					(float) (Math.sin(time * Math.PI / 2)
-							* Math.cos(time * Math.PI / 2) + 1) / 2f);
-		}
-		if (obj.equals(moving)) {
-			if (group.getName().startsWith("w")
-					&& group.getName().length() == 2) {
-				IVector3 center = new Vector3(group.getCenter()).multiply(-1f);
-				matrix.translate(center).multiply(
-						ROTATION.createRotationX(time * 48));
-				center.multiply(-1f);
-				matrix.translate(center);
-			}
-			obj.getRotation().createFromAxisAngle(new Vector3(0,1,0),(float) -(Math.PI + time * 4));
-	
-		}
-		
-		
-		return obj.getModelMatrix();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see hidrogine.math.VisibleObjectHandler#onObjectVisible(hidrogine.math.
 	 * IBoundingSphere)
 	 */
 	@Override
 	public void onObjectVisible(IBoundingSphere obj) {
-		IObject3D obj3d = (IObject3D) obj;
+		Object3D obj3d = (Object3D) obj;
+		// Model3D model = (Model3D) obj3d.getModel();
 
-		draws++;
-		Model3D model = (Model3D) obj3d.getModel();
-		model.draw(obj3d, getProgram(), TheQuadExampleMoving.this);
+		// model.draw(obj3d, getProgram(), TheQuadExampleMoving.this);
+		obj3d.draw(getProgram(), frustum);
 		// model.drawBoxs(program);
 		Vector3 dim = new Vector3(obj3d.getRadius());
-		box.draw(getProgram(), new Vector3(obj3d.getCenter()).subtract(dim), new Vector3(obj3d.getCenter()).add(dim));
+		box.draw(getProgram(), new Vector3(obj3d.getCenter()).subtract(dim),
+				new Vector3(obj3d.getCenter()).add(dim));
 
 	}
 
@@ -291,9 +242,7 @@ public class TheQuadExampleMoving extends Game implements DrawHandler,
 	 */
 	@Override
 	public void onObjectCollision(IBoundingSphere obj1, IBoundingSphere obj2) {
-		if (!obj2.equals(surf)) {
-			hitedObject = (IObject3D) obj2;
-		}
+
 	}
 
 	/*

@@ -28,6 +28,14 @@ public class BoundingSphere extends IBoundingSphere {
     /**
      * Instantiates a new bounding sphere.
      */
+    public BoundingSphere(IBoundingSphere sph) {
+        this.center = new Vector3(sph.getCenter());
+        this.radius = sph.getRadius();
+    }
+    
+    /**
+     * Instantiates a new bounding sphere.
+     */
     public BoundingSphere() {
         this.center = new Vector3();
         this.radius = 0f;

@@ -1,7 +1,6 @@
 package hidrogine.lwjgl;
 
 import hidrogine.math.BoundingSphere;
-import hidrogine.math.IBoundingSphere;
 import hidrogine.math.IVector2;
 import hidrogine.math.IVector3;
 import hidrogine.math.Triangle;
@@ -23,7 +22,7 @@ import org.lwjgl.opengl.GL30;
 /**
  * The Class BufferObject.
  */
-public class BufferObject {
+public class BufferObject extends BoundingSphere {
 
 	/*
 	 * (non-Javadoc)
@@ -56,9 +55,6 @@ public class BufferObject {
 
 	/** The triangles. */
 	private List<Triangle> triangles = new ArrayList<Triangle>();
-
-	/** The container. */
-	private IBoundingSphere container;
 
 	/** The index_count. */
 	private int indexCount;
@@ -146,7 +142,7 @@ public class BufferObject {
 	 * Builds the buffer.
 	 */
 	public final void buildBuffer() {
-		container = new BoundingSphere().createFromPoints(positions);
+		createFromPoints(positions);
 		if (explodeTriangles) {
 			for (int i = 0; i < indexData.size() - 3; i += 3) {
 				IVector3 a = positions.get(indexData.get(i));

@@ -29,6 +29,7 @@ import org.lwjgl.opengl.GL11;
  * The Class Model3D.
  */
 public class Model3D extends IModel3D {
+
 	private static final Matrix IDENTITY = new Matrix().identity(); 
 
 	/** The groups. */
@@ -45,7 +46,10 @@ public class Model3D extends IModel3D {
 	/** The box. */
 	private static DrawableBox box = new DrawableBox();
 	
-	
+	public Iterable<Group> getGroups() {
+		return groups;
+	}
+
 
 	/**
 	 * Instantiates a new model3 d.
@@ -230,7 +234,7 @@ public class Model3D extends IModel3D {
 		for (Group g : groups) {
 			for (BufferObject sg : g.getBuffers()) {
 				sg.bind(shader);
-				Matrix mat=	handler.onDraw(obj,g, sg.getMaterial());
+				Matrix mat=	handler.onDraw(obj,g, sg);
 				if(mat!=null){
 					shader.setModelMatrix(mat);	
 					sg.draw(shader);
