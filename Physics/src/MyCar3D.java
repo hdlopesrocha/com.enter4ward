@@ -34,16 +34,16 @@ public class MyCar3D extends Object3D {
 		final Matrix modelMatrix = getModelMatrix();
 		final Model3D model = (Model3D) getModel();
 		
-		for (Group g : model.getGroups()) {
+		for (final Group g : model.getGroups()) {
 			
 			final BoundingSphere groupSphere = new BoundingSphere(g);
 			groupSphere.getCenter().transform(getRotation()).add(getPosition());
 						
 			if (frustum.contains(groupSphere) != ContainmentType.Disjoint) {
-				for (BufferObject b : g.getBuffers()) {
+				for (final BufferObject b : g.getBuffers()) {
 			
 					final BoundingSphere bufferSphere = new BoundingSphere(b);
-					((Vector3)bufferSphere.getCenter()).transform(getRotation()).add(getPosition());
+					bufferSphere.getCenter().transform(getRotation()).add(getPosition());
 					
 					if (frustum.contains(bufferSphere) != ContainmentType.Disjoint) {
 						program.reset();

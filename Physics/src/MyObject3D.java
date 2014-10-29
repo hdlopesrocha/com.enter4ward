@@ -13,8 +13,6 @@ public class MyObject3D extends Object3D {
 
 	public boolean collided = false;
 
-	private static final Matrix IDENTITY = new Matrix().identity();
-
 	public MyObject3D(IVector3 position, Model3D model) {
 		super(position, model);
 		// TODO Auto-generated constructor stub
@@ -30,11 +28,11 @@ public class MyObject3D extends Object3D {
 		program.setAmbientColor(collided? 1:0, 0, 0);
 		program.setModelMatrix(modelMatrix);
 
-		for (Group g : model.getGroups()) {
+		for (final Group g : model.getGroups()) {
 			final BoundingSphere groupSphere = new BoundingSphere(g);
 			groupSphere.getCenter().transform(getRotation()).add(getPosition());
 			if (frustum.contains(groupSphere) != ContainmentType.Disjoint) {
-				for (BufferObject b : g.getBuffers()) {
+				for (final BufferObject b : g.getBuffers()) {
 					b.bind(program);
 					final BoundingSphere bufferSphere = new BoundingSphere(b);
 					bufferSphere.getCenter().transform(getRotation()).add(getPosition());

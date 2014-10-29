@@ -20,8 +20,8 @@ public class Object3D extends IObject3D{
 
 		final Matrix matrix = getModelMatrix();
 		final Model3D model = (Model3D) getModel();
-		for(Group g : model.getGroups()){
-			for(BufferObject b : g.getBuffers()){
+		for(final Group g : model.getGroups()){
+			for(final BufferObject b : g.getBuffers()){
 				final BoundingSphere sph = new BoundingSphere(b);
 				sph.getCenter().add(matrix.getTranslation());
 				if (frustum.contains(sph) != ContainmentType.Disjoint) {
