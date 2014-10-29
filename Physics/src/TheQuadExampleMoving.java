@@ -16,6 +16,9 @@ import hidrogine.math.Vector3;
 import hidrogine.math.VisibleNodeHandler;
 import hidrogine.math.VisibleObjectHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -45,6 +48,8 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	/** The grid. */
 	private Grid grid;
 
+	private List<MyObject3D> objects;
+	
 	/** The space. */
 	private Space space;
 
@@ -83,7 +88,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	@Override
 	public void setup() {
 		camera = new Camera(1280, 720);
-
+		objects = new ArrayList<MyObject3D>();
 		space = new Space();
 		box = new DrawableBox();
 		/** The box. */
@@ -91,16 +96,26 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		Model3D box = new Model3D("box.mat", "box.geo", 1f, true);
 		Model3D surface = new Model3D("surface.mat", "surface.geo", 1f, true);
 
-		(new MyObject3D(new Vector3(0, -2, 0), surface) {
-		}).insert(space);
+		
+		MyObject3D obj1 = new MyObject3D(new Vector3(0, -2, 0), surface) {
+		};
+		
+		MyObject3D obj2 = new MyObject3D(new Vector3(-10, 0, 0), box) {
+		};
+		
+		moving = new MyObject3D(new Vector3(), box) {
+		};
+		
+		obj1.insert(space);
+		obj2.insert(space);
+		moving.insert(space);
+
+		objects.add(obj1);
+		objects.add(obj2);
+		objects.add(moving);
+		
 
 		(concreteCar = new MyCar3D(new Vector3(0, 0, 0), car) {
-		}).insert(space);
-
-		(new MyObject3D(new Vector3(-10, 0, 0), box) {
-		}).insert(space);
-
-		(moving = new MyObject3D(new Vector3(), box) {
 		}).insert(space);
 
 		camera.lookAt(0, 6, 24, 0, 0, 0);
@@ -120,6 +135,10 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	 */
 	@Override
 	public void update() {
+		for(MyObject3D o : objects){
+			o.collided = false;
+		}
+		
 		time += 0.003f;
 		concreteCar.addTime(0.003f);
 
@@ -242,7 +261,9 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	 */
 	@Override
 	public void onObjectCollision(IBoundingSphere obj1, IBoundingSphere obj2) {
-
+		if(obj2 instanceof MyObject3D){
+			((MyObject3D)obj2).collided = true;
+		}
 	}
 
 	/*
