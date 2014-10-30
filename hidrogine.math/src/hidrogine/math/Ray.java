@@ -211,6 +211,25 @@ public class Ray {
     /**
      * Intersects.
      *
+     * @param triangle
+     *            the triangle
+     * @return the i vector3
+     */
+    public IVector3 intersects(Triangle triangle) {
+        Float distance = intersects(triangle.getPlane());
+        if (distance != null) {
+            IVector3 intersection = new Vector3(Direction).multiply(distance)
+                    .add(Position);
+            if (triangle.contains(intersection)) {
+                return intersection;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Intersects.
+     *
      * @param sphere
      *            the sphere
      * @return the float

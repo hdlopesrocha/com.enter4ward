@@ -64,11 +64,20 @@ public class Triangle {
         float e3y = e1z * e2x - e1x * e2z;
         float e3z = e1x * e2y - e1y * e2x;
 
-        // 3. the tria area is the half length of the
+        // 3. the triangle area is the half length of the
         // normal vector:
 
-        return (float) (0.5 * Math.sqrt(e3x * e3x + e3y * e3y + e3z * e3z));
+        return (float) (0.5f * Math.sqrt(e3x * e3x + e3y * e3y + e3z * e3z));
 
+    }
+
+    /**
+     * Gets the plane.
+     *
+     * @return the plane
+     */
+    public Plane getPlane() {
+        return new Plane(new Vector3(a), new Vector3(b), new Vector3(c));
     }
 
 }
