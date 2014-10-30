@@ -301,6 +301,11 @@ public abstract class IVector3 {
                 * getZ());
     }
 
+    public float lengthSquared() {
+        return getX() * getX() + getY() * getY() + getZ()
+                * getZ();
+    }
+    
     /*
      * (non-Javadoc)
      * 
