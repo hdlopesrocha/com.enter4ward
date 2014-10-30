@@ -11,6 +11,7 @@ import hidrogine.math.BoundingSphere;
 import hidrogine.math.ContainmentType;
 import hidrogine.math.IVector3;
 import hidrogine.math.Matrix;
+import hidrogine.math.Space;
 import hidrogine.math.Vector3;
 
 public class MyCar3D extends Object3D {
@@ -26,9 +27,11 @@ public class MyCar3D extends Object3D {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void update(float delta_t) {
-		super.update(delta_t);
+	public void update(float delta_t, Space space) {
+		super.update(delta_t,space);
 		time += delta_t;
+		update(space);
+
 	};
 
 	@Override

@@ -10,18 +10,18 @@ package hidrogine.math;
 public class Ray {
 
     /** The Direction. */
-    private Vector3 Direction;
+    private IVector3 direction;
 
     /** The Position. */
-    private Vector3 Position;
+    private IVector3 position;
 
     /**
      * Gets the direction.
      *
      * @return the direction
      */
-    public Vector3 getDirection() {
-        return Direction;
+    public IVector3 getDirection() {
+        return direction;
     }
 
     /**
@@ -31,7 +31,7 @@ public class Ray {
      *            the new direction
      */
     public void setDirection(Vector3 direction) {
-        Direction = direction;
+        this.direction = direction;
     }
 
     /**
@@ -39,8 +39,8 @@ public class Ray {
      *
      * @return the position
      */
-    public Vector3 getPosition() {
-        return Position;
+    public IVector3 getPosition() {
+        return position;
     }
 
     /**
@@ -49,21 +49,21 @@ public class Ray {
      * @param position
      *            the new position
      */
-    public void setPosition(Vector3 position) {
-        Position = position;
+    public void setPosition(IVector3 position) {
+        this.position = position;
     }
 
     /**
      * Instantiates a new ray.
      *
-     * @param position
+     * @param iVector3
      *            the position
-     * @param direction
+     * @param iVector32
      *            the direction
      */
-    public Ray(Vector3 position, Vector3 direction) {
-        this.Position = position;
-        this.Direction = direction;
+    public Ray(IVector3 iVector3, IVector3 iVector32) {
+        this.position = iVector3;
+        this.direction = iVector32;
     }
 
     /**
@@ -74,8 +74,8 @@ public class Ray {
      * @return true, if successful
      */
     public boolean equals(Ray other) {
-        return this.Position.equals(other.Position)
-                && this.Direction.equals(other.Direction);
+        return this.position.equals(other.position)
+                && this.direction.equals(other.direction);
     }
 
     // adapted from
@@ -87,18 +87,18 @@ public class Ray {
      *            the box
      * @return the float
      */
-    public Float intersects(BoundingBox box) {
+    public Float intersects(IBoundingBox box) {
         float Epsilon = 1e-6f;
 
         Float tMin = null, tMax = null;
 
-        if (Math.abs(Direction.getX()) < Epsilon) {
-            if (Position.getX() < box.getMin().getX()
-                    || Position.getX() > box.getMax().getX())
+        if (Math.abs(direction.getX()) < Epsilon) {
+            if (position.getX() < box.getMin().getX()
+                    || position.getX() > box.getMax().getX())
                 return null;
         } else {
-            tMin = (box.getMin().getX() - Position.getX()) / Direction.getX();
-            tMax = (box.getMax().getX() - Position.getX()) / Direction.getX();
+            tMin = (box.getMin().getX() - position.getX()) / direction.getX();
+            tMax = (box.getMax().getX() - position.getX()) / direction.getX();
 
             if (tMin > tMax) {
                 float temp = tMin;
@@ -107,15 +107,15 @@ public class Ray {
             }
         }
 
-        if (Math.abs(Direction.getY()) < Epsilon) {
-            if (Position.getY() < box.getMin().getY()
-                    || Position.getY() > box.getMax().getY())
+        if (Math.abs(direction.getY()) < Epsilon) {
+            if (position.getY() < box.getMin().getY()
+                    || position.getY() > box.getMax().getY())
                 return null;
         } else {
-            float tMinY = (box.getMin().getY() - Position.getY())
-                    / Direction.getY();
-            float tMaxY = (box.getMax().getY() - Position.getY())
-                    / Direction.getY();
+            float tMinY = (box.getMin().getY() - position.getY())
+                    / direction.getY();
+            float tMaxY = (box.getMax().getY() - position.getY())
+                    / direction.getY();
 
             if (tMinY > tMaxY) {
                 float temp = tMinY;
@@ -133,15 +133,15 @@ public class Ray {
                 tMax = tMaxY;
         }
 
-        if (Math.abs(Direction.getZ()) < Epsilon) {
-            if (Position.getZ() < box.getMin().getZ()
-                    || Position.getZ() > box.getMax().getZ())
+        if (Math.abs(direction.getZ()) < Epsilon) {
+            if (position.getZ() < box.getMin().getZ()
+                    || position.getZ() > box.getMax().getZ())
                 return null;
         } else {
-            float tMinZ = (box.getMin().getZ() - Position.getZ())
-                    / Direction.getZ();
-            float tMaxZ = (box.getMax().getZ() - Position.getZ())
-                    / Direction.getZ();
+            float tMinZ = (box.getMin().getZ() - position.getZ())
+                    / direction.getZ();
+            float tMaxZ = (box.getMax().getZ() - position.getZ())
+                    / direction.getZ();
 
             if (tMinZ > tMaxZ) {
                 float temp = tMinZ;
@@ -190,13 +190,13 @@ public class Ray {
      */
     public Float intersects(Plane plane) {
         Float result = null;
-        float den = Direction.dot(plane.getNormal());
+        float den = direction.dot(plane.getNormal());
         if (Math.abs(den) < 0.00001f) {
             return null;
 
         }
 
-        result = (-plane.getDistance() - plane.getNormal().dot(Position)) / den;
+        result = (-plane.getDistance() - plane.getNormal().dot(position)) / den;
 
         if (result < 0.0f) {
             if (result < -0.00001f) {
@@ -215,13 +215,12 @@ public class Ray {
      *            the triangle
      * @return the i vector3
      */
-    public IVector3 intersects(Triangle triangle) {
-        Float distance = intersects(triangle.getPlane());
+    public Float intersects(Triangle triangle) {
+        final Float distance = intersects(triangle.getPlane());
         if (distance != null) {
-            IVector3 intersection = new Vector3(Direction).multiply(distance)
-                    .add(Position);
+            IVector3 intersection = new Vector3(direction).multiply(distance).add(position);
             if (triangle.contains(intersection)) {
-                return intersection;
+                return distance;
             }
         }
         return null;
@@ -234,10 +233,10 @@ public class Ray {
      *            the sphere
      * @return the float
      */
-    public Float intersects(BoundingSphere sphere) {
+    public Float intersects(IBoundingSphere sphere) {
         // Find the vector between where the ray starts the the sphere's centre
         IVector3 difference = new Vector3(sphere.getCenter())
-                .subtract(this.Position);
+                .subtract(this.position);
 
         float differenceLengthSquared = difference.lengthSquared();
         float sphereRadiusSquared = sphere.getRadius() * sphere.getRadius();
@@ -252,7 +251,7 @@ public class Ray {
             return 0.0f;
         }
 
-        distanceAlongRay = Direction.dot(difference);
+        distanceAlongRay = direction.dot(difference);
         // If the ray is pointing away from the sphere then we don't ever
         // intersect
         if (distanceAlongRay < 0) {
@@ -277,8 +276,8 @@ public class Ray {
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return "{{Position:" + Position.toString() + " Direction:"
-                + Direction.toString() + "}}";
+        return "{{Position:" + position.toString() + " Direction:"
+                + direction.toString() + "}}";
     }
 
 }

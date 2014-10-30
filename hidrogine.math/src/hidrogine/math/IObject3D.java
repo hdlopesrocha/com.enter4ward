@@ -123,9 +123,9 @@ public abstract class IObject3D extends IBoundingSphere {
      * @param space
      *            the space
      */
-    public void insert(Space space) {
+    public IObject3D insert(Space space) {
         node = space.insert(this);
-
+        return this;
     }
 
     /**

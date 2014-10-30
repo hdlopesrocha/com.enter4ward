@@ -73,6 +73,14 @@ public abstract class IVector3 {
         return this;
     }
 
+    public final IVector3 addMultiply(final IVector3 vec, float factor) {
+        setX(getX() + vec.getX()*factor);
+        setY(getY() + vec.getY()*factor);
+        setZ(getZ() + vec.getZ()*factor);
+        return this;
+    }
+
+    
     /*
      * (non-Javadoc)
      * 

@@ -40,18 +40,16 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	private DrawableSphere sphere;
 	private DrawableBox box;
 
-	
 	/** The moving. */
-	private MyObject3D moving, box2;
+	private MyObject3D moving;
 
 	/** The concrete car. */
 	private MyCar3D concreteCar;
 	/** The camera. */
 	private Camera camera;
 
-
 	private List<MyObject3D> objects;
-	
+
 	/** The space. */
 	private Space space;
 
@@ -99,31 +97,34 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		Model3D box = new Model3D("box.mat", "box.geo", 1f, true);
 		Model3D surface = new Model3D("surface.mat", "surface.geo", 1f, true);
 
-		
 		Object3D obj1 = new Object3D(new Vector3(0, -2, 0), surface) {
 		};
+
 		
-		box2 = new MyObject3D(new Vector3(-10, 0, 0), box) {
-		};
-	
-		MyObject3D obj3 = new MyObject3D(new Vector3(10.6f, 0, 0), box) {
-		};
+
 		
-		moving = new MyObject3D(new Vector3(0,0,0), box) {
+
+		moving = new MyObject3D(new Vector3(0, 0, 0), box) {
 		};
-		
+
 		obj1.insert(space);
-		box2.insert(space);
-		obj3.insert(space);
+
 		moving.insert(space);
-		objects.add(obj3);
-		objects.add(box2);
+		objects.add((MyObject3D) new MyObject3D(new Vector3(11.4f, 0, 0), box) {}.insert(space));
+		objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 64, 0), box) {}.insert(space));
+		objects.add((MyObject3D) new MyObject3D(new Vector3(-10, 68, 0), box) {}.insert(space));
+		objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 72, 0), box) {}.insert(space));
+		objects.add((MyObject3D) new MyObject3D(new Vector3(-10, 76, 0), box) {}.insert(space));
+		objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 80, 0), box) {}.insert(space));
+	//objects.add((MyObject3D) new MyObject3D(new Vector3(-10, 4000, 0), box) {}.insert(space));
+
 		objects.add(moving);
 
-		(concreteCar = new MyCar3D(new Vector3(0, 0, 0), car) {
-		}).insert(space);
+		(concreteCar = new MyCar3D(new Vector3(0, 0, 0), car) {}).insert(space);
 
-		concreteCar.getRotation().set(new Quaternion().createFromAxisAngle(new Vector3(1,0, 0),(float) (-Math.PI/2)));
+		concreteCar.getRotation().set(
+				new Quaternion().createFromAxisAngle(new Vector3(1, 0, 0),
+						(float) (-Math.PI / 2)));
 
 		camera.lookAt(0, 6, 32, 0, 0, 0);
 		getProgram().setLightPosition(0, new Vector3(3, 3, 3));
@@ -141,28 +142,34 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	 */
 	@Override
 	public void update(float deltaTime) {
-		for(MyObject3D o : objects){
+		for (MyObject3D o : objects) {
 			o.collided = false;
 		}
-		
+
 		time += deltaTime;
 
-		concreteCar.getRotation().multiply(new Quaternion().createFromAxisAngle(new Vector3(0, 0, 1),-deltaTime)).normalize();
+		concreteCar
+				.getRotation()
+				.multiply(
+						new Quaternion().createFromAxisAngle(new Vector3(0, 0,
+								1), -deltaTime)).normalize();
 
-		
 		// / moving.remove();
 		moving.getPosition().setX((float) (10 * Math.cos(time)));
 		moving.getPosition().setZ((float) (10 * Math.sin(time)));
-		moving.getRotation().createFromAxisAngle(new Vector3(0, 1, 0),(float) -(Math.PI + time));
-		moving.update(deltaTime);
-		moving.update(space);
-		box2.update(deltaTime);
-		box2.update(space);
+		moving.getRotation().createFromAxisAngle(new Vector3(0, 1, 0),
+				(float) -(Math.PI + time));
+
+		concreteCar.update(deltaTime, space);
+	
+		
+		
+		for (MyObject3D o : objects) {
+			o.update(deltaTime, space);
+		}
+		
 		space.handleObjectCollisions(moving, this);
 
-	concreteCar.update(deltaTime);
-	concreteCar.update(space);
-		
 		// moving.insert(space);
 		float sense = 0.06f;
 		if (Mouse.isButtonDown(0)) {
@@ -193,7 +200,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			camera.move(0, 0, -sense);
 		}
-		getProgram().setLightPosition(0, new Vector3(128,128,128));
+		getProgram().setLightPosition(0, new Vector3(128, 128, 128));
 		getProgram().setTime(time);
 		getProgram().update(camera);
 	}
@@ -266,9 +273,9 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	 */
 	@Override
 	public void onObjectCollision(IBoundingSphere obj1, IBoundingSphere obj2) {
-		if(obj2 instanceof MyObject3D){
-			((MyObject3D)obj2).collided = true;
-			((MyObject3D)obj1).collided = true;
+		if (obj2 instanceof MyObject3D) {
+			((MyObject3D) obj2).collided = true;
+			((MyObject3D) obj1).collided = true;
 			((MyObject3D) obj2).getVelocity().setY(10);
 		}
 	}

@@ -40,6 +40,14 @@ public class Space {
             root.handleObjectCollisions(sphere, handler);
         }
     }
+
+
+    public void handleRayCollisions(Ray ray, float distance, RayCollisionHandler handler) {
+       // System.out.println(handler+":"+ ray);
+        if (root != null) {
+            root.handleRayCollisions(ray, distance, handler);
+        }
+    }
     
     /** The root. */
     private SpaceNode root;
