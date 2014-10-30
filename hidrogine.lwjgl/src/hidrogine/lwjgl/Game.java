@@ -86,21 +86,32 @@ public abstract class Game {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		setup();
 		System.gc();
+		
+		
+		long time = getTime();
+		long oldTime = time;
 		while (!Display.isCloseRequested()) {
 			// Do a single loop (logic/render)
-			update();
+			time = getTime();
+			update((time-oldTime)/1000f);
 			draw();
 			// Force a maximum FPS of about 60
 			Display.sync(60);
 			// Let the CPU synchronize with the GPU if GPU is tagging behind
 			program.use();
+			
 			Display.update();
+			oldTime = time;
 		}
 
 		Display.destroy();
 
 	}
 
+	public long getTime() {
+	    return System.nanoTime() / 1000000;
+	}
+	
 	/**
 	 * Use default shader.
 	 */
@@ -110,8 +121,9 @@ public abstract class Game {
 
 	/**
 	 * Update.
+	 * @param deltaTime 
 	 */
-	public abstract void update();
+	public abstract void update(float deltaTime);
 
 	/**
 	 * Draw.

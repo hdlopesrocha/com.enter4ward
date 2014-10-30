@@ -42,7 +42,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 
 	
 	/** The moving. */
-	private MyObject3D moving;
+	private MyObject3D moving, box2;
 
 	/** The concrete car. */
 	private MyCar3D concreteCar;
@@ -103,30 +103,29 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		Object3D obj1 = new Object3D(new Vector3(0, -2, 0), surface) {
 		};
 		
-		MyObject3D obj2 = new MyObject3D(new Vector3(-10, 0, 0), box) {
+		box2 = new MyObject3D(new Vector3(-10, 0, 0), box) {
 		};
 	
 		MyObject3D obj3 = new MyObject3D(new Vector3(10.6f, 0, 0), box) {
 		};
 		
-		moving = new MyObject3D(new Vector3(), box) {
+		moving = new MyObject3D(new Vector3(0,0,0), box) {
 		};
 		
 		obj1.insert(space);
-		obj2.insert(space);
+		box2.insert(space);
 		obj3.insert(space);
 		moving.insert(space);
 		objects.add(obj3);
-		objects.add(obj2);
+		objects.add(box2);
 		objects.add(moving);
-		
 
 		(concreteCar = new MyCar3D(new Vector3(0, 0, 0), car) {
 		}).insert(space);
 
 		concreteCar.getRotation().set(new Quaternion().createFromAxisAngle(new Vector3(1,0, 0),(float) (-Math.PI/2)));
 
-		camera.lookAt(0, 6, 24, 0, 0, 0);
+		camera.lookAt(0, 6, 32, 0, 0, 0);
 		getProgram().setLightPosition(0, new Vector3(3, 3, 3));
 		getProgram().setAmbientColor(0, 0, 0);
 		getProgram().setDiffuseColor(1, 1, 1);
@@ -141,23 +140,28 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	 * @see hidrogine.lwjgl.Game#update()
 	 */
 	@Override
-	public void update() {
+	public void update(float deltaTime) {
 		for(MyObject3D o : objects){
 			o.collided = false;
 		}
 		
-		time += 0.003f;
+		time += deltaTime;
 
-		concreteCar.getRotation().multiply(new Quaternion().createFromAxisAngle(new Vector3(0, 0, 1),-0.003f * 4)).normalize();
+		concreteCar.getRotation().multiply(new Quaternion().createFromAxisAngle(new Vector3(0, 0, 1),-deltaTime)).normalize();
 
 		
 		// / moving.remove();
-		moving.setPosition(new Vector3((float) (10 * Math.cos(time * 4)), 0f,(float) (10 * Math.sin(time * 4))));
-		moving.getRotation().createFromAxisAngle(new Vector3(0, 1, 0),(float) -(Math.PI + time * 4));
+		moving.getPosition().setX((float) (10 * Math.cos(time)));
+		moving.getPosition().setZ((float) (10 * Math.sin(time)));
+		moving.getRotation().createFromAxisAngle(new Vector3(0, 1, 0),(float) -(Math.PI + time));
+		moving.update(deltaTime);
 		moving.update(space);
+		box2.update(deltaTime);
+		box2.update(space);
 		space.handleObjectCollisions(moving, this);
 
-	
+	concreteCar.update(deltaTime);
+	concreteCar.update(space);
 		
 		// moving.insert(space);
 		float sense = 0.06f;
@@ -190,7 +194,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 			camera.move(0, 0, -sense);
 		}
 		getProgram().setLightPosition(0, new Vector3(128,128,128));
-		getProgram().setTime(time * 10);
+		getProgram().setTime(time);
 		getProgram().update(camera);
 	}
 
@@ -265,6 +269,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		if(obj2 instanceof MyObject3D){
 			((MyObject3D)obj2).collided = true;
 			((MyObject3D)obj1).collided = true;
+			((MyObject3D) obj2).getVelocity().setY(10);
 		}
 	}
 
