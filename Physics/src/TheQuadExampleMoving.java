@@ -97,35 +97,35 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		Model3D box = new Model3D("box.mat", "box.geo", 1f, true);
 		Model3D surface = new Model3D("surface.mat", "surface.geo", 1f, true);
 
-		Object3D obj1 = new Object3D(new Vector3(0, -2, 0), surface) {
+		Object3D obj1 = new Object3D(new Vector3(0, 0, 0), surface) {
 		};
 
 		
 
 		
-
+/*
 		moving = new MyObject3D(new Vector3(0, 0, 0), box) {
 		};
-
+*/
 		obj1.insert(space);
-
+/*
 		moving.insert(space);
-		objects.add((MyObject3D) new MyObject3D(new Vector3(11.4f, 0, 0), box) {}.insert(space));
-		objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 64, 0), box) {}.insert(space));
-		objects.add((MyObject3D) new MyObject3D(new Vector3(-10, 68, 0), box) {}.insert(space));
-		objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 72, 0), box) {}.insert(space));
-		objects.add((MyObject3D) new MyObject3D(new Vector3(-10, 76, 0), box) {}.insert(space));
-		objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 80, 0), box) {}.insert(space));
+	*/	objects.add((MyObject3D) new MyObject3D(new Vector3(11.4f, 4, 0), box) {}.insert(space));
+	//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 64, 0), box) {}.insert(space));
+	//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10, 68, 0), box) {}.insert(space));
+	//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 72, 0), box) {}.insert(space));
+	//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10, 76, 0), box) {}.insert(space));
+	//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 80, 0), box) {}.insert(space));
 	//objects.add((MyObject3D) new MyObject3D(new Vector3(-10, 4000, 0), box) {}.insert(space));
 
-		objects.add(moving);
+	//	objects.add(moving);
 
-		(concreteCar = new MyCar3D(new Vector3(0, 0, 0), car) {}).insert(space);
+	/*	(concreteCar = new MyCar3D(new Vector3(0, 0, 0), car) {}).insert(space);
 
 		concreteCar.getRotation().set(
 				new Quaternion().createFromAxisAngle(new Vector3(1, 0, 0),
 						(float) (-Math.PI / 2)));
-
+*/
 		camera.lookAt(0, 6, 32, 0, 0, 0);
 		getProgram().setLightPosition(0, new Vector3(3, 3, 3));
 		getProgram().setAmbientColor(0, 0, 0);
@@ -147,7 +147,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		}
 
 		time += deltaTime;
-
+/*
 		concreteCar
 				.getRotation()
 				.multiply(
@@ -162,13 +162,13 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 
 		concreteCar.update(deltaTime, space);
 	
-		
+	*/	
 		
 		for (MyObject3D o : objects) {
 			o.update(deltaTime, space);
 		}
 		
-		space.handleObjectCollisions(moving, this);
+	//	space.handleObjectCollisions(moving, this);
 
 		// moving.insert(space);
 		float sense = 0.06f;

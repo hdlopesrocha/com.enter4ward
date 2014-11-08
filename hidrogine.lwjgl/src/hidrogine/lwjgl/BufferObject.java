@@ -313,4 +313,8 @@ public class BufferObject extends BoundingSphere {
 		GL20.glDisableVertexAttribArray(2);
 		GL30.glBindVertexArray(0);
 	}
+
+	public Iterable<Triangle> getTriangles() {
+		return triangles;
+	}
 }

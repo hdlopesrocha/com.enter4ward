@@ -11,6 +11,7 @@ import hidrogine.math.Matrix;
 import hidrogine.math.Ray;
 import hidrogine.math.RayCollisionHandler;
 import hidrogine.math.Space;
+import hidrogine.math.Triangle;
 import hidrogine.math.Vector3;
 
 public class Object3D extends IObject3D implements RayCollisionHandler {
@@ -38,7 +39,7 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 	public void update(float delta_t, Space space) {
 	//	System.out.println("update");
 		velocity.addMultiply(aceleration, delta_t);
-		float len = velocity.length();
+		float len = velocity.length()*delta_t;
 
 		collided = false;
 
@@ -73,10 +74,24 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 	}
 
 	@Override
-	public void onObjectCollision(Ray obj1, float distance, IBoundingSphere obj2) {
-		if (!equals(obj2)) {
-			collided = true;
-			velocity.set(0, 0, 0);
+	public void onObjectCollision(final Ray ray, final float maxDistance, final IBoundingSphere obj) {
+		if (!equals(obj)) {
+			final Object3D obj3d = (Object3D) obj;
+			final Model3D model = (Model3D) obj3d.getModel();
+		
+			for(Group g : model.getGroups()){
+				for(BufferObject b : g.getBuffers()){
+					for(Triangle t : b.getTriangles()){
+						final Float inter = ray.intersects(t,maxDistance);
+						if(inter!=null){
+							collided = true;
+							velocity.set(0, 0, 0);
+							System.out.println("hit!");
+							return;
+						}
+					}
+				}
+			}
 		}
 	}
 }

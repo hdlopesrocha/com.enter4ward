@@ -189,23 +189,11 @@ public class Ray {
      * @return the float
      */
     public Float intersects(Plane plane) {
-        Float result = null;
         float den = direction.dot(plane.getNormal());
         if (Math.abs(den) < 0.00001f) {
             return null;
-
         }
-
-        result = (-plane.getDistance() - plane.getNormal().dot(position)) / den;
-
-        if (result < 0.0f) {
-            if (result < -0.00001f) {
-                return null;
-            }
-
-            result = 0.0f;
-        }
-        return result;
+        return -(plane.getDistance() + plane.getNormal().dot(position)) / den;
     }
 
     /**
@@ -215,11 +203,14 @@ public class Ray {
      *            the triangle
      * @return the i vector3
      */
-    public Float intersects(Triangle triangle) {
+    public Float intersects(final Triangle triangle, float maxDistance) {
         final Float distance = intersects(triangle.getPlane());
-        if (distance != null) {
-            IVector3 intersection = new Vector3(direction).multiply(distance).add(position);
+        if (distance != null && distance<= maxDistance) {
+            IVector3 intersection = new Vector3(position).addMultiply(direction,distance);
+            
+            System.out.println(intersection+" VS "+ position+ " | "+ distance);
             if (triangle.contains(intersection)) {
+
                 return distance;
             }
         }
