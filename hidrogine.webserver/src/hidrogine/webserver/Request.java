@@ -45,6 +45,8 @@ public class Request {
     /** The method. */
     private String method = "";
 
+    private String connection ="";
+    
     /** The encodings. */
     private List<String> encodings = new ArrayList<String>();
 
@@ -69,6 +71,9 @@ public class Request {
         InputStream is = socket.getInputStream();
 
         String currentLine = readLine(is);
+        if(currentLine==null){
+            throw new IOException();
+        }
         StringTokenizer ssLine = new StringTokenizer(currentLine, " ");
         method = ssLine.nextToken();
         url = ssLine.nextToken();
@@ -81,14 +86,14 @@ public class Request {
         if (ssUrl.hasMoreElements()) {
             setAttributes(ssUrl.nextToken());
         }
-
+ //       System.out.println("****************");
         // BUILD HEADERS
         while ((currentLine = readLine(is)) != null && currentLine.length() > 0) {
+   //         System.out.println(currentLine);
             StringTokenizer ssDots = new StringTokenizer(currentLine, ":");
             String key = ssDots.hasMoreElements() ? ssDots.nextToken().trim()
                     .toLowerCase() : "";
-            String value = ssDots.hasMoreElements() ? ssDots.nextToken().trim()
-                    : "";
+            String value = ssDots.hasMoreElements() ? ssDots.nextToken().trim().toLowerCase()      : "";
             headers.put(key, value);
         }
         String value;
@@ -104,6 +109,7 @@ public class Request {
             }
         }
 
+        
         if ((value = headers.get("content-type")) != null) {
             if (value.contains("application/x-www-form-urlencoded")) {
                 int contentLength = Integer.valueOf(headers
@@ -118,8 +124,16 @@ public class Request {
                 }
             }
         }
+        
+        connection = headers.get("connection");
     }
 
+    
+    public boolean keepAlive(){
+        return connection !=null && connection.equals("keep-alive");
+        
+    }
+    
     /**
      * Read line.
      *

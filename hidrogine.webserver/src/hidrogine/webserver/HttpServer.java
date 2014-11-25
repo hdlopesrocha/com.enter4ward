@@ -237,12 +237,18 @@ public class HttpServer {
      * @throws InvocationTargetException
      * @throws IllegalArgumentException
      */
-    public final void process(Socket socket) throws Exception {
-        Request request = new Request(socket, this);
-        String url = request.getFile().substring(1);
-        Call call = getCall(url);
-        Response response = call.invoke(this,request);
-        response.send(socket, request.getSession());
+    public final boolean process(Socket socket, int i) throws Exception {
+        try {
+            System.out.println("S:"+socket.getPort()+"|"+i);
+            Request request = new Request(socket, this);
+            String url = request.getFile().substring(1);
+            Call call = getCall(url);
+            Response response = call.invoke(this,request);
+            response.send(socket, request.getSession());
+            return request.keepAlive();
+        }catch(IOException e){
+            return false;
+        }
     }
 
 }

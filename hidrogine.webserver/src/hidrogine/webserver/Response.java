@@ -21,7 +21,7 @@ public class Response {
     private Request request;
 
     /** The version. */
-    private String version = "1.0";
+    private String version = "1.1";
 
     /** The status. */
     private String status = "200 OK";
@@ -98,8 +98,8 @@ public class Response {
         s += "Content-Type: " + contentType + "\n";
         s += "Content-Length: " + size + "\n";
         s += "Server: hidrogine/" + HttpServer.VERSION + "\n";
-        s += "Connection: close\n";
-
+        s += "Connection: "+(request.keepAlive()? "keep-alive":"close")+"\n";
+       
         if (encoding != null) {
             s += "Content-Encoding: gzip\n";
         }
@@ -153,6 +153,7 @@ public class Response {
         System.arraycopy(data, 0, packg, header.length, data.length);
         DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
         dos.write(packg);
+        
     }
 
     /**

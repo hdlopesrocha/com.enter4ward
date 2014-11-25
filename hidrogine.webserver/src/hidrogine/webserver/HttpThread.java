@@ -35,9 +35,9 @@ public class HttpThread implements Runnable {
      * @see java.lang.Runnable#run()
      */
     public final void run() {
-
+        int i=0;
         try {
-            server.process(socket);
+            while(server.process(socket,i++));
         } catch (Exception e) {
             e.printStackTrace();
         }
