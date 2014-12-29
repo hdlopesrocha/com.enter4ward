@@ -25,11 +25,24 @@ public class Matrix {
      *            the m
      */
     public Matrix(Matrix m) {
-        for (int i = 0; i < 16; ++i) {
-            M[i] = m.M[i];
-        }
+        System.arraycopy(m.M, 0, M, 0, 16);
 
     }
+
+    public float[] toArray(){
+        float [] ret = new float[16];
+        System.arraycopy(M, 0, ret, 0, 16);
+        return ret;
+    }
+
+    public Matrix(float [] m) {
+        System.arraycopy(m, 0, M, 0, 16);
+
+    }
+
+public float get(int i){
+    return M[i];
+}
 
     /**
      * Instantiates a new matrix.
@@ -323,8 +336,7 @@ public class Matrix {
      */
     public Matrix transform(Matrix value, Quaternion rotation) {
         Matrix matrix = createFromQuaternion(rotation);
-        Matrix result = new Matrix(value).multiply(matrix);
-        return result;
+        return new Matrix(value).multiply(matrix);
     }
 
     /**
@@ -483,8 +495,8 @@ public class Matrix {
      *            the camera up vector
      * @return the matrix
      */
-    public Matrix createLookAt(Vector3 cameraPosition, Vector3 cameraDirection,
-            Vector3 cameraUpVector) {
+    public Matrix createLookAt(IVector3 cameraPosition, IVector3 cameraDirection,
+            IVector3 cameraUpVector) {
         identity();
         // http://msdn.microsoft.com/en-us/library/bb205343(v=VS.85).aspx
 
@@ -1097,33 +1109,31 @@ public class Matrix {
     /**
      * Transpose.
      *
-     * @param matrix
-     *            the matrix
      * @return the matrix
      */
-    public Matrix transpose(Matrix matrix) {
-        Matrix result = new Matrix();
-        result.M[0] = matrix.M[0];
-        result.M[1] = matrix.M[4];
-        result.M[2] = matrix.M[8];
-        result.M[3] = matrix.M[12];
+    public Matrix transpose() {
+        Matrix copy = new Matrix(this);
+        M[0] = copy.M[0];
+        M[1] = copy.M[4];
+        M[2] = copy.M[8];
+        M[3] = copy.M[12];
 
-        result.M[4] = matrix.M[1];
-        result.M[5] = matrix.M[5];
-        result.M[6] = matrix.M[9];
-        result.M[7] = matrix.M[13];
+        M[4] = copy.M[1];
+        M[5] = copy.M[5];
+        M[6] = copy.M[9];
+        M[7] = copy.M[13];
 
-        result.M[8] = matrix.M[2];
-        result.M[9] = matrix.M[6];
-        result.M[10] = matrix.M[10];
-        result.M[11] = matrix.M[14];
+        M[8] = copy.M[2];
+        M[9] = copy.M[6];
+        M[10] = copy.M[10];
+        M[11] = copy.M[14];
 
-        result.M[12] = matrix.M[3];
-        result.M[13] = matrix.M[7];
-        result.M[14] = matrix.M[11];
-        result.M[15] = matrix.M[15];
+        M[12] = copy.M[3];
+        M[13] = copy.M[7];
+        M[14] = copy.M[11];
+        M[15] = copy.M[15];
 
-        return result;
+        return this;
     }
 
     /**
@@ -1197,11 +1207,13 @@ public class Matrix {
      *            the matrix
      */
     public void set(Matrix matrix) {
-        for (int i = 0; i < 16; ++i)
-            M[i] = matrix.M[i];
+        System.arraycopy(matrix.M, 0, M, 0, 16);
 
     }
+    public void set(float [] matrix) {
+        System.arraycopy(matrix, 0, M, 0, 16);
 
+    }
     /**
      * Translate.
      *
@@ -1214,6 +1226,12 @@ public class Matrix {
         return this;
     }
 
+    public Matrix translate(float x,float y, float z) {
+        multiply(new Matrix().createTranslation(x, y, z));
+        return this;
+    }
+
+
     /**
      * Scale.
      *
@@ -1222,6 +1240,11 @@ public class Matrix {
      * @return the matrix
      */
     public Matrix scale(IVector3 dim) {
+        multiply(new Matrix().createScale(dim));
+        return this;
+    }
+
+    public Matrix scale(float dim) {
         multiply(new Matrix().createScale(dim));
         return this;
     }

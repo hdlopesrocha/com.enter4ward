@@ -6,6 +6,9 @@ package hidrogine.math;
  */
 public abstract class IBoundingSphere {
 
+
+
+
     /**
      * Gets the radius.
      *

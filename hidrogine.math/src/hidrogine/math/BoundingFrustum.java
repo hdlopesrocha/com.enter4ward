@@ -31,6 +31,7 @@ public class BoundingFrustum {
      * Instantiates a new bounding frustum.
      */
     public BoundingFrustum() {
+
     }
 
     /**
@@ -39,8 +40,10 @@ public class BoundingFrustum {
      * @param value
      *            the value
      */
+
     public BoundingFrustum(Matrix value) {
         createPlanes(value);
+
         createCorners();
 
     }
@@ -78,7 +81,7 @@ public class BoundingFrustum {
      * @param value
      *            the value
      */
-    public void SetMatrix(Matrix value) {
+    public void setMatrix(Matrix value) {
         createPlanes(value); // FIXME: The odds are the planes will be used a
                              // lot
         // more often than the matrix

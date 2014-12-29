@@ -84,8 +84,6 @@ public class Quaternion {
      *
      * @param quaternion1
      *            the quaternion1
-     * @param quaternion2
-     *            the quaternion2
      * @return the quaternion
      */
     public Quaternion add(Quaternion quaternion1) {
@@ -305,9 +303,7 @@ public class Quaternion {
      * @return true, if successful
      */
     public boolean equals(Quaternion other) {
-        if ((X == other.X) && (Y == other.Y) && (Z == other.Z))
-            return W == other.W;
-        return false;
+        return (X == other.X) && (Y == other.Y) && (Z == other.Z) && W == other.W;
     }
 
     /**
@@ -429,8 +425,6 @@ public class Quaternion {
     /**
      * Subtract.
      *
-     * @param quaternion1
-     *            the quaternion1
      * @param quaternion2
      *            the quaternion2
      * @return the quaternion

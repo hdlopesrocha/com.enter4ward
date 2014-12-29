@@ -1,5 +1,4 @@
 import hidrogine.lwjgl.BufferObject;
-import hidrogine.lwjgl.DrawableBox;
 import hidrogine.lwjgl.DrawableSphere;
 import hidrogine.lwjgl.Group;
 import hidrogine.lwjgl.Material;

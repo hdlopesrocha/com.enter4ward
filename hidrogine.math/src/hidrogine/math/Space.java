@@ -25,8 +25,6 @@ public class Space {
      *
      * @param frustum
      *            the frustum
-     * @param nodeh
-     *            the nodeh
      */
     @Deprecated
     public void handleVisibleNodes(BoundingFrustum frustum, VisibleNodeHandler handler) {

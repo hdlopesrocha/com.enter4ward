@@ -332,10 +332,8 @@ public abstract class IBoundingBox {
             dmin += (sphere.getCenter().getZ() - getMax().getZ())
                     * (sphere.getCenter().getZ() - getMax().getZ());
 
-        if (dmin <= sphere.getRadius() * sphere.getRadius())
-            return true;
+        return dmin <= sphere.getRadius() * sphere.getRadius();
 
-        return false;
     }
 
     /**
@@ -348,11 +346,7 @@ public abstract class IBoundingBox {
     public boolean intersects(BoundingBox box) {
         if ((getMax().getX() >= box.getMin().getX())
                 && (getMin().getX() <= box.getMax().getX())) {
-            if ((getMax().getY() < box.getMin().getY())
-                    || (getMin().getY() > box.getMax().getY()))
-                return false;
-            return (getMax().getZ() >= box.getMin().getZ())
-                    && (getMin().getZ() <= box.getMax().getZ());
+            return !((getMax().getY() < box.getMin().getY()) || (getMin().getY() > box.getMax().getY())) && (getMax().getZ() >= box.getMin().getZ()) && (getMin().getZ() <= box.getMax().getZ());
         }
         return false;
     }

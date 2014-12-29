@@ -11,7 +11,6 @@ import hidrogine.math.IBoundingBox;
 import hidrogine.math.IBoundingSphere;
 import hidrogine.math.Matrix;
 import hidrogine.math.ObjectCollisionHandler;
-import hidrogine.math.Quaternion;
 import hidrogine.math.Space;
 import hidrogine.math.Vector3;
 import hidrogine.math.VisibleNodeHandler;

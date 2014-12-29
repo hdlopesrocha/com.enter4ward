@@ -1,7 +1,6 @@
 package hidrogine.lwjgl;
 
 import hidrogine.math.IBoundingSphere;
-import hidrogine.math.IVector3;
 import hidrogine.math.Matrix;
 import hidrogine.math.Vector2;
 import hidrogine.math.Vector3;

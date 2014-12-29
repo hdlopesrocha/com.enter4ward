@@ -285,10 +285,7 @@ public class BoundingBox extends IBoundingBox {
      */
     public boolean intersects(BoundingBox box) {
         if ((max.getX() >= box.min.getX()) && (min.getX() <= box.max.getX())) {
-            if ((max.getY() < box.min.getY()) || (min.getY() > box.max.getY()))
-                return false;
-            return (max.getZ() >= box.min.getZ())
-                    && (min.getZ() <= box.max.getZ());
+            return !((max.getY() < box.min.getY()) || (min.getY() > box.max.getY())) && (max.getZ() >= box.min.getZ()) && (min.getZ() <= box.max.getZ());
         }
         return false;
     }
