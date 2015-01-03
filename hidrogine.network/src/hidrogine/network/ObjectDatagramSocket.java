@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -17,13 +16,11 @@ import java.util.zip.GZIPOutputStream;
 public class ObjectDatagramSocket {
 
     private DatagramSocket socket;
-
     private byte buffer[] = new byte[20000];
     private DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
     private InetAddress endAddress;
     private int endPort;
 
-        
     public ObjectDatagramSocket(int port) {
         try {
             socket = new DatagramSocket(port);
@@ -44,7 +41,7 @@ public class ObjectDatagramSocket {
     }
 
 
-    public Serializable receive() {
+    public Object receive() {
         try {
             Arrays.fill(buffer, (byte) 0);
             socket.receive(packet);
@@ -59,7 +56,7 @@ public class ObjectDatagramSocket {
         return null;
     }
 
-    public void send(final Serializable obj) {
+    public void send(final Object obj) {
         Thread thr = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -76,7 +73,7 @@ public class ObjectDatagramSocket {
         thr.start();
     }
 
-    private static byte[] compress(Serializable obj) throws IOException {
+    private static byte[] compress(Object obj) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         GZIPOutputStream zos = new GZIPOutputStream(bos);
         ObjectOutputStream ous = new ObjectOutputStream(zos);
@@ -86,11 +83,11 @@ public class ObjectDatagramSocket {
         return bos.toByteArray();
     }
 
-    private static Serializable decompress(byte[] bytes) throws IOException, ClassNotFoundException {
+    private static Object decompress(byte[] bytes) throws IOException, ClassNotFoundException {
         ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         GZIPInputStream gzip = new GZIPInputStream(bais);
         ObjectInputStream ois = new ObjectInputStream(gzip);
-        return (Serializable) ois.readObject();
+        return ois.readObject();
     }
 
 
