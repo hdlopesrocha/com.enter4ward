@@ -94,14 +94,10 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		/** The box. */
 		Model3D car = new Model3D("car.mat", "car.geo", 1f, true);
 		Model3D box = new Model3D("box.mat", "box.geo", 1f, true);
-		Model3D surface = new Model3D("surface.mat", "surface.geo", 1f, true);
+		Model3D surface = new Model3D("surface.mat", "half.geo", 50f, true);
 
-		Object3D obj1 = new Object3D(new Vector3(0, 0, 0), surface) {
-		};
+		Object3D obj1 = new Object3D(new Vector3(0, 0, 0), surface) {};
 
-		
-
-		
 /*
 		moving = new MyObject3D(new Vector3(0, 0, 0), box) {
 		};
@@ -109,8 +105,12 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		obj1.insert(space);
 /*
 		moving.insert(space);
-	*/	objects.add((MyObject3D) new MyObject3D(new Vector3(11.4f, 4, 0), box) {}.insert(space));
-	//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 64, 0), box) {}.insert(space));
+	*/
+		objects.add((MyObject3D) new MyObject3D(new Vector3(11.4f, 14, 0), box) {}.insert(space));
+		objects.add((MyObject3D) new MyObject3D(new Vector3(24.0f, 32, 0), box) {}.insert(space));
+
+		
+		//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 64, 0), box) {}.insert(space));
 	//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10, 68, 0), box) {}.insert(space));
 	//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 72, 0), box) {}.insert(space));
 	//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10, 76, 0), box) {}.insert(space));
@@ -141,10 +141,6 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	 */
 	@Override
 	public void update(float deltaTime) {
-		for (MyObject3D o : objects) {
-			o.collided = false;
-		}
-
 		time += deltaTime;
 /*
 		concreteCar
@@ -275,7 +271,9 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		if (obj2 instanceof MyObject3D) {
 			((MyObject3D) obj2).collided = true;
 			((MyObject3D) obj1).collided = true;
-			((MyObject3D) obj2).getVelocity().setY(10);
+			((MyObject3D) obj2).getVelocity().setY(0);
+			((MyObject3D) obj1).getVelocity().setY(0);
+
 		}
 	}
 

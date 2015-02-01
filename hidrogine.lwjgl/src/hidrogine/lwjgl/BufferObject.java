@@ -144,7 +144,7 @@ public class BufferObject extends BoundingSphere {
 	public final void buildBuffer() {
 		createFromPoints(positions);
 		if (explodeTriangles) {
-			for (int i = 0; i < indexData.size() - 3; i += 3) {
+			for (int i = 0; i < indexData.size() ; i += 3) {
 				IVector3 a = positions.get(indexData.get(i));
 				IVector3 b = positions.get(indexData.get(i + 1));
 				IVector3 c = positions.get(indexData.get(i + 2));

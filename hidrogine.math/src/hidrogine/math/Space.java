@@ -40,10 +40,10 @@ public class Space {
     }
 
 
-    public void handleRayCollisions(Ray ray, float maxDistance, RayCollisionHandler handler) {
+    public void handleRayCollisions(Ray ray, RayCollisionHandler handler) {
        // System.out.println(handler+":"+ ray);
         if (root != null) {
-            root.handleRayCollisions(ray, maxDistance, handler);
+            root.handleRayCollisions(ray, handler);
         }
     }
     

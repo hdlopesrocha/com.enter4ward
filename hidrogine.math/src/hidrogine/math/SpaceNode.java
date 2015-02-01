@@ -332,18 +332,17 @@ class SpaceNode extends BoundingBox {
      * @param handler
      *            the handler
      */
-    public void handleRayCollisions(Ray ray, float maxDistance,
+    public void handleRayCollisions(Ray ray,
             RayCollisionHandler handler) {
-        
+        float len = ray.getDirection().length();
         
         for (IBoundingSphere obj2 : container) {
             Float idist = ray.intersects(obj2);
-            if ((idist != null && idist < maxDistance)
-                    || obj2.contains(ray.getPosition())) {
-                handler.onObjectCollision(ray, maxDistance, obj2);
+            if ((idist != null && idist < len)
+                    || obj2.contains(ray.getPosition() )) {
+                handler.onObjectCollision(ray, obj2);
             }
         }
-
         if (child != null) {
             int intersections = 0;
             for (int i = 0; i < 3; ++i) {
@@ -354,15 +353,14 @@ class SpaceNode extends BoundingBox {
                         && node.count > 0
                         && (intersections == 2
                                 || node.contains(ray.getPosition()) != ContainmentType.Disjoint || ((idist = ray
-                                .intersects(node)) != null && idist <= maxDistance))) {
+                                .intersects(node)) != null && idist <= len))) {
                     ++intersections;
                     if (idist == null) {
                         idist = 0f;
                     }
 
                     // System.out.println("#"+node+"#"+ray+"#"+idist+"#"+handler);
-
-                    node.handleRayCollisions(ray, maxDistance, handler);
+                    node.handleRayCollisions(ray, handler);
                 }
             }
         }

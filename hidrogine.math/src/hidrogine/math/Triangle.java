@@ -37,7 +37,7 @@ public class Triangle {
         float area1 = new Triangle(a, b, point).getArea();
         float area2 = new Triangle(a, c, point).getArea();
         float area3 = new Triangle(b, c, point).getArea();
-        return Math.abs(thisArea - (area1 + area2 + area3)) < 0.00001f;
+        return area1 + area2 + area3 < thisArea + 0.00001f;
     }
 
     /**
@@ -71,13 +71,15 @@ public class Triangle {
 
     }
 
+    
+    
     /**
      * Gets the plane.
      *
      * @return the plane
      */
     public Plane getPlane() {
-        return new Plane(new Vector3(a), new Vector3(b), new Vector3(c));
+        return new Plane(a, b, c);
     }
 
     @Override

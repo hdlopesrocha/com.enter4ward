@@ -18,7 +18,7 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 
 	private IVector3 aceleration;
 	private IVector3 velocity;
-	private static boolean collided;
+	private boolean collided;
 
 	public IVector3 getAceleration() {
 		return aceleration;
@@ -37,21 +37,19 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 	}
 
 	public void update(float delta_t, Space space) {
-	//	System.out.println("update");
+		//System.out.println("update");
+
 		velocity.addMultiply(aceleration, delta_t);
-		float len = velocity.length()*delta_t;
 
 		collided = false;
 
-		if(len>0){
-			space.handleRayCollisions(
-					new Ray(getPosition(), new Vector3(velocity).normalize()), len,
-					this);
-		
-			if (!collided) {
-				getPosition().addMultiply(velocity,delta_t);
-			}
+		IVector3 deltaV = new Vector3(velocity).multiply(delta_t);
+		space.handleRayCollisions(new Ray(getPosition(), deltaV),this);
+	
+		if (!collided) {
+			getPosition().add(deltaV);
 		}
+		
 		update(space);
 	}
 
@@ -74,19 +72,32 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 	}
 
 	@Override
-	public void onObjectCollision(final Ray ray, final float maxDistance, final IBoundingSphere obj) {
+	public void onObjectCollision(final Ray ray, final IBoundingSphere obj) {
 		if (!equals(obj)) {
+          //  System.out.println("*************** PSEUDO-COLLISION");
+// XXX - they hit and they are different
 			final Object3D obj3d = (Object3D) obj;
 			final Model3D model = (Model3D) obj3d.getModel();
 		
 			for(Group g : model.getGroups()){
 				for(BufferObject b : g.getBuffers()){
 					for(Triangle t : b.getTriangles()){
-						final Float inter = ray.intersects(t,maxDistance);
+						final Float inter = ray.intersects(t);
+						// XXX - aparently null
 						if(inter!=null){
+							IVector3 n = t.getPlane().getNormal();
+						//	R=V-2N(V.N)
+							float v_dot_n = ray.getDirection().dot(n);
+							IVector3 n2 = new Vector3(n).multiply(v_dot_n*2);
+							IVector3 v2n = new Vector3(ray.getDirection()).subtract(n2).normalize();
+							float len = velocity.length();
+							
+								velocity.set(v2n).multiply(len);
+									
+						//	getPosition().set(new Vector3(ray.getDirection()).multiply(inter).add(ray.getPosition()));
+							//velocity.set(0, 0, 0);
+							System.out.println("BBAAAAAAAAAMMMMM!!!!!!!!!!!");
 							collided = true;
-							velocity.set(0, 0, 0);
-							System.out.println("hit!");
 							return;
 						}
 					}
