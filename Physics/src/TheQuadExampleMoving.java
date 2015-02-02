@@ -107,8 +107,9 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		moving.insert(space);
 	*/
 		objects.add((MyObject3D) new MyObject3D(new Vector3(11.4f, 14, 0), box) {}.insert(space));
-		objects.add((MyObject3D) new MyObject3D(new Vector3(24.0f, 32, 0), box) {}.insert(space));
+		objects.add((MyObject3D) new MyObject3D(new Vector3(24.0f, 20, 20), box) {}.insert(space));
 
+		objects.add((MyObject3D) new MyObject3D(new Vector3(20, 32, 20), box) {}.insert(space));
 		
 		//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 64, 0), box) {}.insert(space));
 	//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10, 68, 0), box) {}.insert(space));
@@ -256,7 +257,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	public void onObjectVisible(IBoundingSphere obj) {
 		Object3D obj3d = (Object3D) obj;
 		obj3d.draw(getProgram(), frustum);
-		sphere.draw(getProgram(), obj3d);
+//		sphere.draw(getProgram(), obj3d);
 	}
 
 	/*
