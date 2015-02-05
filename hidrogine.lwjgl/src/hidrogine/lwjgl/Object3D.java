@@ -18,7 +18,6 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 
 	private IVector3 aceleration;
 	private IVector3 velocity;
-	private boolean collided;
 
 	public IVector3 getAceleration() {
 		return aceleration;
@@ -41,15 +40,15 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 
 		velocity.addMultiply(aceleration, delta_t);
 
-		collided = false;
-
-		IVector3 deltaV = new Vector3().addMultiply(velocity, delta_t);
-		space.handleRayCollisions(new Ray(getPosition(), deltaV), this);
-
-		if (!collided) {
-			getPosition().add(deltaV);
-		}
-
+		Ray ray = new Ray(new Vector3(getPosition()), new Vector3(velocity).multiply(delta_t));
+		space.handleRayCollisions(ray, this);
+		
+		getPosition().set(ray.getPosition());
+		if(ray.getDirection().length()>0.0001f)
+			velocity.set(ray.getDirection().normalize().multiply(velocity.length()));
+		else
+			velocity.set(0,0,0);
+		
 		update(space);
 	}
 
@@ -71,8 +70,16 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		}
 	}
 
+	
+	
 	@Override
 	public void onObjectCollision(final Ray ray, final IBoundingSphere obj) {
+		boolean collided = false;
+		final IVector3 d = ray.getDirection();
+		final IVector3 p = ray.getPosition();
+		float l = d.length();
+
+		
 		if (!equals(obj)) {
 			// System.out.println("*************** PSEUDO-COLLISION");
 			// XXX - they hit and they are different
@@ -83,16 +90,11 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 				for (BufferObject b : g.getBuffers()) {
 					for (Triangle t : b.getTriangles()) {
 						final Float inter = ray.intersects(t);
-						// XXX - aparently null
-						IVector3 d = ray.getDirection();
-						IVector3 p = ray.getPosition();
-						
-						
-						if (inter != null && d.length() > 0) {
+				
+												
+						if (inter != null && l > 0) {
 							IVector3 n = t.getPlane().getNormal();
-							float len = d.length();
-							
-							
+														
 							// R=V-2N(V.N)
 							/*
 							 float v_dot_n = ray.getDirection().dot(n);
@@ -103,26 +105,30 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 							 */
 
 							/*
-							float n2 = -velocity.dot(n) / n.length() + 1f;
+							p.addMultiply(d,l*inter).addMultiply(n, 0.0001f);
+							float n2 = -d.dot(n) / n.length();
 							IVector3 inc = new Vector3(n).normalize().multiply(n2);
-							velocity.add(inc).normalize().multiply(len);
+							d.add(inc).normalize().multiply(l*(1-inter));
+							onObjectCollision(ray, obj3d);
 							*/
 							
-							IVector3 r = new Vector3(n).cross(d).cross(n);
-							r.normalize().multiply(len*inter);
-							d.set(r);
-							p.set(new Vector3(d).multiply(inter).add(p));
-							onObjectCollision(ray, obj3d);
 							
+							p.addMultiply(d,l*inter).addMultiply(n, 0.0001f);
+							d.set(new Vector3(n).cross(d).cross(n).normalize().multiply(l*(1-inter)));
+							onObjectCollision(ray, obj3d);
 							
 							// velocity.set(0, 0, 0);
 							System.out.println("BBAAAAAAAAAMMMMM!!!!!!!!!!!");
-							collided = true;
 							return;
 						}
+				
 					}
 				}
 			}
+			if(!collided) {
+				p.add(d);
+			}
+			
 		}
 	}
 }
