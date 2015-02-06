@@ -40,11 +40,12 @@ public class Space {
     }
 
 
-    public void handleRayCollisions(Ray ray, RayCollisionHandler handler) {
+    public boolean handleRayCollisions(Ray ray, RayCollisionHandler handler) {
        // System.out.println(handler+":"+ ray);
         if (root != null) {
-            root.handleRayCollisions(ray, handler);
+            return root.handleRayCollisions(ray, handler);
         }
+        return false;
     }
     
     /** The root. */

@@ -18,7 +18,7 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 
 	private IVector3 aceleration;
 	private IVector3 velocity;
-
+	private float time;
 	public IVector3 getAceleration() {
 		return aceleration;
 	}
@@ -37,17 +37,13 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 
 	public void update(float delta_t, Space space) {
 		// System.out.println("update");
-
+		time = delta_t;
 		velocity.addMultiply(aceleration, delta_t);
 
-		Ray ray = new Ray(new Vector3(getPosition()), new Vector3(velocity).multiply(delta_t));
-		space.handleRayCollisions(ray, this);
-		
-		getPosition().set(ray.getPosition());
-		if(ray.getDirection().length()>0.0001f)
-			velocity.set(ray.getDirection().normalize().multiply(velocity.length()));
-		else
-			velocity.set(0,0,0);
+		Ray ray = new Ray(getPosition(), new Vector3(velocity).multiply(delta_t));
+		if(!space.handleRayCollisions(ray, this)){
+			getPosition().set(ray.getPosition()).add(ray.getDirection());
+		}
 		
 		update(space);
 	}
@@ -73,12 +69,14 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 	
 	
 	@Override
-	public void onObjectCollision(final Ray ray, final IBoundingSphere obj) {
-		boolean collided = false;
-		final IVector3 d = ray.getDirection();
-		final IVector3 p = ray.getPosition();
-		float l = d.length();
+	public boolean onObjectCollision(final IBoundingSphere obj) {
+		
+		final Ray ray_time = new Ray(getPosition(), new Vector3(velocity).multiply(time));
+		final float len3 = velocity.length();
+		final float len1 = len3*time;
 
+		Float inter = null;
+		Triangle triangle = null;
 		
 		if (!equals(obj)) {
 			// System.out.println("*************** PSEUDO-COLLISION");
@@ -89,46 +87,44 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 			for (Group g : model.getGroups()) {
 				for (BufferObject b : g.getBuffers()) {
 					for (Triangle t : b.getTriangles()) {
-						final Float inter = ray.intersects(t);
-				
-												
-						if (inter != null && l > 0) {
-							IVector3 n = t.getPlane().getNormal();
-														
-							// R=V-2N(V.N)
-							/*
-							 float v_dot_n = ray.getDirection().dot(n);
-							 IVector3 n2 = new Vector3(n).multiply(v_dot_n*2);
-							 IVector3 v2n = new
-							 Vector3(ray.getDirection()).subtract(n2).normalize(); float len = velocity.length();
-							 velocity.set(v2n).multiply(len);
-							 */
-
-							/*
-							p.addMultiply(d,l*inter).addMultiply(n, 0.0001f);
-							float n2 = -d.dot(n) / n.length();
-							IVector3 inc = new Vector3(n).normalize().multiply(n2);
-							d.add(inc).normalize().multiply(l*(1-inter));
-							onObjectCollision(ray, obj3d);
-							*/
-							
-							
-							p.addMultiply(d,l*inter).addMultiply(n, 0.0001f);
-							d.set(new Vector3(n).cross(d).cross(n).normalize().multiply(l*(1-inter)));
-							onObjectCollision(ray, obj3d);
-							
-							// velocity.set(0, 0, 0);
-							System.out.println("BBAAAAAAAAAMMMMM!!!!!!!!!!!");
-							return;
+						final Float i = ray_time.intersects(t);
+						if(i!=null && (inter==null || i<inter)) {
+							inter = i;
+							triangle = t;	
 						}
-				
 					}
 				}
 			}
-			if(!collided) {
-				p.add(d);
+			
+			if (inter != null && time*(1 - inter)>=0) {
+				IVector3 n = triangle.getPlane().getNormal();
+											
+				// R=V-2N(V.N)
+				/*
+				 float v_dot_n = ray.getDirection().dot(n);
+				 IVector3 n2 = new Vector3(n).multiply(v_dot_n*2);
+				 IVector3 v2n = new
+				 Vector3(ray.getDirection()).subtract(n2).normalize(); float len = velocity.length();
+				 velocity.set(v2n).multiply(len);
+				 */
+				
+				getPosition().addMultiply(ray_time.getDirection(),inter).addMultiply(n, 0.00001f);
+				float n2 = -ray_time.getDirection().dot(n) / n.length();
+				IVector3 inc = new Vector3(n).normalize().multiply(n2);
+				ray_time.getDirection().add(inc);
+				final float len2 = ray_time.getDirection().length();					
+				
+				
+				final float len4 = (len3*len2)/len1;
+				velocity.set(ray_time.getDirection()).normalize().multiply(len4);
+				time -= inter*time;
+				onObjectCollision(obj3d);
+				return true;
 			}
+
+			
 			
 		}
+		return false;
 	}
 }

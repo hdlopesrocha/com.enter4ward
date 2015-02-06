@@ -106,10 +106,10 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 /*
 		moving.insert(space);
 	*/
-		objects.add((MyObject3D) new MyObject3D(new Vector3(11.4f, 14, 0), box) {}.insert(space));
-		objects.add((MyObject3D) new MyObject3D(new Vector3(24.0f, 20, 20), box) {}.insert(space));
+		objects.add((MyObject3D) new MyObject3D(new Vector3(11.4f, 11f, 0), box) {}.insert(space));
+		objects.add((MyObject3D) new MyObject3D(new Vector3(24.0f, 13f, 20), box) {}.insert(space));
 
-		objects.add((MyObject3D) new MyObject3D(new Vector3(20, 32, 20), box) {}.insert(space));
+		objects.add((MyObject3D) new MyObject3D(new Vector3(20, 12f, 20), box) {}.insert(space));
 		
 		//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 64, 0), box) {}.insert(space));
 	//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10, 68, 0), box) {}.insert(space));

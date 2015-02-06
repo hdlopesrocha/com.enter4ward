@@ -332,15 +332,15 @@ class SpaceNode extends BoundingBox {
      * @param handler
      *            the handler
      */
-    public void handleRayCollisions(Ray ray,
+    public boolean handleRayCollisions(Ray ray,
             RayCollisionHandler handler) {
         float len = ray.getDirection().length();
-        
+        boolean ret = false;
         for (IBoundingSphere obj2 : container) {
             Float idist = ray.intersects(obj2);
             if ((idist != null && idist < len)
                     || obj2.contains(ray.getPosition() )) {
-                handler.onObjectCollision(ray, obj2);
+                ret |= handler.onObjectCollision(obj2);
             }
         }
         if (child != null) {
@@ -360,10 +360,11 @@ class SpaceNode extends BoundingBox {
                     }
 
                     // System.out.println("#"+node+"#"+ray+"#"+idist+"#"+handler);
-                    node.handleRayCollisions(ray, handler);
+                    ret |= node.handleRayCollisions(ray, handler);
                 }
             }
         }
+        return ret;
     }
 
     /**
