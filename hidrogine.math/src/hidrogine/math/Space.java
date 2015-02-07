@@ -43,7 +43,7 @@ public class Space {
     public boolean handleRayCollisions(Ray ray, RayCollisionHandler handler) {
        // System.out.println(handler+":"+ ray);
         if (root != null) {
-            return root.handleRayCollisions(ray, handler);
+            return root.handleRayCollisions(this,ray, handler);
         }
         return false;
     }
