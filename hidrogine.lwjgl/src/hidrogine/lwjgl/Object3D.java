@@ -1,7 +1,5 @@
 package hidrogine.lwjgl;
 
-import java.util.Map;
-
 import hidrogine.math.BoundingFrustum;
 import hidrogine.math.BoundingSphere;
 import hidrogine.math.ContainmentType;
