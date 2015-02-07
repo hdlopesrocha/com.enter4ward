@@ -340,7 +340,7 @@ class SpaceNode extends BoundingBox {
             Float idist = ray.intersects(obj2);
             if ((idist != null && idist < len)
                     || obj2.contains(ray.getPosition() )) {
-                ret |= handler.onObjectCollision(obj2);
+                ret |= handler.onObjectCollision(ray,obj2);
             }
         }
         if (child != null) {

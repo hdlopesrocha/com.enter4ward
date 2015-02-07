@@ -18,6 +18,7 @@ import hidrogine.math.VisibleObjectHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -94,6 +95,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		/** The box. */
 		Model3D car = new Model3D("car.mat", "car.geo", 1f, true);
 		Model3D box = new Model3D("box.mat", "box.geo", 1f, true);
+//		Model3D surface = new Model3D("surface.mat", "surface.geo", 2f, true);
 		Model3D surface = new Model3D("surface.mat", "half.geo", 50f, true);
 
 		Object3D obj1 = new Object3D(new Vector3(0, 0, 0), surface) {};
@@ -106,11 +108,11 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 /*
 		moving.insert(space);
 	*/
-		objects.add((MyObject3D) new MyObject3D(new Vector3(11.4f, 11f, 0), box) {}.insert(space));
-		objects.add((MyObject3D) new MyObject3D(new Vector3(24.0f, 13f, 20), box) {}.insert(space));
-
-		objects.add((MyObject3D) new MyObject3D(new Vector3(20, 12f, 20), box) {}.insert(space));
 		
+		Random rand = new Random();
+		for(int i=0; i < 16 ; ++i){
+			objects.add((MyObject3D) new MyObject3D(new Vector3(rand.nextInt(64)-32, 10f, rand.nextInt(64)-32), box) {}.insert(space));
+		}
 		//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 64, 0), box) {}.insert(space));
 	//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10, 68, 0), box) {}.insert(space));
 	//	objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 72, 0), box) {}.insert(space));
