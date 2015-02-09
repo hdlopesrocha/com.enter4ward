@@ -104,8 +104,18 @@ public class WaveFront {
                         if (mg.addIndex(vpn)) {
                             mg.addPosition(positions,
                                     Integer.valueOf(token[0]));
-                            mg.addTexture(textures, Integer.valueOf(token[1]));
-                            mg.addNormal(normals, Integer.valueOf(token[2]));
+                            if(token[1].length()>0){
+                                mg.addTexture(textures, Integer.valueOf(token[1]));
+                            }
+                            else{
+                                mg.addTexture();
+                            }
+                            if(token[2].length()>0){
+                                mg.addNormal(normals, Integer.valueOf(token[2]));
+                            }
+                            else{
+                                mg.addNormal();
+                            }
                         }
                     }
                 }

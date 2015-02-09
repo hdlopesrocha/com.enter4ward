@@ -86,6 +86,13 @@ class MaterialGroup {
         normals.add(list.get(i * NORMALS_LENGTH + 2));
     }
 
+
+    public void addNormal() {
+        normals.add("0");
+        normals.add("0");
+        normals.add("0");
+    }
+    
     /**
      * Adds the texture.
      *
@@ -97,6 +104,11 @@ class MaterialGroup {
     public void addTexture(final List<String> list, final int i) {
         textures.add(list.get(i * TEXTURES_LENGTH + 0));
         textures.add(list.get(i * TEXTURES_LENGTH + 1));
+    }
+    
+    public void addTexture() {
+        textures.add("0");
+        textures.add("0");
     }
 
     /**
@@ -153,5 +165,6 @@ class MaterialGroup {
         jobj.put("ii", arrii);
         return jobj;
     }
+
 
 }
