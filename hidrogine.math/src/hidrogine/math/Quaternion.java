@@ -205,46 +205,46 @@ public class Quaternion {
      *            the matrix
      * @return the quaternion
      */
-    public static Quaternion createFromRotationMatrix(Matrix matrix) {
-        Quaternion result = new Quaternion();
+    public Quaternion createFromRotationMatrix(Matrix matrix) {
+        
+        
         if ((matrix.M[0] + matrix.M[5] + matrix.M[10]) > 0.0) {
             float M1 = (float) Math.sqrt((double) (matrix.M[0] + matrix.M[5]
                     + matrix.M[10] + 1.0));
-            result.W = M1 * 0.5f;
+            W = M1 * 0.5f;
             M1 = 0.5f / M1;
-            result.X = (matrix.M[6] - matrix.M[9]) * M1;
-            result.Y = (matrix.M[8] - matrix.M[2]) * M1;
-            result.Z = (matrix.M[1] - matrix.M[4]) * M1;
-            return result;
+            X = (matrix.M[6] - matrix.M[9]) * M1;
+            Y = (matrix.M[8] - matrix.M[2]) * M1;
+            Z = (matrix.M[1] - matrix.M[4]) * M1;
         }
-        if ((matrix.M[0] >= matrix.M[5]) && (matrix.M[0] >= matrix.M[10])) {
+        else if ((matrix.M[0] >= matrix.M[5]) && (matrix.M[0] >= matrix.M[10])) {
             float M2 = (float) Math.sqrt((double) (1.0 + matrix.M[0]
                     - matrix.M[5] - matrix.M[10]));
             float M3 = 0.5f / M2;
-            result.X = 0.5f * M2;
-            result.Y = (matrix.M[1] + matrix.M[4]) * M3;
-            result.Z = (matrix.M[2] + matrix.M[8]) * M3;
-            result.W = (matrix.M[6] - matrix.M[9]) * M3;
-            return result;
+            X = 0.5f * M2;
+            Y = (matrix.M[1] + matrix.M[4]) * M3;
+            Z = (matrix.M[2] + matrix.M[8]) * M3;
+            W = (matrix.M[6] - matrix.M[9]) * M3;
         }
-        if (matrix.M[5] > matrix.M[10]) {
+        else if (matrix.M[5] > matrix.M[10]) {
             float M4 = (float) Math.sqrt((double) (1.0 + matrix.M[5]
                     - matrix.M[0] - matrix.M[10]));
             float M5 = 0.5f / M4;
-            result.X = (matrix.M[4] + matrix.M[1]) * M5;
-            result.Y = 0.5f * M4;
-            result.Z = (matrix.M[9] + matrix.M[6]) * M5;
-            result.W = (matrix.M[8] - matrix.M[2]) * M5;
-            return result;
+            X = (matrix.M[4] + matrix.M[1]) * M5;
+            Y = 0.5f * M4;
+            Z = (matrix.M[9] + matrix.M[6]) * M5;
+            W = (matrix.M[8] - matrix.M[2]) * M5;
         }
+        else {
         float M6 = (float) Math
                 .sqrt((double) (1.0 + matrix.M[10] - matrix.M[0] - matrix.M[5]));
         float M7 = 0.5f / M6;
-        result.X = (matrix.M[8] + matrix.M[2]) * M7;
-        result.Y = (matrix.M[9] + matrix.M[6]) * M7;
-        result.Z = 0.5f * M6;
-        result.W = (matrix.M[1] - matrix.M[4]) * M7;
-        return result;
+        X = (matrix.M[8] + matrix.M[2]) * M7;
+        Y = (matrix.M[9] + matrix.M[6]) * M7;
+        Z = 0.5f * M6;
+        W = (matrix.M[1] - matrix.M[4]) * M7;
+        }
+        return this;
     }
 
     /**

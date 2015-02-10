@@ -87,7 +87,8 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	 */
 	@Override
 	public void setup() {
-		camera = new Camera(1280, 720);
+		camera = new Camera();
+		camera.update(1280, 720);
 		objects = new ArrayList<MyObject3D>();
 		space = new Space();
 		sphere = new DrawableSphere();

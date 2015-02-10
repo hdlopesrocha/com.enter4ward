@@ -15,8 +15,6 @@ public class Camera {
     /** The projection matrix. */
     private Matrix projectionMatrix = null;
 
-    /** The height. */
-    private int width, height;
 
     /**
      * Gets the matrix.
@@ -67,34 +65,14 @@ public class Camera {
      * @param h
      *            the h
      */
-    public Camera(int w, int h) {
+    public Camera() {
         position = new Vector3();
         rotation = Quaternion.identity();
-        width = w;
-        height = h;
-        projectionMatrix = new Matrix().createPerspectiveFieldOfView(
-                (float) Math.toRadians(45f), (float) w / (float) h, 0.1f, 100f);
-
+    
+        projectionMatrix = new Matrix();
     }
 
-    /**
-     * Gets the width.
-     *
-     * @return the width
-     */
-    public int getWidth() {
-        return width;
-    }
-
-    /**
-     * Gets the height.
-     *
-     * @return the height
-     */
-    public int getHeight() {
-        return height;
-    }
-
+ 
     /**
      * Look at.
      *
@@ -113,9 +91,20 @@ public class Camera {
      */
     public void lookAt(float posX, float posY, float posZ, float lookAtX,
             float lookAtY, float lookAtZ) {
-
-        position.set(posX, posY, posZ);
+        position.set(posX, posY, posZ);        
+        Matrix mat = new Matrix().createLookAt(new Vector3(),new Vector3(lookAtX-posX,lookAtY-posY,lookAtZ-posZ).normalize(),new Vector3(0,1,0));  
+        
+        
+        
+        rotation.createFromRotationMatrix(mat);
     }
+    
+    public void update(int w, int h){
+        projectionMatrix = new Matrix().createPerspectiveFieldOfView(
+                (float) Math.toRadians(45f), (float) w / (float) h, 0.1f, 100f);
+    }
+    
+    
 
     /**
      * Move.

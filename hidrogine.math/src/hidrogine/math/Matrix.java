@@ -389,7 +389,7 @@ public float get(int i){
                 M[6] / scale.getY(), 0, M[8] / scale.getZ(), M[9]
                         / scale.getZ(), M[10] / scale.getZ(), 0, 0, 0, 0, 1);
 
-        rotation = Quaternion.createFromRotationMatrix(m1);
+        rotation.createFromRotationMatrix(m1);
         return true;
     }
 
