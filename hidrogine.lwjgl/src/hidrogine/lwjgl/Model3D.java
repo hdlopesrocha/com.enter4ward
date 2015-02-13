@@ -28,7 +28,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * The Class Model3D.
  */
-public class Model3D extends IModel3D {
+public class Model3D implements IModel3D {
 
 	private static final Matrix IDENTITY = new Matrix().identity(); 
 
