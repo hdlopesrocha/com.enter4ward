@@ -35,6 +35,13 @@ public class Quaternion {
         W = w;
     }
 
+    public Quaternion(Quaternion quat) {
+        X = quat.X;
+        Y = quat.Y;
+        Z = quat.Z;
+        W = quat.W;
+    }
+    
     public Quaternion setX(float x) {
         X = x;
         return this;
