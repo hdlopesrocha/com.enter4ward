@@ -116,7 +116,6 @@ public class BoundingFrustum {
         return planes[5];
     }
 
-
     // MONOGAME
     /**
      * Contains.
@@ -152,11 +151,11 @@ public class BoundingFrustum {
      */
     public ContainmentType contains(IBoundingSphere sphere) {
         float val;
+        final IVector3 center = sphere.getCenter();
         ContainmentType result = ContainmentType.Contains;
 
         for (int i = 0; i < 6; ++i) {
-            val = PlaneHelper.perpendicularDistance(sphere.getCenter(),
-                    planes[i]);
+            val = PlaneHelper.perpendicularDistance(center, planes[i]);
             if (val < -sphere.getRadius())
                 return ContainmentType.Disjoint;
             else if (val < sphere.getRadius())

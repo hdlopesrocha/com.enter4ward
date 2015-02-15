@@ -86,7 +86,7 @@ public abstract class IObject3D extends IBoundingSphere {
         // return new
         // Vector3(model.getContainer().getCenter()).transform(rotation).add(position);
         return new Vector3(model.getContainer().getCenter()).transform(rotation).add(position);
-       
+                
               
     }
 
