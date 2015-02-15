@@ -10,7 +10,7 @@ public abstract class IObject3D extends IBoundingSphere {
     private IVector3 position;
 
     /** The rotation. */
-    private Quaternion rotation = new Quaternion();
+    private Quaternion rotation = new Quaternion().identity();
 
     /** The model. */
     private IModel3D model;

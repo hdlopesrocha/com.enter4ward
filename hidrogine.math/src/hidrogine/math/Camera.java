@@ -67,7 +67,7 @@ public class Camera {
      */
     public Camera() {
         position = new Vector3();
-        rotation = Quaternion.identity();
+        rotation = new Quaternion().identity();
     
         projectionMatrix = new Matrix();
     }
@@ -89,10 +89,9 @@ public class Camera {
      * @param lookAtZ
      *            the look at z
      */
-    public void lookAt(float posX, float posY, float posZ, float lookAtX,
-            float lookAtY, float lookAtZ) {
-        position.set(posX, posY, posZ);        
-        Matrix mat = new Matrix().createLookAt(new Vector3(),new Vector3(lookAtX-posX,lookAtY-posY,lookAtZ-posZ).normalize(),new Vector3(0,1,0));  
+    public void lookAt(IVector3 pos, IVector3 lookAt, IVector3 up){
+        position.set(pos);        
+        Matrix mat = new Matrix().createLookAt(new Vector3(),new Vector3(lookAt).subtract(pos).normalize(), up);  
         
         
         

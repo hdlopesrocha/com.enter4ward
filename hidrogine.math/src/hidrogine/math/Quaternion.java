@@ -82,8 +82,12 @@ public class Quaternion {
      *
      * @return the quaternion
      */
-    public static Quaternion identity() {
-        return new Quaternion(0, 0, 0, 1);
+    public Quaternion identity() {
+        X=0;
+        Y=0;
+        Z=0;
+        W=1;
+        return this;
     }
 
     /**
@@ -199,7 +203,7 @@ public class Quaternion {
      *            the angle
      * @return the quaternion
      */
-    public Quaternion createFromAxisAngle(Vector3 axis, float angle) {
+    public Quaternion createFromAxisAngle(IVector3 axis, float angle) {
         float sin_a = (float) Math.sin(angle / 2.0);
         return setX(axis.getX() * sin_a).setY(axis.getY() * sin_a).setZ(axis.getZ() * sin_a).setW( (float) Math.cos(angle / 2.0));
     }

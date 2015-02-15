@@ -129,7 +129,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 				new Quaternion().createFromAxisAngle(new Vector3(1, 0, 0),
 						(float) (-Math.PI / 2)));
 */
-		camera.lookAt(0, 6, 32, 0, 0, 0);
+		camera.lookAt(new Vector3(0, 6, 32), new Vector3(), new Vector3(0,1,0));
 		getProgram().setLightPosition(0, new Vector3(3, 3, 3));
 		getProgram().setAmbientColor(0, 0, 0);
 		getProgram().setDiffuseColor(1, 1, 1);

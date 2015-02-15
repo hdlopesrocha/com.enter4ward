@@ -380,7 +380,7 @@ public float get(int i){
                 * (float) Math.sqrt(M[8] * M[8] + M[9] * M[9] + M[10] * M[10]));
 
         if (scale.getX() == 0.0 || scale.getY() == 0.0 || scale.getZ() == 0.0) {
-            rotation = Quaternion.identity();
+            rotation = rotation.identity();
             return false;
         }
 
