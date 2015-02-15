@@ -208,34 +208,7 @@ public abstract class IBoundingBox {
                 + "}";
     }
 
-    /**
-     * Intersects.
-     *
-     * @param plane
-     *            the plane
-     * @return the plane intersection type
-     */
-    public PlaneIntersectionType intersects2(Plane plane) {
-        // check all corner side of plane
-        Vector3[] corners = getCorners();
-        float lastdistance = plane.getNormal().dot(corners[0])
-                + plane.getDistance();
-
-        for (int i = 1; i < corners.length; i++) {
-            float distance = plane.getNormal().dot(corners[i])
-                    + plane.getDistance();
-            if ((distance <= 0.0 && lastdistance > 0.0)
-                    || (distance >= 0.0 && lastdistance < 0.0))
-                return PlaneIntersectionType.Intersecting;
-            lastdistance = distance;
-        }
-
-        if (lastdistance > 0.0)
-            return PlaneIntersectionType.Front;
-
-        return PlaneIntersectionType.Back;
-
-    }
+ 
 
     // MONOGAME
     /**
@@ -351,10 +324,4 @@ public abstract class IBoundingBox {
         return false;
     }
 
-    /**
-     * Gets the corners.
-     *
-     * @return the corners
-     */
-    protected abstract Vector3[] getCorners();
 }
