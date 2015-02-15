@@ -66,13 +66,7 @@ public class Space {
      * @return the space node
      */
     protected SpaceNode update(IBoundingSphere obj, SpaceNode node) {
-        node.container.remove(obj);
-
-        while (node != null && node.contains(obj) != ContainmentType.Contains) {
-            node.count--;
-            node.clearChild();
-            node = node.parent;
-        }
+        node = node.update(obj);
 
         if (node == null) {
             expand(obj);
@@ -136,7 +130,7 @@ public class Space {
             }
         }
 
-        node.container.add(obj);
+        node.containerAdd(obj);
      /*   for (SpaceNode s = node; s != null; s = s.parent) {
             if(s.clearChild())
                 System.out.println("clear!");
@@ -172,7 +166,7 @@ public class Space {
      */
     private void compress() {
         while (true) {
-            if (root.container.size() == 0) {
+            if (root.containerSize() == 0) {
                 boolean emptyLeft = root.child[SpaceNode.LEFT] == null
                         || root.child[SpaceNode.LEFT].count == 0;
                 boolean emptyCenter = root.child[SpaceNode.CENTER] == null
