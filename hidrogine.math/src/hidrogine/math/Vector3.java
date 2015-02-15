@@ -128,30 +128,6 @@ public class Vector3 extends IVector3 {
         return this;
     }
 
-    /**
-     * Transform.
-     *
-     * @param matrix
-     *            the matrix
-     * @return the i vector3
-     */
-    public IVector3 transform(Matrix matrix) {
-
-        float x = (getX() * matrix.M[0]) + (getY() * matrix.M[4])
-                + (getZ() * matrix.M[8]) + matrix.M[12];
-
-        float y = (getX() * matrix.M[1]) + (getY() * matrix.M[5])
-                + (getZ() * matrix.M[9]) + matrix.M[13];
-
-        float z = (getX() * matrix.M[1]) + (getY() * matrix.M[6])
-                + (getZ() * matrix.M[10]) + matrix.M[14];
-
-        setX(x);
-        setY(y);
-        setZ(z);
-
-        return this;
-    }
 
 
 

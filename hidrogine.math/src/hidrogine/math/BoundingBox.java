@@ -128,9 +128,10 @@ public class BoundingBox extends IBoundingBox {
      * @return the containment type
      */
     public ContainmentType contains(IBoundingSphere sphere) {
-        float sx = sphere.getCenter().getX();
-        float sy = sphere.getCenter().getY();
-        float sz = sphere.getCenter().getZ();
+        IVector3 center = sphere.getCenter();
+        float sx = center.getX();
+        float sy = center.getY();
+        float sz = center.getZ();
         float sr = sphere.getRadius();
 
         if (sx - getMin().getX() >= sr && sy - getMin().getY() >= sr
@@ -196,9 +197,10 @@ public class BoundingBox extends IBoundingBox {
      * @return the containment type
      */
     public ContainmentType containsOld(IBoundingSphere sphere) {
-        float sx = sphere.getCenter().getX();
-        float sy = sphere.getCenter().getY();
-        float sz = sphere.getCenter().getZ();
+        IVector3 center = sphere.getCenter();
+        float sx = center.getX();
+        float sy = center.getY();
+        float sz = center.getZ();
         float sr = sphere.getRadius();
 
         if (sx - min.getX() > sr && sy - min.getY() > sr
@@ -279,10 +281,11 @@ public class BoundingBox extends IBoundingBox {
      * @return the bounding box
      */
     public BoundingBox createFromSphere(BoundingSphere sphere) {
+        IVector3 center = sphere.getCenter();
+        
         IVector3 vector1 = new Vector3(sphere.getRadius());
         return new BoundingBox(
-                new Vector3(sphere.getCenter()).subtract(vector1), new Vector3(
-                        sphere.getCenter()).add(vector1));
+                new Vector3(center).subtract(vector1), new Vector3(center).add(vector1));
     }
 
     /**
