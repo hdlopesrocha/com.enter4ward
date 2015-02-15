@@ -69,7 +69,7 @@ public class Space {
         node = node.update(obj);
 
         if (node == null) {
-            expand(obj);
+            root = root.expand(obj);
             node = root;
         } else {
             node.count--;
@@ -77,26 +77,7 @@ public class Space {
         return insert(obj, node);
     }
 
-    /**
-     * Expand.
-     *
-     * @param obj
-     *            the obj
-     */
-    private int exps=0;
-    private void expand(IBoundingSphere obj) {
-        // System.out.println("=== EXPANSION ===");
-        // System.out.println(root.toString());
-        while (root.contains(obj) != ContainmentType.Contains) {
-            ++exps;
-            System.out.println("EXPS: "+exps);
-            root.clearChild();
-            root = root.expand(obj);
-
-            // System.out.println(root.toString());
-
-        }
-    }
+   
 
     /**
      * Insert.
@@ -155,7 +136,7 @@ public class Space {
      */
     protected SpaceNode insert(IBoundingSphere obj) {
         // expand phase
-        expand(obj);
+        root = root.expand(obj);
 
         // insertion
         return insert(obj, root);

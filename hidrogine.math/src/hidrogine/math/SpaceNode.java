@@ -203,7 +203,7 @@ class SpaceNode extends BoundingBox {
      *            the obj
      * @return the space node
      */
-    public SpaceNode expand(IBoundingSphere obj) {
+    private SpaceNode expandAux(IBoundingSphere obj) {
         IVector3 pos = obj.getCenter();
         float lenX = getLengthX();
         float lenY = getLengthY();
@@ -430,6 +430,18 @@ class SpaceNode extends BoundingBox {
             node.count--;
             node.clearChild();
             node = node.parent;
+        }
+        return node;
+    }
+    
+    
+    public SpaceNode expand(IBoundingSphere obj) {
+        SpaceNode node = this;
+        // System.out.println("=== EXPANSION ===");
+        // System.out.println(root.toString());
+        while (node.contains(obj) != ContainmentType.Contains) {
+            clearChild();
+            node = node.expandAux(obj);
         }
         return node;
     }

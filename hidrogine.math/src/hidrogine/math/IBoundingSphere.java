@@ -52,7 +52,7 @@ public abstract class IBoundingSphere {
      * @return true, if successful
      */
     public boolean contains(IVector3 vec) {
-        return getCenter().distance(vec) <= getRadius();
+        return getCenter().distanceSquared(vec) <= getRadius()*getRadius();
     }
 
     /**
