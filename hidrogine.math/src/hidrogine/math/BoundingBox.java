@@ -148,46 +148,107 @@ public class BoundingBox extends IBoundingBox {
     /**
      * Contains.
      *
+     * @author MonoGame
+     * 
      * @param sphere
      *            the sphere
      * @return the containment type
      */
     public ContainmentType contains(IBoundingSphere sphere) {
-        if (sphere.getCenter().getX() - min.getX() > sphere.getRadius()
-                && sphere.getCenter().getY() - min.getY() > sphere
-                        .getRadius()
-                && sphere.getCenter().getZ() - min.getZ() > sphere
-                        .getRadius()
-                && max.getX() - sphere.getCenter().getX() > sphere
-                        .getRadius()
-                && max.getY() - sphere.getCenter().getY() > sphere
-                        .getRadius()
-                && max.getZ() - sphere.getCenter().getZ() > sphere
-                        .getRadius())
+        float sx = sphere.getCenter().getX();
+        float sy = sphere.getCenter().getY();
+        float sz = sphere.getCenter().getZ();
+        float sr = sphere.getRadius();
+
+        if (sx - getMin().getX() >= sr && sy - getMin().getY() >= sr
+                && sz - getMin().getZ() >= sr && getMax().getX() - sx >= sr
+                && getMax().getY() - sy >= sr && getMax().getZ() - sz >= sr)
+            return ContainmentType.Contains;
+        double dmin = 0;
+        double e = sx - getMin().getX();
+        if (e < 0) {
+            if (e < -sr) {
+                return ContainmentType.Disjoint;
+            }
+            dmin += e * e;
+        } else {
+            e = sx - getMax().getX();
+            if (e > 0) {
+                if (e > sr) {
+                    return ContainmentType.Disjoint;
+                }
+                dmin += e * e;
+            }
+        }
+        e = sy - getMin().getY();
+        if (e < 0) {
+            if (e < -sr) {
+                return ContainmentType.Disjoint;
+            }
+            dmin += e * e;
+        } else {
+            e = sy - getMax().getY();
+            if (e > 0) {
+                if (e > sr) {
+                    return ContainmentType.Disjoint;
+                }
+                dmin += e * e;
+            }
+        }
+        e = sz - getMin().getZ();
+        if (e < 0) {
+            if (e < -sr) {
+                return ContainmentType.Disjoint;
+            }
+            dmin += e * e;
+        } else {
+            e = sz - getMax().getZ();
+            if (e > 0) {
+                if (e > sr) {
+                    return ContainmentType.Disjoint;
+                }
+                dmin += e * e;
+            }
+        }
+        if (dmin <= sr * sr)
+            return ContainmentType.Intersects;
+        return ContainmentType.Disjoint;
+    }
+
+    /**
+     * Contains.
+     *
+     * @param sphere
+     *            the sphere
+     * @return the containment type
+     */
+    public ContainmentType containsOld(IBoundingSphere sphere) {
+        float sx = sphere.getCenter().getX();
+        float sy = sphere.getCenter().getY();
+        float sz = sphere.getCenter().getZ();
+        float sr = sphere.getRadius();
+
+        if (sx - min.getX() > sr && sy - min.getY() > sr
+                && sz - min.getZ() > sr && max.getX() - sx > sr
+                && max.getY() - sy > sr && max.getZ() - sz > sr)
             return ContainmentType.Contains;
 
         double dmin = 0;
 
-        if (sphere.getCenter().getX() - min.getX() <= sphere.getRadius())
-            dmin += (sphere.getCenter().getX() - min.getX())
-                    * (sphere.getCenter().getX() - min.getX());
-        else if (max.getX() - sphere.getCenter().getX() <= sphere.getRadius())
-            dmin += (sphere.getCenter().getX() - max.getX())
-                    * (sphere.getCenter().getX() - max.getX());
-        if (sphere.getCenter().getY() - min.getY() <= sphere.getRadius())
-            dmin += (sphere.getCenter().getY() - min.getY())
-                    * (sphere.getCenter().getY() - min.getY());
-        else if (max.getY() - sphere.getCenter().getY() <= sphere.getRadius())
-            dmin += (sphere.getCenter().getY() - max.getY())
-                    * (sphere.getCenter().getY() - max.getY());
-        if (sphere.getCenter().getZ() - min.getZ() <= sphere.getRadius())
-            dmin += (sphere.getCenter().getZ() - min.getZ())
-                    * (sphere.getCenter().getZ() - min.getZ());
-        else if (max.getZ() - sphere.getCenter().getZ() <= sphere.getRadius())
-            dmin += (sphere.getCenter().getZ() - max.getZ())
-                    * (sphere.getCenter().getZ() - max.getZ());
+        if (sx - min.getX() <= sr)
+            dmin += (sx - min.getX()) * (sx - min.getX());
+        else if (max.getX() - sx <= sr)
+            dmin += (sx - max.getX()) * (sx - max.getX());
+        if (sy - min.getY() <= sr)
+            dmin += (sy - min.getY()) * (sy - min.getY());
+        else if (max.getY() - sy <= sr)
+            dmin += (sy - max.getY()) * (sy - max.getY());
+        if (sz - min.getZ() <= sr)
+            dmin += (sz - min.getZ()) * (sz - min.getZ());
+        else if (max.getZ() - sz <= sr)
+            dmin += (sz - max.getZ()) * (sz - max.getZ());
 
-        if (dmin <= sphere.getRadius() * sphere.getRadius())
+        if (dmin <= sr * sr)
             return ContainmentType.Intersects;
 
         return ContainmentType.Disjoint;
@@ -247,8 +308,8 @@ public class BoundingBox extends IBoundingBox {
     public BoundingBox createFromSphere(BoundingSphere sphere) {
         IVector3 vector1 = new Vector3(sphere.getRadius());
         return new BoundingBox(
-                new Vector3(sphere.getCenter()).subtract(vector1),
-                new Vector3(sphere.getCenter()).add(vector1));
+                new Vector3(sphere.getCenter()).subtract(vector1), new Vector3(
+                        sphere.getCenter()).add(vector1));
     }
 
     /**
@@ -285,7 +346,10 @@ public class BoundingBox extends IBoundingBox {
      */
     public boolean intersects(BoundingBox box) {
         if ((max.getX() >= box.min.getX()) && (min.getX() <= box.max.getX())) {
-            return !((max.getY() < box.min.getY()) || (min.getY() > box.max.getY())) && (max.getZ() >= box.min.getZ()) && (min.getZ() <= box.max.getZ());
+            return !((max.getY() < box.min.getY()) || (min.getY() > box.max
+                    .getY()))
+                    && (max.getZ() >= box.min.getZ())
+                    && (min.getZ() <= box.max.getZ());
         }
         return false;
     }

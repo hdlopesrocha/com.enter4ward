@@ -89,10 +89,13 @@ public class Space {
      * @param obj
      *            the obj
      */
+    private int exps=0;
     private void expand(IBoundingSphere obj) {
         // System.out.println("=== EXPANSION ===");
         // System.out.println(root.toString());
         while (root.contains(obj) != ContainmentType.Contains) {
+            ++exps;
+            System.out.println("EXPS: "+exps);
             root.clearChild();
             root = root.expand(obj);
 
@@ -134,10 +137,11 @@ public class Space {
         }
 
         node.container.add(obj);
-        for (SpaceNode s = node; s != null; s = s.parent) {
-            s.clearChild();
+     /*   for (SpaceNode s = node; s != null; s = s.parent) {
+            if(s.clearChild())
+                System.out.println("clear!");
         }
-
+      */
         // root compression
         compress();
         // System.out.println("=== COMPRESSION ===");

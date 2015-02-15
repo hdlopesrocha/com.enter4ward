@@ -333,6 +333,21 @@ public abstract class IVector3 {
         return Math.sqrt(x * x + y * y + z * z);
     }
 
+ 
+    /**
+     * Distance.
+     *
+     * @param vec
+     *            the vec
+     * @return the double
+     */
+    public double distanceSquared(IVector3 vec) {
+        float x = getX() - vec.getX();
+        float y = getY() - vec.getY();
+        float z = getZ() - vec.getZ();
+        return x * x + y * y + z * z;
+    }
+    
     /*
      * (non-Javadoc)
      * 

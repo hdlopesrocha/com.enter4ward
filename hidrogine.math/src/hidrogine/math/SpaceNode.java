@@ -152,22 +152,30 @@ class SpaceNode extends BoundingBox {
      * @return the child
      */
     public SpaceNode getChild(int i) {
-        if (canSplit()) {
-            if (child == null) {
-                child = new SpaceNode[3];
-            }
-            if (child[i] == null) {
-                child[i] = build(i);
-            }
-            return child[i];
+        if (child == null) {
+            child = new SpaceNode[3];
         }
-        return null;
+        if (child[i] == null) {
+            child[i] = build(i);
+        }
+        return child[i];
     }
 
     /**
      * Clear child.
      */
     protected void clearChild() {
+        if (count==0 && child != null) {        
+            child = null;
+        }
+    }
+
+    
+
+    /**
+     * Clear child.
+     */
+    private void clearSubChild() {
         if (child != null) {
             for (int i = 0; i < 3; ++i) {
                 SpaceNode node = child[i];
@@ -178,6 +186,7 @@ class SpaceNode extends BoundingBox {
         }
     }
 
+    
     /**
      * Expand.
      *
@@ -224,7 +233,7 @@ class SpaceNode extends BoundingBox {
      * @return true, if successful
      */
     protected boolean canSplit() {
-        return getMin().distance(getMax()) > 1f;
+        return getMin().distanceSquared(getMax()) > 1f;
     }
 
     /**
@@ -332,31 +341,31 @@ class SpaceNode extends BoundingBox {
      * @param handler
      *            the handler
      */
-    public boolean handleRayCollisions(Space space,Ray ray,
+    public boolean handleRayCollisions(Space space, Ray ray,
             RayCollisionHandler handler) {
         float len = ray.getDirection().length();
         boolean ret = false;
         IntersectionInfo closestInfo = null;
         IBoundingSphere closestObject = null;
-        
+
         for (IBoundingSphere obj2 : container) {
             Float idist = ray.intersects(obj2);
             if ((idist != null && idist < len)
-                    || obj2.contains(ray.getPosition() )) {
-                
+                    || obj2.contains(ray.getPosition())) {
+
                 IntersectionInfo info = handler.closestTriangle(obj2, ray);
-                if(closestInfo==null || info.distance < closestInfo.distance){
+                if (closestInfo == null || info.distance < closestInfo.distance) {
                     closestInfo = info;
                     closestObject = obj2;
                 }
-                
+
             }
         }
-        if(closestInfo!=null){
-            ret |= handler.onObjectCollision(space,ray,closestObject, closestInfo);
+        if (closestInfo != null) {
+            ret |= handler.onObjectCollision(space, ray, closestObject,
+                    closestInfo);
         }
-        
-        
+
         if (child != null) {
             int intersections = 0;
             for (int i = 0; i < 3; ++i) {
@@ -374,7 +383,7 @@ class SpaceNode extends BoundingBox {
                     }
 
                     // System.out.println("#"+node+"#"+ray+"#"+idist+"#"+handler);
-                    ret |= node.handleRayCollisions(space,ray, handler);
+                    ret |= node.handleRayCollisions(space, ray, handler);
                 }
             }
         }
