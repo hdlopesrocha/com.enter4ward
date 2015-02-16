@@ -164,34 +164,33 @@ public class Quaternion {
      *            the roll
      * @return the quaternion
      */
-    public static Quaternion createFromYawPitchRoll(float yaw, float pitch,
+    public Quaternion createFromYawPitchRoll(float yaw, float pitch,
             float roll) {
-        Quaternion quaternion = new Quaternion();
-        quaternion.X = (((float) Math.cos((double) (yaw * 0.5)) * (float) Math
+        X = (((float) Math.cos((double) (yaw * 0.5)) * (float) Math
                 .sin((double) (pitch * 0.5))) * (float) Math
                 .cos((double) (roll * 0.5)))
                 + (((float) Math.sin((double) (yaw * 0.5)) * (float) Math
                         .cos((double) (pitch * 0.5))) * (float) Math
                         .sin((double) (roll * 0.5)));
-        quaternion.Y = (((float) Math.sin((double) (yaw * 0.5)) * (float) Math
+        Y = (((float) Math.sin((double) (yaw * 0.5)) * (float) Math
                 .cos((double) (pitch * 0.5))) * (float) Math
                 .cos((double) (roll * 0.5)))
                 - (((float) Math.cos((double) (yaw * 0.5)) * (float) Math
                         .sin((double) (pitch * 0.5))) * (float) Math
                         .sin((double) (roll * 0.5)));
-        quaternion.Z = (((float) Math.cos((double) (yaw * 0.5)) * (float) Math
+        Z = (((float) Math.cos((double) (yaw * 0.5)) * (float) Math
                 .cos((double) (pitch * 0.5))) * (float) Math
                 .sin((double) (roll * 0.5)))
                 - (((float) Math.sin((double) (yaw * 0.5)) * (float) Math
                         .sin((double) (pitch * 0.5))) * (float) Math
                         .cos((double) (roll * 0.5)));
-        quaternion.W = (((float) Math.cos((double) (yaw * 0.5)) * (float) Math
+        W = (((float) Math.cos((double) (yaw * 0.5)) * (float) Math
                 .cos((double) (pitch * 0.5))) * (float) Math
                 .cos((double) (roll * 0.5)))
                 + (((float) Math.sin((double) (yaw * 0.5)) * (float) Math
                         .sin((double) (pitch * 0.5))) * (float) Math
                         .sin((double) (roll * 0.5)));
-        return quaternion;
+        return this;
     }
 
     /**

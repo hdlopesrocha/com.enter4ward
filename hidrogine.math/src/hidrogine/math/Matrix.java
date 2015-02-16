@@ -319,8 +319,7 @@ public float get(int i){
      */
     public Matrix createFromYawPitchRoll(float yaw, float pitch, float roll) {
         Matrix matrix;
-        Quaternion quaternion;
-        quaternion = Quaternion.createFromYawPitchRoll(yaw, pitch, roll);
+        Quaternion quaternion = new Quaternion().createFromYawPitchRoll(yaw, pitch, roll);
         matrix = createFromQuaternion(quaternion);
         return matrix;
     }
