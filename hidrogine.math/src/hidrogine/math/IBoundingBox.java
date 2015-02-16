@@ -36,6 +36,8 @@ public abstract class IBoundingBox {
      */
     public abstract void setMax(IVector3 max);
 
+
+    
     /**
      * Contains.
      *
@@ -63,56 +65,7 @@ public abstract class IBoundingBox {
             return ContainmentType.Contains;
     }
 
-    /**
-     * Contains.
-     *
-     * @param sphere
-     *            the sphere
-     * @return the containment type
-     */
-    public ContainmentType contains(BoundingSphere sphere) {
-        if (sphere.getCenter().getX() - getMin().getX() > sphere.getRadius()
-                && sphere.getCenter().getY() - getMin().getY() > sphere
-                        .getRadius()
-                && sphere.getCenter().getZ() - getMin().getZ() > sphere
-                        .getRadius()
-                && getMax().getX() - sphere.getCenter().getX() > sphere
-                        .getRadius()
-                && getMax().getY() - sphere.getCenter().getY() > sphere
-                        .getRadius()
-                && getMax().getZ() - sphere.getCenter().getZ() > sphere
-                        .getRadius())
-            return ContainmentType.Contains;
 
-        double dmin = 0;
-
-        if (sphere.getCenter().getX() - getMin().getX() <= sphere.getRadius())
-            dmin += (sphere.getCenter().getX() - getMin().getX())
-                    * (sphere.getCenter().getX() - getMin().getX());
-        else if (getMax().getX() - sphere.getCenter().getX() <= sphere
-                .getRadius())
-            dmin += (sphere.getCenter().getX() - getMax().getX())
-                    * (sphere.getCenter().getX() - getMin().getX());
-        if (sphere.getCenter().getY() - getMin().getY() <= sphere.getRadius())
-            dmin += (sphere.getCenter().getY() - getMin().getY())
-                    * (sphere.getCenter().getY() - getMin().getY());
-        else if (getMax().getY() - sphere.getCenter().getY() <= sphere
-                .getRadius())
-            dmin += (sphere.getCenter().getY() - getMax().getY())
-                    * (sphere.getCenter().getY() - getMax().getY());
-        if (sphere.getCenter().getZ() - getMin().getZ() <= sphere.getRadius())
-            dmin += (sphere.getCenter().getZ() - getMin().getZ())
-                    * (sphere.getCenter().getZ() - getMin().getZ());
-        else if (getMax().getZ() - sphere.getCenter().getZ() <= sphere
-                .getRadius())
-            dmin += (sphere.getCenter().getZ() - getMax().getZ())
-                    * (sphere.getCenter().getZ() - getMax().getZ());
-
-        if (dmin <= sphere.getRadius() * sphere.getRadius())
-            return ContainmentType.Intersects;
-
-        return ContainmentType.Disjoint;
-    }
 
     /*
      * (non-Javadoc)
@@ -167,7 +120,7 @@ public abstract class IBoundingBox {
      * @return the center x
      */
     public float getCenterX() {
-        return getMin().getX() + getLengthX() / 2f;
+        return (getMin().getX() + getMax().getX()) * 0.5f;
     }
 
     /*
@@ -181,7 +134,7 @@ public abstract class IBoundingBox {
      * @return the center y
      */
     public float getCenterY() {
-        return getMin().getY() + getLengthY() / 2f;
+        return (getMin().getY() + getMax().getY()) * 0.5f;
     }
 
     /*
@@ -195,7 +148,7 @@ public abstract class IBoundingBox {
      * @return the center z
      */
     public float getCenterZ() {
-        return getMin().getZ() + getLengthZ() / 2f;
+        return (getMin().getZ() + getMax().getZ()) * 0.5f;
     }
 
     /*
@@ -210,6 +163,30 @@ public abstract class IBoundingBox {
 
  
 
+    /**
+     * Contains.
+     *
+     * @param box
+     *            the box
+     * @return the containment type
+     */
+    public ContainmentType contains(IBoundingBox box) {
+        // test if all corner is in the same side of a face by just checking min
+        // and max
+        if (box.getMax().getX() < getMin().getX() || box.getMin().getX() > getMax().getX()
+                || box.getMax().getY() < getMin().getY() || box.getMin().getY() > getMax().getY()
+                || box.getMax().getZ() < getMin().getZ() || box.getMin().getZ() > getMax().getZ())
+            return ContainmentType.Disjoint;
+
+        if (box.getMin().getX() >= getMin().getX() && box.getMax().getX() <= getMax().getX()
+                && box.getMin().getY() >= getMin().getY() && box.getMax().getY() <= getMax().getY()
+                && box.getMin().getZ() >= getMin().getZ() && box.getMax().getZ() <= getMax().getZ())
+            return ContainmentType.Contains;
+
+        return ContainmentType.Intersects;
+    }
+
+    
     // MONOGAME
     /**
      * Intersects.
@@ -221,36 +198,40 @@ public abstract class IBoundingBox {
     public PlaneIntersectionType intersects(Plane plane) {
         // See
         // http://zach.in.tu-clausthal.de/teaching/cg_literatur/lighthouse3d_view_frustum_culling/index.html
-        Vector3 positiveVertex = new Vector3();
-        Vector3 negativeVertex = new Vector3();
+        float px,py,pz, nx,ny,nz;
         if (plane.getNormal().getX() >= 0) {
-            positiveVertex.setX(getMax().getX());
-            negativeVertex.setX(getMin().getX());
+            px = getMax().getX();
+            nx = getMin().getX();
         } else {
-            positiveVertex.setX(getMin().getX());
-            negativeVertex.setX(getMax().getX());
+            px = getMin().getX();
+            nx = getMax().getX();
         }
         if (plane.getNormal().getY() >= 0) {
-            positiveVertex.setY(getMax().getY());
-            negativeVertex.setY(getMin().getY());
+            py = getMax().getY();
+            ny = getMin().getY();
         } else {
-            positiveVertex.setY(getMin().getY());
-            negativeVertex.setY(getMax().getY());
+            py = getMin().getY();
+            ny = getMax().getY();
         }
         if (plane.getNormal().getZ() >= 0) {
-            positiveVertex.setZ(getMax().getZ());
-            negativeVertex.setZ(getMin().getZ());
+            pz = getMax().getZ();
+            nz = getMin().getZ();
         } else {
-            positiveVertex.setZ(getMin().getZ());
-            negativeVertex.setZ(getMax().getZ());
+            pz = getMin().getZ();
+            nz = getMax().getZ();
         }
-        float distance = plane.getNormal().dot(negativeVertex)
-                + plane.getDistance();
+        IVector3 nrm = plane.getNormal();
+        float normal_dot_negative = nrm.getX()*nx+nrm.getY()*ny+nrm.getZ()*nz;
+        
+        float distance = normal_dot_negative + plane.getDistance();
         if (distance > 0) {
             return PlaneIntersectionType.Front;
 
         }
-        distance = plane.getNormal().dot(positiveVertex) + plane.getDistance();
+        
+        float normal_dot_positive = nrm.getX()*px+nrm.getY()*py+nrm.getZ()*pz;
+
+        distance = normal_dot_positive + plane.getDistance();
         if (distance < 0) {
             return PlaneIntersectionType.Back;
 
@@ -258,56 +239,115 @@ public abstract class IBoundingBox {
         return PlaneIntersectionType.Intersecting;
     }
 
+
     /**
-     * Intersects.
+     * Contains.
      *
+     * @author MonoGame
+     * 
      * @param sphere
      *            the sphere
-     * @return true, if successful
+     * @return the containment type
      */
-    public boolean intersects(BoundingSphere sphere) {
-        if (sphere.getCenter().getX() - getMin().getX() > sphere.getRadius()
-                && sphere.getCenter().getY() - getMin().getY() > sphere
-                        .getRadius()
-                && sphere.getCenter().getZ() - getMin().getZ() > sphere
-                        .getRadius()
-                && getMax().getX() - sphere.getCenter().getX() > sphere
-                        .getRadius()
-                && getMax().getY() - sphere.getCenter().getY() > sphere
-                        .getRadius()
-                && getMax().getZ() - sphere.getCenter().getZ() > sphere
-                        .getRadius())
-            return true;
+    public ContainmentType contains(IBoundingSphere sphere) {
+        IVector3 center = sphere.getCenter();
+        float sx = center.getX();
+        float sy = center.getY();
+        float sz = center.getZ();
+        float sr = sphere.getRadius();
 
+        if (sx - getMin().getX() >= sr && sy - getMin().getY() >= sr
+                && sz - getMin().getZ() >= sr && getMax().getX() - sx >= sr
+                && getMax().getY() - sy >= sr && getMax().getZ() - sz >= sr)
+            return ContainmentType.Contains;
         double dmin = 0;
-
-        if (sphere.getCenter().getX() - getMin().getX() <= sphere.getRadius())
-            dmin += (sphere.getCenter().getX() - getMin().getX())
-                    * (sphere.getCenter().getX() - getMin().getX());
-        else if (getMax().getX() - sphere.getCenter().getX() <= sphere
-                .getRadius())
-            dmin += (sphere.getCenter().getX() - getMax().getX())
-                    * (sphere.getCenter().getX() - getMax().getX());
-
-        if (sphere.getCenter().getY() - getMin().getY() <= sphere.getRadius())
-            dmin += (sphere.getCenter().getY() - getMin().getY())
-                    * (sphere.getCenter().getY() - getMin().getY());
-        else if (getMax().getY() - sphere.getCenter().getY() <= sphere
-                .getRadius())
-            dmin += (sphere.getCenter().getY() - getMax().getY())
-                    * (sphere.getCenter().getY() - getMax().getY());
-
-        if (sphere.getCenter().getZ() - getMin().getZ() <= sphere.getRadius())
-            dmin += (sphere.getCenter().getZ() - getMin().getZ())
-                    * (sphere.getCenter().getZ() - getMin().getZ());
-        else if (getMax().getZ() - sphere.getCenter().getZ() <= sphere
-                .getRadius())
-            dmin += (sphere.getCenter().getZ() - getMax().getZ())
-                    * (sphere.getCenter().getZ() - getMax().getZ());
-
-        return dmin <= sphere.getRadius() * sphere.getRadius();
-
+        double e = sx - getMin().getX();
+        if (e < 0) {
+            if (e < -sr) {
+                return ContainmentType.Disjoint;
+            }
+            dmin += e * e;
+        } else {
+            e = sx - getMax().getX();
+            if (e > 0) {
+                if (e > sr) {
+                    return ContainmentType.Disjoint;
+                }
+                dmin += e * e;
+            }
+        }
+        e = sy - getMin().getY();
+        if (e < 0) {
+            if (e < -sr) {
+                return ContainmentType.Disjoint;
+            }
+            dmin += e * e;
+        } else {
+            e = sy - getMax().getY();
+            if (e > 0) {
+                if (e > sr) {
+                    return ContainmentType.Disjoint;
+                }
+                dmin += e * e;
+            }
+        }
+        e = sz - getMin().getZ();
+        if (e < 0) {
+            if (e < -sr) {
+                return ContainmentType.Disjoint;
+            }
+            dmin += e * e;
+        } else {
+            e = sz - getMax().getZ();
+            if (e > 0) {
+                if (e > sr) {
+                    return ContainmentType.Disjoint;
+                }
+                dmin += e * e;
+            }
+        }
+        if (dmin <= sr * sr)
+            return ContainmentType.Intersects;
+        return ContainmentType.Disjoint;
     }
+    
+
+    /**
+     * Contains.
+     *
+     * @author MonoGame
+     * 
+     * @param frustum
+     *            the frustum
+     * @return the containment type
+     */
+    public ContainmentType contains(BoundingFrustum frustum) {
+        //TODO: bad done here need a fix.
+        //Because question is not frustum contain box but reverse and this is not the same
+        int i;
+        IVector3[] corners = frustum.getCorners();
+        // First we check if frustum is in box
+        for (i = 0; i < corners.length; i++) {
+            if (contains(corners[i]) == ContainmentType.Disjoint)
+                break;
+        }
+        if (i == corners.length) // This means we checked all the corners and they were all contain or instersect
+            return ContainmentType.Contains;
+        if (i != 0) // if i is not equal to zero, we can fastpath and say that this box intersects
+            return ContainmentType.Intersects;
+        // If we get here, it means the first (and only) point we checked was actually contained in the frustum.
+        // So we assume that all other points will also be contained. If one of the points is disjoint, we can
+        // exit immediately saying that the result is Intersects
+        i++;
+        for (; i < corners.length; i++) {
+            if (contains( corners[i]) != ContainmentType.Contains)
+                return ContainmentType.Intersects;
+        }
+        // If we get here, then we know all the points were actually contained, therefore result is Contains
+        return ContainmentType.Contains;
+    }
+
+    
 
     /**
      * Intersects.
@@ -316,7 +356,7 @@ public abstract class IBoundingBox {
      *            the box
      * @return true, if successful
      */
-    public boolean intersects(BoundingBox box) {
+    public boolean intersects(IBoundingBox box) {
         if ((getMax().getX() >= box.getMin().getX())
                 && (getMin().getX() <= box.getMax().getX())) {
             return !((getMax().getY() < box.getMin().getY()) || (getMin().getY() > box.getMax().getY())) && (getMax().getZ() >= box.getMin().getZ()) && (getMin().getZ() <= box.getMax().getZ());

@@ -82,9 +82,10 @@ public abstract class IBoundingSphere {
             maxY = Math.max(maxY, vec.getY());
             maxZ = Math.max(maxZ, vec.getZ());
         }
-        getCenter().setX((minX + maxX) / 2f);
-        getCenter().setY((minY + maxY) / 2f);
-        getCenter().setZ((minZ + maxZ) / 2f);
+        IVector3 center = getCenter();
+        center.setX((minX + maxX) / 2f);
+        center.setY((minY + maxY) / 2f);
+        center.setZ((minZ + maxZ) / 2f);
 
         setRadius((float) (Math
                 .sqrt((maxX - minX) * (maxX - minX) + (maxY - minY)
