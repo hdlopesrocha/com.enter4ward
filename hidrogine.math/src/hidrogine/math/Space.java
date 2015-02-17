@@ -96,11 +96,14 @@ public class Space {
             boolean childContains = false;
             boolean canSplit = node.canSplit();
             if (canSplit) {
+                float lenX = node.getLengthX();
+                float lenY = node.getLengthY();
+                float lenZ = node.getLengthZ();
+                
                 for (int i = 0; i < 3; ++i) {
-                    SpaceNode child = node.getChild(i);
-                    if (child.contains(obj) == ContainmentType.Contains) {
+                    if (node.childContains(i,obj,lenX,lenY,lenZ) == ContainmentType.Contains) {
                         childContains = true;
-                        node = child;
+                        node = node.getChild(i,lenX,lenY,lenZ);
                         break;
                     }
                 }

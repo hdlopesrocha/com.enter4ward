@@ -586,7 +586,7 @@ public class Quaternion {
         return W;
     }
 
-    public Quaternion set(Quaternion quat) {
+    public Quaternion set(final Quaternion quat) {
         setX(quat.getX());
         setY(quat.getY());
         setZ(quat.getZ());

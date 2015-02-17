@@ -58,6 +58,8 @@ public class BoundingBox extends IBoundingBox {
         this.max = max;
     }
 
+    public BoundingBox() {
+    }
 
 
     

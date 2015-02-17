@@ -9,6 +9,10 @@ public class Camera {
     /** The matrix. */
     private Quaternion rotation = new Quaternion();
 
+    public Quaternion getRotation() {
+        return rotation;
+    }
+
     /** The position. */
     private Vector3 position;
 
@@ -95,7 +99,7 @@ public class Camera {
         
         
         
-        rotation.createFromRotationMatrix(mat);
+        rotation.createFromRotationMatrix(mat).normalize();
     }
     
     public void update(int w, int h){

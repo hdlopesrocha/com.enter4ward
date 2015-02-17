@@ -18,6 +18,11 @@ class SpaceNode extends BoundingBox {
     /** The Constant CENTER. */
     static final int CENTER = 2;
 
+    static final BoundingBox TEMP_BOX = new BoundingBox();
+    static final IVector3 TEMP_MIN = new Vector3();
+    static final IVector3 TEMP_MAX = new Vector3();
+
+
     /** The container. */
     private List<IBoundingSphere> container;
 
@@ -75,7 +80,46 @@ class SpaceNode extends BoundingBox {
         node.parent = this;
     }
 
-  
+    public ContainmentType childContains(final int i, final IBoundingSphere sphere, float lenX, float lenY, float lenZ) {
+   
+
+        if (lenX >= lenY && lenX >= lenZ) {
+            if (i == LEFT) {
+                TEMP_BOX.setMin(getMin());
+                TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addX(-lenX / 2));
+            } else if (i == RIGHT) {
+                TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addX(lenX / 2));
+                TEMP_BOX.setMax(getMax());
+            } else {
+                TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addX(lenX / 4));
+                TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addX(-lenX / 4));
+            }
+        } else if (lenY >= lenZ) {
+            if (i == LEFT) {
+                TEMP_BOX.setMin(getMin());
+                TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addY(-lenY / 2));
+            } else if (i == RIGHT) {
+                TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addY(lenY / 2));
+                TEMP_BOX.setMax(getMax());
+            } else {
+                TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addY(lenY / 4));
+                TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addY(-lenY / 4));
+            }
+        } else {
+            if (i == LEFT) {
+                TEMP_BOX.setMin(getMin());
+                TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addZ(-lenZ / 2));
+            } else if (i == RIGHT) {
+                TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addZ(lenZ / 2));
+                TEMP_BOX.setMax(getMax());
+            } else {
+                TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addZ(lenZ / 4));
+                TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addZ(-lenZ / 4));
+            }
+        }
+        
+        return TEMP_BOX.contains(sphere);
+    }
 
     public void containerAdd(IBoundingSphere obj) {
         if (container == null)
@@ -86,14 +130,14 @@ class SpaceNode extends BoundingBox {
     private void containerRemove(IBoundingSphere obj) {
         if (container != null) {
             container.remove(obj);
-            if(container.size()==0){
-                container=null;
+            if (container.size() == 0) {
+                container = null;
             }
         }
     }
 
     public int containerSize() {
-        return container==null? 0 : container.size();
+        return container == null ? 0 : container.size();
     }
 
     /*
@@ -110,13 +154,13 @@ class SpaceNode extends BoundingBox {
      *
      * @param i
      *            the i
+     * @param lenZ 
+     * @param lenY 
+     * @param lenX 
      * @return the space node
      */
-    private SpaceNode build(int i) {
-        float lenX = getLengthX();
-        float lenY = getLengthY();
-        float lenZ = getLengthZ();
-
+    private SpaceNode build(int i, float lenX, float lenY, float lenZ) {
+   
         if (lenX >= lenY && lenX >= lenZ) {
             if (i == LEFT) {
                 return new SpaceNode(this, getMin(),
@@ -161,14 +205,17 @@ class SpaceNode extends BoundingBox {
      *
      * @param i
      *            the i
+     * @param lenZ 
+     * @param lenY 
+     * @param lenX 
      * @return the child
      */
-    public SpaceNode getChild(int i) {
+    public SpaceNode getChild(int i, float lenX, float lenY, float lenZ) {
         if (child == null) {
             child = new SpaceNode[3];
         }
         if (child[i] == null) {
-            child[i] = build(i);
+            child[i] = build(i,lenX, lenY,lenZ);
         }
         return child[i];
     }
@@ -289,7 +336,7 @@ class SpaceNode extends BoundingBox {
      */
     public void handleVisibleObjects(BoundingFrustum frustum,
             VisibleObjectHandler handler) {
-        if(container!=null){
+        if (container != null) {
             for (IBoundingSphere obj : container) {
                 if (frustum.contains(obj) != ContainmentType.Disjoint) {
                     handler.onObjectVisible(obj);
@@ -322,7 +369,7 @@ class SpaceNode extends BoundingBox {
      */
     public void handleObjectCollisions(IBoundingSphere obj1,
             ObjectCollisionHandler handler) {
-        if(container!=null){
+        if (container != null) {
             for (IBoundingSphere obj2 : container) {
                 if (!obj2.equals(obj1) && obj1.intersects(obj2)) {
                     handler.onObjectCollision(obj1, obj2);
@@ -357,25 +404,25 @@ class SpaceNode extends BoundingBox {
             RayCollisionHandler handler) {
         float len = ray.getDirection().length();
         boolean ret = false;
-   
 
-        if(container!=null){
+        if (container != null) {
             IntersectionInfo closestInfo = null;
             IBoundingSphere closestObject = null;
             for (IBoundingSphere obj2 : container) {
                 Float idist = ray.intersects(obj2);
                 if ((idist != null && idist < len)
                         || obj2.contains(ray.getPosition())) {
-    
+
                     IntersectionInfo info = handler.closestTriangle(obj2, ray);
-                    if (closestInfo == null || info.distance < closestInfo.distance) {
+                    if (closestInfo == null
+                            || info.distance < closestInfo.distance) {
                         closestInfo = info;
                         closestObject = obj2;
                     }
-    
+
                 }
             }
-  
+
             if (closestInfo != null) {
                 ret |= handler.onObjectCollision(space, ray, closestObject,
                         closestInfo);
@@ -422,7 +469,7 @@ class SpaceNode extends BoundingBox {
         }
     }
 
-    public SpaceNode update(IBoundingSphere obj){
+    public SpaceNode update(IBoundingSphere obj) {
         SpaceNode node = this;
         containerRemove(obj);
 
@@ -433,8 +480,7 @@ class SpaceNode extends BoundingBox {
         }
         return node;
     }
-    
-    
+
     public SpaceNode expand(IBoundingSphere obj) {
         SpaceNode node = this;
         // System.out.println("=== EXPANSION ===");
@@ -445,5 +491,5 @@ class SpaceNode extends BoundingBox {
         }
         return node;
     }
-    
+
 }
