@@ -131,28 +131,14 @@ public class Quaternion {
     /**
      * Conjugate.
      */
-    public void conjugate() {
+    public Quaternion conjugate() {
         X = -X;
         Y = -Y;
         Z = -Z;
+        return this;
     }
 
-    /**
-     * Conjugate.
-     *
-     * @param value
-     *            the value
-     * @return the quaternion
-     */
-    public static Quaternion conjugate(Quaternion value) {
-        Quaternion quaternion = new Quaternion();
-        quaternion.X = -value.X;
-        quaternion.Y = -value.Y;
-        quaternion.Z = -value.Z;
-        quaternion.W = value.W;
-        return quaternion;
-    }
-
+  
     /**
      * Creates the from yaw pitch roll.
      *
