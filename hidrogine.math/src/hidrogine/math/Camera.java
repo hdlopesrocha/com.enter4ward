@@ -9,9 +9,6 @@ public class Camera {
     /** The matrix. */
     private Quaternion rotation = new Quaternion();
 
-    public Quaternion getRotation() {
-        return rotation;
-    }
 
     /** The position. */
     private Vector3 position;
@@ -20,6 +17,8 @@ public class Camera {
     private Matrix projectionMatrix = null;
 
 
+    private float far,near;
+    
     /**
      * Gets the matrix.
      *
@@ -69,14 +68,17 @@ public class Camera {
      * @param h
      *            the h
      */
-    public Camera() {
+    public Camera(float near,float far) {
         position = new Vector3();
         rotation = new Quaternion().identity();
-    
+        this.far=far;
+        this.near = near;
         projectionMatrix = new Matrix();
     }
 
- 
+    public Quaternion getRotation() {
+        return rotation;
+    }
     /**
      * Look at.
      *
@@ -104,10 +106,8 @@ public class Camera {
     
     public void update(int w, int h){
         projectionMatrix = new Matrix().createPerspectiveFieldOfView(
-                (float) Math.toRadians(45f), (float) w / (float) h, 0.1f, 100f);
+                (float) Math.toRadians(45f), (float) w / (float) h, near, far);
     }
-    
-    
 
     /**
      * Move.
