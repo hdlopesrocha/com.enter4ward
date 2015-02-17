@@ -14,7 +14,8 @@ public class Space {
      * @param handler
      *            the handler
      */
-    public void handleVisibleObjects(BoundingFrustum frustum, VisibleObjectHandler handler) {
+    public void handleVisibleObjects(BoundingFrustum frustum,
+            VisibleObjectHandler handler) {
         if (root != null) {
             root.handleVisibleObjects(frustum, handler);
         }
@@ -27,13 +28,27 @@ public class Space {
      *            the frustum
      */
     @Deprecated
-    public void handleVisibleNodes(BoundingFrustum frustum, VisibleNodeHandler handler) {
+    public void handleVisibleNodes(BoundingFrustum frustum,
+            VisibleNodeHandler handler) {
         if (root != null) {
             root.handleVisibleNodes(frustum, handler, 0);
         }
     }
 
- 
+    public void handleObjectCollisions(IBoundingSphere sphere,
+            ObjectCollisionHandler handler) {
+        if (root != null) {
+            root.handleObjectCollisions(sphere, handler);
+        }
+    }
+
+    public void handleRayCollisions(Ray ray, RayCollisionHandler handler) {
+        // System.out.println(handler+":"+ ray);
+        if (root != null) {
+            root.handleRayCollisions(this, ray, handler);
+        }
+    }
+
     /** The root. */
     private SpaceNode root;
 
@@ -63,8 +78,6 @@ public class Space {
         return insert(sph, node);
     }
 
-   
-
     /**
      * Insert.
      *
@@ -85,11 +98,11 @@ public class Space {
                 float lenX = node.getLengthX();
                 float lenY = node.getLengthY();
                 float lenZ = node.getLengthZ();
-                
+
                 for (int i = 0; i < 3; ++i) {
-                    if (node.childContains(i,sph,lenX,lenY,lenZ) == ContainmentType.Contains) {
+                    if (node.childContains(i, sph, lenX, lenY, lenZ) == ContainmentType.Contains) {
                         childContains = true;
-                        node = node.getChild(i,lenX,lenY,lenZ);
+                        node = node.getChild(i, lenX, lenY, lenZ);
                         break;
                     }
                 }
@@ -100,18 +113,15 @@ public class Space {
             }
         }
 
-     /*   for (SpaceNode s = node; s != null; s = s.parent) {
-            if(s.clearChild())
-                System.out.println("clear!");
-        }
-      */
+        /*
+         * for (SpaceNode s = node; s != null; s = s.parent) {
+         * if(s.clearChild()) System.out.println("clear!"); }
+         */
         // root compression
         compress();
         // System.out.println("=== COMPRESSION ===");
         // System.out.println(root.toString());
-        
-      
-        
+
         return node;
     }
 

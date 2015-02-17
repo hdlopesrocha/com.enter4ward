@@ -9,6 +9,7 @@ import hidrogine.math.IObject3D;
 import hidrogine.math.IVector3;
 import hidrogine.math.IntersectionInfo;
 import hidrogine.math.Matrix;
+import hidrogine.math.ObjectCollisionHandler;
 import hidrogine.math.Ray;
 import hidrogine.math.RayCollisionHandler;
 import hidrogine.math.Space;
@@ -44,9 +45,12 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 
 		Ray ray = new Ray(getPosition(),
 				new Vector3(velocity).multiply(delta_t));
-		if (!space.handleRayCollisions(ray, this)) {
-			getPosition().addMultiply(velocity, delta_t);
-		}
+		space.handleRayCollisions(ray, this);
+		
+		
+		getPosition().addMultiply(velocity, delta_t);
+			
+		
 
 		update(space);
 	}
@@ -69,7 +73,7 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		}
 	}
 
-	@Override
+	/*@Override
 	public IntersectionInfo closestTriangle(final IBoundingSphere obj,
 			final Ray ray) {
 		IntersectionInfo info = null;
@@ -91,14 +95,15 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		}
 		return info;
 	}
+*/
+
+
 
 	@Override
-	public boolean onObjectCollision(final Space space, final Ray ray,
-			final IBoundingSphere obj, final IntersectionInfo info) {
+	public void onObjectCollision(Space space, Ray ray, Object obj) {
 		final float vel = velocity.length();
 		final float delta = ray.getDirection().length();
-
-		if (!equals(obj)) {
+		if(obj!=this){
 			IVector3 n = info.triangle.getPlane().getNormal().normalize();
 			getPosition().addMultiply(ray.getDirection(), info.distance)
 					.addMultiply(n, 0.01f);
@@ -115,8 +120,6 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 			 * Vector3(ray.getDirection()).subtract(n2).normalize(); float len =
 			 * velocity.length(); velocity.set(v2n).multiply(len);
 			 */
-			return true;
 		}
-		return false;
 	}
 }
