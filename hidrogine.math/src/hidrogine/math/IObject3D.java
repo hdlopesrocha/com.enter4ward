@@ -126,7 +126,6 @@ public abstract class IObject3D {
     public void update(Space space) {
         final SpaceNode newNode = space.update(getBoundingSphere(), node);
         if(newNode!=node){
-           node.remove();
            node.containerRemove(this);
            node=newNode;
            node.containerAdd(this);

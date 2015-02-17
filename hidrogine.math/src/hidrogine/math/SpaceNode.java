@@ -229,19 +229,6 @@ class SpaceNode extends BoundingBox {
         }
     }
 
-    /**
-     * Clear child.
-     */
-    private void clearSubChild() {
-        if (child != null) {
-            for (int i = 0; i < 3; ++i) {
-                SpaceNode node = child[i];
-                if (node != null && node.count == 0) {
-                    node.child = null;
-                }
-            }
-        }
-    }
 
     /**
      * Expand.
