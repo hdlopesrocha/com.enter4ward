@@ -24,7 +24,7 @@ class SpaceNode extends BoundingBox {
 
 
     /** The container. */
-    private List<IBoundingSphere> container;
+    private List<Object> container;
 
     /** The child. */
     SpaceNode[] child;
@@ -121,13 +121,13 @@ class SpaceNode extends BoundingBox {
         return TEMP_BOX.contains(sphere);
     }
 
-    public void containerAdd(IBoundingSphere obj) {
+    public void containerAdd(Object obj) {
         if (container == null)
-            container = new ArrayList<IBoundingSphere>();
+            container = new ArrayList<Object>();
         container.add(obj);
     }
 
-    private void containerRemove(IBoundingSphere obj) {
+    public void containerRemove(Object obj) {
         if (container != null) {
             container.remove(obj);
             if (container.size() == 0) {
@@ -337,10 +337,8 @@ class SpaceNode extends BoundingBox {
     public void handleVisibleObjects(BoundingFrustum frustum,
             VisibleObjectHandler handler) {
         if (container != null) {
-            for (IBoundingSphere obj : container) {
-                if (frustum.contains(obj) != ContainmentType.Disjoint) {
-                    handler.onObjectVisible(obj);
-                }
+            for (Object obj : container) {
+                handler.onObjectVisible(obj);
             }
         }
 
@@ -359,98 +357,6 @@ class SpaceNode extends BoundingBox {
         }
     }
 
-    /**
-     * Iterate.
-     *
-     * @param obj1
-     *            the obj1
-     * @param handler
-     *            the handler
-     */
-    public void handleObjectCollisions(IBoundingSphere obj1,
-            ObjectCollisionHandler handler) {
-        if (container != null) {
-            for (IBoundingSphere obj2 : container) {
-                if (!obj2.equals(obj1) && obj1.intersects(obj2)) {
-                    handler.onObjectCollision(obj1, obj2);
-                }
-            }
-        }
-        if (child != null) {
-            int intersections = 0;
-            for (int i = 0; i < 3; ++i) {
-                SpaceNode node = child[i];
-                if (node != null
-                        && node.count > 0
-                        && (intersections == 2 || node.contains(obj1) != ContainmentType.Disjoint)) {
-                    ++intersections;
-                    node.handleObjectCollisions(obj1, handler);
-                }
-            }
-        }
-    }
-
-    /**
-     * Handle ray collisions.
-     *
-     * @param ray
-     *            the ray
-     * @param maxDistance
-     *            the distance
-     * @param handler
-     *            the handler
-     */
-    public boolean handleRayCollisions(Space space, Ray ray,
-            RayCollisionHandler handler) {
-        float len = ray.getDirection().length();
-        boolean ret = false;
-
-        if (container != null) {
-            IntersectionInfo closestInfo = null;
-            IBoundingSphere closestObject = null;
-            for (IBoundingSphere obj2 : container) {
-                Float idist = ray.intersects(obj2);
-                if ((idist != null && idist < len)
-                        || obj2.contains(ray.getPosition())) {
-
-                    IntersectionInfo info = handler.closestTriangle(obj2, ray);
-                    if (closestInfo == null
-                            || info.distance < closestInfo.distance) {
-                        closestInfo = info;
-                        closestObject = obj2;
-                    }
-
-                }
-            }
-
-            if (closestInfo != null) {
-                ret |= handler.onObjectCollision(space, ray, closestObject,
-                        closestInfo);
-            }
-        }
-        if (child != null) {
-            int intersections = 0;
-            for (int i = 0; i < 3; ++i) {
-                SpaceNode node = child[i];
-                Float idist = null;
-
-                if (node != null
-                        && node.count > 0
-                        && (intersections == 2
-                                || node.contains(ray.getPosition()) != ContainmentType.Disjoint || ((idist = ray
-                                .intersects(node)) != null && idist <= len))) {
-                    ++intersections;
-                    if (idist == null) {
-                        idist = 0f;
-                    }
-
-                    // System.out.println("#"+node+"#"+ray+"#"+idist+"#"+handler);
-                    ret |= node.handleRayCollisions(space, ray, handler);
-                }
-            }
-        }
-        return ret;
-    }
 
     /**
      * Removes the.
@@ -458,10 +364,8 @@ class SpaceNode extends BoundingBox {
      * @param obj
      *            the obj
      */
-    public void remove(IBoundingSphere obj) {
+    public void remove() {
         SpaceNode node = this;
-        containerRemove(obj);
-
         while (node != null) {
             node.count--;
             node.clearChild();
@@ -469,11 +373,9 @@ class SpaceNode extends BoundingBox {
         }
     }
 
-    public SpaceNode update(IBoundingSphere obj) {
+    public SpaceNode update(IBoundingSphere sph) {
         SpaceNode node = this;
-        containerRemove(obj);
-
-        while (node != null && node.contains(obj) != ContainmentType.Contains) {
+        while (node != null && node.contains(sph) != ContainmentType.Contains) {
             node.count--;
             node.clearChild();
             node = node.parent;

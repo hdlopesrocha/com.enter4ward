@@ -4,7 +4,7 @@ package hidrogine.math;
 /**
  * The Class IObject3D.
  */
-public abstract class IObject3D extends IBoundingSphere {
+public abstract class IObject3D {
 
     /** The position. */
     private IVector3 position;
@@ -59,33 +59,17 @@ public abstract class IObject3D extends IBoundingSphere {
         this.model = model;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see hidrogine.math.api.ISphere#getRadius()
-     */
-    public float getRadius() {
-        return model.getContainer().getRadius();
-    }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see hidrogine.math.api.ISphere#setRadius(float)
-     */
-    public void setRadius(float radius) {
-        throw new RuntimeException("Readonly property!");
-    }
 
     /*
      * (non-Javadoc)
      * 
      * @see hidrogine.math.api.ISphere#getPosition()
      */
-    public IVector3 getCenter() {
+    private BoundingSphere getBoundingSphere() {
         // return new
         // Vector3(model.getContainer().getCenter()).transform(rotation).add(position);
-        return new Vector3(model.getContainer().getCenter()).transform(rotation).add(position);
+        return new BoundingSphere(new Vector3(model.getContainer().getCenter()).transform(rotation).add(position), model.getContainer().getRadius());
                 
               
     }
@@ -109,14 +93,7 @@ public abstract class IObject3D extends IBoundingSphere {
         this.position = position;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see hidrogine.math.api.ISphere#setPosition(hidrogine.math.api.IVector3)
-     */
-    public void setCenter(IVector3 position) {
-        throw new RuntimeException("Readonly property!");
-    }
+
 
     /**
      * Insert.
@@ -125,7 +102,8 @@ public abstract class IObject3D extends IBoundingSphere {
      *            the space
      */
     public IObject3D insert(Space space) {
-        node = space.insert(this);
+        node = space.insert(getBoundingSphere());
+        node.containerAdd(this);
         return this;
     }
 
@@ -133,17 +111,11 @@ public abstract class IObject3D extends IBoundingSphere {
      * Removes the.
      */
     public void remove() {
-        node.remove(this);
+        node.remove();
+        node.containerRemove(this);
     }
 
-    /**
-     * Gets the node.
-     *
-     * @return the node
-     */
-    protected SpaceNode getNode() {
-        return node;
-    }
+ 
 
     /**
      * Update.
@@ -152,7 +124,13 @@ public abstract class IObject3D extends IBoundingSphere {
      *            the space
      */
     public void update(Space space) {
-        node = space.update(this, node);
+        final SpaceNode newNode = space.update(getBoundingSphere(), node);
+        if(newNode!=node){
+           node.remove();
+           node.containerRemove(this);
+           node=newNode;
+           node.containerAdd(this);
+        }
     }
 
     /**

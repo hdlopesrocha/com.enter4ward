@@ -33,21 +33,7 @@ public class Space {
         }
     }
 
-    public void handleObjectCollisions(IBoundingSphere sphere, ObjectCollisionHandler handler) {
-        if (root != null) {
-            root.handleObjectCollisions(sphere, handler);
-        }
-    }
-
-
-    public boolean handleRayCollisions(Ray ray, RayCollisionHandler handler) {
-       // System.out.println(handler+":"+ ray);
-        if (root != null) {
-            return root.handleRayCollisions(this,ray, handler);
-        }
-        return false;
-    }
-    
+ 
     /** The root. */
     private SpaceNode root;
 
@@ -65,16 +51,16 @@ public class Space {
      *            the obj
      * @return the space node
      */
-    protected SpaceNode update(IBoundingSphere obj, SpaceNode node) {
-        node = node.update(obj);
+    protected SpaceNode update(IBoundingSphere sph, SpaceNode node) {
+        node = node.update(sph);
 
         if (node == null) {
-            root = root.expand(obj);
+            root = root.expand(sph);
             node = root;
         } else {
             node.count--;
         }
-        return insert(obj, node);
+        return insert(sph, node);
     }
 
    
@@ -88,7 +74,7 @@ public class Space {
      *            the node
      * @return the space node
      */
-    protected SpaceNode insert(IBoundingSphere obj, SpaceNode node) {
+    protected SpaceNode insert(IBoundingSphere sph, SpaceNode node) {
         // insertion
         while (true) {
             ++node.count;
@@ -101,7 +87,7 @@ public class Space {
                 float lenZ = node.getLengthZ();
                 
                 for (int i = 0; i < 3; ++i) {
-                    if (node.childContains(i,obj,lenX,lenY,lenZ) == ContainmentType.Contains) {
+                    if (node.childContains(i,sph,lenX,lenY,lenZ) == ContainmentType.Contains) {
                         childContains = true;
                         node = node.getChild(i,lenX,lenY,lenZ);
                         break;
@@ -114,7 +100,6 @@ public class Space {
             }
         }
 
-        node.containerAdd(obj);
      /*   for (SpaceNode s = node; s != null; s = s.parent) {
             if(s.clearChild())
                 System.out.println("clear!");
@@ -137,12 +122,13 @@ public class Space {
      *            the obj
      * @return the space node
      */
-    protected SpaceNode insert(IBoundingSphere obj) {
+    protected SpaceNode insert(IBoundingSphere sph) {
         // expand phase
-        root = root.expand(obj);
+        root = root.expand(sph);
+        SpaceNode node = insert(sph, root);
 
         // insertion
-        return insert(obj, root);
+        return node;
     }
 
     /**
