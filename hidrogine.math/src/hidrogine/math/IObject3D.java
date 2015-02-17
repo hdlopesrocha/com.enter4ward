@@ -66,7 +66,7 @@ public abstract class IObject3D {
      * 
      * @see hidrogine.math.api.ISphere#getPosition()
      */
-    private BoundingSphere getBoundingSphere() {
+    public BoundingSphere getBoundingSphere() {
         // return new
         // Vector3(model.getContainer().getCenter()).transform(rotation).add(position);
         return new BoundingSphere(new Vector3(model.getContainer().getCenter()).transform(rotation).add(position), model.getContainer().getRadius());

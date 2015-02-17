@@ -21,7 +21,8 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 	private IVector3 aceleration;
 	private IVector3 velocity;
 	private float time;
-
+	private static boolean collided;
+	
 	public IVector3 getAceleration() {
 		return aceleration;
 	}
@@ -45,11 +46,12 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 
 		Ray ray = new Ray(getPosition(),
 				new Vector3(velocity).multiply(delta_t));
+		collided = false;
 		space.handleRayCollisions(ray, this);
 		
-		
-		getPosition().addMultiply(velocity, delta_t);
-			
+		if(!collided){
+			getPosition().addMultiply(velocity, delta_t);
+		}
 		
 
 		update(space);
@@ -73,12 +75,9 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		}
 	}
 
-	/*@Override
-	public IntersectionInfo closestTriangle(final IBoundingSphere obj,
-			final Ray ray) {
+	public IntersectionInfo closestTriangle(final Ray ray) {
 		IntersectionInfo info = null;
-		final Object3D obj3d = (Object3D) obj;
-		final Model3D model = (Model3D) obj3d.getModel();
+		final Model3D model = (Model3D) getModel();
 
 		for (Group g : model.getGroups()) {
 			for (BufferObject b : g.getBuffers()) {
@@ -95,31 +94,45 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		}
 		return info;
 	}
-*/
 
 
+	// AQUI APENAS RECEBO OS OBJECOS CUJO O RAIO INTERSECTA O NO
+	// FALTA FAZER COLISOES MAIS DETALHADAS
 
 	@Override
 	public void onObjectCollision(Space space, Ray ray, Object obj) {
+		
+		
 		final float vel = velocity.length();
 		final float delta = ray.getDirection().length();
 		if(obj!=this){
-			IVector3 n = info.triangle.getPlane().getNormal().normalize();
-			getPosition().addMultiply(ray.getDirection(), info.distance)
-					.addMultiply(n, 0.01f);
-			ray.getDirection().add(n.multiply(-ray.getDirection().dot(n)));
-			velocity.set(ray.getDirection()).multiply(vel / delta);
-			time -= info.distance / time;
-			if (time > 0) {
-				space.handleRayCollisions(ray, this);
+			Object3D obj3D = (Object3D)obj;
+			BoundingSphere sph = obj3D.getBoundingSphere();
+			Float inter = ray.intersects(sph);
+			
+			if(inter!=null && inter <= 1){
+				IntersectionInfo info = obj3D.closestTriangle(ray);
+				if(info!=null){
+				
+					IVector3 n = info.triangle.getPlane().getNormal().normalize();
+					getPosition().addMultiply(ray.getDirection(), info.distance)
+							.addMultiply(n, 0.01f);
+					ray.getDirection().add(n.multiply(-ray.getDirection().dot(n)));
+					velocity.set(ray.getDirection()).multiply(vel / delta);
+					time -= info.distance / time;
+					collided = true;
+					if (time > 0) {
+						space.handleRayCollisions(ray, this);
+					}
+					// R=V-2N(V.N)
+					/*
+					 * float v_dot_n = ray.getDirection().dot(n); IVector3 n2 = new
+					 * Vector3(n).multiply(v_dot_n*2); IVector3 v2n = new
+					 * Vector3(ray.getDirection()).subtract(n2).normalize(); float len =
+					 * velocity.length(); velocity.set(v2n).multiply(len);
+					 */
+				}
 			}
-			// R=V-2N(V.N)
-			/*
-			 * float v_dot_n = ray.getDirection().dot(n); IVector3 n2 = new
-			 * Vector3(n).multiply(v_dot_n*2); IVector3 v2n = new
-			 * Vector3(ray.getDirection()).subtract(n2).normalize(); float len =
-			 * velocity.length(); velocity.set(v2n).multiply(len);
-			 */
 		}
 	}
 }

@@ -251,36 +251,8 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		setTitle();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see hidrogine.math.VisibleObjectHandler#onObjectVisible(hidrogine.math.
-	 * IBoundingSphere)
-	 */
-	@Override
-	public void onObjectVisible(IBoundingSphere obj) {
-		Object3D obj3d = (Object3D) obj;
-		obj3d.draw(getProgram(), frustum);
-//		sphere.draw(getProgram(), obj3d);
-	}
+	
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * hidrogine.math.ObjectCollisionHandler#onObjectCollision(hidrogine.math
-	 * .IBoundingSphere, hidrogine.math.IBoundingSphere)
-	 */
-	@Override
-	public void onObjectCollision(IBoundingSphere obj1, IBoundingSphere obj2) {
-		if (obj2 instanceof MyObject3D) {
-			((MyObject3D) obj2).collided = true;
-			((MyObject3D) obj1).collided = true;
-			((MyObject3D) obj2).getVelocity().setY(0);
-			((MyObject3D) obj1).getVelocity().setY(0);
-
-		}
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -302,5 +274,22 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 			}
 		}
 		box.draw(getProgram(), obj.getMin(), obj.getMax());
+	}
+
+	@Override
+	public void onObjectCollision(Object obj) {
+		if (obj instanceof MyObject3D) {
+			((MyObject3D) obj).collided = true;
+			((MyObject3D) obj).getVelocity().setY(0);
+
+		}		
+	}
+
+	@Override
+	public void onObjectVisible(Object obj) {
+		// TODO Auto-generated method stub
+		Object3D obj3d = (Object3D) obj;
+		obj3d.draw(getProgram(), frustum);
+//		sphere.draw(getProgram(), obj3d);
 	}
 }
