@@ -108,6 +108,16 @@ public class Camera {
         projectionMatrix = new Matrix().createPerspectiveFieldOfView(
                 (float) Math.toRadians(45f), (float) w / (float) h, near, far);
     }
+    
+    
+
+    public float getNear() {
+        return near;
+    }
+
+    public float getFar() {
+        return far;
+    }
 
     /**
      * Move.

@@ -90,10 +90,18 @@ public abstract class Game {
 		
 		long time = getTime();
 		long oldTime = time;
+		//long i =0;
 		while (!Display.isCloseRequested()) {
 			// Do a single loop (logic/render)
 			time = getTime();
 			update((time-oldTime)/1000f);
+			
+
+	      //  if(i == 0)
+	      //  	GL11.glAccum(GL11.GL_LOAD, 1.0f / 10);
+	      //  else
+	      //  	GL11.glAccum(GL11.GL_ACCUM, 1.0f / 10);
+		  //  ++i;
 			draw();
 			// Force a maximum FPS of about 60
 			Display.sync(60);
