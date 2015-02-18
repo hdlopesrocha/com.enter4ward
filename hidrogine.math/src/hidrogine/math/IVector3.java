@@ -441,5 +441,9 @@ public abstract class IVector3 {
         return this;
     }
 
-    
+    public IVector3 reflect(IVector3 normal)
+    {
+
+        return addMultiply(normal, -2.0f*dot(normal));
+    }
 }

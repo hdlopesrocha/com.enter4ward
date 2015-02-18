@@ -146,7 +146,7 @@ public class Space {
      */
     private void compress() {
         while (true) {
-            if (root.containerSize() == 0) {
+            if (root.containerSize() == 0 && root.child!=null) {
                 boolean emptyLeft = root.child[SpaceNode.LEFT] == null
                         || root.child[SpaceNode.LEFT].count == 0;
                 boolean emptyCenter = root.child[SpaceNode.CENTER] == null
