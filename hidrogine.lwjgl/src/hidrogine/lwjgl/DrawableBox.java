@@ -1,6 +1,5 @@
 package hidrogine.lwjgl;
 
-import hidrogine.math.IVector3;
 import hidrogine.math.Matrix;
 import hidrogine.math.Vector2;
 import hidrogine.math.Vector3;
@@ -61,13 +60,13 @@ public class DrawableBox {
 	 * @param shader
 	 *            the shader
 	 */
-	public final void draw(final ShaderProgram shader, IVector3 min,
-			IVector3 max) {
+	public final void draw(final ShaderProgram shader, Vector3 min,
+			Vector3 max) {
 		//System.out.println(min.toString()+" : "+max.toString());
 		shader.setMaterialAlpha(0.2f);
 
 		GL11.glDisable(GL11.GL_CULL_FACE);
-		IVector3 dim = new Vector3(max).subtract(min);
+		Vector3 dim = new Vector3(max).subtract(min);
 		shader.setModelMatrix(new Matrix().createScale(dim).multiply(new Matrix().createTranslation(min)));
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 		obj.draw(shader);

@@ -141,7 +141,7 @@ public float get(int i){
      * @param value
      *            the new backward
      */
-    public void setBackward(IVector3 value) {
+    public void setBackward(Vector3 value) {
         M[8] = value.getX();
         M[9] = value.getY();
         M[10] = value.getZ();
@@ -152,7 +152,7 @@ public float get(int i){
      *
      * @return the down
      */
-    public IVector3 getDown() {
+    public Vector3 getDown() {
         return new Vector3(-M[4], -M[5], -M[6]);
     }
 
@@ -162,7 +162,7 @@ public float get(int i){
      * @param value
      *            the new down
      */
-    public void setDown(IVector3 value) {
+    public void setDown(Vector3 value) {
         M[4] = -value.getX();
         M[5] = -value.getY();
         M[6] = -value.getZ();
@@ -173,7 +173,7 @@ public float get(int i){
      *
      * @return the forward
      */
-    public IVector3 getForward() {
+    public Vector3 getForward() {
         return new Vector3(-M[8], -M[9], -M[10]);
     }
 
@@ -183,7 +183,7 @@ public float get(int i){
      * @param value
      *            the new forward
      */
-    public void setForward(IVector3 value) {
+    public void setForward(Vector3 value) {
         M[8] = -value.getX();
         M[9] = -value.getY();
         M[10] = -value.getZ();
@@ -194,7 +194,7 @@ public float get(int i){
      *
      * @return the left
      */
-    public IVector3 getLeft() {
+    public Vector3 getLeft() {
         return new Vector3(-M[0], -M[1], -M[2]);
     }
 
@@ -204,7 +204,7 @@ public float get(int i){
      * @param value
      *            the new left
      */
-    public void setLeft(IVector3 value) {
+    public void setLeft(Vector3 value) {
         M[0] = -value.getX();
         M[1] = -value.getY();
         M[2] = -value.getZ();
@@ -215,7 +215,7 @@ public float get(int i){
      *
      * @return the right
      */
-    public IVector3 getRight() {
+    public Vector3 getRight() {
         return new Vector3(M[0], M[1], M[2]);
     }
 
@@ -225,7 +225,7 @@ public float get(int i){
      * @param value
      *            the new right
      */
-    public void setRight(IVector3 value) {
+    public void setRight(Vector3 value) {
         M[0] = value.getX();
         M[1] = value.getY();
         M[2] = value.getZ();
@@ -236,7 +236,7 @@ public float get(int i){
      *
      * @return the translation
      */
-    public IVector3 getTranslation() {
+    public Vector3 getTranslation() {
         return new Vector3(M[12], M[13], M[14]);
     }
 
@@ -246,7 +246,7 @@ public float get(int i){
      * @param value
      *            the new translation
      */
-    public void setTranslation(IVector3 value) {
+    public void setTranslation(Vector3 value) {
         M[12] = value.getX();
         M[13] = value.getY();
         M[14] = value.getZ();
@@ -257,7 +257,7 @@ public float get(int i){
      *
      * @return the up
      */
-    public IVector3 getUp() {
+    public Vector3 getUp() {
         return new Vector3(M[4], M[5], M[6]);
     }
 
@@ -267,7 +267,7 @@ public float get(int i){
      * @param value
      *            the new up
      */
-    public void setUp(IVector3 value) {
+    public void setUp(Vector3 value) {
         M[4] = value.getX();
         M[5] = value.getY();
         M[6] = value.getZ();
@@ -287,7 +287,7 @@ public float get(int i){
     public static Matrix createWorld(Vector3 position, Vector3 forward,
             Vector3 up) {
         Matrix result;
-        IVector3 x, y, z;
+        Vector3 x, y, z;
 
         z = new Vector3(forward).normalize();
         x = new Vector3(forward).cross(up);
@@ -437,9 +437,9 @@ public float get(int i){
     public Matrix createBillboard(Vector3 objectPosition,
             Vector3 cameraPosition, Vector3 cameraUpVector,
             Vector3 cameraForwardVector) {
-        IVector3 translation = new Vector3(objectPosition)
+        Vector3 translation = new Vector3(objectPosition)
                 .subtract(cameraPosition);
-        IVector3 backwards, right, up;
+        Vector3 backwards, right, up;
         backwards = new Vector3(translation).normalize();
         up = new Vector3(cameraUpVector).normalize();
         right = new Vector3(backwards).cross(up);
@@ -494,14 +494,14 @@ public float get(int i){
      *            the camera up vector
      * @return the matrix
      */
-    public Matrix createLookAt(IVector3 cameraPosition, IVector3 cameraDirection,
-            IVector3 cameraUpVector) {
+    public Matrix createLookAt(Vector3 cameraPosition, Vector3 cameraDirection,
+            Vector3 cameraUpVector) {
         identity();
         // http://msdn.microsoft.com/en-us/library/bb205343(v=VS.85).aspx
 
-        IVector3 vz = new Vector3(cameraDirection).multiply(-1f);
-        IVector3 vx = new Vector3(cameraUpVector).cross(vz).normalize();
-        IVector3 vy = new Vector3(vz).cross(vx);
+        Vector3 vz = new Vector3(cameraDirection).multiply(-1f);
+        Vector3 vx = new Vector3(cameraUpVector).cross(vz).normalize();
+        Vector3 vy = new Vector3(vz).cross(vx);
 
         M[0] = vx.getX();
         M[1] = vy.getX();
@@ -743,7 +743,7 @@ public float get(int i){
      *            the scales
      * @return the matrix
      */
-    public Matrix createScale(IVector3 scales) {
+    public Matrix createScale(Vector3 scales) {
         identity();
 
         M[0] = scales.getX();
@@ -782,7 +782,7 @@ public float get(int i){
      *            the position
      * @return the matrix
      */
-    public Matrix createTranslation(IVector3 position) {
+    public Matrix createTranslation(Vector3 position) {
         identity();
         setTranslation(position);
 
@@ -1220,7 +1220,7 @@ public float get(int i){
      *            the min
      * @return the matrix
      */
-    public Matrix translate(IVector3 min) {
+    public Matrix translate(Vector3 min) {
         multiply(new Matrix().createTranslation(min));
         return this;
     }
@@ -1238,7 +1238,7 @@ public float get(int i){
      *            the dim
      * @return the matrix
      */
-    public Matrix scale(IVector3 dim) {
+    public Matrix scale(Vector3 dim) {
         multiply(new Matrix().createScale(dim));
         return this;
     }

@@ -35,7 +35,7 @@ public class Space {
         }
     }
 
-    public void handleObjectCollisions(IBoundingSphere sphere,
+    public void handleObjectCollisions(BoundingSphere sphere,
             ObjectCollisionHandler handler) {
         if (root != null) {
             root.handleObjectCollisions(sphere, handler);
@@ -66,7 +66,7 @@ public class Space {
      *            the obj
      * @return the space node
      */
-    protected SpaceNode update(IBoundingSphere sph, SpaceNode node) {
+    protected SpaceNode update(BoundingSphere sph, SpaceNode node) {
         node = node.update(sph);
 
         if (node == null) {
@@ -87,13 +87,13 @@ public class Space {
      *            the node
      * @return the space node
      */
-    protected SpaceNode insert(IBoundingSphere sph, SpaceNode node) {
+    protected SpaceNode insert(BoundingSphere sph, SpaceNode node) {
         // insertion
         while (true) {
             ++node.count;
 
             boolean childContains = false;
-            boolean canSplit = node.canSplit();
+            boolean canSplit = node.child!=null || node.canSplit();
             if (canSplit) {
                 float lenX = node.getLengthX();
                 float lenY = node.getLengthY();
@@ -132,7 +132,7 @@ public class Space {
      *            the obj
      * @return the space node
      */
-    protected SpaceNode insert(IBoundingSphere sph) {
+    protected SpaceNode insert(BoundingSphere sph) {
         // expand phase
         root = root.expand(sph);
         SpaceNode node = insert(sph, root);

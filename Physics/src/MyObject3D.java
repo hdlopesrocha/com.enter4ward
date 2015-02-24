@@ -6,14 +6,14 @@ import hidrogine.lwjgl.ShaderProgram;
 import hidrogine.math.BoundingFrustum;
 import hidrogine.math.BoundingSphere;
 import hidrogine.math.ContainmentType;
-import hidrogine.math.IVector3;
 import hidrogine.math.Matrix;
+import hidrogine.math.Vector3;
 
 public class MyObject3D extends Object3D {
 
 	public boolean collided = false;
 
-	public MyObject3D(IVector3 position, Model3D model) {
+	public MyObject3D(Vector3 position, Model3D model) {
 		super(position, model);
 		// TODO Auto-generated constructor stub
 	}

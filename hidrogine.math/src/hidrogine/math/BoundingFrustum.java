@@ -22,7 +22,7 @@ public class BoundingFrustum {
     private Plane[] planes = new Plane[6];
 
     /** The corners. */
-    private IVector3[] corners = new Vector3[8];
+    private Vector3[] corners = new Vector3[8];
 
     /** The Constant CornerCount. */
     public static final int CornerCount = 8;
@@ -149,9 +149,9 @@ public class BoundingFrustum {
      *            the sphere
      * @return the containment type
      */
-    public ContainmentType contains(IBoundingSphere sphere) {
+    public ContainmentType contains(BoundingSphere sphere) {
         float val;
-        final IVector3 center = sphere.getCenter();
+        final Vector3 center = sphere.getCenter();
         ContainmentType result = ContainmentType.Contains;
 
         for (int i = 0; i < 6; ++i) {
@@ -172,7 +172,7 @@ public class BoundingFrustum {
      *            the point
      * @return the containment type
      */
-    public ContainmentType contains(IVector3 point) {
+    public ContainmentType contains(Vector3 point) {
         // If a point is on the POSITIVE side of the plane, then the point is
         // not contained within the frustum
         for (int i = 0; i < 6; ++i) {
@@ -202,7 +202,7 @@ public class BoundingFrustum {
      *
      * @return the corners
      */
-    public IVector3[] getCorners() {
+    public Vector3[] getCorners() {
         return corners;
     }
 
@@ -280,7 +280,7 @@ public class BoundingFrustum {
      *            the c
      * @return the i vector3
      */
-    public IVector3 intersectionPoint(Plane a, Plane b, Plane c) {
+    public Vector3 intersectionPoint(Plane a, Plane b, Plane c) {
         // Formula used
         // d1 ( N2 * N3 ) + d2 ( N3 * N1 ) + d3 ( N1 * N2 )
         // P =
@@ -291,11 +291,11 @@ public class BoundingFrustum {
         // dot product. '*' means cross product
         float f = -a.getNormal().dot(
                 new Vector3(b.getNormal()).cross(c.getNormal()));
-        IVector3 v1 = new Vector3(b.getNormal()).cross(c.getNormal()).multiply(
+        Vector3 v1 = new Vector3(b.getNormal()).cross(c.getNormal()).multiply(
                 a.getDistance());
-        IVector3 v2 = new Vector3(c.getNormal()).cross(a.getNormal()).multiply(
+        Vector3 v2 = new Vector3(c.getNormal()).cross(a.getNormal()).multiply(
                 b.getDistance());
-        IVector3 v3 = new Vector3(a.getNormal()).cross(b.getNormal()).multiply(
+        Vector3 v3 = new Vector3(a.getNormal()).cross(b.getNormal()).multiply(
                 c.getDistance());
         return v1.add(v2).add(v3).divide(f);
     }

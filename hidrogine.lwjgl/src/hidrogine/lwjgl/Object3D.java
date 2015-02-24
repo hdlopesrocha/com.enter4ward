@@ -5,31 +5,30 @@ import hidrogine.math.BoundingSphere;
 import hidrogine.math.ContainmentType;
 import hidrogine.math.IModel3D;
 import hidrogine.math.IObject3D;
-import hidrogine.math.IVector3;
+import hidrogine.math.Vector3;
 import hidrogine.math.IntersectionInfo;
 import hidrogine.math.Matrix;
 import hidrogine.math.Ray;
 import hidrogine.math.RayCollisionHandler;
 import hidrogine.math.Space;
 import hidrogine.math.Triangle;
-import hidrogine.math.Vector3;
 
 public class Object3D extends IObject3D implements RayCollisionHandler {
 
-	private IVector3 aceleration;
-	private IVector3 velocity;
+	private Vector3 aceleration;
+	private Vector3 velocity;
 	private float time;
 	private static boolean collided;
 	
-	public IVector3 getAceleration() {
+	public Vector3 getAceleration() {
 		return aceleration;
 	}
 
-	public IVector3 getVelocity() {
+	public Vector3 getVelocity() {
 		return velocity;
 	}
 
-	public Object3D(IVector3 position, IModel3D model) {
+	public Object3D(Vector3 position, IModel3D model) {
 		super(position, model);
 		aceleration = new Vector3().setY(-9.8f);
 		velocity = new Vector3();
@@ -112,7 +111,7 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 				IntersectionInfo info = obj3D.closestTriangle(ray);
 				if(info!=null){
 				
-					IVector3 n = info.triangle.getPlane().getNormal().normalize();
+					Vector3 n = info.triangle.getPlane().getNormal().normalize();
 					getPosition().addMultiply(ray.getDirection(), info.distance)
 							.addMultiply(n, 0.01f);
 					ray.getDirection().add(n.multiply(-ray.getDirection().dot(n)));
@@ -124,8 +123,8 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 					}
 					// R=V-2N(V.N)
 					/*
-					 * float v_dot_n = ray.getDirection().dot(n); IVector3 n2 = new
-					 * Vector3(n).multiply(v_dot_n*2); IVector3 v2n = new
+					 * float v_dot_n = ray.getDirection().dot(n); Vector3 n2 = new
+					 * Vector3(n).multiply(v_dot_n*2); Vector3 v2n = new
 					 * Vector3(ray.getDirection()).subtract(n2).normalize(); float len =
 					 * velocity.length(); velocity.set(v2n).multiply(len);
 					 */

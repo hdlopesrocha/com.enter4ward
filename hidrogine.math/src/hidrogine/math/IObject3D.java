@@ -7,7 +7,7 @@ package hidrogine.math;
 public abstract class IObject3D {
 
     /** The position. */
-    private IVector3 position;
+    private Vector3 position;
 
     /** The rotation. */
     private Quaternion rotation = new Quaternion().identity();
@@ -54,7 +54,7 @@ public abstract class IObject3D {
      * @param model
      *            the model
      */
-    public IObject3D(IVector3 position, IModel3D model) {
+    public IObject3D(Vector3 position, IModel3D model) {
         this.position = position;
         this.model = model;
     }
@@ -79,7 +79,7 @@ public abstract class IObject3D {
      *
      * @return the position
      */
-    public IVector3 getPosition() {
+    public Vector3 getPosition() {
         return position;
     }
 
@@ -89,7 +89,7 @@ public abstract class IObject3D {
      * @param position
      *            the new position
      */
-    public void setPosition(IVector3 position) {
+    public void setPosition(Vector3 position) {
         this.position = position;
     }
 

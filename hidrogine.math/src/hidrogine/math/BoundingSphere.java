@@ -4,10 +4,10 @@ package hidrogine.math;
 /**
  * The Class Box.
  */
-public class BoundingSphere extends IBoundingSphere {
+public class BoundingSphere {
 
     /** The max. */
-    private IVector3 center;
+    private Vector3 center;
 
     /** The radius. */
     private float radius;
@@ -20,7 +20,7 @@ public class BoundingSphere extends IBoundingSphere {
      * @param radius
      *            the radius
      */
-    public BoundingSphere(IVector3 position, float radius) {
+    public BoundingSphere(Vector3 position, float radius) {
         this.center = position;
         this.radius = radius;
     }
@@ -28,7 +28,7 @@ public class BoundingSphere extends IBoundingSphere {
     /**
      * Instantiates a new bounding sphere.
      */
-    public BoundingSphere(IBoundingSphere sph) {
+    public BoundingSphere(BoundingSphere sph) {
         this.center = new Vector3(sph.getCenter());
         this.radius = sph.getRadius();
     }
@@ -46,18 +46,16 @@ public class BoundingSphere extends IBoundingSphere {
      * 
      * @see hidrogine.math.ISphere#getCenter()
      */
-    @Override
-    public IVector3 getCenter() {
+    public Vector3 getCenter() {
         return center;
     }
 
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.ISphere#setCenter(hidrogine.math.IVector3)
+     * @see hidrogine.math.ISphere#setCenter(hidrogine.math.Vector3)
      */
-    @Override
-    public void setCenter(IVector3 position) {
+    public void setCenter(Vector3 position) {
         this.center = position;
     }
 
@@ -66,7 +64,6 @@ public class BoundingSphere extends IBoundingSphere {
      * 
      * @see hidrogine.math.ISphere#getRadius()
      */
-    @Override
     public float getRadius() {
         return radius;
     }
@@ -76,9 +73,82 @@ public class BoundingSphere extends IBoundingSphere {
      * 
      * @see hidrogine.math.ISphere#setRadius(float)
      */
-    @Override
     public void setRadius(float radius) {
         this.radius = radius;
     }
 
+    /**
+     * Contains.
+     *
+     * @param vec
+     *            the vec
+     * @return true, if successful
+     */
+    public boolean contains(Vector3 vec) {
+        return getCenter().distanceSquared(vec) <= getRadius()*getRadius();
+    }
+
+    /**
+     * Creates the from points.
+     *
+     * @param points
+     *            the points
+     * @return the sphere
+     */
+    public BoundingSphere createFromPoints(Iterable<Vector3> points) {
+        float maxX = 0, maxY = 0, maxZ = 0, minX = 0, minY = 0, minZ = 0;
+
+        boolean inited = false;
+
+        for (Vector3 vec : points) {
+            if (!inited) {
+                minX = maxX = vec.getX();
+                minY = maxY = vec.getY();
+                minZ = maxZ = vec.getZ();
+
+                inited = true;
+            }
+            minX = Math.min(minX, vec.getX());
+            minY = Math.min(minY, vec.getY());
+            minZ = Math.min(minZ, vec.getZ());
+            maxX = Math.max(maxX, vec.getX());
+            maxY = Math.max(maxY, vec.getY());
+            maxZ = Math.max(maxZ, vec.getZ());
+        }
+        Vector3 center = getCenter();
+        center.setX((minX + maxX) / 2f);
+        center.setY((minY + maxY) / 2f);
+        center.setZ((minZ + maxZ) / 2f);
+
+        setRadius((float) (Math
+                .sqrt((maxX - minX) * (maxX - minX) + (maxY - minY)
+                        * (maxY - minY) + (maxZ - minZ) * (maxZ - minZ)) / 2d));
+        return this;
+    }
+
+    /**
+     * Intersects.
+     *
+     * @param plane
+     *            the plane
+     * @return the plane intersection type
+     */
+    public PlaneIntersectionType intersects(Plane plane) {
+        // TODO Auto-generated method stub
+        return plane.intersects(this);
+    }
+
+    /**
+     * Intersects.
+     *
+     * @param sphere
+     *            the sphere
+     * @return the boolean
+     */
+    public Boolean intersects(BoundingSphere sphere) {
+        return getCenter().distance(sphere.getCenter()) < getRadius()
+                + sphere.getRadius();
+    }
+    
+    
 }

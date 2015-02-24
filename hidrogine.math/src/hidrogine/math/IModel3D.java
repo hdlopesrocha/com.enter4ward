@@ -11,5 +11,5 @@ public interface IModel3D {
      *
      * @return the container
      */
-    public IBoundingSphere getContainer();
+    public BoundingSphere getContainer();
 }

@@ -7,7 +7,7 @@ package hidrogine.math;
 public class Plane {
 
     /** The normal. */
-    private IVector3 normal;
+    private Vector3 normal;
 
     /** The distance. */
     private float distance;
@@ -41,7 +41,7 @@ public class Plane {
      * @param c
      *            the c
      */
-    public Plane(IVector3 a, IVector3 b, IVector3 c) {
+    public Plane(Vector3 a, Vector3 b, Vector3 c) {
         Vector3 ab = (Vector3) new Vector3(b).subtract(a);
         Vector3 ac = (Vector3) new Vector3(c).subtract(a);
         normal = ab.cross(ac);
@@ -86,7 +86,7 @@ public class Plane {
      *            the value
      * @return the float
      */
-    public float dotCoordinate(IVector3 vCorner) {
+    public float dotCoordinate(Vector3 vCorner) {
         return ((((normal.getX() * vCorner.getX()) + (normal.getY() * vCorner
                 .getY())) + (normal.getZ() * vCorner.getZ())) + distance);
     }
@@ -96,7 +96,7 @@ public class Plane {
      *
      * @return the normal
      */
-    public IVector3 getNormal() {
+    public Vector3 getNormal() {
         return normal;
     }
 
@@ -116,7 +116,7 @@ public class Plane {
      *            the value
      * @return the float
      */
-    public float dotNormal(IVector3 direction) {
+    public float dotNormal(Vector3 direction) {
         return (((normal.getX() * direction.getX()) + (normal.getY() * direction.getY())) + (normal
                 .getZ() * direction.getZ()));
     }
@@ -149,7 +149,7 @@ public class Plane {
      *            the box
      * @return the plane intersection type
      */
-    public PlaneIntersectionType intersects(IBoundingBox box) {
+    public PlaneIntersectionType intersects(BoundingBox box) {
         return box.intersects(this);
     }
 
@@ -171,7 +171,7 @@ public class Plane {
      *            the sphere
      * @return the plane intersection type
      */
-    public PlaneIntersectionType intersects(IBoundingSphere sphere) {
+    public PlaneIntersectionType intersects(BoundingSphere sphere) {
         return sphere.intersects(this);
     }
 

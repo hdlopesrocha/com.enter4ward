@@ -19,8 +19,8 @@ class SpaceNode extends BoundingBox {
     static final int CENTER = 2;
 
     static final BoundingBox TEMP_BOX = new BoundingBox();
-    static final IVector3 TEMP_MIN = new Vector3();
-    static final IVector3 TEMP_MAX = new Vector3();
+    static final Vector3 TEMP_MIN = new Vector3();
+    static final Vector3 TEMP_MAX = new Vector3();
 
     /** The container. */
     private List<Object> container;
@@ -53,7 +53,7 @@ class SpaceNode extends BoundingBox {
      * @param max
      *            the max
      */
-    private SpaceNode(SpaceNode parent, IVector3 min, IVector3 max) {
+    private SpaceNode(SpaceNode parent, Vector3 min, Vector3 max) {
         super(min, max);
         this.count = 0l;
         this.parent = parent;
@@ -71,7 +71,7 @@ class SpaceNode extends BoundingBox {
      * @param max
      *            the max
      */
-    private SpaceNode(SpaceNode node, int i, IVector3 min, IVector3 max) {
+    private SpaceNode(SpaceNode node, int i, Vector3 min, Vector3 max) {
         super(min, max);
         this.child = new SpaceNode[3];
         this.child[i] = node;
@@ -80,7 +80,7 @@ class SpaceNode extends BoundingBox {
     }
 
     public ContainmentType childContains(final int i,
-            final IBoundingSphere sphere, float lenX, float lenY, float lenZ) {
+            final BoundingSphere sphere, float lenX, float lenY, float lenZ) {
         if (child == null || child[i] == null) {
             if (lenX >= lenY && lenX >= lenZ) {
                 if (i == LEFT) {
@@ -238,8 +238,8 @@ class SpaceNode extends BoundingBox {
      *            the obj
      * @return the space node
      */
-    private SpaceNode expandAux(IBoundingSphere obj) {
-        IVector3 pos = obj.getCenter();
+    private SpaceNode expandAux(BoundingSphere obj) {
+        Vector3 pos = obj.getCenter();
         float lenX = getLengthX();
         float lenY = getLengthY();
         float lenZ = getLengthZ();
@@ -360,7 +360,7 @@ class SpaceNode extends BoundingBox {
         }
     }
 
-    public SpaceNode update(IBoundingSphere sph) {
+    public SpaceNode update(BoundingSphere sph) {
         SpaceNode node = this;
         while (node != null && node.contains(sph) != ContainmentType.Contains) {
             node.count--;
@@ -370,7 +370,7 @@ class SpaceNode extends BoundingBox {
         return node;
     }
 
-    public SpaceNode expand(IBoundingSphere obj) {
+    public SpaceNode expand(BoundingSphere obj) {
         SpaceNode node = this;
         // System.out.println("=== EXPANSION ===");
         // System.out.println(root.toString());
@@ -389,7 +389,7 @@ class SpaceNode extends BoundingBox {
      * @param handler
      *            the handler
      */
-    public void handleObjectCollisions(IBoundingSphere sph,
+    public void handleObjectCollisions(BoundingSphere sph,
             ObjectCollisionHandler handler) {
         if (container != null) {
             for (Object obj : container) {
@@ -453,7 +453,7 @@ class SpaceNode extends BoundingBox {
      * public boolean handleRayCollisions(Space space, Ray ray,
      * RayCollisionHandler handler) { float len = ray.getDirection().length();
      * boolean ret = false; if (container != null) { IntersectionInfo
-     * closestInfo = null; IBoundingSphere closestObject = null; for (Object
+     * closestInfo = null; BoundingSphere closestObject = null; for (Object
      * obj2 : container) { Float idist = ray.intersects(obj2); if ((idist !=
      * null && idist < len) || obj2.contains(ray.getPosition())) {
      * IntersectionInfo info = handler.closestTriangle(obj2, ray); if

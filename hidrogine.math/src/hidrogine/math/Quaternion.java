@@ -70,7 +70,7 @@ public class Quaternion {
      * @param scalarPart
      *            the scalar part
      */
-    public Quaternion(IVector3 vectorPart, float scalarPart) {
+    public Quaternion(Vector3 vectorPart, float scalarPart) {
         X = vectorPart.getX();
         Y = vectorPart.getY();
         Z = vectorPart.getZ();
@@ -188,7 +188,7 @@ public class Quaternion {
      *            the angle
      * @return the quaternion
      */
-    public Quaternion createFromAxisAngle(IVector3 axis, float angle) {
+    public Quaternion createFromAxisAngle(Vector3 axis, float angle) {
         float sin_a = (float) Math.sin(angle / 2.0);
         return setX(axis.getX() * sin_a).setY(axis.getY() * sin_a).setZ(axis.getZ() * sin_a).setW( (float) Math.cos(angle / 2.0));
     }

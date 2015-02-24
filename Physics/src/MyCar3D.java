@@ -8,10 +8,9 @@ import hidrogine.lwjgl.ShaderProgram;
 import hidrogine.math.BoundingFrustum;
 import hidrogine.math.BoundingSphere;
 import hidrogine.math.ContainmentType;
-import hidrogine.math.IVector3;
+import hidrogine.math.Vector3;
 import hidrogine.math.Matrix;
 import hidrogine.math.Space;
-import hidrogine.math.Vector3;
 
 public class MyCar3D extends Object3D {
 
@@ -21,7 +20,7 @@ public class MyCar3D extends Object3D {
 	private static final Matrix ROTATION = new Matrix();
 	private static final DrawableSphere sphere = new DrawableSphere();
 
-	public MyCar3D(IVector3 position, Model3D model) {
+	public MyCar3D(Vector3 position, Model3D model) {
 		super(position, model);
 		// TODO Auto-generated constructor stub
 	}
@@ -65,7 +64,7 @@ public class MyCar3D extends Object3D {
 						}
 						if (g.getName().startsWith("w")
 								&& g.getName().length() == 2) {
-							final IVector3 center = new Vector3(g.getCenter())
+							final Vector3 center = new Vector3(g.getCenter())
 									.multiply(-1f);
 							matrix.translate(center).multiply(
 									ROTATION.createRotationX(time * 8));

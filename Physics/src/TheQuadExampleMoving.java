@@ -7,8 +7,7 @@ import hidrogine.math.BoundingBox;
 import hidrogine.math.BoundingFrustum;
 import hidrogine.math.Camera;
 import hidrogine.math.ContainmentType;
-import hidrogine.math.IBoundingBox;
-import hidrogine.math.IBoundingSphere;
+import hidrogine.math.BoundingBox;
 import hidrogine.math.Matrix;
 import hidrogine.math.ObjectCollisionHandler;
 import hidrogine.math.Space;
@@ -258,11 +257,11 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * hidrogine.math.VisibleNodeHandler#onNodeVisible(hidrogine.math.IBoundingBox
+	 * hidrogine.math.VisibleNodeHandler#onNodeVisible(hidrogine.math.BoundingBox
 	 * , int)
 	 */
 	@Override
-	public void onNodeVisible(IBoundingBox obj, int storedObjectsCount) {
+	public void onNodeVisible(BoundingBox obj, int storedObjectsCount) {
 		if (storedObjectsCount > 0) {
 			getProgram().setAmbientColor(0f, 0f, 1f);
 		} else {

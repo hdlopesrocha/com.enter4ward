@@ -1,10 +1,8 @@
 package hidrogine.lwjgl;
 
 import hidrogine.math.BoundingSphere;
-import hidrogine.math.IBoundingSphere;
 import hidrogine.math.IModel3D;
 import hidrogine.math.IObject3D;
-import hidrogine.math.IVector3;
 import hidrogine.math.Matrix;
 import hidrogine.math.Vector2;
 import hidrogine.math.Vector3;
@@ -34,7 +32,7 @@ public class Model3D implements IModel3D {
 
 	/** The groups. */
 	private List<Group> groups = new ArrayList<Group>();
-	private IBoundingSphere container;
+	private BoundingSphere container;
 
 	/** The materials. */
 	private TreeMap<String, Material> materials = new TreeMap<String, Material>();
@@ -76,7 +74,7 @@ public class Model3D implements IModel3D {
 	 * @see hidrogine.math.api.IModel3D#getContainer()
 	 */
 	@Override
-	public IBoundingSphere getContainer() {
+	public BoundingSphere getContainer() {
 		return container;
 	}
 
@@ -165,7 +163,7 @@ public class Model3D implements IModel3D {
 	@SuppressWarnings("unchecked")
 	private void loadGeometry(final String filename, final float scale, final boolean explodeTriangles)
 			throws JSONException, IOException {
-		final List<IVector3> points = new ArrayList<IVector3>();
+		final List<Vector3> points = new ArrayList<Vector3>();
 		final FileInputStream file = new FileInputStream(filename);
 		final JSONTokener tokener = new JSONTokener(file);
 		final JSONObject jObject = new JSONObject(tokener);
@@ -173,7 +171,7 @@ public class Model3D implements IModel3D {
 		while (groupNames.hasNext()) {
 			final String groupName = groupNames.next();
 			final Group currentGroup = new Group(groupName);
-			final List<IVector3> groupPoints = new ArrayList<IVector3>();
+			final List<Vector3> groupPoints = new ArrayList<Vector3>();
 			
 			groups.add(currentGroup);
 			final JSONArray subGroups = jObject.getJSONArray(groupName);

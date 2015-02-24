@@ -2,8 +2,8 @@ package hidrogine.lwjgl;
 
 import hidrogine.math.BoundingSphere;
 import hidrogine.math.IVector2;
-import hidrogine.math.IVector3;
 import hidrogine.math.Triangle;
+import hidrogine.math.Vector3;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -39,10 +39,10 @@ public class BufferObject extends BoundingSphere {
 	}
 
 	/** The positions. */
-	private ArrayList<IVector3> positions = new ArrayList<IVector3>();
+	private ArrayList<Vector3> positions = new ArrayList<Vector3>();
 
 	/** The normals. */
-	private ArrayList<IVector3> normals = new ArrayList<IVector3>();
+	private ArrayList<Vector3> normals = new ArrayList<Vector3>();
 
 	/** The texture coords. */
 	private ArrayList<IVector2> textureCoords = new ArrayList<IVector2>();
@@ -93,7 +93,7 @@ public class BufferObject extends BoundingSphere {
 	 * @param vec
 	 *            the vec
 	 */
-	public final void addPosition(final IVector3 vec) {
+	public final void addPosition(final Vector3 vec) {
 		positions.add(vec);
 
 	}
@@ -109,7 +109,7 @@ public class BufferObject extends BoundingSphere {
 	 * @param vec
 	 *            the vec
 	 */
-	public final void addNormal(final IVector3 vec) {
+	public final void addNormal(final Vector3 vec) {
 		normals.add(vec);
 	}
 
@@ -145,9 +145,9 @@ public class BufferObject extends BoundingSphere {
 		createFromPoints(positions);
 		if (explodeTriangles) {
 			for (int i = 0; i < indexData.size() ; i += 3) {
-				IVector3 a = positions.get(indexData.get(i));
-				IVector3 b = positions.get(indexData.get(i + 1));
-				IVector3 c = positions.get(indexData.get(i + 2));
+				Vector3 a = positions.get(indexData.get(i));
+				Vector3 b = positions.get(indexData.get(i + 1));
+				Vector3 c = positions.get(indexData.get(i + 2));
 				triangles.add(new Triangle(a, b, c));
 			}
 		}
@@ -155,8 +155,8 @@ public class BufferObject extends BoundingSphere {
 		final ArrayList<Float> packedVector = new ArrayList<Float>();
 		while (positions.size() > 0 && normals.size() > 0
 				&& textureCoords.size() > 0) {
-			IVector3 pos = positions.remove(0);
-			IVector3 nrm = normals.remove(0);
+			Vector3 pos = positions.remove(0);
+			Vector3 nrm = normals.remove(0);
 			IVector2 tex = textureCoords.remove(0);
 
 			packedVector.add(pos.getX());

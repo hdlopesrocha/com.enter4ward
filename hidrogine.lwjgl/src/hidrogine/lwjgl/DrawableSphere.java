@@ -1,6 +1,6 @@
 package hidrogine.lwjgl;
 
-import hidrogine.math.IBoundingSphere;
+import hidrogine.math.BoundingSphere;
 import hidrogine.math.Matrix;
 import hidrogine.math.Vector2;
 import hidrogine.math.Vector3;
@@ -45,7 +45,7 @@ public class DrawableSphere {
 	 * @param shader
 	 *            the shader
 	 */
-	public final void draw(final ShaderProgram shader, IBoundingSphere sph) {
+	public final void draw(final ShaderProgram shader, BoundingSphere sph) {
 		//System.out.println(min.toString()+" : "+max.toString());
 		shader.setAmbientColor(1, 1, 1);
 		shader.setMaterialAlpha(0.2f);

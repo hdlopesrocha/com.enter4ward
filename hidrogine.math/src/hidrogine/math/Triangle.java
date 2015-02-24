@@ -7,7 +7,7 @@ package hidrogine.math;
 public class Triangle {
 
     /** The c. */
-    private IVector3 a, b, c;
+    private Vector3 a, b, c;
 
     /**
      * Instantiates a new triangle.
@@ -19,7 +19,7 @@ public class Triangle {
      * @param c
      *            the c
      */
-    public Triangle(IVector3 a, IVector3 b, IVector3 c) {
+    public Triangle(Vector3 a, Vector3 b, Vector3 c) {
         this.a = a;
         this.b = b;
         this.c = c;
@@ -32,7 +32,7 @@ public class Triangle {
      *            the point
      * @return true, if successful
      */
-    public boolean contains(IVector3 point) {
+    public boolean contains(Vector3 point) {
         float thisArea = getArea();
         float area1 = new Triangle(a, b, point).getArea();
         float area2 = new Triangle(a, c, point).getArea();

@@ -10,17 +10,17 @@ package hidrogine.math;
 public class Ray {
 
     /** The Direction. */
-    private IVector3 direction;
+    private Vector3 direction;
 
     /** The Position. */
-    private IVector3 position;
+    private Vector3 position;
 
     /**
      * Gets the direction.
      *
      * @return the direction
      */
-    public IVector3 getDirection() {
+    public Vector3 getDirection() {
         return direction;
     }
 
@@ -39,7 +39,7 @@ public class Ray {
      *
      * @return the position
      */
-    public IVector3 getPosition() {
+    public Vector3 getPosition() {
         return position;
     }
 
@@ -49,21 +49,21 @@ public class Ray {
      * @param position
      *            the new position
      */
-    public void setPosition(IVector3 position) {
+    public void setPosition(Vector3 position) {
         this.position = position;
     }
 
     /**
      * Instantiates a new ray.
      *
-     * @param iVector3
+     * @param Vector3
      *            the position
-     * @param iVector32
+     * @param Vector32
      *            the direction
      */
-    public Ray(IVector3 iVector3, IVector3 iVector32) {
-        this.position = iVector3;
-        this.direction = iVector32;
+    public Ray(Vector3 Vector3, Vector3 Vector32) {
+        this.position = Vector3;
+        this.direction = Vector32;
     }
 
     /**
@@ -87,7 +87,7 @@ public class Ray {
      *            the box
      * @return the float
      */
-    public Float intersects(IBoundingBox box) {
+    public Float intersects(BoundingBox box) {
         float Epsilon = 1e-6f;
 
         Float tMin = null, tMax = null;
@@ -189,7 +189,7 @@ public class Ray {
      * @return the float
      */
     public Float intersects(Plane plane) {
-  //      IVector3 nrm = new Vector3(direction).normalize();
+  //      Vector3 nrm = new Vector3(direction).normalize();
         
         
         float den = plane.dotNormal(direction);
@@ -213,7 +213,7 @@ public class Ray {
         
         
         if (distance != null && distance >= 0 && distance<= 1f) {
-            IVector3 intersection = new Vector3(position).addMultiply(direction,distance);
+            Vector3 intersection = new Vector3(position).addMultiply(direction,distance);
 /*
             System.out.println("dist:"+distance);
             System.out.println("tri:"+triangle.toString());
@@ -235,9 +235,9 @@ public class Ray {
      *            the sphere
      * @return the float
      */
-    public Float intersects(IBoundingSphere sphere) {
+    public Float intersects(BoundingSphere sphere) {
         // Find the vector between where the ray starts the the sphere's centre
-        IVector3 difference = new Vector3(sphere.getCenter())
+        Vector3 difference = new Vector3(sphere.getCenter())
                 .subtract(this.position);
 
         float differenceLengthSquared = difference.lengthSquared();

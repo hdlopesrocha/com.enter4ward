@@ -26,7 +26,7 @@ public class Camera {
      */
     public Matrix getViewMatrix() {
 
-        IVector3 negativePos = new Vector3(position).multiply(-1f);
+        Vector3 negativePos = new Vector3(position).multiply(-1f);
         return new Matrix().identity().createTranslation(negativePos)
                 .multiply(new Matrix().createFromQuaternion(rotation));
 
@@ -95,7 +95,7 @@ public class Camera {
      * @param lookAtZ
      *            the look at z
      */
-    public void lookAt(IVector3 pos, IVector3 lookAt, IVector3 up){
+    public void lookAt(Vector3 pos, Vector3 lookAt, Vector3 up){
         position.set(pos);        
         Matrix mat = new Matrix().createLookAt(new Vector3(),new Vector3(lookAt).subtract(pos).normalize(), up);  
         
