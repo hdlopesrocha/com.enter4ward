@@ -81,43 +81,46 @@ class SpaceNode extends BoundingBox {
 
     public ContainmentType childContains(final int i,
             final IBoundingSphere sphere, float lenX, float lenY, float lenZ) {
+        if (child == null || child[i] == null) {
+            if (lenX >= lenY && lenX >= lenZ) {
+                if (i == LEFT) {
+                    TEMP_BOX.setMin(getMin());
+                    TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addX(-lenX / 2));
+                } else if (i == RIGHT) {
+                    TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addX(lenX / 2));
+                    TEMP_BOX.setMax(getMax());
+                } else {
+                    TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addX(lenX / 4));
+                    TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addX(-lenX / 4));
+                }
+            } else if (lenY >= lenZ) {
+                if (i == LEFT) {
+                    TEMP_BOX.setMin(getMin());
+                    TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addY(-lenY / 2));
+                } else if (i == RIGHT) {
+                    TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addY(lenY / 2));
+                    TEMP_BOX.setMax(getMax());
+                } else {
+                    TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addY(lenY / 4));
+                    TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addY(-lenY / 4));
+                }
+            } else {
+                if (i == LEFT) {
+                    TEMP_BOX.setMin(getMin());
+                    TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addZ(-lenZ / 2));
+                } else if (i == RIGHT) {
+                    TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addZ(lenZ / 2));
+                    TEMP_BOX.setMax(getMax());
+                } else {
+                    TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addZ(lenZ / 4));
+                    TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addZ(-lenZ / 4));
+                }
+            }
 
-        if (lenX >= lenY && lenX >= lenZ) {
-            if (i == LEFT) {
-                TEMP_BOX.setMin(getMin());
-                TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addX(-lenX / 2));
-            } else if (i == RIGHT) {
-                TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addX(lenX / 2));
-                TEMP_BOX.setMax(getMax());
-            } else {
-                TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addX(lenX / 4));
-                TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addX(-lenX / 4));
-            }
-        } else if (lenY >= lenZ) {
-            if (i == LEFT) {
-                TEMP_BOX.setMin(getMin());
-                TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addY(-lenY / 2));
-            } else if (i == RIGHT) {
-                TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addY(lenY / 2));
-                TEMP_BOX.setMax(getMax());
-            } else {
-                TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addY(lenY / 4));
-                TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addY(-lenY / 4));
-            }
+            return TEMP_BOX.contains(sphere);
         } else {
-            if (i == LEFT) {
-                TEMP_BOX.setMin(getMin());
-                TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addZ(-lenZ / 2));
-            } else if (i == RIGHT) {
-                TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addZ(lenZ / 2));
-                TEMP_BOX.setMax(getMax());
-            } else {
-                TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addZ(lenZ / 4));
-                TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addZ(-lenZ / 4));
-            }
+            return child[i].contains(sphere);
         }
-
-        return TEMP_BOX.contains(sphere);
     }
 
     public void containerAdd(Object obj) {
@@ -378,8 +381,6 @@ class SpaceNode extends BoundingBox {
         return node;
     }
 
-
-
     /**
      * Iterate.
      *
@@ -449,50 +450,23 @@ class SpaceNode extends BoundingBox {
     }
 
     /*
-    public boolean handleRayCollisions(Space space, Ray ray,
-            RayCollisionHandler handler) {
-        float len = ray.getDirection().length();
-        boolean ret = false;
-        if (container != null) {
-            IntersectionInfo closestInfo = null;
-            IBoundingSphere closestObject = null;
-            for (Object obj2 : container) {
-                Float idist = ray.intersects(obj2);
-                if ((idist != null && idist < len)
-                        || obj2.contains(ray.getPosition())) {
-                    IntersectionInfo info = handler.closestTriangle(obj2, ray);
-                    if (closestInfo == null
-                            || info.distance < closestInfo.distance) {
-                        closestInfo = info;
-                        closestObject = obj2;
-                    }
-                }
-            }
-            if (closestInfo != null) {
-                ret |= handler.onObjectCollision(space, ray, closestObject,
-                        closestInfo);
-            }
-        }
-        if (child != null) {
-            int intersections = 0;
-            for (int i = 0; i < 3; ++i) {
-                SpaceNode node = child[i];
-                Float idist = null;
-                if (node != null
-                        && node.count > 0
-                        && (intersections == 2
-                                || node.contains(ray.getPosition()) != ContainmentType.Disjoint || ((idist = ray
-                                .intersects(node)) != null && idist <= len))) {
-                    ++intersections;
-                    if (idist == null) {
-                        idist = 0f;
-                    }
-                    // System.out.println("#"+node+"#"+ray+"#"+idist+"#"+handler);
-                    ret |= node.handleRayCollisions(space, ray, handler);
-                }
-            }
-        }
-        return ret;
-    }
-    */
+     * public boolean handleRayCollisions(Space space, Ray ray,
+     * RayCollisionHandler handler) { float len = ray.getDirection().length();
+     * boolean ret = false; if (container != null) { IntersectionInfo
+     * closestInfo = null; IBoundingSphere closestObject = null; for (Object
+     * obj2 : container) { Float idist = ray.intersects(obj2); if ((idist !=
+     * null && idist < len) || obj2.contains(ray.getPosition())) {
+     * IntersectionInfo info = handler.closestTriangle(obj2, ray); if
+     * (closestInfo == null || info.distance < closestInfo.distance) {
+     * closestInfo = info; closestObject = obj2; } } } if (closestInfo != null)
+     * { ret |= handler.onObjectCollision(space, ray, closestObject,
+     * closestInfo); } } if (child != null) { int intersections = 0; for (int i
+     * = 0; i < 3; ++i) { SpaceNode node = child[i]; Float idist = null; if
+     * (node != null && node.count > 0 && (intersections == 2 ||
+     * node.contains(ray.getPosition()) != ContainmentType.Disjoint || ((idist =
+     * ray .intersects(node)) != null && idist <= len))) { ++intersections; if
+     * (idist == null) { idist = 0f; } //
+     * System.out.println("#"+node+"#"+ray+"#"+idist+"#"+handler); ret |=
+     * node.handleRayCollisions(space, ray, handler); } } } return ret; }
+     */
 }

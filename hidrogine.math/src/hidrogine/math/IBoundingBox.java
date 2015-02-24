@@ -249,26 +249,28 @@ public abstract class IBoundingBox {
      *            the sphere
      * @return the containment type
      */
-    public ContainmentType contains(IBoundingSphere sphere) {
-        IVector3 center = sphere.getCenter();
-        float sx = center.getX();
-        float sy = center.getY();
-        float sz = center.getZ();
-        float sr = sphere.getRadius();
-
-        if (sx - getMin().getX() >= sr && sy - getMin().getY() >= sr
-                && sz - getMin().getZ() >= sr && getMax().getX() - sx >= sr
-                && getMax().getY() - sy >= sr && getMax().getZ() - sz >= sr)
+    public ContainmentType contains(final IBoundingSphere sphere) {
+        final IVector3 center = sphere.getCenter();
+        final float sx = center.getX();
+        final float sy = center.getY();
+        final float sz = center.getZ();
+        final float sr = sphere.getRadius();
+        final IVector3 min = getMin();
+        final IVector3 max = getMax();
+        
+        if (sx - min.getX() >= sr && sy - min.getY() >= sr
+                && sz - min.getZ() >= sr && max.getX() - sx >= sr
+                && max.getY() - sy >= sr && max.getZ() - sz >= sr)
             return ContainmentType.Contains;
         double dmin = 0;
-        double e = sx - getMin().getX();
+        double e = sx - min.getX();
         if (e < 0) {
             if (e < -sr) {
                 return ContainmentType.Disjoint;
             }
             dmin += e * e;
         } else {
-            e = sx - getMax().getX();
+            e = sx - max.getX();
             if (e > 0) {
                 if (e > sr) {
                     return ContainmentType.Disjoint;
@@ -276,14 +278,14 @@ public abstract class IBoundingBox {
                 dmin += e * e;
             }
         }
-        e = sy - getMin().getY();
+        e = sy - min.getY();
         if (e < 0) {
             if (e < -sr) {
                 return ContainmentType.Disjoint;
             }
             dmin += e * e;
         } else {
-            e = sy - getMax().getY();
+            e = sy - max.getY();
             if (e > 0) {
                 if (e > sr) {
                     return ContainmentType.Disjoint;
@@ -291,14 +293,14 @@ public abstract class IBoundingBox {
                 dmin += e * e;
             }
         }
-        e = sz - getMin().getZ();
+        e = sz - min.getZ();
         if (e < 0) {
             if (e < -sr) {
                 return ContainmentType.Disjoint;
             }
             dmin += e * e;
         } else {
-            e = sz - getMax().getZ();
+            e = sz - max.getZ();
             if (e > 0) {
                 if (e > sr) {
                     return ContainmentType.Disjoint;
