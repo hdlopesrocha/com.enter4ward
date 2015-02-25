@@ -18,10 +18,6 @@ class SpaceNode extends BoundingBox {
     /** The Constant CENTER. */
     static final int CENTER = 2;
 
-    static final BoundingBox TEMP_BOX = new BoundingBox();
-    static final Vector3 TEMP_MIN = new Vector3();
-    static final Vector3 TEMP_MAX = new Vector3();
-
     /** The container. */
     private List<Object> container;
 
@@ -79,49 +75,53 @@ class SpaceNode extends BoundingBox {
         node.parent = this;
     }
 
-    public ContainmentType childContains(final int i,
-            final BoundingSphere sphere, float lenX, float lenY, float lenZ) {
-        if (child == null || child[i] == null) {
+    
+    public int containsIndex(final BoundingSphere sphere, float lenX, float lenY, float lenZ){
+        Vector3 sc = sphere.getCenter();
+        float sr = sphere.getRadius();
+        
+        // skip 4 main planes for each child
+        
+ //       if(onlyContains(sphere)){
             if (lenX >= lenY && lenX >= lenZ) {
-                if (i == LEFT) {
-                    TEMP_BOX.setMin(getMin());
-                    TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addX(-lenX / 2));
-                } else if (i == RIGHT) {
-                    TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addX(lenX / 2));
-                    TEMP_BOX.setMax(getMax());
-                } else {
-                    TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addX(lenX / 4));
-                    TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addX(-lenX / 4));
+                float dist = getCenterX() - sc.getX();
+                if(dist >= sr){
+                    return LEFT; 
+                }
+                else if(-dist>=sr){
+                    return RIGHT; 
+                }
+                else if(Math.abs(dist)+sr <= lenX*.25f){
+                    return CENTER; 
                 }
             } else if (lenY >= lenZ) {
-                if (i == LEFT) {
-                    TEMP_BOX.setMin(getMin());
-                    TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addY(-lenY / 2));
-                } else if (i == RIGHT) {
-                    TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addY(lenY / 2));
-                    TEMP_BOX.setMax(getMax());
-                } else {
-                    TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addY(lenY / 4));
-                    TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addY(-lenY / 4));
+                float dist = getCenterY() - sc.getY();
+                if(dist >= sr){
+                    return LEFT; 
+                }
+                else if(-dist>=sr){
+                    return RIGHT; 
+                }
+                else if(Math.abs(dist)+sr <= lenY*.25f){
+                    return CENTER; 
                 }
             } else {
-                if (i == LEFT) {
-                    TEMP_BOX.setMin(getMin());
-                    TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addZ(-lenZ / 2));
-                } else if (i == RIGHT) {
-                    TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addZ(lenZ / 2));
-                    TEMP_BOX.setMax(getMax());
-                } else {
-                    TEMP_BOX.setMin(TEMP_MIN.set(getMin()).addZ(lenZ / 4));
-                    TEMP_BOX.setMax(TEMP_MAX.set(getMax()).addZ(-lenZ / 4));
+                float dist = getCenterZ() - sc.getZ();
+                if(dist >= sr){
+                    return LEFT; 
+                }
+                else if(-dist>=sr){
+                    return RIGHT; 
+                }
+                else if(Math.abs(dist)+sr <= lenZ*.25f){
+                    return CENTER; 
                 }
             }
-
-            return TEMP_BOX.contains(sphere);
-        } else {
-            return child[i].contains(sphere);
-        }
+   //     }
+        return -1;
     }
+    
+    
 
     public void containerAdd(Object obj) {
         if (container == null)
@@ -362,7 +362,7 @@ class SpaceNode extends BoundingBox {
 
     public SpaceNode update(BoundingSphere sph) {
         SpaceNode node = this;
-        while (node != null && node.contains(sph) != ContainmentType.Contains) {
+        while (node != null && !node.onlyContains(sph)) {
             node.count--;
             node.clearChild();
             node = node.parent;
@@ -374,7 +374,7 @@ class SpaceNode extends BoundingBox {
         SpaceNode node = this;
         // System.out.println("=== EXPANSION ===");
         // System.out.println(root.toString());
-        while (node.contains(obj) != ContainmentType.Contains) {
+        while (!node.onlyContains(obj)) {
             clearChild();
             node = node.expandAux(obj);
         }

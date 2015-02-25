@@ -130,7 +130,7 @@ public class BoundingBox  {
      * @see hidrogine.math.IBox#toString()
      */
     public String toString() {
-        return "{Min:" + min.toString() + " ,Max" + max.toString()
+        return "{Min:" + min.toString() + ", Max" + max.toString()
                 + "}";
     }
 
@@ -284,6 +284,20 @@ public class BoundingBox  {
             return ContainmentType.Intersects;
         return ContainmentType.Disjoint;
     }
+    
+    
+    public boolean onlyContains(final BoundingSphere sphere) {
+        final Vector3 center = sphere.getCenter();
+        final float sx = center.getX();
+        final float sy = center.getY();
+        final float sz = center.getZ();
+        final float sr = sphere.getRadius();
+
+        
+        return (sx - min.getX() >= sr && sy - min.getY() >= sr
+                && sz - min.getZ() >= sr && max.getX() - sx >= sr
+                && max.getY() - sy >= sr && max.getZ() - sz >= sr);
+        }
     
 
     /**

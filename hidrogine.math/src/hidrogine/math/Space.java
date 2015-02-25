@@ -87,28 +87,25 @@ public class Space {
      *            the node
      * @return the space node
      */
-    protected SpaceNode insert(BoundingSphere sph, SpaceNode node) {
+    private SpaceNode insert(BoundingSphere sph, SpaceNode node) {
         // insertion
         while (true) {
             ++node.count;
 
-            boolean childContains = false;
-            boolean canSplit = node.child!=null || node.canSplit();
+            boolean canSplit = node.child != null || node.canSplit();
             if (canSplit) {
                 float lenX = node.getLengthX();
                 float lenY = node.getLengthY();
                 float lenZ = node.getLengthZ();
-
-                for (int i = 0; i < 3; ++i) {
-                    if (node.childContains(i, sph, lenX, lenY, lenZ) == ContainmentType.Contains) {
-                        childContains = true;
-                        node = node.getChild(i, lenX, lenY, lenZ);
-                        break;
-                    }
+                int i = node.containsIndex(sph, lenX, lenY, lenZ);
+                if (i >= 0) {
+                    node = node.getChild(i, lenX, lenY, lenZ);
+                }
+                else {
+                    break;
                 }
             }
-
-            if (!canSplit || !childContains) {
+            else {
                 break;
             }
         }
@@ -135,10 +132,8 @@ public class Space {
     protected SpaceNode insert(BoundingSphere sph) {
         // expand phase
         root = root.expand(sph);
-        SpaceNode node = insert(sph, root);
-
         // insertion
-        return node;
+        return insert(sph, root);
     }
 
     /**
@@ -146,7 +141,7 @@ public class Space {
      */
     private void compress() {
         while (true) {
-            if (root.containerSize() == 0 && root.child!=null) {
+            if (root.containerSize() == 0 && root.child != null) {
                 boolean emptyLeft = root.child[SpaceNode.LEFT] == null
                         || root.child[SpaceNode.LEFT].count == 0;
                 boolean emptyCenter = root.child[SpaceNode.CENTER] == null
