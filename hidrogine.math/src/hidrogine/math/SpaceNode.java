@@ -22,7 +22,7 @@ class SpaceNode extends BoundingBox {
     private List<Object> container;
 
     /** The child. */
-   private SpaceNode[] child;
+    private SpaceNode[] child;
 
     /** The parent. */
     SpaceNode parent;
@@ -349,7 +349,7 @@ class SpaceNode extends BoundingBox {
         if(child!=null){
             int n=0;
             for(int i=0; i < 3 ; ++i){
-                if(child[i]==null || child[i].canMerge()){
+                if(child[i]==null || child[i].isEmpty()){
                     child[i]=null;
                     ++n;
                 }
@@ -494,7 +494,7 @@ class SpaceNode extends BoundingBox {
         }
     }
 
-    public boolean canMerge() {
+    public boolean isEmpty() {
         return containerSize()==0 && (child==null || (child[0]==null && child[1]==null && child[2]==null)) ;
     }
 
