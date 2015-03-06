@@ -102,8 +102,7 @@ public abstract class IObject3D {
      *            the space
      */
     public IObject3D insert(Space space) {
-        node = space.insert(getBoundingSphere());
-        node.containerAdd(this);
+        node = space.insert(getBoundingSphere(), this);
         return this;
     }
 
@@ -111,12 +110,11 @@ public abstract class IObject3D {
      * Removes the.
      */
     public void remove() {
-        node.remove();
         node.containerRemove(this);
+        node.remove();
     }
 
  
-
     /**
      * Update.
      *
@@ -124,11 +122,9 @@ public abstract class IObject3D {
      *            the space
      */
     public void update(Space space) {
-        final SpaceNode newNode = space.update(getBoundingSphere(), node);
-        if(newNode!=node){
-           node.containerRemove(this);
-           node=newNode;
-           node.containerAdd(this);
+        BoundingSphere sph = getBoundingSphere();
+        if(!node.onlyContains(sph)) {
+            node = space.update(sph, node, this);            
         }
     }
 

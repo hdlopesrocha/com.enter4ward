@@ -108,7 +108,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 /*
 		moving.insert(space);
 	*/
-		new MyCar3D(new Vector3(-4, 4, 25), car) {}.insert(space);
+	//	new MyCar3D(new Vector3(-4, 4, 25), car) {}.insert(space);
 
 		Random rand = new Random();
 		for(int i=0; i < 16 ; ++i){
