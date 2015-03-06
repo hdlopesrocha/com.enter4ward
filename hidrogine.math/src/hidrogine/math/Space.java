@@ -61,67 +61,33 @@ public class Space {
 
     /**
      * Update.
+     * @param iObject3D 
      *
      * @param obj
      *            the obj
      * @return the space node
      */
-    protected SpaceNode update(BoundingSphere sph, SpaceNode node) {
-        node = node.update(sph);
-
-        if (node == null) {
-            root = root.expand(sph);
-            node = root;
-        } else {
-            node.count--;
-        }
-        return insert(sph, node);
-    }
-
-    /**
-     * Insert.
-     *
-     * @param obj
-     *            the obj
-     * @param node
-     *            the node
-     * @return the space node
-     */
-    private SpaceNode insert(BoundingSphere sph, SpaceNode node) {
-        // insertion
-        while (true) {
-            ++node.count;
-
-            boolean canSplit = node.child != null || node.canSplit();
-            if (canSplit) {
-                float lenX = node.getLengthX();
-                float lenY = node.getLengthY();
-                float lenZ = node.getLengthZ();
-                int i = node.containsIndex(sph, lenX, lenY, lenZ);
-                if (i >= 0) {
-                    node = node.getChild(i, lenX, lenY, lenZ);
-                }
-                else {
-                    break;
-                }
+    protected SpaceNode update(BoundingSphere sph, SpaceNode node, Object obj) {
+        if(!node.onlyContains(sph)) {
+            node.containerRemove(obj);
+            node.clearChild();
+            node = node.parent;
+            if(node!=null)
+                node = node.update(sph);
+            
+            
+            if(node==null){
+                node = root = root.expand(sph);
             }
-            else {
-                break;
-            }
+            node = node.insert(sph);
+            node.containerAdd(obj);
+            root = root.compress();
         }
-
-        /*
-         * for (SpaceNode s = node; s != null; s = s.parent) {
-         * if(s.clearChild()) System.out.println("clear!"); }
-         */
-        // root compression
-        compress();
-        // System.out.println("=== COMPRESSION ===");
-        // System.out.println(root.toString());
-
         return node;
     }
 
+   
+
     /**
      * Insert.
      *
@@ -129,40 +95,14 @@ public class Space {
      *            the obj
      * @return the space node
      */
-    protected SpaceNode insert(BoundingSphere sph) {
-        // expand phase
-        root = root.expand(sph);
-        // insertion
-        return insert(sph, root);
+    SpaceNode insert(BoundingSphere sph, Object obj) {
+        root = root.expand(sph);     
+        SpaceNode node = root.insert(sph);
+        node.containerAdd(obj);
+        root = root.compress();
+        return node;
     }
 
-    /**
-     * Compress.
-     */
-    private void compress() {
-        while (true) {
-            if (root.containerSize() == 0 && root.child != null) {
-                boolean emptyLeft = root.child[SpaceNode.LEFT] == null
-                        || root.child[SpaceNode.LEFT].count == 0;
-                boolean emptyCenter = root.child[SpaceNode.CENTER] == null
-                        || root.child[SpaceNode.CENTER].count == 0;
-                boolean emptyRight = root.child[SpaceNode.RIGHT] == null
-                        || root.child[SpaceNode.RIGHT].count == 0;
 
-                if (emptyLeft && emptyCenter && !emptyRight) {
-                    root = root.child[SpaceNode.RIGHT];
-                } else if (emptyLeft && !emptyCenter && emptyRight) {
-                    root = root.child[SpaceNode.CENTER];
-                } else if (!emptyLeft && emptyCenter && emptyRight) {
-                    root = root.child[SpaceNode.LEFT];
-                } else {
-                    break;
-                }
-            } else {
-                break;
-            }
-        }
-        root.parent = null;
-    }
 
 }
