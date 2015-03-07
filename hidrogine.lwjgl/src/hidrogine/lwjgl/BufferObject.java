@@ -1,7 +1,7 @@
 package hidrogine.lwjgl;
 
 import hidrogine.math.BoundingSphere;
-import hidrogine.math.IVector2;
+import hidrogine.math.Vector2;
 import hidrogine.math.Triangle;
 import hidrogine.math.Vector3;
 
@@ -45,7 +45,7 @@ public class BufferObject extends BoundingSphere {
 	private ArrayList<Vector3> normals = new ArrayList<Vector3>();
 
 	/** The texture coords. */
-	private ArrayList<IVector2> textureCoords = new ArrayList<IVector2>();
+	private ArrayList<Vector2> textureCoords = new ArrayList<Vector2>();
 
 	/** The index data. */
 	private ArrayList<Short> indexData = new ArrayList<Short>();
@@ -124,7 +124,7 @@ public class BufferObject extends BoundingSphere {
 	 * @param vec
 	 *            the vec
 	 */
-	public final void addTextureCoord(final IVector2 vec) {
+	public final void addTextureCoord(final Vector2 vec) {
 		textureCoords.add(vec);
 	}
 
@@ -157,7 +157,7 @@ public class BufferObject extends BoundingSphere {
 				&& textureCoords.size() > 0) {
 			Vector3 pos = positions.remove(0);
 			Vector3 nrm = normals.remove(0);
-			IVector2 tex = textureCoords.remove(0);
+			Vector2 tex = textureCoords.remove(0);
 
 			packedVector.add(pos.getX());
 			packedVector.add(pos.getY());
