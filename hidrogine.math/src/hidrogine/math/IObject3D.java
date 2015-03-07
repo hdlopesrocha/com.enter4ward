@@ -89,7 +89,7 @@ public abstract class IObject3D {
      * @param position
      *            the new position
      */
-    public void setPosition(Vector3 position) {
+    public void setPosition(final Vector3 position) {
         this.position = position;
     }
 
@@ -103,7 +103,7 @@ public abstract class IObject3D {
      * @param space
      *            the space
      */
-    public IObject3D insert(Space space) {
+    public IObject3D insert(final Space space) {
         node = space.insert(getBoundingSphere(), this);
         return this;
     }
@@ -112,8 +112,7 @@ public abstract class IObject3D {
      * Removes the.
      */
     public void remove() {
-        node.containerRemove(this);
-        node.remove();
+        node.remove(this);
     }
 
  
@@ -124,8 +123,7 @@ public abstract class IObject3D {
      *            the space
      */
     public void update(Space space) {
-        BoundingSphere sph = getBoundingSphere(); 
-        node = space.update(sph, node, this);            
+        node = space.update(getBoundingSphere(), node, this);            
       }
 
     /**

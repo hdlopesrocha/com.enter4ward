@@ -124,7 +124,7 @@ class SpaceNode extends BoundingBox {
         container.add(obj);
     }
 
-    public void containerRemove(Object obj) {
+    void containerRemove(Object obj) {
         if (container != null) {
             container.remove(obj);
             if (container.size() == 0) {
@@ -362,7 +362,10 @@ class SpaceNode extends BoundingBox {
      * @param obj
      *            the obj
      */
-    public void remove() {
+    public void remove(Object obj) {
+        containerRemove(obj);
+
+        
         SpaceNode node = this;
         while (node != null) {
             node.clearChild();
@@ -467,12 +470,7 @@ class SpaceNode extends BoundingBox {
             }
         }
 
-        /*
-         * for (SpaceNode s = node; s != null; s = s.parent) {
-         * if(s.clearChild()) System.out.println("clear!"); }
-         */
-        // System.out.println("=== COMPRESSION ===");
-        // System.out.println(root.toString());
+
 
         return node;
     }
