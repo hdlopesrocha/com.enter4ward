@@ -16,7 +16,7 @@ public abstract class IObject3D {
     private IModel3D model;
 
     /** The node. */
-    private SpaceNode node;
+    private Space.Node node;
 
     /**
      * Gets the model matrix.
