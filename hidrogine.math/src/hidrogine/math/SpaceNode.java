@@ -20,13 +20,9 @@ class SpaceNode extends BoundingBox {
 
     /** The container. */
     private List<Object> container;
-
-    /** The child. */
-    private SpaceNode[] child;
-
+    
     /** The parent. */
-    SpaceNode parent;
-
+    SpaceNode parent, left, right, center;
 
     /**
      * Instantiates a new space node.
@@ -65,58 +61,62 @@ class SpaceNode extends BoundingBox {
      */
     private SpaceNode(SpaceNode node, int i, Vector3 min, Vector3 max) {
         super(min, max);
-        this.child = new SpaceNode[3];
-        this.child[i] = node;
+        switch (i) {
+        case LEFT:
+            left = node;
+            break;
+        case CENTER:
+            center = node;
+            break;
+        case RIGHT:
+            right = node;
+            break;
+        default:
+            break;
+        }
+
         node.parent = this;
     }
 
-    
-    public int containsIndex(final BoundingSphere sphere, float lenX, float lenY, float lenZ){
+    public int containsIndex(final BoundingSphere sphere, float lenX,
+            float lenY, float lenZ) {
         Vector3 sc = sphere.getCenter();
         float sr = sphere.getRadius();
-        
+
         // skip 4 main planes for each child
-        
- //       if(onlyContains(sphere)){
-            if (lenX >= lenY && lenX >= lenZ) {
-                float dist = getCenterX() - sc.getX();
-                if(dist >= sr){
-                    return LEFT; 
-                }
-                else if(-dist>=sr){
-                    return RIGHT; 
-                }
-                else if(Math.abs(dist)+sr <= lenX*.25f){
-                    return CENTER; 
-                }
-            } else if (lenY >= lenZ) {
-                float dist = getCenterY() - sc.getY();
-                if(dist >= sr){
-                    return LEFT; 
-                }
-                else if(-dist>=sr){
-                    return RIGHT; 
-                }
-                else if(Math.abs(dist)+sr <= lenY*.25f){
-                    return CENTER; 
-                }
-            } else {
-                float dist = getCenterZ() - sc.getZ();
-                if(dist >= sr){
-                    return LEFT; 
-                }
-                else if(-dist>=sr){
-                    return RIGHT; 
-                }
-                else if(Math.abs(dist)+sr <= lenZ*.25f){
-                    return CENTER; 
-                }
+
+        // if(onlyContains(sphere)){
+        if (lenX >= lenY && lenX >= lenZ) {
+            float dist = getCenterX() - sc.getX();
+            if (dist >= sr) {
+                return LEFT;
+            } else if (-dist >= sr) {
+                return RIGHT;
+            } else if (Math.abs(dist) + sr <= lenX * .25f) {
+                return CENTER;
             }
-   //     }
+        } else if (lenY >= lenZ) {
+            float dist = getCenterY() - sc.getY();
+            if (dist >= sr) {
+                return LEFT;
+            } else if (-dist >= sr) {
+                return RIGHT;
+            } else if (Math.abs(dist) + sr <= lenY * .25f) {
+                return CENTER;
+            }
+        } else {
+            float dist = getCenterZ() - sc.getZ();
+            if (dist >= sr) {
+                return LEFT;
+            } else if (-dist >= sr) {
+                return RIGHT;
+            } else if (Math.abs(dist) + sr <= lenZ * .25f) {
+                return CENTER;
+            }
+        }
+        // }
         return -1;
     }
-    
-    
 
     public void containerAdd(Object obj) {
         if (container == null)
@@ -208,15 +208,43 @@ class SpaceNode extends BoundingBox {
      * @return the child
      */
     public SpaceNode getChild(int i, float lenX, float lenY, float lenZ) {
-        if (child == null) {
-            child = new SpaceNode[3];
+        switch (i) {
+        case LEFT:
+            if (left == null) {
+                left = build(i, lenX, lenY, lenZ);
+            }
+            return left;
+        case CENTER:
+            if (center == null) {
+                center = build(i, lenX, lenY, lenZ);
+            }
+            return center;
+        case RIGHT:
+            if (right == null) {
+                right = build(i, lenX, lenY, lenZ);
+            }
+            return right;
+        default:
+            break;
         }
-        if (child[i] == null) {
-            child[i] = build(i, lenX, lenY, lenZ);
-        }
-        return child[i];
+        return null;
+
     }
 
+    public SpaceNode child(int i) {
+        switch (i) {
+        case LEFT:
+            return left;
+        case CENTER:
+            return center;
+        case RIGHT:
+            return right;
+        default:
+            break;
+        }
+        return null;
+
+    }
 
     /**
      * Expand.
@@ -264,7 +292,8 @@ class SpaceNode extends BoundingBox {
      * @return true, if successful
      */
     protected boolean canSplit() {
-        return child !=null || getMin().distanceSquared(getMax()) > 1f;
+        return left != null || right != null || center != null
+                || getMin().distanceSquared(getMax()) > 1f;
     }
 
     /**
@@ -287,15 +316,13 @@ class SpaceNode extends BoundingBox {
         nodeh.onNodeVisible(this, containerSize());
         // System.out.println(tabs+"["+container.size()+"/"+count+"] "+toString());
 
-        if (child != null) {
-            int intersections = 0;
-            for (int i = 0; i < 3; ++i) {
-                SpaceNode node = child[i];
-                if (node != null
-                        && (intersections == 2 || frustum.contains(node) != ContainmentType.Disjoint)) {
-                    ++intersections;
-                    node.handleVisibleNodes(frustum, nodeh, 1 + j);
-                }
+        int intersections = 0;
+        for (int i = 0; i < 3; ++i) {
+            SpaceNode node = child(i);
+            if (node != null
+                    && (intersections == 2 || frustum.contains(node) != ContainmentType.Disjoint)) {
+                ++intersections;
+                node.handleVisibleNodes(frustum, nodeh, 1 + j);
             }
         }
     }
@@ -316,18 +343,17 @@ class SpaceNode extends BoundingBox {
             }
         }
 
-        if (child != null) {
-            int intersections = 0;
+        int intersections = 0;
 
-            for (int i = 0; i < 3; ++i) {
-                SpaceNode node = child[i];
-                if (node != null
-                        && (intersections == 2 || frustum.contains(node) != ContainmentType.Disjoint)) {
-                    ++intersections;
-                    node.handleVisibleObjects(frustum, handler);
-                }
+        for (int i = 0; i < 3; ++i) {
+            SpaceNode node = child(i);
+            if (node != null
+                    && (intersections == 2 || frustum.contains(node) != ContainmentType.Disjoint)) {
+                ++intersections;
+                node.handleVisibleObjects(frustum, handler);
             }
         }
+
     }
 
     /**
@@ -344,35 +370,34 @@ class SpaceNode extends BoundingBox {
         }
     }
 
-    
-    protected void clearChild(){
-        if(child!=null){
-            int n=0;
-            for(int i=0; i < 3 ; ++i){
-                if(child[i]==null || child[i].isEmpty()){
-                    child[i]=null;
-                    ++n;
-                }
-            }
-            if(n==3)
-                child=null;
+    protected void clearChild() {
+
+        if (left != null && left.isEmpty()) {
+            left = null;
         }
+
+        if (right != null && right.isEmpty()) {
+            right = null;
+        }
+
+        if (center != null && center.isEmpty()) {
+            center = null;
+        }
+
     }
-    
+
     public SpaceNode update(BoundingSphere sph) {
         SpaceNode node = this;
         while (node != null) {
             node.clearChild();
 
-            if(node.onlyContains(sph)){
-               break;
-            }
-            else {
+            if (node.onlyContains(sph)) {
+                break;
+            } else {
                 node = node.parent;
             }
         }
-        
-        
+
         return node;
     }
 
@@ -400,20 +425,18 @@ class SpaceNode extends BoundingBox {
                 handler.onObjectCollision(obj);
             }
         }
-        if (child != null) {
-            int intersections = 0;
-            for (int i = 0; i < 3; ++i) {
-                SpaceNode node = child[i];
-                if (node != null
-                        && (intersections == 2 || node.contains(sph) != ContainmentType.Disjoint)) {
-                    ++intersections;
-                    node.handleObjectCollisions(sph, handler);
-                }
+        int intersections = 0;
+        for (int i = 0; i < 3; ++i) {
+            SpaceNode node = child(i);
+            if (node != null
+                    && (intersections == 2 || node.contains(sph) != ContainmentType.Disjoint)) {
+                ++intersections;
+                node.handleObjectCollisions(sph, handler);
             }
         }
+
     }
 
-    
     /**
      * Insert.
      *
@@ -425,7 +448,7 @@ class SpaceNode extends BoundingBox {
      */
     protected SpaceNode insert(BoundingSphere sph) {
         SpaceNode node = this;
-        
+
         // insertion
         while (true) {
 
@@ -436,12 +459,10 @@ class SpaceNode extends BoundingBox {
                 int i = node.containsIndex(sph, lenX, lenY, lenZ);
                 if (i >= 0) {
                     node = node.getChild(i, lenX, lenY, lenZ);
-                }
-                else {
+                } else {
                     break;
                 }
-            }
-            else {
+            } else {
                 break;
             }
         }
@@ -455,7 +476,7 @@ class SpaceNode extends BoundingBox {
 
         return node;
     }
-    
+
     /**
      * Handle ray collisions.
      *
@@ -474,44 +495,43 @@ class SpaceNode extends BoundingBox {
                 handler.onObjectCollision(space, ray, obj);
             }
         }
-        if (child != null) {
-            int intersections = 0;
-            for (int i = 0; i < 3; ++i) {
-                SpaceNode node = child[i];
-                Float idist = null;
-                if (node != null
-                        && (intersections == 2
-                                || node.contains(ray.getPosition()) != ContainmentType.Disjoint || ((idist = ray
-                                .intersects(node)) != null && idist <= len))) {
-                    ++intersections;
-                    if (idist == null) {
-                        idist = 0f;
-                    }
-                    // System.out.println("#"+node+"#"+ray+"#"+idist+"#"+handler);
-                    node.handleRayCollisions(space, ray, handler);
+        int intersections = 0;
+        for (int i = 0; i < 3; ++i) {
+            SpaceNode node = child(i);
+            Float idist = null;
+            if (node != null
+                    && (intersections == 2
+                            || node.contains(ray.getPosition()) != ContainmentType.Disjoint || ((idist = ray
+                            .intersects(node)) != null && idist <= len))) {
+                ++intersections;
+                if (idist == null) {
+                    idist = 0f;
                 }
+                // System.out.println("#"+node+"#"+ray+"#"+idist+"#"+handler);
+                node.handleRayCollisions(space, ray, handler);
             }
         }
     }
 
     public boolean isEmpty() {
-        return containerSize()==0 && (child==null || (child[0]==null && child[1]==null && child[2]==null)) ;
+        return containerSize() == 0
+                && (left == null && center == null && right == null);
     }
 
     public SpaceNode compress() {
-        SpaceNode node= this;
+        SpaceNode node = this;
         while (true) {
-            if (node.containerSize() == 0 && node.child != null) {
-                boolean emptyLeft = node.child[SpaceNode.LEFT] == null;
-                boolean emptyCenter = node.child[SpaceNode.CENTER] == null;
-                boolean emptyRight = node.child[SpaceNode.RIGHT] == null;
-            
+            if (node.containerSize() == 0) {
+                boolean emptyLeft = node.left == null;
+                boolean emptyCenter = node.center == null;
+                boolean emptyRight = node.right == null;
+
                 if (emptyLeft && emptyCenter && !emptyRight) {
-                    node = node.child[SpaceNode.RIGHT];
+                    node = node.right;
                 } else if (emptyLeft && !emptyCenter && emptyRight) {
-                    node = node.child[SpaceNode.CENTER];
+                    node = node.center;
                 } else if (!emptyLeft && emptyCenter && emptyRight) {
-                    node = node.child[SpaceNode.LEFT];
+                    node = node.left;
                 } else {
                     break;
                 }
@@ -527,20 +547,19 @@ class SpaceNode extends BoundingBox {
      * public boolean handleRayCollisions(Space space, Ray ray,
      * RayCollisionHandler handler) { float len = ray.getDirection().length();
      * boolean ret = false; if (container != null) { IntersectionInfo
-     * closestInfo = null; BoundingSphere closestObject = null; for (Object
-     * obj2 : container) { Float idist = ray.intersects(obj2); if ((idist !=
-     * null && idist < len) || obj2.contains(ray.getPosition())) {
-     * IntersectionInfo info = handler.closestTriangle(obj2, ray); if
-     * (closestInfo == null || info.distance < closestInfo.distance) {
-     * closestInfo = info; closestObject = obj2; } } } if (closestInfo != null)
-     * { ret |= handler.onObjectCollision(space, ray, closestObject,
-     * closestInfo); } } if (child != null) { int intersections = 0; for (int i
-     * = 0; i < 3; ++i) { SpaceNode node = child[i]; Float idist = null; if
-     * (node != null && node.count > 0 && (intersections == 2 ||
-     * node.contains(ray.getPosition()) != ContainmentType.Disjoint || ((idist =
-     * ray .intersects(node)) != null && idist <= len))) { ++intersections; if
-     * (idist == null) { idist = 0f; } //
-     * System.out.println("#"+node+"#"+ray+"#"+idist+"#"+handler); ret |=
+     * closestInfo = null; BoundingSphere closestObject = null; for (Object obj2
+     * : container) { Float idist = ray.intersects(obj2); if ((idist != null &&
+     * idist < len) || obj2.contains(ray.getPosition())) { IntersectionInfo info
+     * = handler.closestTriangle(obj2, ray); if (closestInfo == null ||
+     * info.distance < closestInfo.distance) { closestInfo = info; closestObject
+     * = obj2; } } } if (closestInfo != null) { ret |=
+     * handler.onObjectCollision(space, ray, closestObject, closestInfo); } } if
+     * (child != null) { int intersections = 0; for (int i = 0; i < 3; ++i) {
+     * SpaceNode node = child[i]; Float idist = null; if (node != null &&
+     * node.count > 0 && (intersections == 2 || node.contains(ray.getPosition())
+     * != ContainmentType.Disjoint || ((idist = ray .intersects(node)) != null
+     * && idist <= len))) { ++intersections; if (idist == null) { idist = 0f; }
+     * // System.out.println("#"+node+"#"+ray+"#"+idist+"#"+handler); ret |=
      * node.handleRayCollisions(space, ray, handler); } } } return ret; }
      */
 }
