@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="Physics">
+	<property environment="env" />
+	<property name="ECLIPSE_HOME" value="../../../../opt/eclipse/" />
+	<property name="hidrogine.math.location" value="../hidrogine.math" />
+	<property name="hidrogine.lwjgl.location" value="../hidrogine.lwjgl" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.7" />
+	<property name="source" value="1.7" />
+	<path id="hidrogine.math.classpath">
+		<pathelement location="${hidrogine.math.location}/bin" />
+		<pathelement location="${hidrogine.math.location}/../lib/json-20140107.jar" />
+	</path>
+	<path id="hidrogine.lwjgl.classpath">
+		<pathelement location="${hidrogine.lwjgl.location}/bin" />
+		<pathelement location="${hidrogine.lwjgl.location}/libs/lwjgl_util.jar" />
+		<pathelement location="${hidrogine.lwjgl.location}/libs/lwjgl.jar" />
+		<pathelement location="${hidrogine.lwjgl.location}/libs/asm-debug-all.jar" />
+		<pathelement location="${hidrogine.lwjgl.location}/libs/lzma.jar" />
+		<pathelement location="${hidrogine.lwjgl.location}/libs/TWL.jar" />
+		<pathelement location="${hidrogine.lwjgl.location}/../lib/json-20140107.jar" />
+		<pathelement location="${hidrogine.lwjgl.location}/../lib/jackson-core-2.4.2.jar" />
+		<path refid="hidrogine.math.classpath" />
+	</path>
+	<path id="Physics.classpath">
+		<pathelement location="bin" />
+		<pathelement location="libs/lwjgl_util.jar" />
+		<pathelement location="libs/lwjgl.jar" />
+		<pathelement location="libs/asm-debug-all.jar" />
+		<pathelement location="libs/lzma.jar" />
+		<pathelement location="libs/TWL.jar" />
+		<path refid="hidrogine.lwjgl.classpath" />
+		<path refid="hidrogine.math.classpath" />
+	</path>
+
+	<target name="jar">
+		<jar destfile="Physics.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Main-Class" value="TheQuadExampleMoving" />
+				<attribute name="Class-Path" value="." />
+			</manifest>
+			<fileset dir="/home/hdlopesrocha/hidrogine/Physics/bin" />
+			<zipfileset excludes="META-INF/*.SF" src="/home/hdlopesrocha/hidrogine/Physics/libs/lwjgl_util.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="/home/hdlopesrocha/hidrogine/Physics/libs/lwjgl.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="/home/hdlopesrocha/hidrogine/Physics/libs/asm-debug-all.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="/home/hdlopesrocha/hidrogine/Physics/libs/lzma.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="/home/hdlopesrocha/hidrogine/Physics/libs/TWL.jar" />
+			<fileset dir="/home/hdlopesrocha/hidrogine/hidrogine.lwjgl/bin" />
+			<zipfileset excludes="META-INF/*.SF" src="/home/hdlopesrocha/hidrogine/hidrogine.lwjgl/libs/lwjgl_util.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="/home/hdlopesrocha/hidrogine/hidrogine.lwjgl/libs/lwjgl.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="/home/hdlopesrocha/hidrogine/hidrogine.lwjgl/libs/asm-debug-all.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="/home/hdlopesrocha/hidrogine/hidrogine.lwjgl/libs/lzma.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="/home/hdlopesrocha/hidrogine/hidrogine.lwjgl/libs/TWL.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="/home/hdlopesrocha/hidrogine/lib/json-20140107.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="/home/hdlopesrocha/hidrogine/lib/jackson-core-2.4.2.jar" />
+			<fileset dir="/home/hdlopesrocha/hidrogine/hidrogine.math/bin" />
+		</jar>
+	</target>
+	<target name="run">
+		<java jar="Physics.jar" fork="true" />
+	</target>
+	<target name="init">
+		<mkdir dir="bin" />
+		<copy includeemptydirs="false" todir="bin">
+			<fileset dir="src">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="clean">
+		<delete dir="bin" />
+	</target>
+	<target depends="clean" name="cleanall">
+		<ant antfile="build.xml" dir="${hidrogine.math.location}" inheritAll="false" target="clean" />
+		<ant antfile="build.xml" dir="${hidrogine.lwjgl.location}" inheritAll="false" target="clean" />
+	</target>
+	<target depends="build-subprojects,build-project" name="build" />
+	<target name="build-subprojects">
+		<ant antfile="build.xml" dir="${hidrogine.math.location}" inheritAll="false" target="build-project">
+			<propertyset>
+				<propertyref name="build.compiler" />
+			</propertyset>
+		</ant>
+		<ant antfile="build.xml" dir="${hidrogine.lwjgl.location}" inheritAll="false" target="build-project">
+			<propertyset>
+				<propertyref name="build.compiler" />
+			</propertyset>
+		</ant>
+	</target>
+	<target depends="init" name="build-project">
+		<echo message="${ant.project.name}: ${ant.file}" />
+		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+			<src path="src" />
+			<classpath refid="Physics.classpath" />
+		</javac>
+	</target>
+	<target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects" />
+	<target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+		<copy todir="${ant.library.dir}">
+			<fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar" />
+		</copy>
+		<unzip dest="${ant.library.dir}">
+			<patternset includes="jdtCompilerAdapter.jar" />
+			<fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar" />
+		</unzip>
+	</target>
+	<target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+		<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter" />
+		<antcall target="build" />
+	</target>
+	<target name="TheQuadExampleMoving">
+		<java classname="TheQuadExampleMoving" failonerror="true" fork="yes">
+			<classpath refid="Physics.classpath" />
+		</java>
+	</target>
+</project>

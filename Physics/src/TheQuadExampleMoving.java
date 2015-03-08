@@ -251,7 +251,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		getProgram().setMaterialAlpha(1f);
 		getProgram().setAmbientColor(0f, 0f, 0f);
 		GL20.glUseProgram(0);
-		setTitle();
+	//	setTitle();
 	}
 
 	
