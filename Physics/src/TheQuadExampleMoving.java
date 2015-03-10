@@ -221,7 +221,7 @@ System.gc();
 		// Print used memory
 		System.out.println("Used Memory:"
 				+ (runtime.totalMemory() - runtime.freeMemory()) / mb + " Draws:"
-				+ draws);
+				+ draws+ " Lens:"+Space.LENS);
 		/*
 		Display.setTitle("Used Memory:"
 				+ (runtime.totalMemory() - runtime.freeMemory()) / mb + " Draws:"

@@ -2,12 +2,42 @@ package hidrogine.math;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class Space.
  */
 public class Space {
+
+    private static TreeMap<Float, TreeMap<Float, TreeMap<Float, Vector3>>> lenghts = new TreeMap<Float, TreeMap<Float, TreeMap<Float, Vector3>>>();
+    private static final Vector3 TEMP_LEN = new Vector3();
+    public static int LENS = 0;
+    
+    
+    private static Vector3 recycle(final Vector3 v) {
+        TreeMap<Float, TreeMap<Float, Vector3>> treeX = lenghts.get(v.getX());
+        if (treeX == null) {
+            treeX = new TreeMap<Float, TreeMap<Float, Vector3>>();
+            lenghts.put(v.getX(), treeX);
+        }
+
+        TreeMap<Float, Vector3> treeY = treeX.get(v.getY());
+        if (treeY == null) {
+            treeY = new TreeMap<Float, Vector3>();
+            treeX.put(v.getY(), treeY);
+        }
+
+        Vector3 r = treeY.get(v.getZ());
+        if (r == null) {
+            r = new Vector3(v);
+            treeY.put(v.getZ(), r);
+            ++LENS;
+        }
+
+        return r;
+
+    }
 
     /**
      * The Class Node.
@@ -33,7 +63,7 @@ public class Space {
          * Instantiates a new space node.
          */
         public Node() {
-            super(0, 0, 0, 1, 1, 1);
+            super(new Vector3(0, 0, 0), new Vector3(1, 1, 1));
             this.parent = null;
         }
 
@@ -48,16 +78,11 @@ public class Space {
          *            the min y
          * @param minZ
          *            the min z
-         * @param maxX
-         *            the max x
-         * @param maxY
-         *            the max y
-         * @param maxZ
-         *            the max z
+         * @param len
+         *            the len
          */
-        private Node(Node parent, float minX, float minY, float minZ,
-                float maxX, float maxY, float maxZ) {
-            super(minX, minY, minZ, maxX, maxY, maxZ);
+        private Node(Node parent, Vector3 min, Vector3 len) {
+            super(min, len);
             this.parent = parent;
         }
 
@@ -68,15 +93,17 @@ public class Space {
          *            the node
          * @param i
          *            the i
-         * @param min
-         *            the min
-         * @param max
-         *            the max
+         * @param minX
+         *            the min x
+         * @param minY
+         *            the min y
+         * @param minZ
+         *            the min z
+         * @param len
+         *            the len
          */
-        private Node(Node node, int i, float minX, float minY, float minZ,
-                float maxX, float maxY, float maxZ) {
-            super(minX, minY, minZ, maxX, maxY,
-                    maxZ);
+        private Node(Node node, int i, Vector3 min, Vector3 len) {
+            super(min, len);
             switch (i) {
             case LEFT:
                 left = node;
@@ -205,46 +232,41 @@ public class Space {
          *            the len z
          * @return the space node
          */
+
         private Node build(final int i, final float lenX, final float lenY,
                 final float lenZ) {
 
             if (lenX >= lenY && lenX >= lenZ) {
+                Vector3 len = recycle(TEMP_LEN.set(getLengthX() * 0.5f,
+                        getLengthY(), getLengthZ()));
+
                 if (i == LEFT) {
-                    return new Node(this, getMinX(), getMinY(), getMinZ(),
-                            getMaxX() - lenX / 2, getMaxY(), getMaxZ());
+                    return new Node(this, getMin(), len);
                 } else if (i == RIGHT) {
-                    return new Node(this, getMinX() + lenX / 2, getMinY(),
-                            getMinZ(), getMaxX(), getMaxY(), getMaxZ());
+                    return new Node(this, new Vector3(getMin()).addX(lenX/2), len);
                 } else {
-                    return new Node(this, getMinX() + lenX / 4, getMinY(),
-                            getMinZ(), getMaxX() - lenX / 4, getMaxY(),
-                            getMaxZ());
+                    return new Node(this, new Vector3(getMin()).addX(lenX/4), len);
                 }
             } else if (lenY >= lenZ) {
-                if (i == LEFT) {
-                    return new Node(this, getMinX(), getMinY(), getMinZ(),
-                            getMaxX(), getMaxY() - lenY / 2, getMaxZ());
-                } else if (i == RIGHT) {
-                    return new Node(this, getMinX(), getMinY() + lenY / 2,
-                            getMinZ(), getMaxX(), getMaxY(), getMaxZ());
-                } else {
-                    return new Node(this, getMinX(), getMinY() + lenY / 4,
-                            getMinZ(), getMaxX(), getMaxY() - lenY / 4,
-                            getMaxZ());
+                Vector3 len = recycle(TEMP_LEN.set(getLengthX(),
+                        getLengthY() * 0.5f, getLengthZ()));
 
+                if (i == LEFT) {
+                    return new Node(this, getMin(), len);
+                } else if (i == RIGHT) {
+                    return new Node(this, new Vector3(getMin()).addY(lenY/2), len);
+                } else {
+                    return new Node(this, new Vector3(getMin()).addY(lenY/4), len);
                 }
             } else {
+                Vector3 len = recycle(TEMP_LEN.set(getLengthX(), getLengthY(),
+                        getLengthZ() * 0.5f));
                 if (i == LEFT) {
-                    return new Node(this, getMinX(), getMinY(), getMinZ(),
-                            getMaxX(), getMaxY(), getMaxZ()- lenZ / 2);
+                    return new Node(this, getMin(), len);
                 } else if (i == RIGHT) {
-                    return new Node(this, getMinX(), getMinY() ,
-                            getMinZ()+ lenZ / 2, getMaxX(), getMaxY(), getMaxZ());
+                    return new Node(this, new Vector3(getMin()).addZ(lenZ/2), len);
                 } else {
-                    return new Node(this, getMinX(), getMinY() ,
-                            getMinZ()+ lenZ / 4, getMaxX(), getMaxY() ,
-                            getMaxZ()- lenZ / 4);
-
+                    return new Node(this, new Vector3(getMin()).addZ(lenZ/4), len);
                 }
             }
         }
@@ -322,28 +344,30 @@ public class Space {
             float lenZ = getLengthZ();
 
             if (lenX < lenY && lenX < lenZ) {
+                Vector3 len = recycle(TEMP_LEN.set(lenX * 2, lenY, lenZ));
+
                 if (pos.getX() >= getCenterX()) {
-                    return new Node(this, LEFT, getMinX(),getMinY(),getMinZ(),
-                            getMaxX()+lenX,getMaxY(),getMaxZ());
+                    return new Node(this, LEFT, getMin(), len);
                 } else {
-                    return new Node(this, LEFT, getMinX()-lenX,getMinY(),getMinZ(),
-                            getMaxX(),getMaxY(),getMaxZ());
+                    return new Node(this, RIGHT, new Vector3(getMin()).addX(-lenX), len);
                 }
             } else if (lenY < lenZ) {
+                Vector3 len = recycle(TEMP_LEN.set(lenX, lenY * 2, lenZ));
+
                 if (pos.getY() >= getCenterY()) {
-                    return new Node(this, LEFT, getMinX(),getMinY(),getMinZ(),
-                            getMaxX(),getMaxY()+lenX,getMaxZ());
+                    return new Node(this, LEFT, getMin(), len);
                 } else {
-                    return new Node(this, LEFT, getMinX(),getMinY()-lenX,getMinZ(),
-                            getMaxX(),getMaxY(),getMaxZ());
+                    return new Node(this, RIGHT, new Vector3(getMin()).addY(-lenY), len);
+
                 }
             } else {
+                Vector3 len = recycle(TEMP_LEN.set(lenX, lenY, lenZ * 2));
+
                 if (pos.getZ() >= getCenterZ()) {
-                    return new Node(this, LEFT, getMinX(),getMinY(),getMinZ(),
-                            getMaxX(),getMaxY(),getMaxZ()+lenX);
+                    return new Node(this, LEFT, getMin(), len);
                 } else {
-                    return new Node(this, LEFT, getMinX(),getMinY(),getMinZ()-lenX,
-                            getMaxX(),getMaxY(),getMaxZ());
+                    return new Node(this, RIGHT, new Vector3(getMin()).addZ(-lenZ), len);
+
                 }
             }
         }
@@ -354,12 +378,9 @@ public class Space {
          * @return true, if successful
          */
         protected boolean canSplit() {
-            
-            
-            
-            
+
             return left != null || right != null || center != null
-                    || getLengthX()+getLengthY()+getLengthZ() > 3f;
+                    || getLengthX() + getLengthY() + getLengthZ() > 3f;
         }
 
         /**

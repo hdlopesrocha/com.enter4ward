@@ -7,8 +7,8 @@ package hidrogine.math;
 public class BoundingBox {
 
     /** The max. */
-    private float minX, minY, minZ;
-    private float maxX, maxY, maxZ;
+    private Vector3 min;
+    private Vector3 len;
 
     /**
      * Contains.
@@ -19,14 +19,14 @@ public class BoundingBox {
      */
     public ContainmentType contains(final Vector3 point) {
         // first we get if point is out of box
-        if (point.getX() < minX || point.getX() > maxX || point.getY() < minY
-                || point.getY() > maxY || point.getZ() < minZ
-                || point.getZ() > maxZ) {
+        if (point.getX() < getMin().getX() || point.getX() > getMaxX() || point.getY() < getMin().getY()
+                || point.getY() > getMaxY() || point.getZ() < getMin().getZ()
+                || point.getZ() > getMaxZ()) {
             return ContainmentType.Disjoint;
         }// or if point is on box because coordonate of point is lesser or equal
-        else if (point.getX() == minX || point.getX() == maxX
-                || point.getY() == minY || point.getY() == maxY
-                || point.getZ() == minZ || point.getZ() == maxZ)
+        else if (point.getX() == getMin().getX() || point.getX() == getMaxX()
+                || point.getY() == getMin().getY() || point.getY() == getMaxY()
+                || point.getZ() == getMin().getZ() || point.getZ() == getMaxZ())
             return ContainmentType.Intersects;
         else
             return ContainmentType.Contains;
@@ -43,7 +43,7 @@ public class BoundingBox {
      * @return the length x
      */
     public float getLengthX() {
-        return maxX - minX;
+        return len.getX();
     }
 
     /*
@@ -57,7 +57,7 @@ public class BoundingBox {
      * @return the length y
      */
     public float getLengthY() {
-        return maxY - minY;
+        return len.getY();
     }
 
     /*
@@ -71,7 +71,7 @@ public class BoundingBox {
      * @return the length z
      */
     public float getLengthZ() {
-        return maxZ - minZ;
+        return len.getZ();
     }
 
     /*
@@ -85,7 +85,7 @@ public class BoundingBox {
      * @return the center x
      */
     public float getCenterX() {
-        return (minX + maxX) * 0.5f;
+        return getMin().getX() + len.getX() * 0.5f;
     }
 
     /*
@@ -99,7 +99,7 @@ public class BoundingBox {
      * @return the center y
      */
     public float getCenterY() {
-        return (minY + maxY) * 0.5f;
+        return getMin().getY() + len.getY() * 0.5f;
     }
 
     /*
@@ -113,7 +113,7 @@ public class BoundingBox {
      * @return the center z
      */
     public float getCenterZ() {
-        return (minZ + maxZ) * 0.5f;
+        return getMin().getZ() + len.getZ() * 0.5f;
     }
 
     /*
@@ -122,8 +122,8 @@ public class BoundingBox {
      * @see hidrogine.math.IBox#toString()
      */
     public String toString() {
-        return "{Min:" + "{" + minX + "," + minY + "," + minZ + "}, Max" + "{"
-                + maxX + "," + maxY + "," + maxZ + "}}";
+        return "{Min:" + "{" + getMin().getX() + "," + getMin().getY() + "," + getMin().getZ() + "}, Len:" + "{"
+                + len.toString() +"}";
     }
 
     /**
@@ -136,12 +136,12 @@ public class BoundingBox {
     public ContainmentType contains(BoundingBox box) {
         // test if all corner is in the same side of a face by just checking min
         // and max
-        if (box.maxX < minX || box.minX > maxX || box.maxY < minY
-                || box.minY > maxY || box.maxZ < minZ || box.minZ > maxZ)
+        if (box.getMaxX() < getMin().getX() || box.getMin().getX() > getMaxX() || box.getMaxY() < getMin().getY()
+                || box.getMin().getY() > getMaxY() || box.getMaxZ() < getMin().getZ() || box.getMin().getZ() > getMaxZ())
             return ContainmentType.Disjoint;
 
-        if (box.minX >= minX && box.maxX <= maxX && box.minY >= minY
-                && box.maxY <= maxY && box.minZ >= minZ && box.maxZ <= maxZ)
+        if (box.getMin().getX() >= getMin().getX() && box.getMaxX() <= getMaxX() && box.getMin().getY() >= getMin().getY()
+                && box.getMaxY() <= getMaxY() && box.getMin().getZ() >= getMin().getZ() && box.getMaxZ() <= getMaxZ())
             return ContainmentType.Contains;
 
         return ContainmentType.Intersects;
@@ -160,25 +160,25 @@ public class BoundingBox {
         // http://zach.in.tu-clausthal.de/teaching/cg_literatur/lighthouse3d_view_frustum_culling/index.html
         float px, py, pz, nx, ny, nz;
         if (plane.getNormal().getX() >= 0) {
-            px = maxX;
-            nx = minX;
+            px = getMaxX();
+            nx = getMin().getX();
         } else {
-            px = minX;
-            nx = maxX;
+            px = getMin().getX();
+            nx = getMaxX();
         }
         if (plane.getNormal().getY() >= 0) {
-            py = maxY;
-            ny = minY;
+            py = getMaxY();
+            ny = getMin().getY();
         } else {
-            py = minY;
-            ny = maxY;
+            py = getMin().getY();
+            ny = getMaxY();
         }
         if (plane.getNormal().getZ() >= 0) {
-            pz = maxZ;
-            nz = minZ;
+            pz = getMaxZ();
+            nz = getMin().getZ();
         } else {
-            pz = minZ;
-            nz = maxZ;
+            pz = getMin().getZ();
+            nz = getMaxZ();
         }
         Vector3 nrm = plane.getNormal();
         float normal_dot_negative = nrm.getX() * nx + nrm.getY() * ny
@@ -217,18 +217,18 @@ public class BoundingBox {
         final float sz = center.getZ();
         final float sr = sphere.getRadius();
 
-        if (sx - minX >= sr && sy - minY >= sr && sz - minZ >= sr
-                && maxX - sx >= sr && maxY - sy >= sr && maxZ - sz >= sr)
+        if (sx - getMin().getX() >= sr && sy - getMin().getY() >= sr && sz - getMin().getZ() >= sr
+                && getMaxX() - sx >= sr && getMaxY() - sy >= sr && getMaxZ() - sz >= sr)
             return ContainmentType.Contains;
         double dmin = 0;
-        double e = sx - minX;
+        double e = sx - getMin().getX();
         if (e < 0) {
             if (e < -sr) {
                 return ContainmentType.Disjoint;
             }
             dmin += e * e;
         } else {
-            e = sx - maxX;
+            e = sx - getMaxX();
             if (e > 0) {
                 if (e > sr) {
                     return ContainmentType.Disjoint;
@@ -236,14 +236,14 @@ public class BoundingBox {
                 dmin += e * e;
             }
         }
-        e = sy - minY;
+        e = sy - getMin().getY();
         if (e < 0) {
             if (e < -sr) {
                 return ContainmentType.Disjoint;
             }
             dmin += e * e;
         } else {
-            e = sy - maxY;
+            e = sy - getMaxY();
             if (e > 0) {
                 if (e > sr) {
                     return ContainmentType.Disjoint;
@@ -251,14 +251,14 @@ public class BoundingBox {
                 dmin += e * e;
             }
         }
-        e = sz - minZ;
+        e = sz - getMin().getZ();
         if (e < 0) {
             if (e < -sr) {
                 return ContainmentType.Disjoint;
             }
             dmin += e * e;
         } else {
-            e = sz - maxZ;
+            e = sz - getMaxZ();
             if (e > 0) {
                 if (e > sr) {
                     return ContainmentType.Disjoint;
@@ -285,8 +285,8 @@ public class BoundingBox {
         final float sz = center.getZ();
         final float sr = sphere.getRadius();
 
-        return (sx - minX >= sr && sy - minY >= sr && sz - minZ >= sr
-                && maxX - sx >= sr && maxY - sy >= sr && maxZ - sz >= sr);
+        return (sx - getMin().getX() >= sr && sy - getMin().getY() >= sr && sz - getMin().getZ() >= sr
+                && getMaxX() - sx >= sr && getMaxY() - sy >= sr && getMaxZ() - sz >= sr);
     }
 
     /**
@@ -338,9 +338,9 @@ public class BoundingBox {
      * @return true, if successful
      */
     public boolean intersects(BoundingBox box) {
-        if ((maxX >= box.minX) && (minX <= box.maxX)) {
-            return !((maxY < box.minY) || (minY > box.maxY))
-                    && (maxZ >= box.minZ) && (minZ <= box.maxZ);
+        if ((getMaxX() >= box.getMin().getX()) && (getMin().getX() <= box.getMaxX())) {
+            return !((getMaxY() < box.getMin().getY()) || (getMin().getY() > box.getMaxY()))
+                    && (getMaxZ() >= box.getMin().getZ()) && (getMin().getZ() <= box.getMaxZ());
         }
         return false;
     }
@@ -348,51 +348,39 @@ public class BoundingBox {
 
 
     public float getMinX() {
-        return minX;
+        return getMin().getX();
     }
 
-    public void setMinX(float minX) {
-        this.minX = minX;
+    public void setMinX(float min) {
+        this.getMin().setX(min);
     }
 
     public float getMinY() {
-        return minY;
+        return getMin().getY();
     }
 
-    public void setMinY(float minY) {
-        this.minY = minY;
+    public void setMinY(float min) {
+        this.getMin().setY(min);
     }
 
     public float getMinZ() {
-        return minZ;
+        return getMin().getZ();
     }
 
-    public void setMinZ(float minZ) {
-        this.minZ = minZ;
+    public void setMinZ(float min) {
+        this.getMin().setZ(min);
     }
 
     public float getMaxX() {
-        return maxX;
-    }
-
-    public void setMaxX(float maxX) {
-        this.maxX = maxX;
+        return getMin().getX()+len.getX();
     }
 
     public float getMaxY() {
-        return maxY;
-    }
-
-    public void setMaxY(float maxY) {
-        this.maxY = maxY;
+        return getMin().getY() + len.getY();
     }
 
     public float getMaxZ() {
-        return maxZ;
-    }
-
-    public void setMaxZ(float maxZ) {
-        this.maxZ = maxZ;
+        return getMin().getZ()+len.getZ();
     }
 
     /**
@@ -403,15 +391,9 @@ public class BoundingBox {
      * @param max
      *            the max
      */
-    public BoundingBox(float minX, float minY, float minZ, float maxX,
-            float maxY, float maxZ) {
-        this.minX = minX;
-        this.minY = minY;
-        this.minZ = minZ;
-        this.maxX = maxX;
-        this.maxY = maxY;
-        this.maxZ = maxZ;
-
+    public BoundingBox(Vector3 min, Vector3 len) {
+        this.min = min;
+        this.len  =len;
     }
 
     /**
@@ -432,15 +414,18 @@ public class BoundingBox {
         boolean empty = true;
         final Vector3 vector2 = new Vector3(Float.MAX_VALUE);
         final Vector3 vector1 = new Vector3(Float.MIN_VALUE);
-
+        
+        
         for (Vector3 vector3 : points) {
             vector2.min(vector3);
             vector1.max(vector3);
             empty = false;
         }
+        
+        final Vector3 len = vector2.subtract(vector1);
+        
 
-        return empty ? null : new BoundingBox(vector2.getX(), vector2.getY(),
-                vector2.getZ(), vector1.getX(), vector1.getY(), vector1.getZ());
+        return empty ? null : new BoundingBox(vector2,len);
     }
 
     /**
@@ -451,14 +436,16 @@ public class BoundingBox {
      * @return the bounding box
      */
     public BoundingBox createFromSphere(BoundingSphere sphere) {
-        final Vector3 center = sphere.getCenter();
+/*        final Vector3 center = sphere.getCenter();
 
         final Vector3 vector1 = new Vector3(sphere.getRadius());
 
         return new BoundingBox(center.getX() - vector1.getX(), center.getY()
-                - vector1.getY(), center.getZ() - vector1.getZ(), center.getX()
-                + vector1.getX(), center.getY() + vector1.getY(), center.getZ()
-                + vector1.getZ());
+                - vector1.getY(), center.getZ() - vector1.getZ(),
+                new Vector3(vector1).multiply(0.5f)
+                );
+  */
+    return null;    
     }
 
     /**
@@ -471,14 +458,16 @@ public class BoundingBox {
      * @return the bounding box
      */
     public BoundingBox createMerged(BoundingBox original, BoundingBox additional) {
-
+/*
         return new BoundingBox(
-                Math.min(original.minX, additional.minX),
-                Math.min(original.minY, additional.minY), 
-                Math.min(original.minZ, additional.minZ),
-                Math.max(original.maxX, additional.maxX),
-                Math.max(original.maxY, additional.maxY), 
-                Math.max(original.maxZ, additional.maxZ));
+                Math.min(original.min.getX(), additional.min.getX()),
+                Math.min(original.min.getY(), additional.min.getY()), 
+                Math.min(original.min.getZ(), additional.min.getZ()),
+                Math.max(original.getMaxX(), additional.getMaxX()),
+                Math.max(original.getMaxY(), additional.getMaxY()), 
+                Math.max(original.getMaxZ(), additional.getMaxZ()));
+  */
+    return null;    
     }
 
     /**
@@ -491,6 +480,14 @@ public class BoundingBox {
     public boolean equals(BoundingBox other) {
         return this.equals(other);
         // return (min.equals(other.min)) && (max.equals(other.max));
+    }
+
+    public Vector3 getMin() {
+        return min;
+    }
+
+    public void setMin(Vector3 min) {
+        this.min = min;
     }
 
 }

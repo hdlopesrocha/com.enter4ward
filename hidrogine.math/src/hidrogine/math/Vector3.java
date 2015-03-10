@@ -4,7 +4,7 @@ package hidrogine.math;
 /**
  * The Class Vector3.
  */
-public class Vector3 {
+public class Vector3{
 
     /** The x. */
     private float x;
@@ -561,5 +561,6 @@ public class Vector3 {
 
         return addMultiply(normal, -2.0f * dot(normal));
     }
+
 
 }
