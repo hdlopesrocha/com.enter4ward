@@ -27,12 +27,15 @@ public class BoundingSphere {
 
     /**
      * Instantiates a new bounding sphere.
+     *
+     * @param sph
+     *            the sph
      */
     public BoundingSphere(BoundingSphere sph) {
         this.center = new Vector3(sph.getCenter());
         this.radius = sph.getRadius();
     }
-    
+
     /**
      * Instantiates a new bounding sphere.
      */
@@ -46,6 +49,11 @@ public class BoundingSphere {
      * 
      * @see hidrogine.math.ISphere#getCenter()
      */
+    /**
+     * Gets the center.
+     *
+     * @return the center
+     */
     public Vector3 getCenter() {
         return center;
     }
@@ -54,6 +62,12 @@ public class BoundingSphere {
      * (non-Javadoc)
      * 
      * @see hidrogine.math.ISphere#setCenter(hidrogine.math.Vector3)
+     */
+    /**
+     * Sets the center.
+     *
+     * @param position
+     *            the new center
      */
     public void setCenter(Vector3 position) {
         this.center = position;
@@ -64,6 +78,11 @@ public class BoundingSphere {
      * 
      * @see hidrogine.math.ISphere#getRadius()
      */
+    /**
+     * Gets the radius.
+     *
+     * @return the radius
+     */
     public float getRadius() {
         return radius;
     }
@@ -72,6 +91,12 @@ public class BoundingSphere {
      * (non-Javadoc)
      * 
      * @see hidrogine.math.ISphere#setRadius(float)
+     */
+    /**
+     * Sets the radius.
+     *
+     * @param radius
+     *            the new radius
      */
     public void setRadius(float radius) {
         this.radius = radius;
@@ -85,7 +110,7 @@ public class BoundingSphere {
      * @return true, if successful
      */
     public boolean contains(Vector3 vec) {
-        return getCenter().distanceSquared(vec) <= getRadius()*getRadius();
+        return getCenter().distanceSquared(vec) <= getRadius() * getRadius();
     }
 
     /**
@@ -149,6 +174,5 @@ public class BoundingSphere {
         return getCenter().distance(sphere.getCenter()) < getRadius()
                 + sphere.getRadius();
     }
-    
-    
+
 }

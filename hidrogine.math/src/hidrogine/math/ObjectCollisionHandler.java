@@ -9,10 +9,8 @@ public interface ObjectCollisionHandler {
     /**
      * On object collision.
      *
-     * @param obj1
-     *            the obj1
-     * @param obj2
-     *            the obj2
+     * @param obj
+     *            the obj
      */
     public void onObjectCollision(Object obj);
 }

@@ -1,12 +1,25 @@
 package hidrogine.math;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface RayCollisionHandler.
+ */
 public interface RayCollisionHandler {
 
-    
-    public void onObjectCollision(final Space space,final Ray ray,final Object obj2);
+    /**
+     * On object collision.
+     *
+     * @param space
+     *            the space
+     * @param ray
+     *            the ray
+     * @param obj2
+     *            the obj2
+     */
+    public void onObjectCollision(final Space space, final Ray ray,
+            final Object obj2);
 
-    
-   // public IntersectionInfo closestTriangle(final IBoundingSphere obj, final Ray ray);
+    // public IntersectionInfo closestTriangle(final IBoundingSphere obj, final
+    // Ray ray);
 
 }

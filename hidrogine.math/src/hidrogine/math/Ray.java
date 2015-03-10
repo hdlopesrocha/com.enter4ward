@@ -93,12 +93,12 @@ public class Ray {
         Float tMin = null, tMax = null;
 
         if (Math.abs(direction.getX()) < Epsilon) {
-            if (position.getX() < box.getMin().getX()
-                    || position.getX() > box.getMax().getX())
+            if (position.getX() < box.getMinX()
+                    || position.getX() > box.getMaxX())
                 return null;
         } else {
-            tMin = (box.getMin().getX() - position.getX()) / direction.getX();
-            tMax = (box.getMax().getX() - position.getX()) / direction.getX();
+            tMin = (box.getMinX() - position.getX()) / direction.getX();
+            tMax = (box.getMaxX() - position.getX()) / direction.getX();
 
             if (tMin > tMax) {
                 float temp = tMin;
@@ -108,13 +108,13 @@ public class Ray {
         }
 
         if (Math.abs(direction.getY()) < Epsilon) {
-            if (position.getY() < box.getMin().getY()
-                    || position.getY() > box.getMax().getY())
+            if (position.getY() < box.getMinY()
+                    || position.getY() > box.getMaxY())
                 return null;
         } else {
-            float tMinY = (box.getMin().getY() - position.getY())
+            float tMinY = (box.getMinY() - position.getY())
                     / direction.getY();
-            float tMaxY = (box.getMax().getY() - position.getY())
+            float tMaxY = (box.getMaxY() - position.getY())
                     / direction.getY();
 
             if (tMinY > tMaxY) {
@@ -134,13 +134,13 @@ public class Ray {
         }
 
         if (Math.abs(direction.getZ()) < Epsilon) {
-            if (position.getZ() < box.getMin().getZ()
-                    || position.getZ() > box.getMax().getZ())
+            if (position.getZ() < box.getMinZ()
+                    || position.getZ() > box.getMaxZ())
                 return null;
         } else {
-            float tMinZ = (box.getMin().getZ() - position.getZ())
+            float tMinZ = (box.getMinZ() - position.getZ())
                     / direction.getZ();
-            float tMaxZ = (box.getMax().getZ() - position.getZ())
+            float tMaxZ = (box.getMaxZ() - position.getZ())
                     / direction.getZ();
 
             if (tMinZ > tMaxZ) {
@@ -189,14 +189,13 @@ public class Ray {
      * @return the float
      */
     public Float intersects(Plane plane) {
-  //      Vector3 nrm = new Vector3(direction).normalize();
-        
-        
+        // Vector3 nrm = new Vector3(direction).normalize();
+
         float den = plane.dotNormal(direction);
         if (Math.abs(den) > 0.000001f) {
-            return -(plane.getDistance()+ plane.dotNormal(position)) / den;
+            return -(plane.getDistance() + plane.dotNormal(position)) / den;
         }
-       return null;
+        return null;
     }
 
     /**
@@ -208,18 +207,18 @@ public class Ray {
      */
     public Float intersects(final Triangle triangle) {
         final Float distance = intersects(triangle.getPlane());
-//        if (distance != null && distance<= direction.length()) {
- //       System.out.println("this:"+toString());
-        
-        
-        if (distance != null && distance >= 0 && distance<= 1f) {
-            Vector3 intersection = new Vector3(position).addMultiply(direction,distance);
-/*
-            System.out.println("dist:"+distance);
-            System.out.println("tri:"+triangle.toString());
-            System.out.println("ray:"+toString());
-            System.out.println("inter:"+intersection);
-*/            
+        // if (distance != null && distance<= direction.length()) {
+        // System.out.println("this:"+toString());
+
+        if (distance != null && distance >= 0 && distance <= 1f) {
+            Vector3 intersection = new Vector3(position).addMultiply(direction,
+                    distance);
+            /*
+             * System.out.println("dist:"+distance);
+             * System.out.println("tri:"+triangle.toString());
+             * System.out.println("ray:"+toString());
+             * System.out.println("inter:"+intersection);
+             */
             if (triangle.contains(intersection)) {
 
                 return distance;

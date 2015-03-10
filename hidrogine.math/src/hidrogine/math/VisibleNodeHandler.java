@@ -12,6 +12,8 @@ public interface VisibleNodeHandler {
      *
      * @param obj
      *            the obj
+     * @param storedObjectsCount
+     *            the stored objects count
      */
     @Deprecated
     public void onNodeVisible(BoundingBox obj, int storedObjectsCount);

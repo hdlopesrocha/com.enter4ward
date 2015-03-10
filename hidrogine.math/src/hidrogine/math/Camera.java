@@ -9,16 +9,15 @@ public class Camera {
     /** The matrix. */
     private Quaternion rotation = new Quaternion();
 
-
     /** The position. */
     private Vector3 position;
 
     /** The projection matrix. */
     private Matrix projectionMatrix = null;
 
+    /** The near. */
+    private float far, near;
 
-    private float far,near;
-    
     /**
      * Gets the matrix.
      *
@@ -56,65 +55,82 @@ public class Camera {
      *            the w
      */
     public void rotate(float x, float y, float z, float w) {
-        rotation = new Quaternion().createFromAxisAngle(new Vector3(x, y, z), w).multiply(rotation);
+        rotation = new Quaternion()
+                .createFromAxisAngle(new Vector3(x, y, z), w)
+                .multiply(rotation);
         rotation.normalize();
     }
 
     /**
      * Instantiates a new camera.
      *
+     * @param near
+     *            the near
+     * @param far
+     *            the far
+     */
+    public Camera(float near, float far) {
+        position = new Vector3();
+        rotation = new Quaternion().identity();
+        this.far = far;
+        this.near = near;
+        projectionMatrix = new Matrix();
+    }
+
+    /**
+     * Gets the rotation.
+     *
+     * @return the rotation
+     */
+    public Quaternion getRotation() {
+        return rotation;
+    }
+
+    /**
+     * Look at.
+     *
+     * @param pos
+     *            the pos
+     * @param lookAt
+     *            the look at
+     * @param up
+     *            the up
+     */
+    public void lookAt(Vector3 pos, Vector3 lookAt, Vector3 up) {
+        position.set(pos);
+        Matrix mat = new Matrix().createLookAt(new Vector3(), new Vector3(
+                lookAt).subtract(pos).normalize(), up);
+
+        rotation.createFromRotationMatrix(mat).normalize();
+    }
+
+    /**
+     * Update.
+     *
      * @param w
      *            the w
      * @param h
      *            the h
      */
-    public Camera(float near,float far) {
-        position = new Vector3();
-        rotation = new Quaternion().identity();
-        this.far=far;
-        this.near = near;
-        projectionMatrix = new Matrix();
-    }
-
-    public Quaternion getRotation() {
-        return rotation;
-    }
-    /**
-     * Look at.
-     *
-     * @param posX
-     *            the pos x
-     * @param posY
-     *            the pos y
-     * @param posZ
-     *            the pos z
-     * @param lookAtX
-     *            the look at x
-     * @param lookAtY
-     *            the look at y
-     * @param lookAtZ
-     *            the look at z
-     */
-    public void lookAt(Vector3 pos, Vector3 lookAt, Vector3 up){
-        position.set(pos);        
-        Matrix mat = new Matrix().createLookAt(new Vector3(),new Vector3(lookAt).subtract(pos).normalize(), up);  
-        
-        
-        
-        rotation.createFromRotationMatrix(mat).normalize();
-    }
-    
-    public void update(int w, int h){
+    public void update(int w, int h) {
         projectionMatrix = new Matrix().createPerspectiveFieldOfView(
                 (float) Math.toRadians(45f), (float) w / (float) h, near, far);
     }
-    
-    
 
+    /**
+     * Gets the near.
+     *
+     * @return the near
+     */
     public float getNear() {
         return near;
     }
 
+    /**
+     * Gets the far.
+     *
+     * @return the far
+     */
     public float getFar() {
         return far;
     }

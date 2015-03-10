@@ -29,20 +29,38 @@ public class Matrix {
 
     }
 
-    public float[] toArray(){
-        float [] ret = new float[16];
+    /**
+     * To array.
+     *
+     * @return the float[]
+     */
+    public float[] toArray() {
+        float[] ret = new float[16];
         System.arraycopy(M, 0, ret, 0, 16);
         return ret;
     }
 
-    public Matrix(float [] m) {
+    /**
+     * Instantiates a new matrix.
+     *
+     * @param m
+     *            the m
+     */
+    public Matrix(float[] m) {
         System.arraycopy(m, 0, M, 0, 16);
 
     }
 
-public float get(int i){
-    return M[i];
-}
+    /**
+     * Gets the.
+     *
+     * @param i
+     *            the i
+     * @return the float
+     */
+    public float get(int i) {
+        return M[i];
+    }
 
     /**
      * Instantiates a new matrix.
@@ -319,7 +337,8 @@ public float get(int i){
      */
     public Matrix createFromYawPitchRoll(float yaw, float pitch, float roll) {
         Matrix matrix;
-        Quaternion quaternion = new Quaternion().createFromYawPitchRoll(yaw, pitch, roll);
+        Quaternion quaternion = new Quaternion().createFromYawPitchRoll(yaw,
+                pitch, roll);
         matrix = createFromQuaternion(quaternion);
         return matrix;
     }
@@ -1209,10 +1228,18 @@ public float get(int i){
         System.arraycopy(matrix.M, 0, M, 0, 16);
 
     }
-    public void set(float [] matrix) {
+
+    /**
+     * Sets the.
+     *
+     * @param matrix
+     *            the matrix
+     */
+    public void set(float[] matrix) {
         System.arraycopy(matrix, 0, M, 0, 16);
 
     }
+
     /**
      * Translate.
      *
@@ -1225,11 +1252,21 @@ public float get(int i){
         return this;
     }
 
-    public Matrix translate(float x,float y, float z) {
+    /**
+     * Translate.
+     *
+     * @param x
+     *            the x
+     * @param y
+     *            the y
+     * @param z
+     *            the z
+     * @return the matrix
+     */
+    public Matrix translate(float x, float y, float z) {
         multiply(new Matrix().createTranslation(x, y, z));
         return this;
     }
-
 
     /**
      * Scale.
@@ -1243,6 +1280,13 @@ public float get(int i){
         return this;
     }
 
+    /**
+     * Scale.
+     *
+     * @param dim
+     *            the dim
+     * @return the matrix
+     */
     public Matrix scale(float dim) {
         multiply(new Matrix().createScale(dim));
         return this;

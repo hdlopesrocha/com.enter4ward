@@ -4,7 +4,7 @@ package hidrogine.math;
 /**
  * The Class Vector2.
  */
-public class Vector2  {
+public class Vector2 {
 
     /** The x. */
     private float x;
@@ -44,28 +44,51 @@ public class Vector2  {
         y = vec.y;
     }
 
-
+    /**
+     * Gets the x.
+     *
+     * @return the x
+     */
     public final float getX() {
         return x;
     }
 
-
+    /**
+     * Sets the x.
+     *
+     * @param xx
+     *            the new x
+     */
     public final void setX(final float xx) {
         x = xx;
     }
 
-
+    /**
+     * Gets the y.
+     *
+     * @return the y
+     */
     public final float getY() {
         return y;
     }
 
-
+    /**
+     * Sets the y.
+     *
+     * @param yy
+     *            the new y
+     */
     public final void setY(final float yy) {
         y = yy;
     }
 
-
-
+    /**
+     * Adds the.
+     *
+     * @param vec
+     *            the vec
+     * @return the vector2
+     */
     public final Vector2 add(final Vector2 vec) {
         x += vec.x;
         y += vec.y;
@@ -126,5 +149,4 @@ public class Vector2  {
         return this;
     }
 
-    
 }

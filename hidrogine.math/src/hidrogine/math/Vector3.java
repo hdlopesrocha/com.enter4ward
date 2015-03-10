@@ -69,7 +69,12 @@ public class Vector3 {
      * 
      * @see hidrogine.math.Vector3#getZ()
      */
-    
+
+    /**
+     * Gets the z.
+     *
+     * @return the z
+     */
     public final float getZ() {
         return z;
     }
@@ -78,6 +83,13 @@ public class Vector3 {
      * (non-Javadoc)
      * 
      * @see hidrogine.math.Vector3#setZ(float)
+     */
+    /**
+     * Sets the z.
+     *
+     * @param zz
+     *            the zz
+     * @return the vector3
      */
     public final Vector3 setZ(final float zz) {
         z = zz;
@@ -90,6 +102,11 @@ public class Vector3 {
      * 
      * @see hidrogine.math.Vector3#getX()
      */
+    /**
+     * Gets the x.
+     *
+     * @return the x
+     */
     public final float getX() {
         return x;
     }
@@ -98,6 +115,13 @@ public class Vector3 {
      * (non-Javadoc)
      * 
      * @see hidrogine.math.Vector3#setX(float)
+     */
+    /**
+     * Sets the x.
+     *
+     * @param xx
+     *            the xx
+     * @return the vector3
      */
     public Vector3 setX(final float xx) {
         x = xx;
@@ -109,6 +133,11 @@ public class Vector3 {
      * 
      * @see hidrogine.math.Vector3#y
      */
+    /**
+     * Gets the y.
+     *
+     * @return the y
+     */
     public final float getY() {
         return y;
     }
@@ -118,12 +147,17 @@ public class Vector3 {
      * 
      * @see hidrogine.math.Vector3#setY(float)
      */
+    /**
+     * Sets the y.
+     *
+     * @param yy
+     *            the yy
+     * @return the vector3
+     */
     public final Vector3 setY(final float yy) {
         y = yy;
         return this;
     }
-
-
 
     /*
      * (non-Javadoc)
@@ -138,20 +172,28 @@ public class Vector3 {
      * @return the i vector3
      */
     public final Vector3 add(final Vector3 vec) {
-        x+=vec.x;
-        y+=vec.y;
-        z+=vec.z;
+        x += vec.x;
+        y += vec.y;
+        z += vec.z;
         return this;
     }
 
+    /**
+     * Adds the multiply.
+     *
+     * @param vec
+     *            the vec
+     * @param factor
+     *            the factor
+     * @return the vector3
+     */
     public final Vector3 addMultiply(final Vector3 vec, float factor) {
-        x+=vec.x*factor;
-        y+=vec.y*factor;
-        z+=vec.z*factor;
+        x += vec.x * factor;
+        y += vec.y * factor;
+        z += vec.z * factor;
         return this;
     }
 
-    
     /*
      * (non-Javadoc)
      * 
@@ -165,7 +207,7 @@ public class Vector3 {
      * @return the i vector3
      */
     public final Vector3 addX(final float vec) {
-        x+=vec;
+        x += vec;
         return this;
     }
 
@@ -182,7 +224,7 @@ public class Vector3 {
      * @return the i vector3
      */
     public final Vector3 addY(final float vec) {
-        y+=vec;
+        y += vec;
         return this;
     }
 
@@ -199,7 +241,7 @@ public class Vector3 {
      * @return the i vector3
      */
     public final Vector3 addZ(final float vec) {
-        z+=vec;
+        z += vec;
         return this;
     }
 
@@ -216,9 +258,9 @@ public class Vector3 {
      * @return the i vector3
      */
     public final Vector3 subtract(final Vector3 vec) {
-        x-= vec.x;
-        y-= vec.y;
-        z-= vec.z;
+        x -= vec.x;
+        y -= vec.y;
+        z -= vec.z;
         return this;
     }
 
@@ -235,9 +277,9 @@ public class Vector3 {
      * @return the i vector3
      */
     public final Vector3 multiply(final Vector3 vec) {
-        x*= vec.x;
-        y*= vec.y;
-        z*= vec.z;
+        x *= vec.x;
+        y *= vec.y;
+        z *= vec.z;
         return this;
     }
 
@@ -267,9 +309,9 @@ public class Vector3 {
      * @return the i vector3
      */
     public final Vector3 multiply(final float vec) {
-        x*= vec;
-        y*= vec;
-        z*= vec;
+        x *= vec;
+        y *= vec;
+        z *= vec;
         return this;
     }
 
@@ -295,9 +337,9 @@ public class Vector3 {
      * @return the i vector3
      */
     public final Vector3 divide(final Vector3 vec) {
-        x/= vec.x;
-        y/= vec.y;
-        z/= vec.z;
+        x /= vec.x;
+        y /= vec.y;
+        z /= vec.z;
         return this;
     }
 
@@ -314,9 +356,9 @@ public class Vector3 {
      * @return the i vector3
      */
     public final Vector3 divide(final float vec) {
-        x/= vec;
-        y/= vec;
-        z/= vec;
+        x /= vec;
+        y /= vec;
+        z /= vec;
         return this;
     }
 
@@ -356,9 +398,9 @@ public class Vector3 {
         float cx = y * v.z - v.y * z;
         float cy = v.x * z - x * v.z;
         float cz = x * v.y - v.x * y;
-        x=cx;
-        y=cy;
-        z=cz;
+        x = cx;
+        y = cy;
+        z = cz;
         return this;
     }
 
@@ -373,15 +415,18 @@ public class Vector3 {
      * @return the double
      */
     public float length() {
-        return (float) Math.sqrt(x * x + y * y + z
-                * z);
+        return (float) Math.sqrt(x * x + y * y + z * z);
     }
 
+    /**
+     * Length squared.
+     *
+     * @return the float
+     */
     public float lengthSquared() {
-        return x * x + y * y + z
-                * z;
+        return x * x + y * y + z * z;
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -401,7 +446,6 @@ public class Vector3 {
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
- 
     /**
      * Distance.
      *
@@ -415,7 +459,7 @@ public class Vector3 {
         float dz = z - vec.z;
         return dx * dx + dy * dy + dz * dz;
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -454,12 +498,12 @@ public class Vector3 {
      */
     public Vector3 min(Vector3 min2) {
 
-        x=Math.min(x, min2.x);
-        y=Math.min(y, min2.y);
-        z=Math.min(z, min2.z);
+        x = Math.min(x, min2.x);
+        y = Math.min(y, min2.y);
+        z = Math.min(z, min2.z);
         return this;
     }
-    
+
     /**
      * Transform.
      *
@@ -480,7 +524,7 @@ public class Vector3 {
                 + (rotation.getX() * ty - rotation.getY() * tx);
         return this;
     }
-    
+
     /**
      * Transform.
      *
@@ -490,27 +534,32 @@ public class Vector3 {
      */
     public Vector3 transform(Matrix matrix) {
 
-        float tx = (x * matrix.M[0]) + (y * matrix.M[4])
-                + (z * matrix.M[8]) + matrix.M[12];
+        float tx = (x * matrix.M[0]) + (y * matrix.M[4]) + (z * matrix.M[8])
+                + matrix.M[12];
 
-        float ty = (x * matrix.M[1]) + (y * matrix.M[5])
-                + (z * matrix.M[9]) + matrix.M[13];
+        float ty = (x * matrix.M[1]) + (y * matrix.M[5]) + (z * matrix.M[9])
+                + matrix.M[13];
 
-        float tz = (x * matrix.M[1]) + (y * matrix.M[6])
-                + (z * matrix.M[10]) + matrix.M[14];
+        float tz = (x * matrix.M[1]) + (y * matrix.M[6]) + (z * matrix.M[10])
+                + matrix.M[14];
 
-        x =tx;
-        y =ty;
-        z =tz;
+        x = tx;
+        y = ty;
+        z = tz;
 
         return this;
     }
 
-    public Vector3 reflect(Vector3 normal)
-    {
+    /**
+     * Reflect.
+     *
+     * @param normal
+     *            the normal
+     * @return the vector3
+     */
+    public Vector3 reflect(Vector3 normal) {
 
-        return addMultiply(normal, -2.0f*dot(normal));
+        return addMultiply(normal, -2.0f * dot(normal));
     }
-
 
 }

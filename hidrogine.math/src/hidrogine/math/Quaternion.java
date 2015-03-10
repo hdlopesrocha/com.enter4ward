@@ -35,28 +35,62 @@ public class Quaternion {
         W = w;
     }
 
+    /**
+     * Instantiates a new quaternion.
+     *
+     * @param quat
+     *            the quat
+     */
     public Quaternion(Quaternion quat) {
         X = quat.X;
         Y = quat.Y;
         Z = quat.Z;
         W = quat.W;
     }
-    
+
+    /**
+     * Sets the x.
+     *
+     * @param x
+     *            the x
+     * @return the quaternion
+     */
     public Quaternion setX(float x) {
         X = x;
         return this;
     }
 
+    /**
+     * Sets the y.
+     *
+     * @param y
+     *            the y
+     * @return the quaternion
+     */
     public Quaternion setY(float y) {
         Y = y;
         return this;
-        }
+    }
 
+    /**
+     * Sets the z.
+     *
+     * @param z
+     *            the z
+     * @return the quaternion
+     */
     public Quaternion setZ(float z) {
         Z = z;
         return this;
     }
 
+    /**
+     * Sets the w.
+     *
+     * @param w
+     *            the w
+     * @return the quaternion
+     */
     public Quaternion setW(float w) {
         W = w;
         return this;
@@ -83,10 +117,10 @@ public class Quaternion {
      * @return the quaternion
      */
     public Quaternion identity() {
-        X=0;
-        Y=0;
-        Z=0;
-        W=1;
+        X = 0;
+        Y = 0;
+        Z = 0;
+        W = 1;
         return this;
     }
 
@@ -130,6 +164,8 @@ public class Quaternion {
 
     /**
      * Conjugate.
+     *
+     * @return the quaternion
      */
     public Quaternion conjugate() {
         X = -X;
@@ -138,7 +174,6 @@ public class Quaternion {
         return this;
     }
 
-  
     /**
      * Creates the from yaw pitch roll.
      *
@@ -150,8 +185,7 @@ public class Quaternion {
      *            the roll
      * @return the quaternion
      */
-    public Quaternion createFromYawPitchRoll(float yaw, float pitch,
-            float roll) {
+    public Quaternion createFromYawPitchRoll(float yaw, float pitch, float roll) {
         X = (((float) Math.cos((double) (yaw * 0.5)) * (float) Math
                 .sin((double) (pitch * 0.5))) * (float) Math
                 .cos((double) (roll * 0.5)))
@@ -190,9 +224,9 @@ public class Quaternion {
      */
     public Quaternion createFromAxisAngle(Vector3 axis, float angle) {
         float sin_a = (float) Math.sin(angle / 2.0);
-        return setX(axis.getX() * sin_a).setY(axis.getY() * sin_a).setZ(axis.getZ() * sin_a).setW( (float) Math.cos(angle / 2.0));
+        return setX(axis.getX() * sin_a).setY(axis.getY() * sin_a)
+                .setZ(axis.getZ() * sin_a).setW((float) Math.cos(angle / 2.0));
     }
-
 
     /**
      * Creates the from rotation matrix.
@@ -202,8 +236,7 @@ public class Quaternion {
      * @return the quaternion
      */
     public Quaternion createFromRotationMatrix(Matrix matrix) {
-        
-        
+
         if ((matrix.M[0] + matrix.M[5] + matrix.M[10]) > 0.0) {
             float M1 = (float) Math.sqrt((double) (matrix.M[0] + matrix.M[5]
                     + matrix.M[10] + 1.0));
@@ -212,8 +245,8 @@ public class Quaternion {
             X = (matrix.M[6] - matrix.M[9]) * M1;
             Y = (matrix.M[8] - matrix.M[2]) * M1;
             Z = (matrix.M[1] - matrix.M[4]) * M1;
-        }
-        else if ((matrix.M[0] >= matrix.M[5]) && (matrix.M[0] >= matrix.M[10])) {
+        } else if ((matrix.M[0] >= matrix.M[5])
+                && (matrix.M[0] >= matrix.M[10])) {
             float M2 = (float) Math.sqrt((double) (1.0 + matrix.M[0]
                     - matrix.M[5] - matrix.M[10]));
             float M3 = 0.5f / M2;
@@ -221,8 +254,7 @@ public class Quaternion {
             Y = (matrix.M[1] + matrix.M[4]) * M3;
             Z = (matrix.M[2] + matrix.M[8]) * M3;
             W = (matrix.M[6] - matrix.M[9]) * M3;
-        }
-        else if (matrix.M[5] > matrix.M[10]) {
+        } else if (matrix.M[5] > matrix.M[10]) {
             float M4 = (float) Math.sqrt((double) (1.0 + matrix.M[5]
                     - matrix.M[0] - matrix.M[10]));
             float M5 = 0.5f / M4;
@@ -230,15 +262,14 @@ public class Quaternion {
             Y = 0.5f * M4;
             Z = (matrix.M[9] + matrix.M[6]) * M5;
             W = (matrix.M[8] - matrix.M[2]) * M5;
-        }
-        else {
-        float M6 = (float) Math
-                .sqrt((double) (1.0 + matrix.M[10] - matrix.M[0] - matrix.M[5]));
-        float M7 = 0.5f / M6;
-        X = (matrix.M[8] + matrix.M[2]) * M7;
-        Y = (matrix.M[9] + matrix.M[6]) * M7;
-        Z = 0.5f * M6;
-        W = (matrix.M[1] - matrix.M[4]) * M7;
+        } else {
+            float M6 = (float) Math.sqrt((double) (1.0 + matrix.M[10]
+                    - matrix.M[0] - matrix.M[5]));
+            float M7 = 0.5f / M6;
+            X = (matrix.M[8] + matrix.M[2]) * M7;
+            Y = (matrix.M[9] + matrix.M[6]) * M7;
+            Z = 0.5f * M6;
+            W = (matrix.M[1] - matrix.M[4]) * M7;
         }
         return this;
     }
@@ -299,7 +330,8 @@ public class Quaternion {
      * @return true, if successful
      */
     public boolean equals(Quaternion other) {
-        return (X == other.X) && (Y == other.Y) && (Z == other.Z) && W == other.W;
+        return (X == other.X) && (Y == other.Y) && (Z == other.Z)
+                && W == other.W;
     }
 
     /**
@@ -572,6 +604,13 @@ public class Quaternion {
         return W;
     }
 
+    /**
+     * Sets the.
+     *
+     * @param quat
+     *            the quat
+     * @return the quaternion
+     */
     public Quaternion set(final Quaternion quat) {
         setX(quat.getX());
         setY(quat.getY());

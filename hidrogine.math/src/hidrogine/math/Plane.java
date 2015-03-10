@@ -46,15 +46,14 @@ public class Plane {
         Vector3 ac = (Vector3) new Vector3(c).subtract(a);
         normal = ab.cross(ac);
         distance = -normal.dot(a);
-        //  Ax + By + Cz + d = 0
-         
+        // Ax + By + Cz + d = 0
+
         // NOT NECESSARY
-   //     float len = normal.length();
-   //     normal.divide(len);
-   //     distance /= len;
-        
-        
-     //   normal.normalize();
+        // float len = normal.length();
+        // normal.divide(len);
+        // distance /= len;
+
+        // normal.normalize();
 
     }
 
@@ -117,8 +116,8 @@ public class Plane {
      * @return the float
      */
     public float dotNormal(Vector3 direction) {
-        return (((normal.getX() * direction.getX()) + (normal.getY() * direction.getY())) + (normal
-                .getZ() * direction.getZ()));
+        return (((normal.getX() * direction.getX()) + (normal.getY() * direction
+                .getY())) + (normal.getZ() * direction.getZ()));
     }
 
     /**

@@ -59,19 +59,23 @@ public abstract class IObject3D {
         this.model = model;
     }
 
-
-
     /*
      * (non-Javadoc)
      * 
      * @see hidrogine.math.api.ISphere#getPosition()
      */
+    /**
+     * Gets the bounding sphere.
+     *
+     * @return the bounding sphere
+     */
     public BoundingSphere getBoundingSphere() {
         // return new
         // Vector3(model.getContainer().getCenter()).transform(rotation).add(position);
-        return new BoundingSphere(new Vector3(model.getContainer().getCenter()).transform(rotation).add(position), model.getContainer().getRadius());
-                
-              
+        return new BoundingSphere(new Vector3(model.getContainer().getCenter())
+                .transform(rotation).add(position), model.getContainer()
+                .getRadius());
+
     }
 
     /**
@@ -93,15 +97,12 @@ public abstract class IObject3D {
         this.position = position;
     }
 
-
-    
-    
-
     /**
      * Insert.
      *
      * @param space
      *            the space
+     * @return the i object3 d
      */
     public IObject3D insert(final Space space) {
         node = space.insert(getBoundingSphere(), this);
@@ -115,7 +116,6 @@ public abstract class IObject3D {
         node.remove(this);
     }
 
- 
     /**
      * Update.
      *
@@ -123,8 +123,8 @@ public abstract class IObject3D {
      *            the space
      */
     public void update(Space space) {
-        node = space.update(getBoundingSphere(), node, this);            
-      }
+        node = space.update(getBoundingSphere(), node, this);
+    }
 
     /**
      * Gets the rotation.

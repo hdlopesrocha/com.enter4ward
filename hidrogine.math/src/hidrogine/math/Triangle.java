@@ -71,8 +71,6 @@ public class Triangle {
 
     }
 
-    
-    
     /**
      * Gets the plane.
      *
@@ -82,8 +80,13 @@ public class Triangle {
         return new Plane(a, b, c);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
     @Override
-    public String toString(){
-        return "{a:"+a+", b:"+b+", "+c+"}";
+    public String toString() {
+        return "{a:" + a + ", b:" + b + ", " + c + "}";
     }
 }
