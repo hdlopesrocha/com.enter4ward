@@ -10,28 +10,19 @@ import java.util.TreeMap;
  */
 public class Space {
 
-    private static TreeMap<Float, TreeMap<Float, TreeMap<Float, Vector3>>> lenghts = new TreeMap<Float, TreeMap<Float, TreeMap<Float, Vector3>>>();
+    private static TreeMap<String, Vector3> lenghts = new TreeMap<String, Vector3>();
     private static final Vector3 TEMP_LEN = new Vector3();
     public static int LENS = 0;
     
     
     private static Vector3 recycle(final Vector3 v) {
-        TreeMap<Float, TreeMap<Float, Vector3>> treeX = lenghts.get(v.getX());
-        if (treeX == null) {
-            treeX = new TreeMap<Float, TreeMap<Float, Vector3>>();
-            lenghts.put(v.getX(), treeX);
-        }
-
-        TreeMap<Float, Vector3> treeY = treeX.get(v.getY());
-        if (treeY == null) {
-            treeY = new TreeMap<Float, Vector3>();
-            treeX.put(v.getY(), treeY);
-        }
-
-        Vector3 r = treeY.get(v.getZ());
+        String s = v.toString();
+        
+        Vector3 r = lenghts.get(s);
         if (r == null) {
             r = new Vector3(v);
-            treeY.put(v.getZ(), r);
+            lenghts.put(s, r);
+            System.out.println(s);
             ++LENS;
         }
 

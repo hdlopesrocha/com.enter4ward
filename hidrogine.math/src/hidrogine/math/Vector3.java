@@ -471,7 +471,7 @@ public class Vector3{
      * @see hidrogine.math.Vector3#toString()
      */
     public String toString() {
-        return "{X=" + x + ", Y=" + y + ", Z=" + z + "}";
+        return x + "," + y + "," + z;
     }
 
     /**

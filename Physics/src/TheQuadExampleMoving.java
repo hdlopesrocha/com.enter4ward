@@ -111,12 +111,25 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		// new MyCar3D(new Vector3(-4, 4, 25), car) {}.insert(space);
 
 		Random rand = new Random();
-		for (int i = 0; i < 128; ++i) {
-			objects.add((MyObject3D) new MyObject3D(new Vector3(
-					rand.nextInt(64) - 32, 10f, rand.nextInt(64) - 32), box) {
-			}.insert(space));
+		
+		  for (int i = 0; i < 128; ++i) { objects.add((MyObject3D) new
+		  MyObject3D(new Vector3( rand.nextInt(64) - 32, 10f, rand.nextInt(64) -
+		  32), box) { }.insert(space)); }
+		 
+		
+		
+		/*
+		int size = 8 * 1024;
+		for (int i = 0; i < 1000000; ++i) {
+			if(i%1000==0)
+				System.out.println(i);
+			new MyObject3D(new Vector3(rand.nextInt(size) - size / 2,
+					rand.nextInt(size) - size / 2, rand.nextInt(size) - size / 2), box)
+					.insert(space);
+			
+			
 		}
-
+*/
 		// objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 64, 0), box)
 		// {}.insert(space));
 		// objects.add((MyObject3D) new MyObject3D(new Vector3(-10, 68, 0), box)
@@ -214,19 +227,18 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	 */
 	public void setTitle() {
 		float mb = 1024 * 1024;
-System.gc();
+		System.gc();
 		// Getting the runtime reference from system
 		Runtime runtime = Runtime.getRuntime();
 
 		// Print used memory
 		System.out.println("Used Memory:"
 				+ (runtime.totalMemory() - runtime.freeMemory()) / mb + " Draws:"
-				+ draws+ " Lens:"+Space.LENS);
+				+ draws + " Lens:" + Space.LENS);
 		/*
-		Display.setTitle("Used Memory:"
-				+ (runtime.totalMemory() - runtime.freeMemory()) / mb + " Draws:"
-				+ draws);
-*/
+		 * Display.setTitle("Used Memory:" + (runtime.totalMemory() -
+		 * runtime.freeMemory()) / mb + " Draws:" + draws);
+		 */
 	}
 
 	/*
@@ -256,7 +268,7 @@ System.gc();
 		getProgram().setMaterialAlpha(1f);
 		getProgram().setAmbientColor(0f, 0f, 0f);
 		GL20.glUseProgram(0);
-		 setTitle();
+		setTitle();
 	}
 
 	/*
@@ -281,9 +293,8 @@ System.gc();
 
 		Vector3 min = new Vector3(obj.getMinX(), obj.getMinY(), obj.getMinZ());
 		Vector3 max = new Vector3(obj.getMaxX(), obj.getMaxY(), obj.getMaxZ());
-		
-		
-		box.draw(getProgram(), min,max);
+
+		box.draw(getProgram(), min, max);
 	}
 
 	@Override
