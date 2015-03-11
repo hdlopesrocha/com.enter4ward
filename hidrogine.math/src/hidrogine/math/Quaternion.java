@@ -222,6 +222,21 @@ public class Quaternion {
      *            the angle
      * @return the quaternion
      */
+    public Quaternion createFromAxisAngle(float x,float y, float z, float angle) {
+        float sin_a = (float) Math.sin(angle / 2.0);
+        return setX(x * sin_a).setY(y * sin_a)
+                .setZ(z * sin_a).setW((float) Math.cos(angle / 2.0));
+    }
+    
+    /**
+     * Creates the from axis angle.
+     *
+     * @param axis
+     *            the axis
+     * @param angle
+     *            the angle
+     * @return the quaternion
+     */
     public Quaternion createFromAxisAngle(Vector3 axis, float angle) {
         float sin_a = (float) Math.sin(angle / 2.0);
         return setX(axis.getX() * sin_a).setY(axis.getY() * sin_a)

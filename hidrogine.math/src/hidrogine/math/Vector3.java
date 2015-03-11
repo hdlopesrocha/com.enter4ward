@@ -612,4 +612,14 @@ public class Vector3 {
         return addMultiply(normal, -2.0f * dot(normal));
     }
 
+    /**
+     * Clear.
+     *
+     * @return the vector3
+     */
+    public Vector3 clear() {
+        x = y = z = 0;
+        return this;
+    }
+
 }

@@ -64,7 +64,7 @@ public class MyCar3D extends Object3D {
 						}
 						if (g.getName().startsWith("w")
 								&& g.getName().length() == 2) {
-							final Vector3 center = new Vector3(g.getCenter())
+							final Vector3 center = Vector3.temp().set(g.getCenter())
 									.multiply(-1f);
 							matrix.translate(center).multiply(
 									Matrix.temp().createRotationX(time * 8));

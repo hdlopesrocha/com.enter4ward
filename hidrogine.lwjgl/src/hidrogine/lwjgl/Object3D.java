@@ -42,7 +42,7 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		velocity.addMultiply(aceleration, delta_t);
 
 		Ray ray = new Ray(getPosition(),
-				new Vector3(velocity).multiply(delta_t));
+				Vector3.temp().set(velocity).multiply(delta_t));
 		collided = false;
 		space.handleRayCollisions(ray, this);
 		

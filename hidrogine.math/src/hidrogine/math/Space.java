@@ -13,8 +13,6 @@ public class Space {
     /** The lenghts. */
     private static TreeMap<String, Vector3> lenghts = new TreeMap<String, Vector3>();
 
-    /** The Constant TEMP_LEN. */
-    private static final Vector3 TEMP_LEN = new Vector3();
 
     /** The lens. */
     public static int LENS = 0;
@@ -220,12 +218,15 @@ public class Space {
 
         private Node build(final int i) {
 
+            final Vector3 tempLen = Vector3.temp();
+
+            
             final float lenX = getLengthX();
             final float lenY = getLengthY();
             final float lenZ = getLengthZ();
 
             if (lenX >= lenY && lenX >= lenZ) {
-                final Vector3 len = recycle(TEMP_LEN.set(lenX * 0.5f, lenY,
+                final Vector3 len = recycle(tempLen.set(lenX * 0.5f, lenY,
                         lenZ));
 
                 if (i == LEFT) {
@@ -238,7 +239,7 @@ public class Space {
                             len);
                 }
             } else if (lenY >= lenZ) {
-                final Vector3 len = recycle(TEMP_LEN.set(lenX, lenY * 0.5f,
+                final Vector3 len = recycle(tempLen.set(lenX, lenY * 0.5f,
                         lenZ));
 
                 if (i == LEFT) {
@@ -251,7 +252,7 @@ public class Space {
                             len);
                 }
             } else {
-                final Vector3 len = recycle(TEMP_LEN.set(lenX, lenY,
+                final Vector3 len = recycle(tempLen.set(lenX, lenY,
                         lenZ * 0.5f));
                 if (i == LEFT) {
                     return new Node(this, getMin(), len);
@@ -332,8 +333,11 @@ public class Space {
             final float lenY = getLengthY();
             final float lenZ = getLengthZ();
 
+            final Vector3 tempLen = Vector3.temp();
+
+            
             if (lenX < lenY && lenX < lenZ) {
-                final Vector3 len = recycle(TEMP_LEN.set(lenX * 2, lenY, lenZ));
+                final Vector3 len = recycle(tempLen.set(lenX * 2, lenY, lenZ));
 
                 if (pos.getX() >= getCenterX()) {
                     return new Node(this, LEFT, getMin(), len);
@@ -342,7 +346,7 @@ public class Space {
                             new Vector3(getMin()).addX(-lenX), len);
                 }
             } else if (lenY < lenZ) {
-                final Vector3 len = recycle(TEMP_LEN.set(lenX, lenY * 2, lenZ));
+                final Vector3 len = recycle(tempLen.set(lenX, lenY * 2, lenZ));
 
                 if (pos.getY() >= getCenterY()) {
                     return new Node(this, LEFT, getMin(), len);
@@ -352,7 +356,7 @@ public class Space {
 
                 }
             } else {
-                final Vector3 len = recycle(TEMP_LEN.set(lenX, lenY, lenZ * 2));
+                final Vector3 len = recycle(tempLen.set(lenX, lenY, lenZ * 2));
 
                 if (pos.getZ() >= getCenterZ()) {
                     return new Node(this, LEFT, getMin(), len);

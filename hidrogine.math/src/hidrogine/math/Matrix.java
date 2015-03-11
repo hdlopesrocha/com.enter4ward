@@ -175,7 +175,7 @@ public class Matrix {
      * @return the backward
      */
     public Vector3 getBackward() {
-        return new Vector3(M[8], M[9], M[10]);
+        return Vector3.temp().set(M[8], M[9], M[10]);
     }
 
     /**
@@ -196,7 +196,7 @@ public class Matrix {
      * @return the down
      */
     public Vector3 getDown() {
-        return new Vector3(-M[4], -M[5], -M[6]);
+        return Vector3.temp().set(-M[4], -M[5], -M[6]);
     }
 
     /**
@@ -217,7 +217,7 @@ public class Matrix {
      * @return the forward
      */
     public Vector3 getForward() {
-        return new Vector3(-M[8], -M[9], -M[10]);
+        return Vector3.temp().set(-M[8], -M[9], -M[10]);
     }
 
     /**
@@ -238,7 +238,7 @@ public class Matrix {
      * @return the left
      */
     public Vector3 getLeft() {
-        return new Vector3(-M[0], -M[1], -M[2]);
+        return Vector3.temp().set(-M[0], -M[1], -M[2]);
     }
 
     /**
@@ -259,7 +259,7 @@ public class Matrix {
      * @return the right
      */
     public Vector3 getRight() {
-        return new Vector3(M[0], M[1], M[2]);
+        return Vector3.temp().set(M[0], M[1], M[2]);
     }
 
     /**
@@ -280,7 +280,7 @@ public class Matrix {
      * @return the translation
      */
     public Vector3 getTranslation() {
-        return new Vector3(M[12], M[13], M[14]);
+        return Vector3.temp().set(M[12], M[13], M[14]);
     }
 
     /**
@@ -301,7 +301,7 @@ public class Matrix {
      * @return the up
      */
     public Vector3 getUp() {
-        return new Vector3(M[4], M[5], M[6]);
+        return Vector3.temp().set(M[4], M[5], M[6]);
     }
 
     /**
@@ -330,9 +330,9 @@ public class Matrix {
     public Matrix createWorld(Vector3 position, Vector3 forward, Vector3 up) {
         Vector3 x, y, z;
 
-        z = new Vector3(forward).normalize();
-        x = new Vector3(forward).cross(up);
-        y = new Vector3(x).cross(forward);
+        z = Vector3.temp().set(forward).normalize();
+        x = Vector3.temp().set(forward).cross(up);
+        y = Vector3.temp().set(x).cross(forward);
 
         x.normalize();
         y.normalize();
@@ -508,10 +508,10 @@ public class Matrix {
         Vector3 translation = new Vector3(objectPosition)
                 .subtract(cameraPosition);
         Vector3 backwards, right, up;
-        backwards = new Vector3(translation).normalize();
-        up = new Vector3(cameraUpVector).normalize();
-        right = new Vector3(backwards).cross(up);
-        up = new Vector3(backwards).cross(right);
+        backwards = Vector3.temp().set(translation).normalize();
+        up = Vector3.temp().set(cameraUpVector).normalize();
+        right = Vector3.temp().set(backwards).cross(up);
+        up = Vector3.temp().set(backwards).cross(right);
         identity();
         setBackward(backwards);
         setRight(right);
@@ -557,13 +557,6 @@ public class Matrix {
      * @return the matrix
      */
 
-    private static final Vector3 TEMP_X = new Vector3();
-
-    /** The Constant TEMP_Y. */
-    private static final Vector3 TEMP_Y = new Vector3();
-
-    /** The Constant TEMP_Z. */
-    private static final Vector3 TEMP_Z = new Vector3();
 
     /**
      * Creates the look at.
@@ -581,9 +574,9 @@ public class Matrix {
         identity();
         // http://msdn.microsoft.com/en-us/library/bb205343(v=VS.85).aspx
 
-        Vector3 vz = TEMP_X.set(cameraDirection).multiply(-1f);
-        Vector3 vx = TEMP_Y.set(cameraUpVector).cross(vz).normalize();
-        Vector3 vy = TEMP_Z.set(vz).cross(vx);
+        Vector3 vz = Vector3.temp().set(cameraDirection).multiply(-1f);
+        Vector3 vx = Vector3.temp().set(cameraUpVector).cross(vz).normalize();
+        Vector3 vy = Vector3.temp().set(vz).cross(vx);
 
         M[0] = vx.getX();
         M[1] = vy.getX();

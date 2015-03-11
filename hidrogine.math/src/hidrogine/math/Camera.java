@@ -18,7 +18,6 @@ public class Camera extends BoundingFrustum{
     /** The near. */
     private float far, near;
 
-    private static final Vector3 TEMP_NEGATIVE = new Vector3();
 
     
     /**
@@ -27,9 +26,8 @@ public class Camera extends BoundingFrustum{
      * @return the matrix
      */
     public Matrix getViewMatrix() {
-
-        TEMP_NEGATIVE.set(position).multiply(-1f);
-        return Matrix.temp().identity().createTranslation(TEMP_NEGATIVE).transform(rotation);
+        Vector3 negative = Vector3.temp().set(position).multiply(-1f);
+        return Matrix.temp().identity().createTranslation(negative).transform(rotation);
 
     }
 
@@ -60,7 +58,7 @@ public class Camera extends BoundingFrustum{
      */
     public void rotate(float x, float y, float z, float w) {
         rotation = new Quaternion()
-                .createFromAxisAngle(new Vector3(x, y, z), w)
+                .createFromAxisAngle(x, y, z, w)
                 .multiply(rotation);
         rotation.normalize();
     }
@@ -104,7 +102,7 @@ public class Camera extends BoundingFrustum{
     
     public void lookAt(Vector3 pos, Vector3 lookAt, Vector3 up) {
         position.set(pos);
-        Matrix mat = Matrix.temp().createLookAt(new Vector3(), new Vector3(lookAt).subtract(pos).normalize(), up);
+        Matrix mat = Matrix.temp().createLookAt(Vector3.temp().clear(), Vector3.temp().set(lookAt).subtract(pos).normalize(), up);
 
         rotation.createFromRotationMatrix(mat).normalize();
     }

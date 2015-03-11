@@ -42,9 +42,9 @@ public class Plane {
      *            the c
      */
     public Plane(Vector3 a, Vector3 b, Vector3 c) {
-        Vector3 ab = (Vector3) new Vector3(b).subtract(a);
-        Vector3 ac = (Vector3) new Vector3(c).subtract(a);
-        normal = ab.cross(ac);
+        Vector3 ac = Vector3.temp().set(c).subtract(a);
+        Vector3 normal = new Vector3(b).subtract(a);
+        normal.cross(ac);
         distance = -normal.dot(a);
         // Ax + By + Cz + d = 0
 

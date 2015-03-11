@@ -287,8 +287,8 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 			}
 		}
 
-		Vector3 min = new Vector3(obj.getMinX(), obj.getMinY(), obj.getMinZ());
-		Vector3 max = new Vector3(obj.getMaxX(), obj.getMaxY(), obj.getMaxZ());
+		Vector3 min = Vector3.temp().set(obj.getMinX(), obj.getMinY(), obj.getMinZ());
+		Vector3 max = Vector3.temp().set(obj.getMaxX(), obj.getMaxY(), obj.getMaxZ());
 
 		box.draw(getProgram(), min, max);
 	}
