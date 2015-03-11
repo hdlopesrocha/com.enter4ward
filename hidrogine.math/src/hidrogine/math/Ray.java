@@ -236,7 +236,7 @@ public class Ray {
      */
     public Float intersects(BoundingSphere sphere) {
         // Find the vector between where the ray starts the the sphere's centre
-        Vector3 difference = Vector3.temp().set(sphere.getCenter())
+        Vector3 difference = Vector3.temp().set(sphere)
                 .subtract(this.position);
 
         float differenceLengthSquared = difference.lengthSquared();

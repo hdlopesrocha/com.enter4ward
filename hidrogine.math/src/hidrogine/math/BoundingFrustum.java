@@ -24,14 +24,17 @@ public class BoundingFrustum {
     /** The corners. */
     private Vector3[] corners = new Vector3[8];
 
-    /** The Constant CornerCount. */
-    public static final int CornerCount = 8;
-
     /**
      * Instantiates a new bounding frustum.
      */
     public BoundingFrustum() {
-
+        for (int i = 0; i < 8; ++i) {
+            corners[i] = new Vector3();
+        }
+        
+        for (int i = 0; i < 6; ++i) {
+            planes[i] = new Plane();
+        }
     }
 
     /**
@@ -42,6 +45,8 @@ public class BoundingFrustum {
      */
 
     public BoundingFrustum(Matrix value) {
+        this();
+
         createPlanes(value);
 
         createCorners();
@@ -151,11 +156,10 @@ public class BoundingFrustum {
      */
     public ContainmentType contains(BoundingSphere sphere) {
         float val;
-        final Vector3 center = sphere.getCenter();
         ContainmentType result = ContainmentType.Contains;
 
         for (int i = 0; i < 6; ++i) {
-            val = PlaneHelper.perpendicularDistance(center, planes[i]);
+            val = PlaneHelper.perpendicularDistance(sphere, planes[i]);
             if (val < -sphere.getRadius())
                 return ContainmentType.Disjoint;
             else if (val < sphere.getRadius())
@@ -223,14 +227,14 @@ public class BoundingFrustum {
      * Creates the corners.
      */
     void createCorners() {
-        corners[0] = intersectionPoint(planes[4], planes[2], planes[5]);
-        corners[1] = intersectionPoint(planes[4], planes[3], planes[5]);
-        corners[2] = intersectionPoint(planes[4], planes[3], planes[0]);
-        corners[3] = intersectionPoint(planes[4], planes[2], planes[0]);
-        corners[4] = intersectionPoint(planes[1], planes[2], planes[5]);
-        corners[5] = intersectionPoint(planes[1], planes[3], planes[5]);
-        corners[6] = intersectionPoint(planes[1], planes[3], planes[0]);
-        corners[7] = intersectionPoint(planes[1], planes[2], planes[0]);
+        corners[0].intersectionPoint(planes[4], planes[2], planes[5]);
+        corners[1].intersectionPoint(planes[4], planes[3], planes[5]);
+        corners[2].intersectionPoint(planes[4], planes[3], planes[0]);
+        corners[3].intersectionPoint(planes[4], planes[2], planes[0]);
+        corners[4].intersectionPoint(planes[1], planes[2], planes[5]);
+        corners[5].intersectionPoint(planes[1], planes[3], planes[5]);
+        corners[6].intersectionPoint(planes[1], planes[3], planes[0]);
+        corners[7].intersectionPoint(planes[1], planes[2], planes[0]);
     }
 
     /**
@@ -241,63 +245,32 @@ public class BoundingFrustum {
      */
     void createPlanes(Matrix matrix) {
         // Pre-calculate the different planes needed
-        planes[0] = new Plane(-matrix.M[3] - matrix.M[1], -matrix.M[7]
+        planes[0].set(-matrix.M[3] - matrix.M[1], -matrix.M[7]
                 - matrix.M[5], -matrix.M[11] - matrix.M[9], -matrix.M[15]
                 - matrix.M[13]);
 
-        planes[1] = new Plane(matrix.M[2] - matrix.M[3], matrix.M[6]
+        planes[1].set(matrix.M[2] - matrix.M[3], matrix.M[6]
                 - matrix.M[7], matrix.M[10] - matrix.M[11], matrix.M[14]
                 - matrix.M[15]);
 
-        planes[2] = new Plane(-matrix.M[3] - matrix.M[0], -matrix.M[7]
+        planes[2].set(-matrix.M[3] - matrix.M[0], -matrix.M[7]
                 - matrix.M[4], -matrix.M[11] - matrix.M[8], -matrix.M[15]
                 - matrix.M[12]);
 
-        planes[3] = new Plane(matrix.M[0] - matrix.M[3], matrix.M[4]
+        planes[3].set(matrix.M[0] - matrix.M[3], matrix.M[4]
                 - matrix.M[7], matrix.M[8] - matrix.M[11], matrix.M[12]
                 - matrix.M[15]);
 
-        planes[4] = new Plane(-matrix.M[2], -matrix.M[6], -matrix.M[10],
+        planes[4].set(-matrix.M[2], -matrix.M[6], -matrix.M[10],
                 -matrix.M[14]);
 
-        planes[5] = new Plane(matrix.M[1] - matrix.M[3], matrix.M[5]
+        planes[5].set(matrix.M[1] - matrix.M[3], matrix.M[5]
                 - matrix.M[7], matrix.M[9] - matrix.M[11], matrix.M[13]
                 - matrix.M[15]);
 
         for (int i = 0; i < 6; ++i) {
             planes[i].normalize();
         }
-    }
-
-    /**
-     * Intersection point.
-     *
-     * @param a
-     *            the a
-     * @param b
-     *            the b
-     * @param c
-     *            the c
-     * @return the i vector3
-     */
-    public Vector3 intersectionPoint(Plane a, Plane b, Plane c) {
-        // Formula used
-        // d1 ( N2 * N3 ) + d2 ( N3 * N1 ) + d3 ( N1 * N2 )
-        // P =
-        // -------------------------------------------------------------------------
-        // N1 . ( N2 * N3 )
-        //
-        // Note: N refers to the normal, d refers to the displacement. '.' means
-        // dot product. '*' means cross product
-        float f = -a.getNormal().dot(
-                new Vector3(b.getNormal()).cross(c.getNormal()));
-        Vector3 v1 = new Vector3(b.getNormal()).cross(c.getNormal()).multiply(
-                a.getDistance());
-        Vector3 v2 = new Vector3(c.getNormal()).cross(a.getNormal()).multiply(
-                b.getDistance());
-        Vector3 v3 = new Vector3(a.getNormal()).cross(b.getNormal()).multiply(
-                c.getDistance());
-        return v1.add(v2).add(v3).divide(f);
     }
 
 }

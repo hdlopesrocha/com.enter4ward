@@ -16,6 +16,7 @@ public class Plane {
      * Instantiates a new plane.
      */
     public Plane() {
+        normal = new Vector3();
     }
 
     /**
@@ -43,8 +44,8 @@ public class Plane {
      */
     public Plane(Vector3 a, Vector3 b, Vector3 c) {
         Vector3 ac = Vector3.temp().set(c).subtract(a);
-        Vector3 normal = new Vector3(b).subtract(a);
-        normal.cross(ac);
+        this.normal = new Vector3(b).subtract(a);
+        this.normal.cross(ac);
         distance = -normal.dot(a);
         // Ax + By + Cz + d = 0
 
@@ -73,6 +74,12 @@ public class Plane {
         this(new Vector3(a, b, c), d);
     }
 
+    public Plane set(float a, float b, float c, float d) {
+        this.normal.set(a,b,c);
+        this.distance = d;
+        return this;
+    }
+    
     /*
      * Plane(Vector4 value) {this = Plane(Vector3(value.X, value.Y, value.Z),
      * value.W); } float dot(Vector4 value) { return ((((Normal.X * value.X) +

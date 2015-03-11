@@ -40,13 +40,13 @@ public class MyCar3D extends Object3D {
 		for (final Group g : model.getGroups()) {
 
 			final BoundingSphere groupSphere = new BoundingSphere(g);
-			groupSphere.getCenter().transform(getRotation()).add(getPosition());
+			groupSphere.transform(getRotation()).add(getPosition());
 
 			if (frustum.contains(groupSphere) != ContainmentType.Disjoint) {
 				for (final BufferObject b : g.getBuffers()) {
 
 					final BoundingSphere bufferSphere = new BoundingSphere(b);
-					bufferSphere.getCenter().transform(getRotation())
+					bufferSphere.transform(getRotation())
 							.add(getPosition());
 
 					if (frustum.contains(bufferSphere) != ContainmentType.Disjoint) {
@@ -64,7 +64,7 @@ public class MyCar3D extends Object3D {
 						}
 						if (g.getName().startsWith("w")
 								&& g.getName().length() == 2) {
-							final Vector3 center = Vector3.temp().set(g.getCenter())
+							final Vector3 center = Vector3.temp().set(g)
 									.multiply(-1f);
 							matrix.translate(center).multiply(
 									Matrix.temp().createRotationX(time * 8));

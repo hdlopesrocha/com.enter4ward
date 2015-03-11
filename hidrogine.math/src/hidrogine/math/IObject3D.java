@@ -75,7 +75,7 @@ public abstract class IObject3D {
     public BoundingSphere getBoundingSphere() {
         // return new
         // Vector3(model.getContainer().getCenter()).transform(rotation).add(position);
-        TEMP_SPHERE.getCenter().set(model.getContainer().getCenter()).transform(rotation).add(position);
+        TEMP_SPHERE.set(model.getContainer()).transform(rotation).add(position);
         TEMP_SPHERE.setRadius(model.getContainer()
                 .getRadius());
         return TEMP_SPHERE;

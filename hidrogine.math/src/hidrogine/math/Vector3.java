@@ -352,6 +352,18 @@ public class Vector3 {
     }
 
     /**
+     * Sets the.
+     *
+     * @param pos
+     *            the pos
+     * @return the i vector3
+     */
+    public Vector3 set(float pos) {
+        x = y = z = pos;
+        return this;
+    }
+
+    /**
      * Multiply.
      *
      * @param vec
@@ -620,6 +632,37 @@ public class Vector3 {
     public Vector3 clear() {
         x = y = z = 0;
         return this;
+    }
+
+    /**
+     * Intersection point.
+     *
+     * @param a
+     *            the a
+     * @param b
+     *            the b
+     * @param c
+     *            the c
+     * @return the i vector3
+     */
+    public Vector3 intersectionPoint(Plane a, Plane b, Plane c) {
+        // Formula used
+        // d1 ( N2 * N3 ) + d2 ( N3 * N1 ) + d3 ( N1 * N2 )
+        // P =
+        // -------------------------------------------------------------------------
+        // N1 . ( N2 * N3 )
+        //
+        // Note: N refers to the normal, d refers to the displacement. '.' means
+        // dot product. '*' means cross product
+        float f = -a.getNormal().dot(
+                Vector3.temp().set(b.getNormal()).cross(c.getNormal()));
+        set(b.getNormal()).cross(c.getNormal()).multiply(a.getDistance());
+        Vector3 v2 = Vector3.temp().set(c.getNormal()).cross(a.getNormal())
+                .multiply(b.getDistance());
+        Vector3 v3 = Vector3.temp().set(a.getNormal()).cross(b.getNormal())
+                .multiply(c.getDistance());
+
+        return add(v2).add(v3).divide(f);
     }
 
 }

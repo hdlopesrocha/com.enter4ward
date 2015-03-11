@@ -61,8 +61,8 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		final Model3D model = (Model3D) getModel();
 		for (final Group g : model.getGroups()) {
 			for (final BufferObject b : g.getBuffers()) {
-				final BoundingSphere sph = new BoundingSphere(b);
-				sph.getCenter().add(matrix.getTranslation());
+				final BoundingSphere sph = BoundingSphere.temp().set(b);
+				sph.add(matrix.getTranslation());
 				if (frustum.contains(sph) != ContainmentType.Disjoint) {
 					b.bind(program);
 					program.setModelMatrix(matrix);
@@ -111,7 +111,7 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 				IntersectionInfo info = obj3D.closestTriangle(ray);
 				if(info!=null){
 				
-					Vector3 n = info.triangle.getPlane().getNormal().normalize();
+					Vector3 n = info.triangle.getNormal().normalize();
 					getPosition().addMultiply(ray.getDirection(), info.distance)
 							.addMultiply(n, 0.01f);
 					ray.getDirection().add(n.multiply(-ray.getDirection().dot(n)));

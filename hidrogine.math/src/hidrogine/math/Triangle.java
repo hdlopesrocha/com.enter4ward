@@ -80,6 +80,13 @@ public class Triangle {
         return new Plane(a, b, c);
     }
 
+    public Vector3 getNormal(){
+        
+        Vector3 ac = Vector3.temp().set(c).subtract(a);
+        return  Vector3.temp().set(b).subtract(a).cross(ac);
+        
+    }
+    
     /*
      * (non-Javadoc)
      * 

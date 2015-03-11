@@ -30,12 +30,12 @@ public class MyObject3D extends Object3D {
 
 		for (final Group g : model.getGroups()) {
 			final BoundingSphere groupSphere = new BoundingSphere(g);
-			groupSphere.getCenter().transform(getRotation()).add(getPosition());
+			groupSphere.transform(getRotation()).add(getPosition());
 			if (frustum.contains(groupSphere) != ContainmentType.Disjoint) {
 				for (final BufferObject b : g.getBuffers()) {
 					b.bind(program);
 					final BoundingSphere bufferSphere = new BoundingSphere(b);
-					bufferSphere.getCenter().transform(getRotation()).add(getPosition());
+					bufferSphere.transform(getRotation()).add(getPosition());
 					if (frustum.contains(bufferSphere) != ContainmentType.Disjoint) {
 						TheQuadExampleMoving.draws++;
 						b.draw(program);

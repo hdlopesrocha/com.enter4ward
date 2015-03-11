@@ -1,7 +1,6 @@
 package hidrogine.math;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.TreeMap;
 
 // TODO: Auto-generated Javadoc
@@ -121,7 +120,6 @@ public class Space {
          * @return the int
          */
         public int containsIndex(final BoundingSphere sphere) {
-            final Vector3 sc = sphere.getCenter();
             final float sr = sphere.getRadius();
             final float lenX = getLengthX();
             final float lenY = getLengthY();
@@ -131,7 +129,7 @@ public class Space {
 
             // if(onlyContains(sphere)){
             if (lenX >= lenY && lenX >= lenZ) {
-                final float dist = getCenterX() - sc.getX();
+                final float dist = getCenterX() - sphere.getX();
                 if (dist >= sr) {
                     return LEFT;
                 } else if (-dist >= sr) {
@@ -140,7 +138,7 @@ public class Space {
                     return CENTER;
                 }
             } else if (lenY >= lenZ) {
-                final float dist = getCenterY() - sc.getY();
+                final float dist = getCenterY() - sphere.getY();
                 if (dist >= sr) {
                     return LEFT;
                 } else if (-dist >= sr) {
@@ -149,7 +147,7 @@ public class Space {
                     return CENTER;
                 }
             } else {
-                final float dist = getCenterZ() - sc.getZ();
+                final float dist = getCenterZ() - sphere.getZ();
                 if (dist >= sr) {
                     return LEFT;
                 } else if (-dist >= sr) {
@@ -328,7 +326,6 @@ public class Space {
          * @return the space node
          */
         private Node expandAux(final BoundingSphere obj) {
-            final Vector3 pos = obj.getCenter();
             final float lenX = getLengthX();
             final float lenY = getLengthY();
             final float lenZ = getLengthZ();
@@ -339,30 +336,27 @@ public class Space {
             if (lenX < lenY && lenX < lenZ) {
                 final Vector3 len = recycle(tempLen.set(lenX * 2, lenY, lenZ));
 
-                if (pos.getX() >= getCenterX()) {
+                if (obj.getX() >= getCenterX()) {
                     return new Node(this, LEFT, getMin(), len);
                 } else {
-                    return new Node(this, RIGHT,
-                            new Vector3(getMin()).addX(-lenX), len);
+                    return new Node(this, RIGHT,new Vector3(getMin()).addX(-lenX), len);
                 }
             } else if (lenY < lenZ) {
                 final Vector3 len = recycle(tempLen.set(lenX, lenY * 2, lenZ));
 
-                if (pos.getY() >= getCenterY()) {
+                if (obj.getY() >= getCenterY()) {
                     return new Node(this, LEFT, getMin(), len);
                 } else {
-                    return new Node(this, RIGHT,
-                            new Vector3(getMin()).addY(-lenY), len);
+                    return new Node(this, RIGHT,new Vector3(getMin()).addY(-lenY), len);
 
                 }
             } else {
                 final Vector3 len = recycle(tempLen.set(lenX, lenY, lenZ * 2));
 
-                if (pos.getZ() >= getCenterZ()) {
+                if (obj.getZ() >= getCenterZ()) {
                     return new Node(this, LEFT, getMin(), len);
                 } else {
-                    return new Node(this, RIGHT,
-                            new Vector3(getMin()).addZ(-lenZ), len);
+                    return new Node(this, RIGHT,new Vector3(getMin()).addZ(-lenZ), len);
 
                 }
             }

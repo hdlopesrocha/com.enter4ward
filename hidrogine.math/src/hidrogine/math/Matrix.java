@@ -505,7 +505,7 @@ public class Matrix {
     public Matrix createBillboard(Vector3 objectPosition,
             Vector3 cameraPosition, Vector3 cameraUpVector,
             Vector3 cameraForwardVector) {
-        Vector3 translation = new Vector3(objectPosition)
+        Vector3 translation = Vector3.temp().set(objectPosition)
                 .subtract(cameraPosition);
         Vector3 backwards, right, up;
         backwards = Vector3.temp().set(translation).normalize();

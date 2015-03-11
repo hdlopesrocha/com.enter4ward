@@ -235,7 +235,6 @@ public class Model3D implements IModel3D {
 				if(mat!=null){
 					shader.setModelMatrix(mat);	
 					sg.draw(shader);
-					shader.setModelMatrix(Matrix.IDENTITY);	
 				}
 			}
 		}
@@ -251,7 +250,7 @@ public class Model3D implements IModel3D {
 	public void drawBoxs(ShaderProgram shader) {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		for (Group g : groups) {
-			box.draw(shader, Vector3.temp().set(g.getCenter()).subtract(g.getRadius()), Vector3.temp().set(g.getCenter()).add(g.getRadius()));
+			box.draw(shader, Vector3.temp().set(g).subtract(g.getRadius()), Vector3.temp().set(g).add(g.getRadius()));
 		}
 	}
 
