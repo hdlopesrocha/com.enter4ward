@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.StringTokenizer;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class Controller.
  */
@@ -27,8 +28,6 @@ public abstract class Controller {
      */
     public Controller() {
     }
-
-
 
     /**
      * Read.
@@ -70,8 +69,13 @@ public abstract class Controller {
     public final Request getRequest() {
         return request;
     }
-    
-    public String getNav(){
+
+    /**
+     * Gets the nav.
+     *
+     * @return the nav
+     */
+    public String getNav() {
         return server.getNav(request.getFile());
     }
 

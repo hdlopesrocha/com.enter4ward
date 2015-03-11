@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import java.util.List;
 import org.json.JSONObject;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class WaveFront.
  */
@@ -20,8 +21,6 @@ public class WaveFront {
 
     /** The Constant TRIANGLE. */
     private static final int TRIANGLE = 3;
-
-
 
     /** The groups. */
     private Map<String, Group> groups;
@@ -34,7 +33,6 @@ public class WaveFront {
 
     /** The textures. */
     private List<String> textures;
-
 
     /**
      * Instantiates a new wave front.
@@ -102,18 +100,16 @@ public class WaveFront {
                         MaterialGroup mg = cg.getMaterialGroup(materialName);
 
                         if (mg.addIndex(vpn)) {
-                            mg.addPosition(positions,
-                                    Integer.valueOf(token[0]));
-                            if(token[1].length()>0){
-                                mg.addTexture(textures, Integer.valueOf(token[1]));
-                            }
-                            else{
+                            mg.addPosition(positions, Integer.valueOf(token[0]));
+                            if (token[1].length() > 0) {
+                                mg.addTexture(textures,
+                                        Integer.valueOf(token[1]));
+                            } else {
                                 mg.addTexture();
                             }
-                            if(token[2].length()>0){
+                            if (token[2].length() > 0) {
                                 mg.addNormal(normals, Integer.valueOf(token[2]));
-                            }
-                            else{
+                            } else {
                                 mg.addNormal();
                             }
                         }
@@ -123,7 +119,6 @@ public class WaveFront {
         }
         reader.close();
     }
-
 
     /**
      * Simplify.
@@ -149,7 +144,6 @@ public class WaveFront {
         return temp;
 
     }
-
 
     /**
      * Groups to json.

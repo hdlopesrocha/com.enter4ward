@@ -22,7 +22,7 @@ public class Space {
         if (r == null) {
             r = new Vector3(v);
             lenghts.put(s, r);
-            System.out.println(s);
+     //       System.out.println(s);
             ++LENS;
         }
 
@@ -54,7 +54,7 @@ public class Space {
          * Instantiates a new space node.
          */
         public Node() {
-            super(new Vector3(0, 0, 0), new Vector3(1, 1, 1));
+            super(new Vector3(0), new Vector3(1));
             this.parent = null;
         }
 
@@ -125,11 +125,14 @@ public class Space {
          *            the len z
          * @return the int
          */
-        public int containsIndex(final BoundingSphere sphere, final float lenX,
-                final float lenY, final float lenZ) {
+        public int containsIndex(final BoundingSphere sphere) {
             final Vector3 sc = sphere.getCenter();
             final float sr = sphere.getRadius();
-
+            final float lenX = getLengthX();
+            final float lenY = getLengthY();
+            final float lenZ = getLengthZ();
+            
+            
             // skip 4 main planes for each child
 
             // if(onlyContains(sphere)){
@@ -224,11 +227,14 @@ public class Space {
          * @return the space node
          */
 
-        private Node build(final int i, final float lenX, final float lenY,
-                final float lenZ) {
+        private Node build(final int i) {
 
+            final float lenX = getLengthX();
+            final float lenY = getLengthY();
+            final float lenZ = getLengthZ();
+            
             if (lenX >= lenY && lenX >= lenZ) {
-                Vector3 len = recycle(TEMP_LEN.set(getLengthX() * 0.5f,
+                final Vector3 len = recycle(TEMP_LEN.set(getLengthX() * 0.5f,
                         getLengthY(), getLengthZ()));
 
                 if (i == LEFT) {
@@ -239,8 +245,7 @@ public class Space {
                     return new Node(this, new Vector3(getMin()).addX(lenX/4), len);
                 }
             } else if (lenY >= lenZ) {
-                Vector3 len = recycle(TEMP_LEN.set(getLengthX(),
-                        getLengthY() * 0.5f, getLengthZ()));
+                final Vector3 len = recycle(TEMP_LEN.set(getLengthX(), getLengthY() * 0.5f, getLengthZ()));
 
                 if (i == LEFT) {
                     return new Node(this, getMin(), len);
@@ -250,7 +255,7 @@ public class Space {
                     return new Node(this, new Vector3(getMin()).addY(lenY/4), len);
                 }
             } else {
-                Vector3 len = recycle(TEMP_LEN.set(getLengthX(), getLengthY(),
+                final Vector3 len = recycle(TEMP_LEN.set(getLengthX(), getLengthY(),
                         getLengthZ() * 0.5f));
                 if (i == LEFT) {
                     return new Node(this, getMin(), len);
@@ -275,21 +280,23 @@ public class Space {
          *            the len z
          * @return the child
          */
-        public Node getChild(int i, float lenX, float lenY, float lenZ) {
+        public Node getChild(int i) {
+            
+            
             switch (i) {
             case LEFT:
                 if (left == null) {
-                    left = build(i, lenX, lenY, lenZ);
+                    left = build(i);
                 }
                 return left;
             case CENTER:
                 if (center == null) {
-                    center = build(i, lenX, lenY, lenZ);
+                    center = build(i);
                 }
                 return center;
             case RIGHT:
                 if (right == null) {
-                    right = build(i, lenX, lenY, lenZ);
+                    right = build(i);
                 }
                 return right;
             default:
@@ -328,14 +335,14 @@ public class Space {
          *            the obj
          * @return the space node
          */
-        private Node expandAux(BoundingSphere obj) {
-            Vector3 pos = obj.getCenter();
-            float lenX = getLengthX();
-            float lenY = getLengthY();
-            float lenZ = getLengthZ();
+        private Node expandAux(final BoundingSphere obj) {
+            final Vector3 pos = obj.getCenter();
+            final float lenX = getLengthX();
+            final float lenY = getLengthY();
+            final float lenZ = getLengthZ();
 
             if (lenX < lenY && lenX < lenZ) {
-                Vector3 len = recycle(TEMP_LEN.set(lenX * 2, lenY, lenZ));
+                final Vector3 len = recycle(TEMP_LEN.set(lenX * 2, lenY, lenZ));
 
                 if (pos.getX() >= getCenterX()) {
                     return new Node(this, LEFT, getMin(), len);
@@ -343,7 +350,7 @@ public class Space {
                     return new Node(this, RIGHT, new Vector3(getMin()).addX(-lenX), len);
                 }
             } else if (lenY < lenZ) {
-                Vector3 len = recycle(TEMP_LEN.set(lenX, lenY * 2, lenZ));
+                final Vector3 len = recycle(TEMP_LEN.set(lenX, lenY * 2, lenZ));
 
                 if (pos.getY() >= getCenterY()) {
                     return new Node(this, LEFT, getMin(), len);
@@ -352,7 +359,7 @@ public class Space {
 
                 }
             } else {
-                Vector3 len = recycle(TEMP_LEN.set(lenX, lenY, lenZ * 2));
+                final Vector3 len = recycle(TEMP_LEN.set(lenX, lenY, lenZ * 2));
 
                 if (pos.getZ() >= getCenterZ()) {
                     return new Node(this, LEFT, getMin(), len);
@@ -548,12 +555,10 @@ public class Space {
             while (true) {
 
                 if (node.canSplit()) {
-                    float lenX = node.getLengthX();
-                    float lenY = node.getLengthY();
-                    float lenZ = node.getLengthZ();
-                    int i = node.containsIndex(sph, lenX, lenY, lenZ);
+             
+                    int i = node.containsIndex(sph);
                     if (i >= 0) {
-                        node = node.getChild(i, lenX, lenY, lenZ);
+                        node = node.getChild(i);
                     } else {
                         break;
                     }

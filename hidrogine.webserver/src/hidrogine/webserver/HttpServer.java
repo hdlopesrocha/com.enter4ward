@@ -16,6 +16,7 @@ import java.util.TreeMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class HttpServer.
  */
@@ -27,6 +28,7 @@ public class HttpServer {
     /** The port. */
     private int port;
 
+    /** The session manager. */
     private SessionManager sessionManager;
     /** The resources. */
     private TreeMap<String, Controller> resources;
@@ -199,7 +201,15 @@ public class HttpServer {
         return res;
     }
 
-    
+    /**
+     * Gets the call.
+     *
+     * @param url
+     *            the url
+     * @return the call
+     * @throws NoSuchMethodException
+     *             the no such method exception
+     */
     public Call getCall(String url) throws NoSuchMethodException {
 
         StringTokenizer ssPage = new StringTokenizer(url, "/");
@@ -218,35 +228,30 @@ public class HttpServer {
             controller = FileController.class;
             method = FileController.class.getMethod("process");
         }
-        return new Call(controller,method);
+        return new Call(controller, method);
     }
-    
+
     /**
      * Gets the page.
-     * 
-     * @param socket
      *
-     * @param url
-     *            the url
+     * @param socket
+     *            the socket
+     * @param i
+     *            the i
      * @return the page
-     * @throws IOException
-     * @throws SecurityException
-     * @throws NoSuchMethodException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     * @throws InvocationTargetException
-     * @throws IllegalArgumentException
+     * @throws Exception
+     *             the exception
      */
     public final boolean process(Socket socket, int i) throws Exception {
         try {
-            System.out.println("S:"+socket.getPort()+"|"+i);
+            System.out.println("S:" + socket.getPort() + "|" + i);
             Request request = new Request(socket, this);
             String url = request.getFile().substring(1);
             Call call = getCall(url);
-            Response response = call.invoke(this,request);
+            Response response = call.invoke(this, request);
             response.send(socket, request.getSession());
             return request.keepAlive();
-        }catch(IOException e){
+        } catch (IOException e) {
             return false;
         }
     }
