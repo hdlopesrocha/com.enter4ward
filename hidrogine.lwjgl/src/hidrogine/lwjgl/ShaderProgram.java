@@ -210,18 +210,18 @@ public class ShaderProgram {
 		matrix44Buffer.flip();
 		glUniformMatrix4ARB(viewMatrixLocation, false, matrix44Buffer);
 
-		Vector3 cameraPosition = camera.getPosition();
+		final Vector3 cameraPosition = camera.getPosition();
 		glUniform3fARB(cameraPositionLocation, cameraPosition.getX(),
 				cameraPosition.getY(), cameraPosition.getZ());
 
 		for (int i = 0; i < 10; ++i) {
-			Vector3 position = lightPosition[i];
+			final Vector3 position = lightPosition[i];
 			if (position != null) {
 				glUniform3fARB(lightPositionLocation[i], position.getX(),
 						position.getY(), position.getZ());
 			}
 
-			Vector3 specularColor = lightSpecularColor[i];
+			final Vector3 specularColor = lightSpecularColor[i];
 			if (specularColor != null) {
 				glUniform3fARB(lightSpecularColorLocation[i],
 						specularColor.getX(), specularColor.getY(),

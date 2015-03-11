@@ -352,9 +352,10 @@ public class Matrix {
      *            the rotation
      * @return the matrix
      */
-    public Matrix transform(Matrix value, Quaternion rotation) {
-        Matrix matrix = createFromQuaternion(rotation);
-        return new Matrix(value).multiply(matrix);
+    private static final Matrix TEMP_QUATERNION= new Matrix();
+
+    public Matrix transform(Quaternion rotation) {
+        return multiply(TEMP_QUATERNION.createFromQuaternion(rotation));
     }
 
     /**
@@ -1224,9 +1225,9 @@ public class Matrix {
      * @param matrix
      *            the matrix
      */
-    public void set(Matrix matrix) {
+    public Matrix set(Matrix matrix) {
         System.arraycopy(matrix.M, 0, M, 0, 16);
-
+        return this;
     }
 
     /**

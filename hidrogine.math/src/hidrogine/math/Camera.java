@@ -4,7 +4,7 @@ package hidrogine.math;
 /**
  * The Class Camera.
  */
-public class Camera {
+public class Camera extends BoundingFrustum{
 
     /** The matrix. */
     private Quaternion rotation = new Quaternion();
@@ -18,6 +18,11 @@ public class Camera {
     /** The near. */
     private float far, near;
 
+    private static final Vector3 TEMP_NEGATIVE = new Vector3();
+    private static final Matrix TEMP_TRANSLATION = new Matrix();
+    private static final Matrix TEMP_MVP = new Matrix();
+
+    
     /**
      * Gets the matrix.
      *
@@ -25,9 +30,8 @@ public class Camera {
      */
     public Matrix getViewMatrix() {
 
-        Vector3 negativePos = new Vector3(position).multiply(-1f);
-        return new Matrix().identity().createTranslation(negativePos)
-                .multiply(new Matrix().createFromQuaternion(rotation));
+        TEMP_NEGATIVE.set(position).multiply(-1f);
+        return TEMP_TRANSLATION.identity().createTranslation(TEMP_NEGATIVE).transform(rotation);
 
     }
 
@@ -36,10 +40,10 @@ public class Camera {
      *
      * @return the bounding frustum
      */
-    public BoundingFrustum getBoundingFrustum() {
-        return new BoundingFrustum(
-                new Matrix(getViewMatrix()).multiply(getProjectionMatrix()));
-
+    public void update() {
+        TEMP_MVP.set(getViewMatrix()).multiply(getProjectionMatrix());
+        createPlanes(TEMP_MVP);
+        createCorners();
     }
 
     /**

@@ -58,8 +58,6 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	/** The draws. */
 	public static int draws = 0;
 
-	/** The frustum. */
-	private BoundingFrustum frustum;
 
 	/**
 	 * Instantiates a new the quad example moving.
@@ -104,24 +102,24 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		/*
 		 * moving = new MyObject3D(new Vector3(0, 0, 0), box) { };
 		 */
-		obj1.insert(space);
+//		obj1.insert(space);
 		/*
 		 * moving.insert(space);
 		 */
 		// new MyCar3D(new Vector3(-4, 4, 25), car) {}.insert(space);
 
 		Random rand = new Random();
-		
+		/*
 		  for (int i = 0; i < 128; ++i) { objects.add((MyObject3D) new
 		  MyObject3D(new Vector3( rand.nextInt(40) - 20, 10f, rand.nextInt(40) -
 		  20), box) { }.insert(space)); }
-		 
+		 */
 		
 		
-		/*
+		
 		int size = 8 * 1024;
 		for (int i = 0; i < 1000000; ++i) {
-			if(i%1000==0)
+			if(i%10000==0)
 				System.out.println(i);
 			new MyObject3D(new Vector3(rand.nextInt(size) - size / 2,
 					rand.nextInt(size) - size / 2, rand.nextInt(size) - size / 2), box)
@@ -129,7 +127,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 			
 			
 		}
-*/
+
 		// objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 64, 0), box)
 		// {}.insert(space));
 		// objects.add((MyObject3D) new MyObject3D(new Vector3(-10, 68, 0), box)
@@ -157,6 +155,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		getProgram().setDiffuseColor(1, 1, 1);
 		getProgram().setMaterialShininess(1000);
 		getProgram().setLightColor(0, new Vector3(1, 1, 1));
+		getProgram().setLightPosition(0, new Vector3(128, 128, 128));
 
 	}
 
@@ -217,7 +216,6 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			camera.move(0, 0, -sense);
 		}
-		getProgram().setLightPosition(0, new Vector3(128, 128, 128));
 		getProgram().setTime(time);
 		getProgram().update(camera);
 	}
@@ -227,7 +225,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	 */
 	public void setTitle() {
 		float mb = 1024 * 1024;
-		System.gc();
+	//	System.gc();
 		// Getting the runtime reference from system
 		Runtime runtime = Runtime.getRuntime();
 
@@ -249,7 +247,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 
 	@Override
 	public void draw() {
-		frustum = camera.getBoundingFrustum();
+		camera.update();
 
 		draws = 0;
 		getProgram().setModelMatrix(IDENTITY);
@@ -260,11 +258,11 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 
 		// grid.draw(program);
 		getProgram().setOpaque(true);
-		space.handleVisibleObjects(frustum, this);
+		space.handleVisibleObjects(camera, this);
 		getProgram().setOpaque(false);
-		space.handleVisibleObjects(frustum, this);
+		space.handleVisibleObjects(camera, this);
 
-		space.handleVisibleNodes(frustum, this);
+		space.handleVisibleNodes(camera, this);
 		getProgram().setMaterialAlpha(1f);
 		getProgram().setAmbientColor(0f, 0f, 0f);
 		GL20.glUseProgram(0);
@@ -283,7 +281,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		if (storedObjectsCount > 0) {
 			getProgram().setAmbientColor(0f, 0f, 1f);
 		} else {
-			ContainmentType ct = frustum.contains((BoundingBox) obj);
+			ContainmentType ct = camera.contains((BoundingBox) obj);
 			if (ct == ContainmentType.Contains) {
 				getProgram().setAmbientColor(0f, 1f, 0f);
 			} else {
@@ -310,7 +308,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	public void onObjectVisible(Object obj) {
 		// TODO Auto-generated method stub
 		Object3D obj3d = (Object3D) obj;
-		obj3d.draw(getProgram(), frustum);
+		obj3d.draw(getProgram(), camera);
 		// sphere.draw(getProgram(), obj3d);
 	}
 }
