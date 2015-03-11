@@ -54,24 +54,25 @@ public class DrawableBox {
 		obj.buildBuffer();
 	}
 
+	
 	/**
 	 * Draw.
 	 *
 	 * @param shader
 	 *            the shader
 	 */
-	public final void draw(final ShaderProgram shader, Vector3 min,
-			Vector3 max) {
+	public final void draw(final ShaderProgram shader, final Vector3 min,
+			final Vector3 max) {
 		//System.out.println(min.toString()+" : "+max.toString());
 		shader.setMaterialAlpha(0.2f);
 
 		GL11.glDisable(GL11.GL_CULL_FACE);
-		Vector3 dim = new Vector3(max).subtract(min);
-		shader.setModelMatrix(new Matrix().createScale(dim).multiply(new Matrix().createTranslation(min)));
+		final Vector3 dim = Vector3.temp().set(max).subtract(min);
+
+		shader.setModelMatrix(Matrix.temp().createScale(dim).translate(min));
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 		obj.draw(shader);
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
-		shader.setModelMatrix(new Matrix().identity());
 
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		

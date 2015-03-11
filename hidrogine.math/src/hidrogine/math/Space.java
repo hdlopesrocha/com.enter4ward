@@ -56,7 +56,7 @@ public class Space {
         static final int CENTER = 2;
 
         /** The container. */
-        private List<Object> container;
+        private ArrayList<Object> container;
 
         /** The parent. */
         private Node parent, left, right, center;
@@ -172,8 +172,9 @@ public class Space {
          */
         public void containerAdd(final Object obj) {
             if (container == null)
-                container = new ArrayList<Object>();
+                container = new ArrayList<Object>(1);
             container.add(obj);
+            container.trimToSize();
         }
 
         /**

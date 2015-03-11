@@ -15,9 +15,7 @@ import hidrogine.math.Space;
 public class MyCar3D extends Object3D {
 
 	private float time;
-	private static final Matrix IDENTITY = new Matrix().identity();
 	/** The Constant ROTATION. */
-	private static final Matrix ROTATION = new Matrix();
 	private static final DrawableSphere sphere = new DrawableSphere();
 
 	public MyCar3D(Vector3 position, Model3D model) {
@@ -31,6 +29,8 @@ public class MyCar3D extends Object3D {
 		update(space);
 
 	};
+	
+
 
 	@Override
 	public void draw(final ShaderProgram program, final BoundingFrustum frustum) {
@@ -53,7 +53,7 @@ public class MyCar3D extends Object3D {
 						program.reset();
 						b.bind(program);
 						final Material m = b.getMaterial();
-						final Matrix matrix = new Matrix().identity();
+						final Matrix matrix = Matrix.temp().identity();
 
 						if (m.getName().equals("c0")) {
 							program.setDiffuseColor(
@@ -67,7 +67,7 @@ public class MyCar3D extends Object3D {
 							final Vector3 center = new Vector3(g.getCenter())
 									.multiply(-1f);
 							matrix.translate(center).multiply(
-									ROTATION.createRotationX(time * 8));
+									Matrix.temp().createRotationX(time * 8));
 							center.multiply(-1f);
 							matrix.translate(center);
 						}
@@ -77,7 +77,7 @@ public class MyCar3D extends Object3D {
 						b.draw(program);
 					}
 				}
-				program.setModelMatrix(IDENTITY);
+				program.setModelMatrix(Matrix.IDENTITY);
 				sphere.draw(program, groupSphere);
 
 			}

@@ -28,7 +28,6 @@ import org.lwjgl.opengl.GL11;
  */
 public class Model3D implements IModel3D {
 
-	private static final Matrix IDENTITY = new Matrix().identity(); 
 
 	/** The groups. */
 	private List<Group> groups = new ArrayList<Group>();
@@ -236,7 +235,7 @@ public class Model3D implements IModel3D {
 				if(mat!=null){
 					shader.setModelMatrix(mat);	
 					sg.draw(shader);
-					shader.setModelMatrix(IDENTITY);	
+					shader.setModelMatrix(Matrix.IDENTITY);	
 				}
 			}
 		}
@@ -252,7 +251,7 @@ public class Model3D implements IModel3D {
 	public void drawBoxs(ShaderProgram shader) {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		for (Group g : groups) {
-			box.draw(shader, new Vector3(g.getCenter()).subtract(new Vector3(g.getRadius())), new Vector3(g.getCenter()).add(new Vector3(g.getRadius())));
+			box.draw(shader, Vector3.temp().set(g.getCenter()).subtract(g.getRadius()), Vector3.temp().set(g.getCenter()).add(g.getRadius()));
 		}
 	}
 

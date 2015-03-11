@@ -32,8 +32,6 @@ import org.lwjgl.opengl.GL20;
 public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		ObjectCollisionHandler, VisibleNodeHandler {
 
-	/** The Constant IDENTITY. */
-	private static final Matrix IDENTITY = new Matrix().identity();
 
 	/** The box. */
 	private DrawableSphere sphere;
@@ -102,18 +100,18 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		/*
 		 * moving = new MyObject3D(new Vector3(0, 0, 0), box) { };
 		 */
-//		obj1.insert(space);
+		//obj1.insert(space);
 		/*
 		 * moving.insert(space);
 		 */
 		// new MyCar3D(new Vector3(-4, 4, 25), car) {}.insert(space);
 
 		Random rand = new Random();
-		/*
+/*		
 		  for (int i = 0; i < 128; ++i) { objects.add((MyObject3D) new
 		  MyObject3D(new Vector3( rand.nextInt(40) - 20, 10f, rand.nextInt(40) -
 		  20), box) { }.insert(space)); }
-		 */
+	*/	 
 		
 		
 		
@@ -250,7 +248,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		camera.update();
 
 		draws = 0;
-		getProgram().setModelMatrix(IDENTITY);
+		getProgram().setModelMatrix(Matrix.IDENTITY);
 		getProgram().use();
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 

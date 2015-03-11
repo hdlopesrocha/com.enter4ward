@@ -18,13 +18,16 @@ public abstract class IObject3D {
     /** The node. */
     private Space.Node node;
 
+    private static final BoundingSphere TEMP_SPHERE = new BoundingSphere();
+
+    
     /**
      * Gets the model matrix.
      *
      * @return the model matrix
      */
     public Matrix getModelMatrix() {
-        return new Matrix().createFromQuaternion(rotation).translate(position);
+        return Matrix.temp().createFromQuaternion(rotation).translate(position);
     }
 
     /**
@@ -72,10 +75,10 @@ public abstract class IObject3D {
     public BoundingSphere getBoundingSphere() {
         // return new
         // Vector3(model.getContainer().getCenter()).transform(rotation).add(position);
-        return new BoundingSphere(new Vector3(model.getContainer().getCenter())
-                .transform(rotation).add(position), model.getContainer()
+        TEMP_SPHERE.getCenter().set(model.getContainer().getCenter()).transform(rotation).add(position);
+        TEMP_SPHERE.setRadius(model.getContainer()
                 .getRadius());
-
+        return TEMP_SPHERE;
     }
 
     /**

@@ -39,6 +39,7 @@ public class DrawableSphere {
 		obj.buildBuffer();
 	}
 
+	
 	/**
 	 * Draw.
 	 *
@@ -50,11 +51,11 @@ public class DrawableSphere {
 		shader.setAmbientColor(1, 1, 1);
 		shader.setMaterialAlpha(0.2f);
 		GL11.glDisable(GL11.GL_CULL_FACE);
-		shader.setModelMatrix(new Matrix().createScale(sph.getRadius()).multiply(new Matrix().createTranslation(sph.getCenter())));
+		shader.setModelMatrix(Matrix.temp().createScale(sph.getRadius()).translate(sph.getCenter()));
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 		obj.draw(shader);
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
-		shader.setModelMatrix(new Matrix().identity());
+	
 
 		GL11.glEnable(GL11.GL_CULL_FACE);
 

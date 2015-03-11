@@ -19,8 +19,6 @@ public class Camera extends BoundingFrustum{
     private float far, near;
 
     private static final Vector3 TEMP_NEGATIVE = new Vector3();
-    private static final Matrix TEMP_TRANSLATION = new Matrix();
-    private static final Matrix TEMP_MVP = new Matrix();
 
     
     /**
@@ -31,7 +29,7 @@ public class Camera extends BoundingFrustum{
     public Matrix getViewMatrix() {
 
         TEMP_NEGATIVE.set(position).multiply(-1f);
-        return TEMP_TRANSLATION.identity().createTranslation(TEMP_NEGATIVE).transform(rotation);
+        return Matrix.temp().identity().createTranslation(TEMP_NEGATIVE).transform(rotation);
 
     }
 
@@ -41,8 +39,10 @@ public class Camera extends BoundingFrustum{
      * @return the bounding frustum
      */
     public void update() {
-        TEMP_MVP.set(getViewMatrix()).multiply(getProjectionMatrix());
-        createPlanes(TEMP_MVP);
+        Matrix mvp = Matrix.temp();
+    	
+        mvp.set(getViewMatrix()).multiply(getProjectionMatrix());
+        createPlanes(mvp);
         createCorners();
     }
 
@@ -100,10 +100,11 @@ public class Camera extends BoundingFrustum{
      * @param up
      *            the up
      */
+    
+    
     public void lookAt(Vector3 pos, Vector3 lookAt, Vector3 up) {
         position.set(pos);
-        Matrix mat = new Matrix().createLookAt(new Vector3(), new Vector3(
-                lookAt).subtract(pos).normalize(), up);
+        Matrix mat = Matrix.temp().createLookAt(new Vector3(), new Vector3(lookAt).subtract(pos).normalize(), up);
 
         rotation.createFromRotationMatrix(mat).normalize();
     }
@@ -117,7 +118,7 @@ public class Camera extends BoundingFrustum{
      *            the h
      */
     public void update(int w, int h) {
-        projectionMatrix = new Matrix().createPerspectiveFieldOfView(
+        projectionMatrix.createPerspectiveFieldOfView(
                 (float) Math.toRadians(45f), (float) w / (float) h, near, far);
     }
 
@@ -168,16 +169,19 @@ public class Camera extends BoundingFrustum{
      * @param right
      *            the left
      */
+    
+    
+    
     public void move(float front, float down, float right) {
-        Matrix trans = new Matrix().createFromQuaternion(rotation).invert();
+        final Matrix trans = Matrix.temp().createFromQuaternion(rotation).invert();
         if (front != 0) {
-            position.add(new Vector3(trans.getForward()).multiply(front));
+            position.addMultiply(trans.getForward(),front);
         }
         if (down != 0) {
-            position.add(new Vector3(trans.getDown()).multiply(down));
+            position.addMultiply(trans.getDown(),down);
         }
         if (right != 0) {
-            position.add(new Vector3(trans.getLeft()).multiply(right));
+            position.addMultiply(trans.getLeft(),right);
         }
     }
 

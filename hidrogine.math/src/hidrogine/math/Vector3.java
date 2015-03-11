@@ -4,7 +4,29 @@ package hidrogine.math;
 /**
  * The Class Vector3.
  */
-public class Vector3{
+public class Vector3 {
+
+    /** The Constant TEMP. */
+    static final Vector3[] TEMP = new Vector3[128];
+
+    /** The temp ptr. */
+    static int TEMP_PTR = 0;
+    static {
+        for (int i = 0; i < 128; ++i) {
+            TEMP[i] = new Vector3();
+        }
+    }
+
+    /**
+     * Temp.
+     *
+     * @return the matrix
+     */
+    public static Vector3 temp() {
+        Vector3 ret = TEMP[TEMP_PTR];
+        TEMP_PTR = (TEMP_PTR + 1) % 128;
+        return ret;
+    }
 
     /** The x. */
     private float x;
@@ -261,6 +283,34 @@ public class Vector3{
         x -= vec.x;
         y -= vec.y;
         z -= vec.z;
+        return this;
+    }
+
+    /**
+     * Subtract.
+     *
+     * @param vec
+     *            the vec
+     * @return the vector3
+     */
+    public final Vector3 subtract(final float vec) {
+        x -= vec;
+        y -= vec;
+        z -= vec;
+        return this;
+    }
+
+    /**
+     * Adds the.
+     *
+     * @param vec
+     *            the vec
+     * @return the vector3
+     */
+    public final Vector3 add(final float vec) {
+        x += vec;
+        y += vec;
+        z += vec;
         return this;
     }
 
@@ -561,6 +611,5 @@ public class Vector3{
 
         return addMultiply(normal, -2.0f * dot(normal));
     }
-
 
 }
