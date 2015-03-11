@@ -113,8 +113,8 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		Random rand = new Random();
 		
 		  for (int i = 0; i < 128; ++i) { objects.add((MyObject3D) new
-		  MyObject3D(new Vector3( rand.nextInt(64) - 32, 10f, rand.nextInt(64) -
-		  32), box) { }.insert(space)); }
+		  MyObject3D(new Vector3( rand.nextInt(40) - 20, 10f, rand.nextInt(40) -
+		  20), box) { }.insert(space)); }
 		 
 		
 		
@@ -268,7 +268,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		getProgram().setMaterialAlpha(1f);
 		getProgram().setAmbientColor(0f, 0f, 0f);
 		GL20.glUseProgram(0);
-	//	setTitle();
+		setTitle();
 	}
 
 	/*

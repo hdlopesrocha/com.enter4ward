@@ -10,19 +10,30 @@ import java.util.TreeMap;
  */
 public class Space {
 
+    /** The lenghts. */
     private static TreeMap<String, Vector3> lenghts = new TreeMap<String, Vector3>();
+
+    /** The Constant TEMP_LEN. */
     private static final Vector3 TEMP_LEN = new Vector3();
+
+    /** The lens. */
     public static int LENS = 0;
-    
-    
+
+    /**
+     * Recycle.
+     *
+     * @param v
+     *            the v
+     * @return the vector3
+     */
     private static Vector3 recycle(final Vector3 v) {
         String s = v.toString();
-        
+
         Vector3 r = lenghts.get(s);
         if (r == null) {
             r = new Vector3(v);
             lenghts.put(s, r);
-     //       System.out.println(s);
+            // System.out.println(s);
             ++LENS;
         }
 
@@ -63,12 +74,8 @@ public class Space {
          *
          * @param parent
          *            the parent
-         * @param minX
-         *            the min x
-         * @param minY
-         *            the min y
-         * @param minZ
-         *            the min z
+         * @param min
+         *            the min
          * @param len
          *            the len
          */
@@ -84,12 +91,8 @@ public class Space {
          *            the node
          * @param i
          *            the i
-         * @param minX
-         *            the min x
-         * @param minY
-         *            the min y
-         * @param minZ
-         *            the min z
+         * @param min
+         *            the min
          * @param len
          *            the len
          */
@@ -117,12 +120,6 @@ public class Space {
          *
          * @param sphere
          *            the sphere
-         * @param lenX
-         *            the len x
-         * @param lenY
-         *            the len y
-         * @param lenZ
-         *            the len z
          * @return the int
          */
         public int containsIndex(final BoundingSphere sphere) {
@@ -131,8 +128,7 @@ public class Space {
             final float lenX = getLengthX();
             final float lenY = getLengthY();
             final float lenZ = getLengthZ();
-            
-            
+
             // skip 4 main planes for each child
 
             // if(onlyContains(sphere)){
@@ -218,12 +214,6 @@ public class Space {
          *
          * @param i
          *            the i
-         * @param lenX
-         *            the len x
-         * @param lenY
-         *            the len y
-         * @param lenZ
-         *            the len z
          * @return the space node
          */
 
@@ -232,37 +222,44 @@ public class Space {
             final float lenX = getLengthX();
             final float lenY = getLengthY();
             final float lenZ = getLengthZ();
-            
+
             if (lenX >= lenY && lenX >= lenZ) {
-                final Vector3 len = recycle(TEMP_LEN.set(getLengthX() * 0.5f,
-                        getLengthY(), getLengthZ()));
+                final Vector3 len = recycle(TEMP_LEN.set(lenX * 0.5f, lenY,
+                        lenZ));
 
                 if (i == LEFT) {
                     return new Node(this, getMin(), len);
                 } else if (i == RIGHT) {
-                    return new Node(this, new Vector3(getMin()).addX(lenX/2), len);
+                    return new Node(this, new Vector3(getMin()).addX(lenX / 2),
+                            len);
                 } else {
-                    return new Node(this, new Vector3(getMin()).addX(lenX/4), len);
+                    return new Node(this, new Vector3(getMin()).addX(lenX / 4),
+                            len);
                 }
             } else if (lenY >= lenZ) {
-                final Vector3 len = recycle(TEMP_LEN.set(getLengthX(), getLengthY() * 0.5f, getLengthZ()));
+                final Vector3 len = recycle(TEMP_LEN.set(lenX, lenY * 0.5f,
+                        lenZ));
 
                 if (i == LEFT) {
                     return new Node(this, getMin(), len);
                 } else if (i == RIGHT) {
-                    return new Node(this, new Vector3(getMin()).addY(lenY/2), len);
+                    return new Node(this, new Vector3(getMin()).addY(lenY / 2),
+                            len);
                 } else {
-                    return new Node(this, new Vector3(getMin()).addY(lenY/4), len);
+                    return new Node(this, new Vector3(getMin()).addY(lenY / 4),
+                            len);
                 }
             } else {
-                final Vector3 len = recycle(TEMP_LEN.set(getLengthX(), getLengthY(),
-                        getLengthZ() * 0.5f));
+                final Vector3 len = recycle(TEMP_LEN.set(lenX, lenY,
+                        lenZ * 0.5f));
                 if (i == LEFT) {
                     return new Node(this, getMin(), len);
                 } else if (i == RIGHT) {
-                    return new Node(this, new Vector3(getMin()).addZ(lenZ/2), len);
+                    return new Node(this, new Vector3(getMin()).addZ(lenZ / 2),
+                            len);
                 } else {
-                    return new Node(this, new Vector3(getMin()).addZ(lenZ/4), len);
+                    return new Node(this, new Vector3(getMin()).addZ(lenZ / 4),
+                            len);
                 }
             }
         }
@@ -272,17 +269,10 @@ public class Space {
          *
          * @param i
          *            the i
-         * @param lenX
-         *            the len x
-         * @param lenY
-         *            the len y
-         * @param lenZ
-         *            the len z
          * @return the child
          */
         public Node getChild(int i) {
-            
-            
+
             switch (i) {
             case LEFT:
                 if (left == null) {
@@ -347,7 +337,8 @@ public class Space {
                 if (pos.getX() >= getCenterX()) {
                     return new Node(this, LEFT, getMin(), len);
                 } else {
-                    return new Node(this, RIGHT, new Vector3(getMin()).addX(-lenX), len);
+                    return new Node(this, RIGHT,
+                            new Vector3(getMin()).addX(-lenX), len);
                 }
             } else if (lenY < lenZ) {
                 final Vector3 len = recycle(TEMP_LEN.set(lenX, lenY * 2, lenZ));
@@ -355,7 +346,8 @@ public class Space {
                 if (pos.getY() >= getCenterY()) {
                     return new Node(this, LEFT, getMin(), len);
                 } else {
-                    return new Node(this, RIGHT, new Vector3(getMin()).addY(-lenY), len);
+                    return new Node(this, RIGHT,
+                            new Vector3(getMin()).addY(-lenY), len);
 
                 }
             } else {
@@ -364,7 +356,8 @@ public class Space {
                 if (pos.getZ() >= getCenterZ()) {
                     return new Node(this, LEFT, getMin(), len);
                 } else {
-                    return new Node(this, RIGHT, new Vector3(getMin()).addZ(-lenZ), len);
+                    return new Node(this, RIGHT,
+                            new Vector3(getMin()).addZ(-lenZ), len);
 
                 }
             }
@@ -555,7 +548,7 @@ public class Space {
             while (true) {
 
                 if (node.canSplit()) {
-             
+
                     int i = node.containsIndex(sph);
                     if (i >= 0) {
                         node = node.getChild(i);
