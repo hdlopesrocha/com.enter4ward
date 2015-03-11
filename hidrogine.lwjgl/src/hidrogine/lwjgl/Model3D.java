@@ -241,6 +241,9 @@ public class Model3D implements IModel3D {
 		
 	}
 
+	private static final Vector3 TEMP_MIN = new Vector3();
+	private static final Vector3 TEMP_MAX = new Vector3();
+
 	/**
 	 * Draw boxs.
 	 *
@@ -250,7 +253,7 @@ public class Model3D implements IModel3D {
 	public void drawBoxs(ShaderProgram shader) {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		for (Group g : groups) {
-			box.draw(shader, Vector3.temp().set(g).subtract(g.getRadius()), Vector3.temp().set(g).add(g.getRadius()));
+			box.draw(shader, TEMP_MIN.set(g).subtract(g.getRadius()), TEMP_MAX.set(g).add(g.getRadius()));
 		}
 	}
 

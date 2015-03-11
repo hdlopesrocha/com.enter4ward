@@ -30,7 +30,7 @@ public class MyCar3D extends Object3D {
 
 	};
 	
-
+private static final Vector3 TEMP_CENTER = new Vector3();
 
 	@Override
 	public void draw(final ShaderProgram program, final BoundingFrustum frustum) {
@@ -64,7 +64,7 @@ public class MyCar3D extends Object3D {
 						}
 						if (g.getName().startsWith("w")
 								&& g.getName().length() == 2) {
-							final Vector3 center = Vector3.temp().set(g)
+							final Vector3 center = TEMP_CENTER.set(g)
 									.multiply(-1f);
 							matrix.translate(center).multiply(
 									Matrix.temp().createRotationX(time * 8));

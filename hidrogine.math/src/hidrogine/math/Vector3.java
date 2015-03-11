@@ -22,7 +22,7 @@ public class Vector3 {
      *
      * @return the matrix
      */
-    public static Vector3 temp() {
+    public static Vector3 temp2() {
         Vector3 ret = TEMP[TEMP_PTR];
         TEMP_PTR = (TEMP_PTR + 1) % 128;
         return ret;
@@ -634,6 +634,10 @@ public class Vector3 {
         return this;
     }
 
+    private static final Vector3 TEMP_VEC1 = new Vector3();
+    private static final Vector3 TEMP_VEC2 = new Vector3();
+    private static final Vector3 TEMP_VEC3 = new Vector3();
+    
     /**
      * Intersection point.
      *
@@ -654,12 +658,11 @@ public class Vector3 {
         //
         // Note: N refers to the normal, d refers to the displacement. '.' means
         // dot product. '*' means cross product
-        float f = -a.getNormal().dot(
-                Vector3.temp().set(b.getNormal()).cross(c.getNormal()));
+        float f = -a.getNormal().dot(TEMP_VEC1.set(b.getNormal()).cross(c.getNormal()));
         set(b.getNormal()).cross(c.getNormal()).multiply(a.getDistance());
-        Vector3 v2 = Vector3.temp().set(c.getNormal()).cross(a.getNormal())
+        Vector3 v2 = TEMP_VEC2.set(c.getNormal()).cross(a.getNormal())
                 .multiply(b.getDistance());
-        Vector3 v3 = Vector3.temp().set(a.getNormal()).cross(b.getNormal())
+        Vector3 v3 = TEMP_VEC3.set(a.getNormal()).cross(b.getNormal())
                 .multiply(c.getDistance());
 
         return add(v2).add(v3).divide(f);

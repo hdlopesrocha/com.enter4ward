@@ -36,13 +36,14 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		// TODO Auto-generated constructor stub
 	}
 
+	private static final Vector3 TEMP_DIRECTION  =new Vector3();
+	
 	public void update(float delta_t, Space space) {
 		// System.out.println("update");
 		time = delta_t;
 		velocity.addMultiply(aceleration, delta_t);
 
-		Ray ray = new Ray(getPosition(),
-				Vector3.temp().set(velocity).multiply(delta_t));
+		Ray ray = new Ray(getPosition(),TEMP_DIRECTION.set(velocity).multiply(delta_t));
 		collided = false;
 		space.handleRayCollisions(ray, this);
 		
@@ -111,10 +112,10 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 				IntersectionInfo info = obj3D.closestTriangle(ray);
 				if(info!=null){
 				
-					Vector3 n = info.triangle.getNormal().normalize();
+					Vector3 normal = info.triangle.getNormal().normalize();
 					getPosition().addMultiply(ray.getDirection(), info.distance)
-							.addMultiply(n, 0.01f);
-					ray.getDirection().add(n.multiply(-ray.getDirection().dot(n)));
+							.addMultiply(normal, 0.01f);
+					ray.getDirection().add(normal.multiply(-ray.getDirection().dot(normal)));
 					velocity.set(ray.getDirection()).multiply(vel / delta);
 					time -= info.distance / time;
 					collided = true;

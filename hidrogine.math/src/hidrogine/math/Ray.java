@@ -197,6 +197,7 @@ public class Ray {
         }
         return null;
     }
+    private static final Vector3 TEMP_INTERSECTION = new Vector3();
 
     /**
      * Intersects.
@@ -211,7 +212,7 @@ public class Ray {
         // System.out.println("this:"+toString());
 
         if (distance != null && distance >= 0 && distance <= 1f) {
-            Vector3 intersection = Vector3.temp().set(position).addMultiply(direction,
+            Vector3 intersection = TEMP_INTERSECTION.set(position).addMultiply(direction,
                     distance);
             /*
              * System.out.println("dist:"+distance);
@@ -227,6 +228,8 @@ public class Ray {
         return null;
     }
 
+    
+    private static final Vector3 TEMP_DIFFERENCE = new Vector3();
     /**
      * Intersects.
      *
@@ -236,8 +239,7 @@ public class Ray {
      */
     public Float intersects(BoundingSphere sphere) {
         // Find the vector between where the ray starts the the sphere's centre
-        Vector3 difference = Vector3.temp().set(sphere)
-                .subtract(this.position);
+        Vector3 difference = TEMP_DIFFERENCE.set(sphere).subtract(this.position);
 
         float differenceLengthSquared = difference.lengthSquared();
         float sphereRadiusSquared = sphere.getRadius() * sphere.getRadius();

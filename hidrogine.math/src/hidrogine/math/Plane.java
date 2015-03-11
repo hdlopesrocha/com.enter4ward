@@ -32,6 +32,8 @@ public class Plane {
         this.distance = d;
     }
 
+    private static final Vector3 TEMP_VECTOR = new Vector3();
+    
     /**
      * Instantiates a new plane.
      *
@@ -43,7 +45,7 @@ public class Plane {
      *            the c
      */
     public Plane(Vector3 a, Vector3 b, Vector3 c) {
-        Vector3 ac = Vector3.temp().set(c).subtract(a);
+        Vector3 ac = TEMP_VECTOR.set(c).subtract(a);
         this.normal = new Vector3(b).subtract(a);
         this.normal.cross(ac);
         distance = -normal.dot(a);
