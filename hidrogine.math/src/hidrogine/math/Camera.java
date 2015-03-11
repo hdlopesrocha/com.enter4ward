@@ -57,10 +57,9 @@ public class Camera extends BoundingFrustum{
      *            the w
      */
     public void rotate(float x, float y, float z, float w) {
-        rotation = new Quaternion()
-                .createFromAxisAngle(x, y, z, w)
-                .multiply(rotation);
-        rotation.normalize();
+        Quaternion quat = Quaternion.temp().createFromAxisAngle(x, y, z, w).multiply(rotation);
+        rotation.set(quat).normalize();
+     
     }
 
     /**

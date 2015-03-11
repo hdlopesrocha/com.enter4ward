@@ -6,6 +6,28 @@ package hidrogine.math;
  */
 public class Quaternion {
 
+    /** The Constant TEMP. */
+    static final Quaternion[] TEMP = new Quaternion[128];
+
+    /** The temp ptr. */
+    static int TEMP_PTR = 0;
+    static {
+        for (int i = 0; i < 128; ++i) {
+            TEMP[i] = new Quaternion();
+        }
+    }
+
+    /**
+     * Temp.
+     *
+     * @return the matrix
+     */
+    public static Quaternion temp() {
+        Quaternion ret = TEMP[TEMP_PTR];
+        TEMP_PTR = (TEMP_PTR + 1) % 128;
+        return ret;
+    }
+    
     /** The w. */
     private float X, Y, Z, W;
 
