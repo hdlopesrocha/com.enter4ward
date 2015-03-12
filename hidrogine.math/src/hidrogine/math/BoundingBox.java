@@ -458,14 +458,17 @@ public class BoundingBox {
         float minX = Math.min(min.getX(), box.min.getX());
         float minY = Math.min(min.getY(), box.min.getY());
         float minZ = Math.min(min.getZ(), box.min.getZ());
-        
-        float maxX = Math.max(min.getX()+len.getX(), box.min.getX()+box.len.getX());
-        float maxY = Math.max(min.getY()+len.getY(), box.min.getY()+box.len.getY());
-        float maxZ = Math.max(min.getZ()+len.getZ(), box.min.getZ()+box.len.getZ());
-          
+
+        float maxX = Math.max(min.getX() + len.getX(),
+                box.min.getX() + box.len.getX());
+        float maxY = Math.max(min.getY() + len.getY(),
+                box.min.getY() + box.len.getY());
+        float maxZ = Math.max(min.getZ() + len.getZ(),
+                box.min.getZ() + box.len.getZ());
+
         min.set(minX, minY, minZ);
-        len.set(maxX-minZ, maxY-minY, maxZ-minZ);
-         
+        len.set(maxX - minZ, maxY - minY, maxZ - minZ);
+
         return this;
     }
 
@@ -476,9 +479,11 @@ public class BoundingBox {
      *            the other
      * @return true, if successful
      */
-    public boolean equals(BoundingBox other) {
-        return this.equals(other);
-        // return (min.equals(other.min)) && (max.equals(other.max));
+    public boolean equals(Object other) {
+        if (other instanceof BoundingBox) {
+            return (min.equals(((BoundingBox)other).min)) && (len.equals(((BoundingBox)other).len));
+        }
+        return false;
     }
 
     public Vector3 getMin() {

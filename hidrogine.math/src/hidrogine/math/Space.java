@@ -9,35 +9,36 @@ import java.util.TreeMap;
  */
 public class Space {
 
-    /** The lenghts. */
-    private static TreeMap<String, Vector3> lenghts = new TreeMap<String, Vector3>();
-
     private static final Vector3 TEMP_LENGTH = new Vector3();
 
-    /** The lens. */
+    private static TreeMap<Float, TreeMap<Float, TreeMap<Float, Vector3>>> lenghts = new TreeMap<Float, TreeMap<Float, TreeMap<Float, Vector3>>>();
     public static int LENS = 0;
 
-    /**
-     * Recycle.
-     *
-     * @param v
-     *            the v
-     * @return the vector3
-     */
     private static Vector3 recycle(final Vector3 v) {
-        String s = v.toString();
+        TreeMap<Float, TreeMap<Float, Vector3>> treeX = lenghts.get(v.getX());
+        if (treeX == null) {
+            treeX = new TreeMap<Float, TreeMap<Float, Vector3>>();
+            lenghts.put(v.getX(), treeX);
+        }
 
-        Vector3 r = lenghts.get(s);
+        TreeMap<Float, Vector3> treeY = treeX.get(v.getY());
+        if (treeY == null) {
+            treeY = new TreeMap<Float, Vector3>();
+            treeX.put(v.getY(), treeY);
+        }
+
+        Vector3 r = treeY.get(v.getZ());
         if (r == null) {
             r = new Vector3(v);
-            lenghts.put(s, r);
-            // System.out.println(s);
+            treeY.put(v.getZ(), r);
             ++LENS;
         }
 
         return r;
 
     }
+
+    private float minSize;
 
     /**
      * The Class Node.
@@ -63,7 +64,7 @@ public class Space {
          * Instantiates a new space node.
          */
         public Node() {
-            super(new Vector3(0), new Vector3(1));
+            super(new Vector3(0), new Vector3(minSize * 3));
             this.parent = null;
         }
 
@@ -217,8 +218,6 @@ public class Space {
 
         private Node build(final int i) {
 
-
-            
             final float lenX = getLengthX();
             final float lenY = getLengthY();
             final float lenZ = getLengthZ();
@@ -318,7 +317,6 @@ public class Space {
 
         }
 
-        
         /**
          * Expand.
          *
@@ -331,32 +329,36 @@ public class Space {
             final float lenY = getLengthY();
             final float lenZ = getLengthZ();
 
-
-            
             if (lenX < lenY && lenX < lenZ) {
-                final Vector3 len = recycle(TEMP_LENGTH.set(lenX * 2, lenY, lenZ));
+                final Vector3 len = recycle(TEMP_LENGTH.set(lenX * 2, lenY,
+                        lenZ));
 
                 if (obj.getX() >= getCenterX()) {
                     return new Node(this, LEFT, getMin(), len);
                 } else {
-                    return new Node(this, RIGHT,new Vector3(getMin()).addX(-lenX), len);
+                    return new Node(this, RIGHT,
+                            new Vector3(getMin()).addX(-lenX), len);
                 }
             } else if (lenY < lenZ) {
-                final Vector3 len = recycle(TEMP_LENGTH.set(lenX, lenY * 2, lenZ));
+                final Vector3 len = recycle(TEMP_LENGTH.set(lenX, lenY * 2,
+                        lenZ));
 
                 if (obj.getY() >= getCenterY()) {
                     return new Node(this, LEFT, getMin(), len);
                 } else {
-                    return new Node(this, RIGHT,new Vector3(getMin()).addY(-lenY), len);
+                    return new Node(this, RIGHT,
+                            new Vector3(getMin()).addY(-lenY), len);
 
                 }
             } else {
-                final Vector3 len = recycle(TEMP_LENGTH.set(lenX, lenY, lenZ * 2));
+                final Vector3 len = recycle(TEMP_LENGTH.set(lenX, lenY,
+                        lenZ * 2));
 
                 if (obj.getZ() >= getCenterZ()) {
                     return new Node(this, LEFT, getMin(), len);
                 } else {
-                    return new Node(this, RIGHT,new Vector3(getMin()).addZ(-lenZ), len);
+                    return new Node(this, RIGHT,
+                            new Vector3(getMin()).addZ(-lenZ), len);
 
                 }
             }
@@ -368,9 +370,11 @@ public class Space {
          * @return true, if successful
          */
         protected boolean canSplit() {
+            // if(containerSize()==0)
+            // return false;
 
             return left != null || right != null || center != null
-                    || getLengthX() + getLengthY() + getLengthZ() > 3f;
+                    || getLengthX() + getLengthY() + getLengthZ() > minSize;
         }
 
         /**
@@ -729,7 +733,8 @@ public class Space {
     /**
      * Instantiates a new space.
      */
-    public Space() {
+    public Space(float minSize) {
+        this.minSize = minSize * 3.5f;
         root = new Node();
     }
 

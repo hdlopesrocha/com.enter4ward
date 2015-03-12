@@ -33,7 +33,7 @@ public class Plane {
     }
 
     private static final Vector3 TEMP_VECTOR = new Vector3();
-    
+
     /**
      * Instantiates a new plane.
      *
@@ -77,11 +77,11 @@ public class Plane {
     }
 
     public Plane set(float a, float b, float c, float d) {
-        this.normal.set(a,b,c);
+        this.normal.set(a, b, c);
         this.distance = d;
         return this;
     }
-    
+
     /*
      * Plane(Vector4 value) {this = Plane(Vector3(value.X, value.Y, value.Z),
      * value.W); } float dot(Vector4 value) { return ((((Normal.X * value.X) +
@@ -146,8 +146,12 @@ public class Plane {
      *            the other
      * @return true, if successful
      */
-    public boolean equals(Plane other) {
-        return ((normal == other.normal) && (distance == other.distance));
+    public boolean equals(Object obj) {
+        if (obj instanceof Plane) {
+            Plane other = (Plane) obj;
+            return ((normal == other.normal) && (distance == other.distance));
+        }
+        return false;
     }
 
     /**

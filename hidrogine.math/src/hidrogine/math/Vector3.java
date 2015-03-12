@@ -6,27 +6,6 @@ package hidrogine.math;
  */
 public class Vector3 {
 
-    /** The Constant TEMP. */
-    static final Vector3[] TEMP = new Vector3[128];
-
-    /** The temp ptr. */
-    static int TEMP_PTR = 0;
-    static {
-        for (int i = 0; i < 128; ++i) {
-            TEMP[i] = new Vector3();
-        }
-    }
-
-    /**
-     * Temp.
-     *
-     * @return the matrix
-     */
-    public static Vector3 temp2() {
-        Vector3 ret = TEMP[TEMP_PTR];
-        TEMP_PTR = (TEMP_PTR + 1) % 128;
-        return ret;
-    }
 
     /** The x. */
     private float x;

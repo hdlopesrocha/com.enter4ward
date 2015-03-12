@@ -73,9 +73,13 @@ public class Ray {
      *            the other
      * @return true, if successful
      */
-    public boolean equals(Ray other) {
-        return this.position.equals(other.position)
-                && this.direction.equals(other.direction);
+    public boolean equals(Object obj) {
+        if (obj instanceof Ray) {
+            Ray other = (Ray) obj;
+            return this.position.equals(other.position)
+                    && this.direction.equals(other.direction);
+        }
+        return false;
     }
 
     // adapted from
@@ -112,10 +116,8 @@ public class Ray {
                     || position.getY() > box.getMaxY())
                 return null;
         } else {
-            float tMinY = (box.getMinY() - position.getY())
-                    / direction.getY();
-            float tMaxY = (box.getMaxY() - position.getY())
-                    / direction.getY();
+            float tMinY = (box.getMinY() - position.getY()) / direction.getY();
+            float tMaxY = (box.getMaxY() - position.getY()) / direction.getY();
 
             if (tMinY > tMaxY) {
                 float temp = tMinY;
@@ -138,10 +140,8 @@ public class Ray {
                     || position.getZ() > box.getMaxZ())
                 return null;
         } else {
-            float tMinZ = (box.getMinZ() - position.getZ())
-                    / direction.getZ();
-            float tMaxZ = (box.getMaxZ() - position.getZ())
-                    / direction.getZ();
+            float tMinZ = (box.getMinZ() - position.getZ()) / direction.getZ();
+            float tMaxZ = (box.getMaxZ() - position.getZ()) / direction.getZ();
 
             if (tMinZ > tMaxZ) {
                 float temp = tMinZ;
@@ -162,14 +162,11 @@ public class Ray {
         // having a positive tMin and a negative tMax means the ray is inside
         // the box
         // we expect the intesection distance to be 0 in that case
-        if ((tMin != null && tMin < 0) && tMax > 0)
-            return 0f;
-
-        // a negative tMin means that the intersection point is behind the ray's
-        // origin
-        // we discard these as not hitting the AABB
-        if (tMin < 0)
-            return null;
+        if (tMin != null && tMin < 0) {
+            if (tMax > 0) {
+                return (tMax > 0) ? 0f : null;
+            }
+        }
 
         return tMin;
     }
@@ -197,6 +194,7 @@ public class Ray {
         }
         return null;
     }
+
     private static final Vector3 TEMP_INTERSECTION = new Vector3();
 
     /**
@@ -212,8 +210,8 @@ public class Ray {
         // System.out.println("this:"+toString());
 
         if (distance != null && distance >= 0 && distance <= 1f) {
-            Vector3 intersection = TEMP_INTERSECTION.set(position).addMultiply(direction,
-                    distance);
+            Vector3 intersection = TEMP_INTERSECTION.set(position).addMultiply(
+                    direction, distance);
             /*
              * System.out.println("dist:"+distance);
              * System.out.println("tri:"+triangle.toString());
@@ -228,8 +226,8 @@ public class Ray {
         return null;
     }
 
-    
     private static final Vector3 TEMP_DIFFERENCE = new Vector3();
+
     /**
      * Intersects.
      *
@@ -239,7 +237,8 @@ public class Ray {
      */
     public Float intersects(BoundingSphere sphere) {
         // Find the vector between where the ray starts the the sphere's centre
-        Vector3 difference = TEMP_DIFFERENCE.set(sphere).subtract(this.position);
+        Vector3 difference = TEMP_DIFFERENCE.set(sphere)
+                .subtract(this.position);
 
         float differenceLengthSquared = difference.lengthSquared();
         float sphereRadiusSquared = sphere.getRadius() * sphere.getRadius();

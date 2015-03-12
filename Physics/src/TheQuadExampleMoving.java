@@ -85,7 +85,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		camera = new Camera(0.1f, 256);
 		camera.update(1280, 720);
 		objects = new ArrayList<MyObject3D>();
-		space = new Space();
+		space = new Space(32);
 		sphere = new DrawableSphere();
 		box = new DrawableBox();
 		/** The box. */
@@ -100,21 +100,21 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		/*
 		 * moving = new MyObject3D(new Vector3(0, 0, 0), box) { };
 		 */
-		obj1.insert(space);
+		//obj1.insert(space);
 		/*
 		 * moving.insert(space);
 		 */
 		// new MyCar3D(new Vector3(-4, 4, 25), car) {}.insert(space);
 
 		Random rand = new Random();
-		
+/*		
 		  for (int i = 0; i < 128; ++i) { objects.add((MyObject3D) new
 		  MyObject3D(new Vector3( rand.nextInt(40) - 20, 10f, rand.nextInt(40) -
 		  20), box) { }.insert(space)); }
-		 
+	*/	 
 		
 		
-/*		
+
 		int size = 8 * 1024;
 		for (int i = 0; i < 1000000; ++i) {
 			if(i%10000==0)
@@ -125,7 +125,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 			
 			
 		}
-*/
+
 		// objects.add((MyObject3D) new MyObject3D(new Vector3(-10.1f, 64, 0), box)
 		// {}.insert(space));
 		// objects.add((MyObject3D) new MyObject3D(new Vector3(-10, 68, 0), box)
@@ -264,7 +264,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		getProgram().setMaterialAlpha(1f);
 		getProgram().setAmbientColor(0f, 0f, 0f);
 		GL20.glUseProgram(0);
-		setTitle();
+	//	setTitle();
 	}
 
 	private static final Vector3 TEMP_MIN = new Vector3();

@@ -190,16 +190,6 @@ public class BoundingFrustum {
         return ContainmentType.Contains;
     }
 
-    /**
-     * Equals.
-     *
-     * @param other
-     *            the other
-     * @return true, if successful
-     */
-    public boolean equals(BoundingFrustum other) {
-        return this == other;
-    }
 
     /**
      * Gets the corners.

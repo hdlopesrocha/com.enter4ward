@@ -371,8 +371,8 @@ public class Matrix {
      * @param rotation
      *            the rotation
      * @return the matrix
-     */    private static Matrix TEMP_TRANSFORM = new Matrix();
-
+     */
+    private static Matrix TEMP_TRANSFORM = new Matrix();
 
     public Matrix transform(Quaternion rotation) {
         return multiply(TEMP_TRANSFORM.createFromQuaternion(rotation));
@@ -421,15 +421,15 @@ public class Matrix {
                 * (float) Math.sqrt(M[8] * M[8] + M[9] * M[9] + M[10] * M[10]));
 
         if (scale.getX() == 0.0 || scale.getY() == 0.0 || scale.getZ() == 0.0) {
-            rotation = rotation.identity();
+            rotation.identity();
             return false;
         }
 
-        Matrix m1 = TEMP_DECOMPOSE.set(M[0] / scale.getX(), M[1] / scale.getX(),
-                M[2] / scale.getX(), 0, M[4] / scale.getY(),
-                M[5] / scale.getY(), M[6] / scale.getY(), 0,
-                M[8] / scale.getZ(), M[9] / scale.getZ(), M[10] / scale.getZ(),
-                0, 0, 0, 0, 1);
+        Matrix m1 = TEMP_DECOMPOSE.set(M[0] / scale.getX(),
+                M[1] / scale.getX(), M[2] / scale.getX(), 0,
+                M[4] / scale.getY(), M[5] / scale.getY(), M[6] / scale.getY(),
+                0, M[8] / scale.getZ(), M[9] / scale.getZ(),
+                M[10] / scale.getZ(), 0, 0, 0, 0, 1);
 
         rotation.createFromRotationMatrix(m1);
         return true;
@@ -908,7 +908,6 @@ public class Matrix {
     private static Matrix TEMP_INVERSE = new Matrix();
     private static Matrix TEMP_COPY = new Matrix();
 
-    
     /**
      * Divide.
      *
@@ -1217,8 +1216,6 @@ public class Matrix {
         return matrix1;
     }
 
-    
-    
     /**
      * Transpose.
      *
@@ -1278,15 +1275,19 @@ public class Matrix {
      *            the other
      * @return true, if successful
      */
-    public boolean equals(Matrix other) {
-        return (M[0] == other.M[0]) && (M[1] == other.M[1])
-                && (M[2] == other.M[2]) && (M[3] == other.M[3])
-                && (M[4] == other.M[4]) && (M[5] == other.M[5])
-                && (M[6] == other.M[6]) && (M[7] == other.M[7])
-                && (M[8] == other.M[8]) && (M[9] == other.M[9])
-                && (M[10] == other.M[10]) && (M[11] == other.M[11])
-                && (M[12] == other.M[12]) && (M[13] == other.M[13])
-                && (M[14] == other.M[14]) && (M[15] == other.M[15]);
+    public boolean equals(Object obj) {
+        if (obj instanceof Matrix) {
+            Matrix other = (Matrix) obj;
+            return (M[0] == other.M[0]) && (M[1] == other.M[1])
+                    && (M[2] == other.M[2]) && (M[3] == other.M[3])
+                    && (M[4] == other.M[4]) && (M[5] == other.M[5])
+                    && (M[6] == other.M[6]) && (M[7] == other.M[7])
+                    && (M[8] == other.M[8]) && (M[9] == other.M[9])
+                    && (M[10] == other.M[10]) && (M[11] == other.M[11])
+                    && (M[12] == other.M[12]) && (M[13] == other.M[13])
+                    && (M[14] == other.M[14]) && (M[15] == other.M[15]);
+        }
+        return false;
     }
 
     /**
@@ -1337,8 +1338,8 @@ public class Matrix {
 
     }
 
-    
-    private static final Matrix TEMP_TRANSLATE  =new Matrix(); 
+    private static final Matrix TEMP_TRANSLATE = new Matrix();
+
     /**
      * Translate.
      *
@@ -1368,7 +1369,7 @@ public class Matrix {
         return this;
     }
 
-    private static final Matrix TEMP_SCALE  =new Matrix(); 
+    private static final Matrix TEMP_SCALE = new Matrix();
 
     /**
      * Scale.

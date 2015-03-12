@@ -27,7 +27,7 @@ public class Quaternion {
         TEMP_PTR = (TEMP_PTR + 1) % 128;
         return ret;
     }
-    
+
     /** The w. */
     private float X, Y, Z, W;
 
@@ -244,12 +244,12 @@ public class Quaternion {
      *            the angle
      * @return the quaternion
      */
-    public Quaternion createFromAxisAngle(float x,float y, float z, float angle) {
+    public Quaternion createFromAxisAngle(float x, float y, float z, float angle) {
         float sin_a = (float) Math.sin(angle / 2.0);
-        return setX(x * sin_a).setY(y * sin_a)
-                .setZ(z * sin_a).setW((float) Math.cos(angle / 2.0));
+        return setX(x * sin_a).setY(y * sin_a).setZ(z * sin_a)
+                .setW((float) Math.cos(angle / 2.0));
     }
-    
+
     /**
      * Creates the from axis angle.
      *
@@ -366,9 +366,13 @@ public class Quaternion {
      *            the other
      * @return true, if successful
      */
-    public boolean equals(Quaternion other) {
-        return (X == other.X) && (Y == other.Y) && (Z == other.Z)
-                && W == other.W;
+    public boolean equals(Object obj) {
+        if (obj instanceof Quaternion) {
+            Quaternion other = (Quaternion) obj;
+            return (X == other.X) && (Y == other.Y) && (Z == other.Z)
+                    && W == other.W;
+        }
+        return false;
     }
 
     /**
