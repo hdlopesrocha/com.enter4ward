@@ -8,28 +8,6 @@ import java.nio.FloatBuffer;
  */
 public class Matrix {
 
-    /** The Constant TEMP. */
-    static final Matrix[] TEMP = new Matrix[128];
-
-    /** The temp ptr. */
-    static int TEMP_PTR = 0;
-    static {
-        for (int i = 0; i < 128; ++i) {
-            TEMP[i] = new Matrix();
-        }
-    }
-
-    /**
-     * Temp.
-     *
-     * @return the matrix
-     */
-    public static Matrix temp() {
-        Matrix ret = TEMP[TEMP_PTR];
-        TEMP_PTR = (TEMP_PTR + 1) % 128;
-        return ret;
-    }
-
     /** The Constant IDENTITY. */
     public static final Matrix IDENTITY = new Matrix().identity();
 
@@ -167,8 +145,8 @@ public class Matrix {
         return this;
     }
 
-    
-private static final Vector3 TEMP_BACKWARD = new Vector3();
+    private static final Vector3 TEMP_BACKWARD = new Vector3();
+
     /**
      * Gets the backward.
      *
@@ -192,7 +170,6 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
 
     private static final Vector3 TEMP_DOWN = new Vector3();
 
-    
     /**
      * Gets the down.
      *
@@ -216,7 +193,6 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
 
     private static final Vector3 TEMP_FORWARD = new Vector3();
 
-    
     /**
      * Gets the forward.
      *
@@ -240,7 +216,6 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
 
     private static final Vector3 TEMP_LEFT = new Vector3();
 
-    
     /**
      * Gets the left.
      *
@@ -264,7 +239,6 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
 
     private static final Vector3 TEMP_RIGHT = new Vector3();
 
-    
     /**
      * Gets the right.
      *
@@ -288,7 +262,6 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
 
     private static final Vector3 TEMP_TRANSLATION = new Vector3();
 
-    
     /**
      * Gets the translation.
      *
@@ -312,7 +285,6 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
 
     private static final Vector3 TEMP_UP = new Vector3();
 
-    
     /**
      * Gets the up.
      *
@@ -334,12 +306,10 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
         M[6] = value.getZ();
     }
 
-    
     private static final Vector3 TEMP_WORLD_X = new Vector3();
     private static final Vector3 TEMP_WORLD_Y = new Vector3();
     private static final Vector3 TEMP_WORLD_Z = new Vector3();
 
-    
     /**
      * Creates the world.
      *
@@ -401,10 +371,11 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
      * @param rotation
      *            the rotation
      * @return the matrix
-     */
+     */    private static Matrix TEMP_TRANSFORM = new Matrix();
+
 
     public Matrix transform(Quaternion rotation) {
-        return multiply(Matrix.temp().createFromQuaternion(rotation));
+        return multiply(TEMP_TRANSFORM.createFromQuaternion(rotation));
     }
 
     /**
@@ -418,6 +389,8 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
      *            the translation
      * @return true, if successful
      */
+    private static Matrix TEMP_DECOMPOSE = new Matrix();
+
     public boolean decompose(Vector3 scale, Quaternion rotation,
             Vector3 translation) {
         translation.setX(M[12]);
@@ -452,7 +425,7 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
             return false;
         }
 
-        Matrix m1 = Matrix.temp().set(M[0] / scale.getX(), M[1] / scale.getX(),
+        Matrix m1 = TEMP_DECOMPOSE.set(M[0] / scale.getX(), M[1] / scale.getX(),
                 M[2] / scale.getX(), 0, M[4] / scale.getY(),
                 M[5] / scale.getY(), M[6] / scale.getY(), 0,
                 M[8] / scale.getZ(), M[9] / scale.getZ(), M[10] / scale.getZ(),
@@ -566,8 +539,8 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
     public Matrix createBillboard(Vector3 objectPosition,
             Vector3 cameraPosition, Vector3 cameraUpVector,
             Vector3 cameraForwardVector) {
-        Vector3 translation = TEMP_TRANSLATION.set(objectPosition)
-                .subtract(cameraPosition);
+        Vector3 translation = TEMP_TRANSLATION.set(objectPosition).subtract(
+                cameraPosition);
         Vector3 backwards, right, up;
         backwards = TEMP_BACKWARD.set(translation).normalize();
         up = TEMP_UP.set(cameraUpVector).normalize();
@@ -624,13 +597,10 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
      * @return the matrix
      */
 
-
-
-    
     private static final Vector3 TEMP_LOOK_X = new Vector3();
     private static final Vector3 TEMP_LOOK_Y = new Vector3();
     private static final Vector3 TEMP_LOOK_Z = new Vector3();
-    
+
     /**
      * Creates the look at.
      *
@@ -935,6 +905,10 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
         return this;
     }
 
+    private static Matrix TEMP_INVERSE = new Matrix();
+    private static Matrix TEMP_COPY = new Matrix();
+
+    
     /**
      * Divide.
      *
@@ -943,8 +917,8 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
      * @return the matrix
      */
     public Matrix divide(Matrix matrix2) {
-        Matrix inverse = Matrix.temp().set(matrix2).invert();
-        Matrix matrix1 = Matrix.temp().set(this);
+        Matrix inverse = TEMP_INVERSE.set(matrix2).invert();
+        Matrix matrix1 = TEMP_COPY.set(this);
 
         M[0] = matrix1.M[0] * inverse.M[0] + matrix1.M[1] * inverse.M[4]
                 + matrix1.M[2] * inverse.M[8] + matrix1.M[3] * inverse.M[12];
@@ -1243,13 +1217,15 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
         return matrix1;
     }
 
+    
+    
     /**
      * Transpose.
      *
      * @return the matrix
      */
     public Matrix transpose() {
-        Matrix copy = Matrix.temp();
+        Matrix copy = TEMP_COPY;
         copy.set(this);
         M[0] = copy.M[0];
         M[1] = copy.M[4];
@@ -1361,6 +1337,8 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
 
     }
 
+    
+    private static final Matrix TEMP_TRANSLATE  =new Matrix(); 
     /**
      * Translate.
      *
@@ -1369,7 +1347,7 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
      * @return the matrix
      */
     public Matrix translate(Vector3 min) {
-        multiply(Matrix.temp().createTranslation(min));
+        multiply(TEMP_TRANSLATE.createTranslation(min));
         return this;
     }
 
@@ -1386,9 +1364,11 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
      */
 
     public Matrix translate(float x, float y, float z) {
-        multiply(Matrix.temp().createTranslation(x, y, z));
+        multiply(TEMP_TRANSLATE.createTranslation(x, y, z));
         return this;
     }
+
+    private static final Matrix TEMP_SCALE  =new Matrix(); 
 
     /**
      * Scale.
@@ -1398,7 +1378,7 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
      * @return the matrix
      */
     public Matrix scale(Vector3 dim) {
-        multiply(Matrix.temp().createScale(dim));
+        multiply(TEMP_SCALE.createScale(dim));
         return this;
     }
 
@@ -1410,7 +1390,7 @@ private static final Vector3 TEMP_BACKWARD = new Vector3();
      * @return the matrix
      */
     public Matrix scale(float dim) {
-        multiply(Matrix.temp().createScale(dim));
+        multiply(TEMP_SCALE.createScale(dim));
         return this;
     }
 

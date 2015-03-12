@@ -39,7 +39,7 @@ public class DrawableSphere {
 		obj.buildBuffer();
 	}
 
-	
+	private static final Matrix TEMP_SCALE = new Matrix();
 	/**
 	 * Draw.
 	 *
@@ -51,7 +51,7 @@ public class DrawableSphere {
 		shader.setAmbientColor(1, 1, 1);
 		shader.setMaterialAlpha(0.2f);
 		GL11.glDisable(GL11.GL_CULL_FACE);
-		shader.setModelMatrix(Matrix.temp().createScale(sph.getRadius()).translate(sph));
+		shader.setModelMatrix(TEMP_SCALE.createScale(sph.getRadius()).translate(sph));
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 		obj.draw(shader);
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);

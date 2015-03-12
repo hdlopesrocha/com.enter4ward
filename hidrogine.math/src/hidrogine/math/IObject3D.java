@@ -19,6 +19,7 @@ public abstract class IObject3D {
     private Space.Node node;
 
     private static final BoundingSphere TEMP_SPHERE = new BoundingSphere();
+    private static final Matrix TEMP_MODEL_MATRIX = new Matrix();
 
     
     /**
@@ -27,7 +28,7 @@ public abstract class IObject3D {
      * @return the model matrix
      */
     public Matrix getModelMatrix() {
-        return Matrix.temp().createFromQuaternion(rotation).translate(position);
+        return TEMP_MODEL_MATRIX.createFromQuaternion(rotation).translate(position);
     }
 
     /**

@@ -26,11 +26,13 @@ public class Camera extends BoundingFrustum{
      * @return the matrix
      */
     private static final Vector3 TEMP_NEGATIVE = new Vector3();
+    private static final Matrix TEMP_TRANSLATE = new Matrix();
+    private static final Matrix TEMP_MVP = new Matrix();
 
     
     public Matrix getViewMatrix() {
         TEMP_NEGATIVE.set(position).multiply(-1f);
-        return Matrix.temp().identity().createTranslation(TEMP_NEGATIVE).transform(rotation);
+        return TEMP_TRANSLATE.createTranslation(TEMP_NEGATIVE).transform(rotation);
 
     }
 
@@ -40,7 +42,7 @@ public class Camera extends BoundingFrustum{
      * @return the bounding frustum
      */
     public void update() {
-        Matrix mvp = Matrix.temp();
+        Matrix mvp = TEMP_MVP;
     	
         mvp.set(getViewMatrix()).multiply(getProjectionMatrix());
         createPlanes(mvp);
@@ -173,10 +175,11 @@ public class Camera extends BoundingFrustum{
      *            the left
      */
     
+    private static final Matrix TEMP_ROTATION = new Matrix();
     
     
     public void move(float front, float down, float right) {
-        final Matrix trans = Matrix.temp().createFromQuaternion(rotation).invert();
+        final Matrix trans = TEMP_ROTATION.createFromQuaternion(rotation).invert();
         if (front != 0) {
             position.addMultiply(trans.getForward(),front);
         }

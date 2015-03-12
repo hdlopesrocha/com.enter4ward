@@ -30,7 +30,9 @@ public class MyCar3D extends Object3D {
 
 	};
 	
-private static final Vector3 TEMP_CENTER = new Vector3();
+	private static final Vector3 TEMP_CENTER = new Vector3();
+	private static final Matrix TEMP_MATRIX = new Matrix();
+	private static final Matrix TEMP_ROTATION = new Matrix();
 
 	@Override
 	public void draw(final ShaderProgram program, final BoundingFrustum frustum) {
@@ -53,7 +55,7 @@ private static final Vector3 TEMP_CENTER = new Vector3();
 						program.reset();
 						b.bind(program);
 						final Material m = b.getMaterial();
-						final Matrix matrix = Matrix.temp().identity();
+						final Matrix matrix = TEMP_MATRIX;
 
 						if (m.getName().equals("c0")) {
 							program.setDiffuseColor(
@@ -67,7 +69,7 @@ private static final Vector3 TEMP_CENTER = new Vector3();
 							final Vector3 center = TEMP_CENTER.set(g)
 									.multiply(-1f);
 							matrix.translate(center).multiply(
-									Matrix.temp().createRotationX(time * 8));
+									TEMP_ROTATION.createRotationX(time * 8));
 							center.multiply(-1f);
 							matrix.translate(center);
 						}

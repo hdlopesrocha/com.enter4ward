@@ -55,7 +55,9 @@ public class DrawableBox {
 	}
 	
 	private static final Vector3 TEMP_DIM = new Vector3();
+	private static final Matrix TEMP_SCALE = new Matrix();
 	
+
 	/**
 	 * Draw.
 	 *
@@ -70,7 +72,7 @@ public class DrawableBox {
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		TEMP_DIM.set(max).subtract(min);
 
-		shader.setModelMatrix(Matrix.temp().createScale(TEMP_DIM).translate(min));
+		shader.setModelMatrix(TEMP_SCALE.createScale(TEMP_DIM).translate(min));
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 		obj.draw(shader);
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
