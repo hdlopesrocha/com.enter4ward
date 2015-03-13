@@ -330,6 +330,23 @@ public class Vector3 {
         return this;
     }
 
+    @Override
+    public boolean equals(Object arg0) {
+        if(arg0 instanceof Vector3){
+            Vector3 vec = (Vector3) arg0;
+            return x==vec.getX() && y==vec.getY() && z==vec.getZ();
+        }
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return ((Float)x).hashCode()+((Float)y).hashCode()+((Float)z).hashCode();
+        
+        
+    }
+
     /**
      * Sets the.
      *

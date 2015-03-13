@@ -235,7 +235,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		space.handleVisibleNodes(camera, this);
 		getProgram().setAmbientColor(0f, 0f, 0f);
 		GL20.glUseProgram(0);
-		// setTitle();
+		 setTitle();
 	}
 
 	private static final Vector3 TEMP_MIN = new Vector3();
