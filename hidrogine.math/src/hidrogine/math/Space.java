@@ -374,7 +374,7 @@ public class Space {
             // return false;
 
             return left != null || right != null || center != null
-                    || getLengthX() + getLengthY() + getLengthZ() > minSize;
+                    || getLengthX() > minSize|| getLengthY() > minSize|| getLengthZ() > minSize;
         }
 
         /**
@@ -389,12 +389,12 @@ public class Space {
          */
         @Deprecated
         public void handleVisibleNodes(BoundingFrustum frustum,
-                VisibleNodeHandler nodeh, int j) {
+                VisibleNodeHandler handler, int j) {
             // String tabs = "";
             // for(int k = 0; k < j; ++k){
             // tabs += "  |  ";
             // }
-            nodeh.onNodeVisible(this, containerSize());
+            handler.onNodeVisible(this, containerSize());
             // System.out.println(tabs+"["+container.size()+"/"+count+"] "+toString());
 
             int intersections = 0;
@@ -403,7 +403,7 @@ public class Space {
                 if (node != null
                         && (intersections == 2 || frustum.contains(node) != ContainmentType.Disjoint)) {
                     ++intersections;
-                    node.handleVisibleNodes(frustum, nodeh, 1 + j);
+                    node.handleVisibleNodes(frustum, handler, 1 + j);
                 }
             }
         }
@@ -737,7 +737,7 @@ public class Space {
      * Instantiates a new space.
      */
     public Space(float minSize) {
-        this.minSize = minSize * 3.5f;
+        this.minSize = minSize;
         root = new Node();
     }
 
