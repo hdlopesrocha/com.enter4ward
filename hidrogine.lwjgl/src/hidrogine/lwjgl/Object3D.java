@@ -18,7 +18,6 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 	private Vector3 aceleration;
 	private Vector3 velocity;
 	private float time;
-	private static boolean collided;
 	
 	public Vector3 getAceleration() {
 		return aceleration;
@@ -44,10 +43,8 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		velocity.addMultiply(aceleration, delta_t);
 
 		Ray ray = new Ray(getPosition(),TEMP_DIRECTION.set(velocity).multiply(delta_t));
-		collided = false;
-		space.handleRayCollisions(ray, this);
 		
-		if(!collided){
+		if(!space.handleRayCollisions(ray, this)){
 			getPosition().addMultiply(velocity, delta_t);
 		}
 		
@@ -98,8 +95,8 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 	// FALTA FAZER COLISOES MAIS DETALHADAS
 
 	@Override
-	public void onObjectCollision(Space space, Ray ray, Object obj) {
-		
+	public boolean onObjectCollision(Space space, Ray ray, Object obj) {
+		boolean collided = false;
 		
 		final float vel = velocity.length();
 		final float delta = ray.getDirection().length();
@@ -132,5 +129,6 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 				}
 			}
 		}
+		return collided;
 	}
 }

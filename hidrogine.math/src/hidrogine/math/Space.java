@@ -576,12 +576,13 @@ public class Space {
          * @param handler
          *            the handler
          */
-        public void handleRayCollisions(final Space space, final Ray ray,
+        public boolean handleRayCollisions(final Space space, final Ray ray,
                 final RayCollisionHandler handler) {
             final float len = ray.getDirection().length();
+            boolean result = false;
             if (container != null) {
                 for (Object obj : container) {
-                    handler.onObjectCollision(space, ray, obj);
+                    result |= handler.onObjectCollision(space, ray, obj);
                 }
             }
             int intersections = 0;
@@ -597,9 +598,10 @@ public class Space {
                         idist = 0f;
                     }
                     // System.out.println("#"+node+"#"+ray+"#"+idist+"#"+handler);
-                    node.handleRayCollisions(space, ray, handler);
+                    result |= node.handleRayCollisions(space, ray, handler);
                 }
             }
+            return result;
         }
 
         /**
@@ -719,12 +721,13 @@ public class Space {
      * @param handler
      *            the handler
      */
-    public void handleRayCollisions(final Ray ray,
+    public boolean handleRayCollisions(final Ray ray,
             final RayCollisionHandler handler) {
         // System.out.println(handler+":"+ ray);
         if (root != null) {
-            root.handleRayCollisions(this, ray, handler);
+            return root.handleRayCollisions(this, ray, handler);
         }
+        return false;
     }
 
     /** The root. */

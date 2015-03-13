@@ -16,7 +16,7 @@ public interface RayCollisionHandler {
      * @param obj2
      *            the obj2
      */
-    public void onObjectCollision(final Space space, final Ray ray,
+    public boolean onObjectCollision(final Space space, final Ray ray,
             final Object obj2);
 
     // public IntersectionInfo closestTriangle(final IBoundingSphere obj, final
