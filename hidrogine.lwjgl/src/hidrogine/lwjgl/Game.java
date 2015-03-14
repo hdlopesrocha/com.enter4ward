@@ -95,7 +95,6 @@ public abstract class Game {
 			// Do a single loop (logic/render)
 			time = getTime();
 			update((time-oldTime)/1000f);
-			
 
 	      //  if(i == 0)
 	      //  	GL11.glAccum(GL11.GL_LOAD, 1.0f / 10);
