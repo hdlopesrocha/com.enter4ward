@@ -53,6 +53,8 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		update(space);
 	}
 
+	private static BoundingSphere TEMP_SPHERE_DRAW = new BoundingSphere();
+	
 	public void draw(ShaderProgram program, BoundingFrustum frustum) {
 		program.reset();
 
@@ -61,7 +63,7 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		for (final Group g : model.getGroups()) {
 			for (final IBufferObject ib : g.getBuffers()) {
 				BufferObject b = (BufferObject) ib;
-				final BoundingSphere sph = BoundingSphere.temp().set(b);
+				final BoundingSphere sph = TEMP_SPHERE_DRAW.set(b);
 				sph.add(matrix.getTranslation());
 				if (frustum.contains(sph) != ContainmentType.Disjoint) {
 					b.bind(program);

@@ -22,18 +22,33 @@ public class Model3D implements IModel3D {
     /** The materials. */
     protected TreeMap<String, Material> materials = new TreeMap<String, Material>();
 
+    /** The container. */
     private BoundingSphere container;
 
+    /**
+     * Gets the groups.
+     *
+     * @return the groups
+     */
     public Iterable<Group> getGroups() {
         return groups;
     }
 
+    /**
+     * Instantiates a new model3 d.
+     */
     public Model3D() {
 
     }
 
+    /** The lights. */
     private List<Vector3> lights = new ArrayList<Vector3>();
 
+    /**
+     * Gets the lights.
+     *
+     * @return the lights
+     */
     public List<Vector3> getLights() {
         return lights;
     }
@@ -41,12 +56,14 @@ public class Model3D implements IModel3D {
     /**
      * Instantiates a new model3 d.
      *
-     * @param materials
-     *            the materials
-     * @param geometry
-     *            the geometry
+     * @param fis
+     *            the fis
      * @param scale
      *            the scale
+     * @param builder
+     *            the builder
+     * @param rot
+     *            the rot
      */
     public Model3D(InputStream fis, float scale, IBufferBuilder builder,
             final Quaternion rot) {
@@ -147,8 +164,6 @@ public class Model3D implements IModel3D {
 
                 } else if ("lights".equals(name)) {
                     jsonParser.nextToken(); // [
-                    System.out.println("######### LIGHTS ###################");
-
                     while (jsonParser.nextToken() != JsonToken.END_ARRAY) { // [[
                         while (jsonParser.nextToken() != JsonToken.END_ARRAY) { // [[(...)]
                             float x = jsonParser.getFloatValue() * scale;

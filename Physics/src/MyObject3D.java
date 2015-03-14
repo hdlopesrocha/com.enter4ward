@@ -10,15 +10,34 @@ import hidrogine.math.IBufferObject;
 import hidrogine.math.Matrix;
 import hidrogine.math.Vector3;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MyObject3D.
+ */
 public class MyObject3D extends Object3D {
 
+	/** The collided. */
 	public boolean collided = false;
 
+	/**
+	 * Instantiates a new my object3 d.
+	 *
+	 * @param position
+	 *          the position
+	 * @param model
+	 *          the model
+	 */
 	public MyObject3D(Vector3 position, LWJGLModel3D model) {
 		super(position, model);
 		// TODO Auto-generated constructor stub
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hidrogine.lwjgl.Object3D#draw(hidrogine.lwjgl.ShaderProgram,
+	 * hidrogine.math.BoundingFrustum)
+	 */
 	@Override
 	public void draw(ShaderProgram program, BoundingFrustum frustum) {
 
@@ -26,7 +45,7 @@ public class MyObject3D extends Object3D {
 		final Matrix modelMatrix = getModelMatrix();
 		final LWJGLModel3D model = (LWJGLModel3D) getModel();
 
-		program.setAmbientColor(collided? 1:0, 0, 0);
+		program.setAmbientColor(collided ? 1 : 0, 0, 0);
 		program.setModelMatrix(modelMatrix);
 
 		for (final Group g : model.getGroups()) {

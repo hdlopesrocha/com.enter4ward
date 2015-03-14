@@ -40,6 +40,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	/** The camera. */
 	private Camera camera;
 
+	/** The objects. */
 	private List<MyObject3D> objects;
 
 	/** The space. */
@@ -51,8 +52,10 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	/** The draws. */
 	public static int draws = 0;
 
+	/** The scene. */
 	private static int scene = 2;
 
+	/** The buffer builder. */
 	private static IBufferBuilder bufferBuilder = new IBufferBuilder() {
 
 		@Override
@@ -89,7 +92,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		camera = new Camera(0.1f, 256);
 		camera.update(1280, 720);
 		objects = new ArrayList<MyObject3D>();
-		space = new Space(32);
+		space = new Space(16);
 		box = new DrawableBox();
 		/** The box. */
 		LWJGLModel3D car = null, box = null, surface = null;
@@ -246,7 +249,10 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		setTitle();
 	}
 
+	/** The Constant TEMP_MIN. */
 	private static final Vector3 TEMP_MIN = new Vector3();
+
+	/** The Constant TEMP_MAX. */
 	private static final Vector3 TEMP_MAX = new Vector3();
 
 	/*
@@ -269,6 +275,12 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * hidrogine.math.ObjectCollisionHandler#onObjectCollision(java.lang.Object)
+	 */
 	@Override
 	public void onObjectCollision(Object obj) {
 		if (obj instanceof MyObject3D) {
@@ -278,6 +290,11 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hidrogine.math.VisibleObjectHandler#onObjectVisible(java.lang.Object)
+	 */
 	@Override
 	public void onObjectVisible(Object obj) {
 		// TODO Auto-generated method stub

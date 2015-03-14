@@ -1,34 +1,10 @@
 package hidrogine.math;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class Box.
  */
 public class BoundingSphere extends Vector3 {
-
-    /** The Constant TEMP. */
-    static final BoundingSphere[] TEMP = new BoundingSphere[128];
-
-    /** The temp ptr. */
-    static int TEMP_PTR = 0;
-    static {
-        for (int i = 0; i < 128; ++i) {
-            TEMP[i] = new BoundingSphere();
-        }
-    }
-
-    /**
-     * Temp.
-     *
-     * @return the matrix
-     */
-    public static BoundingSphere temp() {
-        BoundingSphere ret = TEMP[TEMP_PTR];
-        TEMP_PTR = (TEMP_PTR + 1) % 128;
-        return ret;
-    }
-    
 
     /** The radius. */
     private float radius;
@@ -64,9 +40,6 @@ public class BoundingSphere extends Vector3 {
         this.radius = 0f;
     }
 
-
-
-
     /*
      * (non-Javadoc)
      * 
@@ -101,7 +74,7 @@ public class BoundingSphere extends Vector3 {
      *
      * @param radius
      *            the new radius
-     * @return 
+     * @return
      */
     public BoundingSphere set(final BoundingSphere sph) {
         this.radius = sph.getRadius();
@@ -111,7 +84,6 @@ public class BoundingSphere extends Vector3 {
         return this;
     }
 
-    
     /**
      * Contains.
      *
@@ -122,8 +94,6 @@ public class BoundingSphere extends Vector3 {
     public boolean contains(Vector3 vec) {
         return distanceSquared(vec) <= getRadius() * getRadius();
     }
-
-
 
     /**
      * Intersects.
@@ -145,8 +115,7 @@ public class BoundingSphere extends Vector3 {
      * @return the boolean
      */
     public Boolean intersects(BoundingSphere sphere) {
-        return distance(sphere) < getRadius()
-                + sphere.getRadius();
+        return distance(sphere) < getRadius() + sphere.getRadius();
     }
 
     /**
@@ -180,9 +149,13 @@ public class BoundingSphere extends Vector3 {
         setY((minY + maxY) / 2f);
         setZ((minZ + maxZ) / 2f);
 
-        setRadius((float) (Math
-                .sqrt((maxX - minX) * (maxX - minX) + (maxY - minY)
-                        * (maxY - minY) + (maxZ - minZ) * (maxZ - minZ)) / 2d));
+        setRadius(0f);
+
+        for (Vector3 vec : points) {
+            float dist = (float) vec.distance(this);
+            setRadius(Math.max(getRadius(), dist));
+        }
+
         return this;
     }
 }
