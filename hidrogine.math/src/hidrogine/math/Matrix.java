@@ -32,15 +32,7 @@ public class Matrix {
 
     }
 
-    /**
-     * To array.
-     *
-     * @return the float[]
-     */
-    private float[] getArray() {
-        return M;
-    }
-
+  
     /**
      * Instantiates a new matrix.
      *

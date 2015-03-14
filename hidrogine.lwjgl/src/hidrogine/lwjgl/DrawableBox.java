@@ -1,7 +1,6 @@
 package hidrogine.lwjgl;
 
 import hidrogine.math.Matrix;
-import hidrogine.math.Vector2;
 import hidrogine.math.Vector3;
 
 import org.lwjgl.opengl.GL11;

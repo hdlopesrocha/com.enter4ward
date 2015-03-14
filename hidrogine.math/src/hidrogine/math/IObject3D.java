@@ -1,5 +1,6 @@
 package hidrogine.math;
 
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class IObject3D.
@@ -18,17 +19,20 @@ public abstract class IObject3D {
     /** The node. */
     private Space.Node node;
 
+    /** The Constant TEMP_SPHERE. */
     private static final BoundingSphere TEMP_SPHERE = new BoundingSphere();
+
+    /** The Constant TEMP_MODEL_MATRIX. */
     private static final Matrix TEMP_MODEL_MATRIX = new Matrix();
 
-    
     /**
      * Gets the model matrix.
      *
      * @return the model matrix
      */
     public Matrix getModelMatrix() {
-        return TEMP_MODEL_MATRIX.createFromQuaternion(rotation).translate(position);
+        return TEMP_MODEL_MATRIX.createFromQuaternion(rotation).translate(
+                position);
     }
 
     /**
@@ -39,8 +43,6 @@ public abstract class IObject3D {
     public IModel3D getModel() {
         return model;
     }
-
-
 
     /**
      * Instantiates a new i object3 d.
@@ -69,7 +71,7 @@ public abstract class IObject3D {
         // return new
         // Vector3(model.getContainer().getCenter()).transform(rotation).add(position);
         BoundingSphere cont = model.getContainer();
-        
+
         TEMP_SPHERE.set(cont).transform(rotation).add(position);
         TEMP_SPHERE.setRadius(cont.getRadius());
         return TEMP_SPHERE;
@@ -130,6 +132,34 @@ public abstract class IObject3D {
      */
     public Quaternion getRotation() {
         return rotation;
+    }
+
+    /**
+     * Closest triangle.
+     *
+     * @param ray
+     *            the ray
+     * @return the intersection info
+     */
+    public IntersectionInfo closestTriangle(final Ray ray) {
+        IntersectionInfo info = null;
+        final Model3D model = (Model3D) getModel();
+
+        for (Group g : model.getGroups()) {
+            for (IBufferObject b : g.getBuffers()) {
+
+                for (Triangle t : b.getTriangles()) {
+                    final Float i = ray.intersects(t);
+                    if (i != null && (info == null || i < info.distance)) {
+                        if (info == null)
+                            info = new IntersectionInfo();
+                        info.distance = i;
+                        info.triangle = t;
+                    }
+                }
+            }
+        }
+        return info;
     }
 
 }

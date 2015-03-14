@@ -1,20 +1,17 @@
 package hidrogine.lwjgl;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
-import hidrogine.math.IBufferBuilder;
 import hidrogine.math.Group;
+import hidrogine.math.IBufferBuilder;
 import hidrogine.math.IBufferObject;
 import hidrogine.math.IObject3D;
 import hidrogine.math.ITextureLoader;
 import hidrogine.math.Material;
 import hidrogine.math.Matrix;
-import hidrogine.math.Quaternion;
-import hidrogine.math.Vector3;
 import hidrogine.math.Model3D;
+import hidrogine.math.Quaternion;
 
-import org.lwjgl.opengl.GL11;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -2,8 +2,6 @@ package hidrogine.math;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.TreeMap;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -1,6 +1,5 @@
 package hidrogine.math;
 
-import java.util.List;
 
 // TODO: Auto-generated Javadoc
 /**

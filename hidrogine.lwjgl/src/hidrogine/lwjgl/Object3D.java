@@ -12,7 +12,6 @@ import hidrogine.math.Matrix;
 import hidrogine.math.Ray;
 import hidrogine.math.RayCollisionHandler;
 import hidrogine.math.Space;
-import hidrogine.math.Triangle;
 import hidrogine.math.Vector3;
 
 public class Object3D extends IObject3D implements RayCollisionHandler {
@@ -71,28 +70,6 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 				}
 			}
 		}
-	}
-
-	public IntersectionInfo closestTriangle(final Ray ray) {
-		IntersectionInfo info = null;
-		final LWJGLModel3D model = (LWJGLModel3D) getModel();
-
-		for (Group g : model.getGroups()) {
-			for (IBufferObject ib : g.getBuffers()) {
-				BufferObject b = (BufferObject) ib;
-
-				for (Triangle t : b.getTriangles()) {
-					final Float i = ray.intersects(t);
-					if (i != null && (info == null || i < info.distance)) {
-						if (info == null)
-							info = new IntersectionInfo();
-						info.distance = i;
-						info.triangle = t;
-					}
-				}
-			}
-		}
-		return info;
 	}
 
 
