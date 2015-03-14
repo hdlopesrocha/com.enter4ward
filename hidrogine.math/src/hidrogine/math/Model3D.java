@@ -32,6 +32,13 @@ public class Model3D implements IModel3D {
         
     }
     
+    private List<Vector3> lights = new ArrayList<Vector3>();
+
+    public List<Vector3> getLights() {
+        return lights;
+    }
+
+    
     /**
      * Instantiates a new model3 d.
      *
@@ -164,7 +171,7 @@ public class Model3D implements IModel3D {
 
                                 System.out.println("######### LIGHT AT "
                                         + vec.toString());
-                                // lights.add(vec);
+                                lights.add(vec);
                             }
 
                         }
