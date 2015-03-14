@@ -1,6 +1,6 @@
 package hidrogine.math;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -28,6 +28,10 @@ public class Model3D implements IModel3D {
         return groups;
     }
 
+    public Model3D() {
+        
+    }
+    
     /**
      * Instantiates a new model3 d.
      *
@@ -38,7 +42,7 @@ public class Model3D implements IModel3D {
      * @param scale
      *            the scale
      */
-    public Model3D(FileInputStream fis, float scale, IBufferBuilder builder,
+    public Model3D(InputStream fis, float scale, IBufferBuilder builder,
             final Quaternion rot) {
 
         try {
@@ -53,7 +57,6 @@ public class Model3D implements IModel3D {
                         String materialName = jsonParser.getCurrentName();
                         Material currentMaterial = new Material(materialName);
                         materials.put(materialName, currentMaterial);
-                        System.out.println("MMM:" + materialName);
                         jsonParser.nextToken();
                         while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
                             String key = jsonParser.getCurrentName();
