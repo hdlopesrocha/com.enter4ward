@@ -1,16 +1,6 @@
 package hidrogine.lwjgl;
 
-import hidrogine.math.BoundingSphere;
-import hidrogine.math.Vector2;
-import hidrogine.math.Triangle;
-import hidrogine.math.Vector3;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-import java.util.ArrayList;
-import java.util.List;
+import hidrogine.math.IBufferObject;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -22,7 +12,53 @@ import org.lwjgl.opengl.GL30;
 /**
  * The Class BufferObject.
  */
-public class BufferObject extends BoundingSphere {
+public class BufferObject extends IBufferObject {
+
+	// The amount of bytes an element has
+	/** The Constant elementBytes. */
+	public static final int elementBytes = 4;
+
+	// Elements per parameter
+	/** The Constant positionElementCount. */
+	public static final int positionElementCount = 3;
+
+	/** The Constant normalElementCount. */
+	public static final int normalElementCount = 3;
+
+	/** The Constant textureElementCount. */
+	public static final int textureElementCount = 2;
+
+	// Bytes per parameter
+	/** The Constant positionBytesCount. */
+	public static final int positionBytesCount = positionElementCount
+			* elementBytes;
+
+	/** The Constant normalByteCount. */
+	public static final int normalByteCount = normalElementCount * elementBytes;
+
+	/** The Constant textureByteCount. */
+	public static final int textureByteCount = textureElementCount * elementBytes;
+
+	// Byte offsets per parameter
+	/** The Constant positionByteOffset. */
+	public static final int positionByteOffset = 0;
+
+	/** The Constant normalByteOffset. */
+	public static final int normalByteOffset = positionByteOffset
+			+ positionBytesCount;
+
+	/** The Constant textureByteOffset. */
+	public static final int textureByteOffset = normalByteOffset
+			+ normalByteCount;
+
+	// The amount of elements that a vertex has
+	/** The Constant elementCount. */
+	public static final int elementCount = positionElementCount
+			+ normalElementCount + textureElementCount;
+	// The size of a vertex in bytes, like in C/C++: sizeof(Vertex)
+	/** The Constant stride. */
+	public static final int stride = positionBytesCount + normalByteCount
+			+ textureByteCount;
 
 	/*
 	 * (non-Javadoc)
@@ -38,26 +74,9 @@ public class BufferObject extends BoundingSphere {
 		return material;
 	}
 
-	/** The positions. */
-	private ArrayList<Vector3> positions = new ArrayList<Vector3>();
-
-	/** The normals. */
-	private ArrayList<Vector3> normals = new ArrayList<Vector3>();
-
-	/** The texture coords. */
-	private ArrayList<Vector2> textureCoords = new ArrayList<Vector2>();
-
-	/** The index data. */
-	private ArrayList<Short> indexData = new ArrayList<Short>();
-
 	/** The material. */
 	private Material material;
 
-	/** The triangles. */
-	private List<Triangle> triangles = new ArrayList<Triangle>();
-
-	/** The index_count. */
-	private int indexCount;
 
 	/** The vao id. */
 	private int vaoId;
@@ -68,144 +87,55 @@ public class BufferObject extends BoundingSphere {
 	/** The vbo id. */
 	private int vboId;
 
-	private boolean explodeTriangles;
 
 	/**
 	 * Instantiates a new buffer object.
+	 *
+	 * @param explodeTriangles
+	 *          the explode triangles
 	 */
 	public BufferObject(boolean explodeTriangles) {
-		this.explodeTriangles = explodeTriangles;
+		super(explodeTriangles);
 	}
 
 	/**
 	 * Sets the material.
 	 *
 	 * @param f
-	 *            the new material
+	 *          the new material
 	 */
 	public final void setMaterial(final Material f) {
 		material = f;
 	}
 
-	/**
-	 * Adds the vertex.
-	 *
-	 * @param vec
-	 *            the vec
-	 */
-	public final void addPosition(final Vector3 vec) {
-		positions.add(vec);
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see hidrogine.lwjgl.IBufferObject#addNormal(float, float, float)
-	 */
-	/**
-	 * Adds the normal.
-	 *
-	 * @param vec
-	 *            the vec
-	 */
-	public final void addNormal(final Vector3 vec) {
-		normals.add(vec);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see hidrogine.lwjgl.IBufferObject#addTextureCoord(float, float)
-	 */
-	/**
-	 * Adds the texture coord.
-	 *
-	 * @param vec
-	 *            the vec
-	 */
-	public final void addTextureCoord(final Vector2 vec) {
-		textureCoords.add(vec);
-	}
-
-	/**
-	 * Adds the index.
-	 *
-	 * @param f
-	 *            the f
-	 */
-	public final void addIndex(final short f) {
-		indexData.add(f);
-	}
 
 	/**
 	 * Builds the buffer.
 	 */
 	public final void buildBuffer() {
-		createFromPoints(positions);
-		if (explodeTriangles) {
-			for (int i = 0; i < indexData.size() ; i += 3) {
-				Vector3 a = positions.get(indexData.get(i));
-				Vector3 b = positions.get(indexData.get(i + 1));
-				Vector3 c = positions.get(indexData.get(i + 2));
-				triangles.add(new Triangle(a, b, c));
-			}
-		}
+		super.buildBuffer();
 
-		final ArrayList<Float> packedVector = new ArrayList<Float>();
-		while (positions.size() > 0 && normals.size() > 0
-				&& textureCoords.size() > 0) {
-			Vector3 pos = positions.remove(0);
-			Vector3 nrm = normals.remove(0);
-			Vector2 tex = textureCoords.remove(0);
-
-			packedVector.add(pos.getX());
-			packedVector.add(pos.getY());
-			packedVector.add(pos.getZ());
-			packedVector.add(nrm.getX());
-			packedVector.add(nrm.getY());
-			packedVector.add(nrm.getZ());
-			packedVector.add(tex.getX());
-			packedVector.add(tex.getY());
-		}
-
-		indexCount = indexData.size();
-		final FloatBuffer vertexBuffer = ByteBuffer
-				.allocateDirect(packedVector.size() * 4)
-				.order(ByteOrder.nativeOrder()).asFloatBuffer();
-		vertexBuffer.put(toFloatArray(packedVector)).position(0);
-
-		final ShortBuffer indexBuffer = ByteBuffer
-				.allocateDirect(indexData.size() * 2)
-				.order(ByteOrder.nativeOrder()).asShortBuffer();
-		indexBuffer.put(toShortArray(indexData)).position(0);
+		
 
 		// Create a new Vertex Array Object in memory and select it (bind)
 		vaoId = GL30.glGenVertexArrays();
 		vboiId = GL15.glGenBuffers();
 		vboId = GL15.glGenBuffers();
 
-		indexData.clear();
-		normals.clear();
-		positions.clear();
-		textureCoords.clear();
+
 
 		GL30.glBindVertexArray(vaoId);
 		// Create a new Vertex Buffer Object in memory and select it (bind)
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboId);
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertexBuffer,
-				GL15.GL_STATIC_DRAW);
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertexBuffer, GL15.GL_STATIC_DRAW);
 
 		// Put the position coordinates in attribute list 0
-		GL20.glVertexAttribPointer(0, VertexData.positionElementCount,
-				GL11.GL_FLOAT, false, VertexData.stride,
-				VertexData.positionByteOffset);
-		GL20.glVertexAttribPointer(1, VertexData.normalElementCount,
-				GL11.GL_FLOAT, false, VertexData.stride,
-				VertexData.normalByteOffset);
-		GL20.glVertexAttribPointer(2, VertexData.textureElementCount,
-				GL11.GL_FLOAT, false, VertexData.stride,
-				VertexData.textureByteOffset);
+		GL20.glVertexAttribPointer(0, positionElementCount, GL11.GL_FLOAT, false,
+				stride, positionByteOffset);
+		GL20.glVertexAttribPointer(1, normalElementCount, GL11.GL_FLOAT, false,
+				stride, normalByteOffset);
+		GL20.glVertexAttribPointer(2, textureElementCount, GL11.GL_FLOAT, false,
+				stride, textureByteOffset);
 
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 
@@ -220,35 +150,7 @@ public class BufferObject extends BoundingSphere {
 
 	}
 
-	/**
-	 * To float array.
-	 *
-	 * @param list
-	 *            the list
-	 * @return the float[]
-	 */
-	private static float[] toFloatArray(final ArrayList<Float> list) {
-		float[] ret = new float[list.size()];
-		for (int i = 0; i < ret.length; ++i) {
-			ret[i] = list.get(i);
-		}
-		return ret;
-	}
 
-	/**
-	 * To short array.
-	 *
-	 * @param list
-	 *            the list
-	 * @return the short[]
-	 */
-	private static short[] toShortArray(final ArrayList<Short> list) {
-		short[] ret = new short[list.size()];
-		for (int i = 0; i < ret.length; ++i) {
-			ret[i] = list.get(i);
-		}
-		return ret;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -259,7 +161,7 @@ public class BufferObject extends BoundingSphere {
 	 * Bind.
 	 *
 	 * @param shader
-	 *            the shader
+	 *          the shader
 	 */
 	public final void bind(final ShaderProgram shader) {
 		int tex = material != null ? material.texture : 0;
@@ -271,8 +173,7 @@ public class BufferObject extends BoundingSphere {
 				shader.setMaterialSpecular(material.Ks[0], material.Ks[1],
 						material.Ks[2]);
 			if (material.Kd != null)
-				shader.setDiffuseColor(material.Kd[0], material.Kd[1],
-						material.Kd[2]);
+				shader.setDiffuseColor(material.Kd[0], material.Kd[1], material.Kd[2]);
 			if (material.d != null)
 				shader.setMaterialAlpha(material.d);
 
@@ -287,7 +188,7 @@ public class BufferObject extends BoundingSphere {
 	 * Draw.
 	 *
 	 * @param shader
-	 *            the shader
+	 *          the shader
 	 */
 	public final void draw(final ShaderProgram shader) {
 		// Bind to the VAO that has all the information about the vertices
@@ -302,8 +203,8 @@ public class BufferObject extends BoundingSphere {
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboiId);
 
 		// Draw the vertices
-		GL11.glDrawElements(GL11.GL_TRIANGLES, indexCount,
-				GL11.GL_UNSIGNED_SHORT, 0);
+		GL11.glDrawElements(GL11.GL_TRIANGLES, indexCount, GL11.GL_UNSIGNED_SHORT,
+				0);
 
 		// Put everything back to default (deselect)
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -313,7 +214,5 @@ public class BufferObject extends BoundingSphere {
 		GL30.glBindVertexArray(0);
 	}
 
-	public Iterable<Triangle> getTriangles() {
-		return triangles;
-	}
+
 }

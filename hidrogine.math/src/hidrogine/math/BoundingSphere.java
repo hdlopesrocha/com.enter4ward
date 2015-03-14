@@ -1,5 +1,7 @@
 package hidrogine.math;
 
+import java.util.List;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Box.
@@ -122,6 +124,32 @@ public class BoundingSphere extends Vector3 {
         return distanceSquared(vec) <= getRadius() * getRadius();
     }
 
+
+
+    /**
+     * Intersects.
+     *
+     * @param plane
+     *            the plane
+     * @return the plane intersection type
+     */
+    public PlaneIntersectionType intersects(Plane plane) {
+        // TODO Auto-generated method stub
+        return plane.intersects(this);
+    }
+
+    /**
+     * Intersects.
+     *
+     * @param sphere
+     *            the sphere
+     * @return the boolean
+     */
+    public Boolean intersects(BoundingSphere sphere) {
+        return distance(sphere) < getRadius()
+                + sphere.getRadius();
+    }
+
     /**
      * Creates the from points.
      *
@@ -158,29 +186,4 @@ public class BoundingSphere extends Vector3 {
                         * (maxY - minY) + (maxZ - minZ) * (maxZ - minZ)) / 2d));
         return this;
     }
-
-    /**
-     * Intersects.
-     *
-     * @param plane
-     *            the plane
-     * @return the plane intersection type
-     */
-    public PlaneIntersectionType intersects(Plane plane) {
-        // TODO Auto-generated method stub
-        return plane.intersects(this);
-    }
-
-    /**
-     * Intersects.
-     *
-     * @param sphere
-     *            the sphere
-     * @return the boolean
-     */
-    public Boolean intersects(BoundingSphere sphere) {
-        return distance(sphere) < getRadius()
-                + sphere.getRadius();
-    }
-
 }

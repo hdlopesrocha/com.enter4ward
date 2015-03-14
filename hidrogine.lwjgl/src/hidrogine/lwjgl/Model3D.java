@@ -195,13 +195,11 @@ public class Model3D implements IModel3D {
 					float tx = (float) vt.getDouble(k * 2 + 0);
 					float ty = (float) vt.getDouble(k * 2 + 1);
 					Vector3 pos = new Vector3(vx, vy, vz);
-					Vector3 nrm = new Vector3(nx, ny, nz);
-					Vector2 tex = new Vector2(tx, 1f-ty);
 					groupPoints.add(pos);
 					points.add(pos);
-					currentSubGroup.addPosition(pos);
-					currentSubGroup.addNormal(nrm);
-					currentSubGroup.addTextureCoord(tex);
+					currentSubGroup.addVertex(vx, vy, vz);
+					currentSubGroup.addNormal(nx, ny, nz);
+					currentSubGroup.addTexture(tx, 1f-ty);
 
 				}
 				final JSONArray ii = jSubGroup.getJSONArray("ii");

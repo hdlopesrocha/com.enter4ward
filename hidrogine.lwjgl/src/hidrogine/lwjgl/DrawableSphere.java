@@ -22,13 +22,12 @@ public class DrawableSphere {
 					   };
 
 		for (int i = 0; i < packedVector.length; i += 8) {
-			obj.addPosition(new Vector3(packedVector[i + 0],
-					packedVector[i + 1], packedVector[i + 2]));
+			obj.addVertex(packedVector[i + 0], packedVector[i + 1],
+					packedVector[i + 2]);
 
-			obj.addNormal(new Vector3(packedVector[i + 3], packedVector[i + 4],
-					packedVector[i + 5]));
-			obj.addTextureCoord(new Vector2(packedVector[i + 6],
-					packedVector[i + 7]));
+			obj.addNormal(packedVector[i + 3], packedVector[i + 4],
+					packedVector[i + 5]);
+			obj.addTexture(packedVector[i + 6], packedVector[i + 7]);
 
 		}
 
