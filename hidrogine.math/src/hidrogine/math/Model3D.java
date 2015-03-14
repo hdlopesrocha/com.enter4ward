@@ -168,9 +168,6 @@ public class Model3D implements IModel3D {
                                 if (rot != null) {
                                     vec.transform(rot);
                                 }
-
-                                System.out.println("######### LIGHT AT "
-                                        + vec.toString());
                                 lights.add(vec);
                             }
 
