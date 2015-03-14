@@ -51,16 +51,16 @@ public class XModel3D implements IModel3D {
 	 * @param scale
 	 *            the scale
 	 */
-	public XModel3D(FileInputStream mat, FileInputStream geo, float scale, IBufferBuilder builder) {
+	public XModel3D(FileInputStream fis, float scale, IBufferBuilder builder) {
 		this.bufferBuilder = builder;
 		try {
-	
+			final JSONTokener tokener = new JSONTokener(fis);
+			final JSONObject root = new JSONObject(tokener);
 			
-			loadMaterials(mat);
-			loadGeometry(geo, scale);
+			loadMaterials(root);
+			loadGeometry(root, scale);
 			
-			geo.close();
-			mat.close();
+			fis.close();
 
 		} catch (JSONException | IOException e) {
 			e.printStackTrace();
@@ -87,11 +87,10 @@ public class XModel3D implements IModel3D {
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	private void loadMaterials(FileInputStream fis) throws JSONException,
+	private void loadMaterials(JSONObject root) throws JSONException,
 			IOException {
 
-		final JSONTokener tokener = new JSONTokener(fis);
-		final JSONObject jObject = new JSONObject(tokener);
+		final JSONObject jObject = root.getJSONObject("materials");
 		final Iterator<String> keys = jObject.keys();
 
 		while (keys.hasNext()) {
@@ -160,11 +159,11 @@ public class XModel3D implements IModel3D {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@SuppressWarnings("unchecked")
-	private void loadGeometry(FileInputStream fis, final float scale)
+	private void loadGeometry(JSONObject root, final float scale)
 			throws JSONException, IOException {
 		final List<Vector3> points = new ArrayList<Vector3>();
-		final JSONTokener tokener = new JSONTokener(fis);
-		final JSONObject jObject = new JSONObject(tokener);
+
+		final JSONObject jObject = root.getJSONObject("groups");
 		final Iterator<String> groupNames = jObject.keys();
 		while (groupNames.hasNext()) {
 			final String groupName = groupNames.next();

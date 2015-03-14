@@ -51,7 +51,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	/** The draws. */
 	public static int draws = 0;
 
-	private static int scene = 2;
+	private static int scene = 0;
 
 
 	
@@ -97,10 +97,9 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		/** The box. */
 		Model3D car = null,box = null,surface = null;
 		try {
-			car = new Model3D("car.mat", "car.geo", 1f, bufferBuilder);
-			box = new Model3D("box.mat", "box.geo", 1f, bufferBuilder);
-			// Model3D surface = new Model3D("surface.mat", "surface.geo", 2f, true);
-			surface = new Model3D("surface.mat", "half.geo", 50f, bufferBuilder);
+			car = new Model3D("car.json", 1f, bufferBuilder);
+			box = new Model3D("box.json", 1f, bufferBuilder);
+			surface = new Model3D("half.json", 50f, bufferBuilder);
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

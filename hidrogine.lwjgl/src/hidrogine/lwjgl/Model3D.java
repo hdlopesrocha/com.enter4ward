@@ -40,9 +40,9 @@ public class Model3D extends XModel3D {
 	 * @throws FileNotFoundException 
 	 */
 	
-	public Model3D(String materials, String geometry, float scale,
+	public Model3D(String geometry, float scale,
 			IBufferBuilder builder) throws FileNotFoundException {
-		super(new FileInputStream(materials), new FileInputStream(geometry), scale, builder);
+		super(new FileInputStream(geometry), scale, builder);
 		
 
 		
