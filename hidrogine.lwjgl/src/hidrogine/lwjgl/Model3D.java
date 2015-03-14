@@ -1,10 +1,11 @@
 package hidrogine.lwjgl;
 
 import hidrogine.math.BoundingSphere;
+import hidrogine.math.Group;
+import hidrogine.math.IBufferObject;
 import hidrogine.math.IModel3D;
 import hidrogine.math.IObject3D;
 import hidrogine.math.Matrix;
-import hidrogine.math.Vector2;
 import hidrogine.math.Vector3;
 
 import java.io.FileInputStream;
@@ -227,12 +228,14 @@ public class Model3D implements IModel3D {
 	 */
 	public void draw(IObject3D obj, ShaderProgram shader, DrawHandler handler) {
 		for (Group g : groups) {
-			for (BufferObject sg : g.getBuffers()) {
-				sg.bind(shader);
-				Matrix mat=	handler.onDraw(obj,g, sg);
+			for (IBufferObject ib : g.getBuffers()) {
+				BufferObject b = (BufferObject) ib;
+
+				b.bind(shader);
+				Matrix mat=	handler.onDraw(obj,g, b);
 				if(mat!=null){
 					shader.setModelMatrix(mat);	
-					sg.draw(shader);
+					b.draw(shader);
 				}
 			}
 		}

@@ -3,15 +3,17 @@ package hidrogine.lwjgl;
 import hidrogine.math.BoundingFrustum;
 import hidrogine.math.BoundingSphere;
 import hidrogine.math.ContainmentType;
+import hidrogine.math.Group;
+import hidrogine.math.IBufferObject;
 import hidrogine.math.IModel3D;
 import hidrogine.math.IObject3D;
-import hidrogine.math.Vector3;
 import hidrogine.math.IntersectionInfo;
 import hidrogine.math.Matrix;
 import hidrogine.math.Ray;
 import hidrogine.math.RayCollisionHandler;
 import hidrogine.math.Space;
 import hidrogine.math.Triangle;
+import hidrogine.math.Vector3;
 
 public class Object3D extends IObject3D implements RayCollisionHandler {
 
@@ -58,7 +60,8 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		final Matrix matrix = getModelMatrix();
 		final Model3D model = (Model3D) getModel();
 		for (final Group g : model.getGroups()) {
-			for (final BufferObject b : g.getBuffers()) {
+			for (final IBufferObject ib : g.getBuffers()) {
+				BufferObject b = (BufferObject) ib;
 				final BoundingSphere sph = BoundingSphere.temp().set(b);
 				sph.add(matrix.getTranslation());
 				if (frustum.contains(sph) != ContainmentType.Disjoint) {
@@ -75,7 +78,9 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		final Model3D model = (Model3D) getModel();
 
 		for (Group g : model.getGroups()) {
-			for (BufferObject b : g.getBuffers()) {
+			for (IBufferObject ib : g.getBuffers()) {
+				BufferObject b = (BufferObject) ib;
+
 				for (Triangle t : b.getTriangles()) {
 					final Float i = ray.intersects(t);
 					if (i != null && (info == null || i < info.distance)) {

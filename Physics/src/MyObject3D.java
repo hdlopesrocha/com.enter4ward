@@ -1,11 +1,12 @@
 import hidrogine.lwjgl.BufferObject;
-import hidrogine.lwjgl.Group;
 import hidrogine.lwjgl.Model3D;
 import hidrogine.lwjgl.Object3D;
 import hidrogine.lwjgl.ShaderProgram;
 import hidrogine.math.BoundingFrustum;
 import hidrogine.math.BoundingSphere;
 import hidrogine.math.ContainmentType;
+import hidrogine.math.Group;
+import hidrogine.math.IBufferObject;
 import hidrogine.math.Matrix;
 import hidrogine.math.Vector3;
 
@@ -32,7 +33,8 @@ public class MyObject3D extends Object3D {
 			final BoundingSphere groupSphere = new BoundingSphere(g);
 			groupSphere.transform(getRotation()).add(getPosition());
 			if (frustum.contains(groupSphere) != ContainmentType.Disjoint) {
-				for (final BufferObject b : g.getBuffers()) {
+				for (final IBufferObject ib : g.getBuffers()) {
+					BufferObject b = (BufferObject) ib;
 					b.bind(program);
 					final BoundingSphere bufferSphere = new BoundingSphere(b);
 					bufferSphere.transform(getRotation()).add(getPosition());

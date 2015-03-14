@@ -1,5 +1,6 @@
 package hidrogine.lwjgl;
 
+import hidrogine.math.Group;
 import hidrogine.math.IObject3D;
 import hidrogine.math.Matrix;
 
