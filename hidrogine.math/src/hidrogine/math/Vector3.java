@@ -342,7 +342,8 @@ public class Vector3 {
 
     @Override
     public int hashCode() {
-        return Float.hashCode(x*3+y*5+z*7);
+        Float f = x*3+y*5+z*7;
+        return f.hashCode();
     }
 
     /**
