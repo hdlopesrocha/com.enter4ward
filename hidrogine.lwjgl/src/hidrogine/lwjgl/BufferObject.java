@@ -1,6 +1,7 @@
 package hidrogine.lwjgl;
 
 import hidrogine.math.IBufferObject;
+import hidrogine.math.Material;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;

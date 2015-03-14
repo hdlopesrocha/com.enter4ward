@@ -1,4 +1,5 @@
-package hidrogine.lwjgl;
+package hidrogine.math;
+
 
 
 
@@ -14,16 +15,21 @@ public class Material {
     public Float Ni;
     public int texture = 0;
     public String name;
+    public String filename;
     
     public Material(String n) {
         name = n;
     }
     
     public void setTexture(String filename) {
-        texture = TextureLoader.loadTexture(filename);
+    	this.filename = filename;
     }
 
     public String getName() {
         return name;
     }
+
+		public void load(ITextureLoader loader) {
+      texture = loader.load();			
+		}
 }

@@ -4,7 +4,7 @@ import hidrogine.lwjgl.Game;
 import hidrogine.lwjgl.Model3D;
 import hidrogine.lwjgl.Object3D;
 import hidrogine.math.BoundingBox;
-import hidrogine.math.BufferBuilder;
+import hidrogine.math.IBufferBuilder;
 import hidrogine.math.Camera;
 import hidrogine.math.IBufferObject;
 import hidrogine.math.Matrix;
@@ -15,6 +15,7 @@ import hidrogine.math.Vector3;
 import hidrogine.math.VisibleNodeHandler;
 import hidrogine.math.VisibleObjectHandler;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -54,7 +55,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 
 
 	
-	private static BufferBuilder bufferBuilder = new BufferBuilder() {
+	private static IBufferBuilder bufferBuilder = new IBufferBuilder() {
 		
 		@Override
 		public IBufferObject build() {
@@ -94,10 +95,17 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		space = new Space(32);
 		box = new DrawableBox();
 		/** The box. */
-		Model3D car = new Model3D("car.mat", "car.geo", 1f, bufferBuilder);
-		Model3D box = new Model3D("box.mat", "box.geo", 1f, bufferBuilder);
-		// Model3D surface = new Model3D("surface.mat", "surface.geo", 2f, true);
-		Model3D surface = new Model3D("surface.mat", "half.geo", 50f, bufferBuilder);
+		Model3D car = null,box = null,surface = null;
+		try {
+			car = new Model3D("car.mat", "car.geo", 1f, bufferBuilder);
+			box = new Model3D("box.mat", "box.geo", 1f, bufferBuilder);
+			// Model3D surface = new Model3D("surface.mat", "surface.geo", 2f, true);
+			surface = new Model3D("surface.mat", "half.geo", 50f, bufferBuilder);
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		Object3D obj1 = new Object3D(new Vector3(0, 0, 0), surface) {
 		};

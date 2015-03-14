@@ -1,6 +1,5 @@
 import hidrogine.lwjgl.BufferObject;
 import hidrogine.lwjgl.DrawableSphere;
-import hidrogine.lwjgl.Material;
 import hidrogine.lwjgl.Model3D;
 import hidrogine.lwjgl.Object3D;
 import hidrogine.lwjgl.ShaderProgram;
@@ -9,6 +8,7 @@ import hidrogine.math.BoundingSphere;
 import hidrogine.math.ContainmentType;
 import hidrogine.math.Group;
 import hidrogine.math.IBufferObject;
+import hidrogine.math.Material;
 import hidrogine.math.Matrix;
 import hidrogine.math.Space;
 import hidrogine.math.Vector3;

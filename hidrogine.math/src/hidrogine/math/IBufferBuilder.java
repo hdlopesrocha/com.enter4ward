@@ -2,7 +2,7 @@ package hidrogine.math;
 
 import hidrogine.math.IBufferObject;
 
-public interface BufferBuilder {
+public interface IBufferBuilder {
 
 	IBufferObject build();
 	
