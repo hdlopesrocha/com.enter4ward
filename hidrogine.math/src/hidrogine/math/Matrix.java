@@ -503,24 +503,24 @@ public class Matrix {
      *            the matrix2
      * @return the matrix
      */
-    public Matrix add(Matrix matrix1, Matrix matrix2) {
-        matrix1.M[0] += matrix2.M[0];
-        matrix1.M[1] += matrix2.M[1];
-        matrix1.M[2] += matrix2.M[2];
-        matrix1.M[3] += matrix2.M[3];
-        matrix1.M[4] += matrix2.M[4];
-        matrix1.M[5] += matrix2.M[5];
-        matrix1.M[6] += matrix2.M[6];
-        matrix1.M[7] += matrix2.M[7];
-        matrix1.M[8] += matrix2.M[8];
-        matrix1.M[9] += matrix2.M[9];
-        matrix1.M[10] += matrix2.M[10];
-        matrix1.M[11] += matrix2.M[11];
-        matrix1.M[12] += matrix2.M[12];
-        matrix1.M[13] += matrix2.M[13];
-        matrix1.M[14] += matrix2.M[14];
-        matrix1.M[15] += matrix2.M[15];
-        return matrix1;
+    public Matrix add(Matrix matrix2) {
+        M[0] += matrix2.M[0];
+        M[1] += matrix2.M[1];
+        M[2] += matrix2.M[2];
+        M[3] += matrix2.M[3];
+        M[4] += matrix2.M[4];
+        M[5] += matrix2.M[5];
+        M[6] += matrix2.M[6];
+        M[7] += matrix2.M[7];
+        M[8] += matrix2.M[8];
+        M[9] += matrix2.M[9];
+        M[10] += matrix2.M[10];
+        M[11] += matrix2.M[11];
+        M[12] += matrix2.M[12];
+        M[13] += matrix2.M[13];
+        M[14] += matrix2.M[14];
+        M[15] += matrix2.M[15];
+        return this;
     }
 
     /**
@@ -967,27 +967,27 @@ public class Matrix {
      *            the divider
      * @return the matrix
      */
-    public Matrix divide(Matrix matrix1, float divider) {
+    public Matrix divide(float divider) {
         float inverseDivider = 1f / divider;
 
-        matrix1.M[0] = matrix1.M[0] * inverseDivider;
-        matrix1.M[1] = matrix1.M[1] * inverseDivider;
-        matrix1.M[2] = matrix1.M[2] * inverseDivider;
-        matrix1.M[3] = matrix1.M[3] * inverseDivider;
-        matrix1.M[4] = matrix1.M[4] * inverseDivider;
-        matrix1.M[5] = matrix1.M[5] * inverseDivider;
-        matrix1.M[6] = matrix1.M[6] * inverseDivider;
-        matrix1.M[7] = matrix1.M[7] * inverseDivider;
-        matrix1.M[8] = matrix1.M[8] * inverseDivider;
-        matrix1.M[9] = matrix1.M[9] * inverseDivider;
-        matrix1.M[10] = matrix1.M[10] * inverseDivider;
-        matrix1.M[11] = matrix1.M[11] * inverseDivider;
-        matrix1.M[12] = matrix1.M[12] * inverseDivider;
-        matrix1.M[13] = matrix1.M[13] * inverseDivider;
-        matrix1.M[14] = matrix1.M[14] * inverseDivider;
-        matrix1.M[15] = matrix1.M[15] * inverseDivider;
+        M[0] *= inverseDivider;
+        M[1] *= inverseDivider;
+        M[2] *= inverseDivider;
+        M[3] *= inverseDivider;
+        M[4] *= inverseDivider;
+        M[5] *= inverseDivider;
+        M[6] *= inverseDivider;
+        M[7] *= inverseDivider;
+        M[8] *= inverseDivider;
+        M[9] *= inverseDivider;
+        M[10] *= inverseDivider;
+        M[11] *= inverseDivider;
+        M[12] *= inverseDivider;
+        M[13] *= inverseDivider;
+        M[14] *= inverseDivider;
+        M[15] *= inverseDivider;
 
-        return matrix1;
+        return this;
     }
 
     /**
@@ -1140,24 +1140,24 @@ public class Matrix {
      *            the factor
      * @return the matrix
      */
-    public static Matrix multiply(Matrix matrix1, float factor) {
-        matrix1.M[0] *= factor;
-        matrix1.M[1] *= factor;
-        matrix1.M[2] *= factor;
-        matrix1.M[3] *= factor;
-        matrix1.M[4] *= factor;
-        matrix1.M[5] *= factor;
-        matrix1.M[6] *= factor;
-        matrix1.M[7] *= factor;
-        matrix1.M[8] *= factor;
-        matrix1.M[9] *= factor;
-        matrix1.M[10] *= factor;
-        matrix1.M[11] *= factor;
-        matrix1.M[12] *= factor;
-        matrix1.M[13] *= factor;
-        matrix1.M[14] *= factor;
-        matrix1.M[15] *= factor;
-        return matrix1;
+    public Matrix multiply(float factor) {
+        M[0] *= factor;
+        M[1] *= factor;
+        M[2] *= factor;
+        M[3] *= factor;
+        M[4] *= factor;
+        M[5] *= factor;
+        M[6] *= factor;
+        M[7] *= factor;
+        M[8] *= factor;
+        M[9] *= factor;
+        M[10] *= factor;
+        M[11] *= factor;
+        M[12] *= factor;
+        M[13] *= factor;
+        M[14] *= factor;
+        M[15] *= factor;
+        return this;
     }
 
     /**
@@ -1167,24 +1167,24 @@ public class Matrix {
      *            the matrix
      * @return the matrix
      */
-    public Matrix negate(Matrix matrix) {
-        matrix.M[0] = -matrix.M[0];
-        matrix.M[1] = -matrix.M[1];
-        matrix.M[2] = -matrix.M[2];
-        matrix.M[3] = -matrix.M[3];
-        matrix.M[4] = -matrix.M[4];
-        matrix.M[5] = -matrix.M[5];
-        matrix.M[6] = -matrix.M[6];
-        matrix.M[7] = -matrix.M[7];
-        matrix.M[8] = -matrix.M[8];
-        matrix.M[9] = -matrix.M[9];
-        matrix.M[10] = -matrix.M[10];
-        matrix.M[11] = -matrix.M[11];
-        matrix.M[12] = -matrix.M[12];
-        matrix.M[13] = -matrix.M[13];
-        matrix.M[14] = -matrix.M[14];
-        matrix.M[15] = -matrix.M[15];
-        return matrix;
+    public Matrix negate() {
+        M[0] = -M[0];
+        M[1] = -M[1];
+        M[2] = -M[2];
+        M[3] = -M[3];
+        M[4] = -M[4];
+        M[5] = -M[5];
+        M[6] = -M[6];
+        M[7] = -M[7];
+        M[8] = -M[8];
+        M[9] = -M[9];
+        M[10] = -M[10];
+        M[11] = -M[11];
+        M[12] = -M[12];
+        M[13] = -M[13];
+        M[14] = -M[14];
+        M[15] = -M[15];
+        return this;
     }
 
     /**
@@ -1196,24 +1196,24 @@ public class Matrix {
      *            the matrix2
      * @return the matrix
      */
-    public Matrix subtract(Matrix matrix1, Matrix matrix2) {
-        matrix1.M[0] -= matrix2.M[0];
-        matrix1.M[1] -= matrix2.M[1];
-        matrix1.M[2] -= matrix2.M[2];
-        matrix1.M[3] -= matrix2.M[3];
-        matrix1.M[4] -= matrix2.M[4];
-        matrix1.M[5] -= matrix2.M[5];
-        matrix1.M[6] -= matrix2.M[6];
-        matrix1.M[7] -= matrix2.M[7];
-        matrix1.M[8] -= matrix2.M[8];
-        matrix1.M[9] -= matrix2.M[9];
-        matrix1.M[10] -= matrix2.M[10];
-        matrix1.M[11] -= matrix2.M[11];
-        matrix1.M[12] -= matrix2.M[12];
-        matrix1.M[13] -= matrix2.M[13];
-        matrix1.M[14] -= matrix2.M[14];
-        matrix1.M[15] -= matrix2.M[15];
-        return matrix1;
+    public Matrix subtract(Matrix matrix2) {
+        M[0] -= matrix2.M[0];
+        M[1] -= matrix2.M[1];
+        M[2] -= matrix2.M[2];
+        M[3] -= matrix2.M[3];
+        M[4] -= matrix2.M[4];
+        M[5] -= matrix2.M[5];
+        M[6] -= matrix2.M[6];
+        M[7] -= matrix2.M[7];
+        M[8] -= matrix2.M[8];
+        M[9] -= matrix2.M[9];
+        M[10] -= matrix2.M[10];
+        M[11] -= matrix2.M[11];
+        M[12] -= matrix2.M[12];
+        M[13] -= matrix2.M[13];
+        M[14] -= matrix2.M[14];
+        M[15] -= matrix2.M[15];
+        return this;
     }
 
     /**

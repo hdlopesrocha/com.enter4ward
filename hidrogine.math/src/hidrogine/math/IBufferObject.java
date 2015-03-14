@@ -9,15 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class IBufferObject extends BoundingSphere {
-    private final static ArrayList<Float> vertexData = new ArrayList<Float>(
-            100000);
-    private final static ArrayList<Float> normalData = new ArrayList<Float>(
-            100000);
-    private final static ArrayList<Float> textureData = new ArrayList<Float>(
-            100000);
-    private final static ArrayList<Short> indexData = new ArrayList<Short>(
-            100000);
+    private final static float [] packedData = new float[300000];
+    private final static short [] indexData = new short[100000];
 
+
+    private static int vertexDataPointer = 0, normalDataPointer =0, textureDataPointer=0, indexDataPointer =0 ;
+    
+    
     protected FloatBuffer vertexBuffer;
     protected ShortBuffer indexBuffer;
     protected IntBuffer vbo;
@@ -37,10 +35,12 @@ public abstract class IBufferObject extends BoundingSphere {
     }
 
     public void addVertex(float x, float y, float z) {
-        vertexData.add(x);
-        vertexData.add(y);
-        vertexData.add(z);
+        packedData[vertexDataPointer*8+0]= x;
+        packedData[vertexDataPointer*8+1]= y;
+        packedData[vertexDataPointer*8+2]= z;
 
+        vertexDataPointer++;
+        
         if (!inited) {
             minX = maxX = x;
             minY = maxY = y;
@@ -57,24 +57,27 @@ public abstract class IBufferObject extends BoundingSphere {
     }
 
     public void addNormal(float x, float y, float z) {
-        normalData.add(x);
-        normalData.add(y);
-        normalData.add(z);
+        packedData[normalDataPointer*8+3]= x;
+        packedData[normalDataPointer*8+4]= y;
+        packedData[normalDataPointer*8+5]= z;
+        normalDataPointer++;
     }
 
     public void addTexture(float u, float v) {
-        textureData.add(u);
-        textureData.add(v);
+        packedData[textureDataPointer*8+6]= u;
+        packedData[textureDataPointer*8+7]= v;
+        textureDataPointer++;
     }
 
     public void addIndex(short f) {
-        indexData.add(f);
+        indexData[indexDataPointer++]= f;
+
     }
 
     private Vector3 getVector3(int i){
-        float x = vertexData.get(i*3+0);
-        float y = vertexData.get(i*3+1);
-        float z = vertexData.get(i*3+2);
+        float x = packedData[i*8+0];
+        float y = packedData[i*8+1];
+        float z = packedData[i*8+2];
         return new Vector3(x,y,z);
         
         
@@ -95,73 +98,50 @@ public abstract class IBufferObject extends BoundingSphere {
 
         /* EXTRACT TRIANGLES */
         if (explodeTriangles) {
-            for (int i = 0; i < indexData.size(); i += 3) {
+            for (int i = 0; i < indexDataPointer; i += 3) {
                 
+        
                 
-                
-                Vector3 a = getVector3(indexData.get(i));
-                Vector3 b = getVector3(indexData.get(i + 1));
-                Vector3 c = getVector3(indexData.get(i + 2));
+                Vector3 a = getVector3(indexData[i]);
+                Vector3 b = getVector3(indexData[i + 1]);
+                Vector3 c = getVector3(indexData[i + 2]);
                 triangles.add(new Triangle(a, b, c));
             }
         }
 
         /* BUILD BUFFERS */
 
-        int vv = 0, vt = 0, vn = 0;
-        vboSize = vertexData.size();
-        int size = vertexData.size() + normalData.size() + textureData.size();
+        int pp = 0, ii=0;
+        vboSize = vertexDataPointer;
+        int size = vertexDataPointer*8;
         vertexBuffer = ByteBuffer.allocateDirect(size * 4)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
 
-        while (vv < vertexData.size() && vn < normalData.size()
-                && vt < textureData.size()) {
-            vertexBuffer.put(vertexData.get(vv++));
-            vertexBuffer.put(vertexData.get(vv++));
-            vertexBuffer.put(vertexData.get(vv++));
-            vertexBuffer.put(normalData.get(vn++));
-            vertexBuffer.put(normalData.get(vn++));
-            vertexBuffer.put(normalData.get(vn++));
-            vertexBuffer.put(textureData.get(vt++));
-            vertexBuffer.put(textureData.get(vt++));
+        while (pp < size) {
+            vertexBuffer.put(packedData[pp++]);
         }
-        indexCount = indexData.size();
+        indexCount = indexDataPointer;
         vertexBuffer.position(0);
 
-        indexBuffer = ByteBuffer.allocateDirect(indexData.size() * 2)
+        indexBuffer = ByteBuffer.allocateDirect(indexDataPointer * 2)
                 .order(ByteOrder.nativeOrder()).asShortBuffer();
-        indexBuffer.put(toShortArray(indexData)).position(0);
+      
+        
+        while (ii < indexDataPointer) {
+            indexBuffer.put(indexData[ii++]);
+        }
+        
+        indexBuffer.position(0);
 
         // CLEAR
-        vertexData.clear();
-        normalData.clear();
-        textureData.clear();
-        indexData.clear();
+        vertexDataPointer = 0;
+        normalDataPointer = 0;
+        textureDataPointer = 0;
+        indexDataPointer=0;
 
     }
 
-    protected static short[] toShortArray(ArrayList<Short> list) {
-        short[] ret = new short[list.size()];
-        for (int i = 0; i < ret.length; ++i)
-            ret[i] = list.get(i);
-        return ret;
-    }
-
-    /**
-     * To float array.
-     *
-     * @param list
-     *            the list
-     * @return the float[]
-     */
-    protected static float[] toFloatArray(final ArrayList<Float> list) {
-        float[] ret = new float[list.size()];
-        for (int i = 0; i < ret.length; ++i) {
-            ret[i] = list.get(i);
-        }
-        return ret;
-    }
-
+  
     
     /**
      * Gets the triangles.

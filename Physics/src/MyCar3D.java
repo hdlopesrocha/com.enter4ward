@@ -20,6 +20,7 @@ public class MyCar3D extends Object3D {
 
 	public MyCar3D(Vector3 position, Model3D model) {
 		super(position, model);
+		getAceleration().set(0);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -34,6 +35,8 @@ public class MyCar3D extends Object3D {
 	private static final Matrix TEMP_MATRIX = new Matrix();
 	private static final Matrix TEMP_ROTATION = new Matrix();
 
+	
+	
 	@Override
 	public void draw(final ShaderProgram program, final BoundingFrustum frustum) {
 		final Matrix modelMatrix = getModelMatrix();
@@ -55,7 +58,7 @@ public class MyCar3D extends Object3D {
 						program.reset();
 						b.bind(program);
 						final Material m = b.getMaterial();
-						final Matrix matrix = TEMP_MATRIX;
+						final Matrix matrix = TEMP_MATRIX.set(Matrix.IDENTITY);
 
 						if (m.getName().equals("c0")) {
 							program.setDiffuseColor(
@@ -64,16 +67,16 @@ public class MyCar3D extends Object3D {
 									(float) (Math.sin(time * Math.PI / 2)
 											* Math.cos(time * Math.PI / 2) + 1) / 2f);
 						}
-						if (g.getName().startsWith("w")
+						else if (g.getName().startsWith("w")
 								&& g.getName().length() == 2) {
 							final Vector3 center = TEMP_CENTER.set(g)
 									.multiply(-1f);
-							matrix.translate(center).multiply(
-									TEMP_ROTATION.createRotationX(time * 8));
+							matrix.createTranslation(center);
+							matrix.multiply(TEMP_ROTATION.createRotationX(time * 8));
 							center.multiply(-1f);
 							matrix.translate(center);
 						}
-
+						
 						program.setModelMatrix(matrix.multiply(modelMatrix));
 						TheQuadExampleMoving.draws++;
 						b.draw(program);

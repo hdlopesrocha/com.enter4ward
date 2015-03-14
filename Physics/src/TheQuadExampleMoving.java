@@ -4,7 +4,6 @@ import hidrogine.lwjgl.Model3D;
 import hidrogine.lwjgl.Object3D;
 import hidrogine.math.BoundingBox;
 import hidrogine.math.Camera;
-import hidrogine.math.ContainmentType;
 import hidrogine.math.Matrix;
 import hidrogine.math.ObjectCollisionHandler;
 import hidrogine.math.Quaternion;
@@ -48,7 +47,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	/** The draws. */
 	public static int draws = 0;
 
-	private static int scene = 1;
+	private static int scene = 2;
 
 	/**
 	 * Instantiates a new the quad example moving.
@@ -113,8 +112,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		}
 		if (scene == 2) {
 
-			(concreteCar = new MyCar3D(new Vector3(0, 0, 0), car) {
-			}).insert(space);
+			(concreteCar = new MyCar3D(new Vector3(0, 0, 0), car)).insert(space);
 
 			concreteCar.getRotation().set(
 					new Quaternion().createFromAxisAngle(new Vector3(1, 0, 0),
@@ -147,7 +145,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 							new Quaternion().createFromAxisAngle(new Vector3(0, 0, 1),
 									-deltaTime)).normalize();
 
-			// concreteCar.update(deltaTime, space);
+			concreteCar.update(deltaTime, space);
 		}
 
 		for (MyObject3D o : objects) {
