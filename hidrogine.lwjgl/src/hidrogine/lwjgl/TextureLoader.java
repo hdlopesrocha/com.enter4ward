@@ -19,7 +19,6 @@ public class TextureLoader {
     private static Map<String,Integer> loadedTextures = new TreeMap<String, Integer>();
     
     public static int loadTexture(String filename){
-       
         Integer res = loadedTextures.get(filename);
         if(res==null){
             res = loadPNGTexture(filename,GL13.GL_TEXTURE0);

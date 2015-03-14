@@ -1,6 +1,7 @@
+
 import hidrogine.lwjgl.BufferObject;
 import hidrogine.lwjgl.DrawableSphere;
-import hidrogine.lwjgl.Model3D;
+import hidrogine.lwjgl.LWJGLModel3D;
 import hidrogine.lwjgl.Object3D;
 import hidrogine.lwjgl.ShaderProgram;
 import hidrogine.math.BoundingFrustum;
@@ -10,6 +11,7 @@ import hidrogine.math.Group;
 import hidrogine.math.IBufferObject;
 import hidrogine.math.Material;
 import hidrogine.math.Matrix;
+import hidrogine.math.Quaternion;
 import hidrogine.math.Space;
 import hidrogine.math.Vector3;
 
@@ -19,7 +21,7 @@ public class MyCar3D extends Object3D {
 	/** The Constant ROTATION. */
 	private static final DrawableSphere sphere = new DrawableSphere();
 
-	public MyCar3D(Vector3 position, Model3D model) {
+	public MyCar3D(Vector3 position, LWJGLModel3D model) {
 		super(position, model);
 		getAceleration().set(0);
 		// TODO Auto-generated constructor stub
@@ -27,6 +29,12 @@ public class MyCar3D extends Object3D {
 
 	public void update(float delta_t, Space space) {
 		super.update(delta_t,space);
+		
+		getRotation()
+		.multiply(
+				new Quaternion().createFromAxisAngle(new Vector3(0, 1, 0),
+						-delta_t)).normalize();
+		
 		time += delta_t;
 		update(space);
 
@@ -34,14 +42,14 @@ public class MyCar3D extends Object3D {
 	
 	private static final Vector3 TEMP_CENTER = new Vector3();
 	private static final Matrix TEMP_MATRIX = new Matrix();
-	private static final Matrix TEMP_ROTATION = new Matrix();
+	private static final Quaternion TEMP_ROTATION = new Quaternion();
 
 	
 	
 	@Override
 	public void draw(final ShaderProgram program, final BoundingFrustum frustum) {
 		final Matrix modelMatrix = getModelMatrix();
-		final Model3D model = (Model3D) getModel();
+		final LWJGLModel3D model = (LWJGLModel3D) getModel();
 
 		for (final Group g : model.getGroups()) {
 
@@ -70,10 +78,11 @@ public class MyCar3D extends Object3D {
 						}
 						else if (g.getName().startsWith("w")
 								&& g.getName().length() == 2) {
-							final Vector3 center = TEMP_CENTER.set(g)
-									.multiply(-1f);
+							final Vector3 center = TEMP_CENTER.set(g).multiply(-1f);
 							matrix.createTranslation(center);
-							matrix.multiply(TEMP_ROTATION.createRotationX(time * 8));
+
+							TEMP_ROTATION.createFromYawPitchRoll(0f,time * 8,0f);
+							matrix.transform(TEMP_ROTATION);
 							center.multiply(-1f);
 							matrix.translate(center);
 						}

@@ -10,7 +10,9 @@ import hidrogine.math.IObject3D;
 import hidrogine.math.ITextureLoader;
 import hidrogine.math.Material;
 import hidrogine.math.Matrix;
+import hidrogine.math.Quaternion;
 import hidrogine.math.Vector3;
+import hidrogine.math.Model3D;
 
 import org.lwjgl.opengl.GL11;
 
@@ -18,43 +20,48 @@ import org.lwjgl.opengl.GL11;
 /**
  * The Class Model3D.
  */
-public class Model3D extends XModel3D {
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see hidrogine.lwjgl.Model#draw(hidrogine.lwjgl.ShaderProgram)
-	 */
-	/** The box. */
-	private static DrawableBox box = new DrawableBox();
+public class LWJGLModel3D extends Model3D {
 
 	/**
 	 * Instantiates a new model3 d.
 	 *
-	 * @param materials
-	 *          the materials
 	 * @param geometry
 	 *          the geometry
 	 * @param scale
 	 *          the scale
-	 * @throws FileNotFoundException 
+	 * @param builder
+	 *          the builder
+	 * @throws FileNotFoundException
+	 *           the file not found exception
 	 */
-	
-	public Model3D(String geometry, float scale,
-			IBufferBuilder builder) throws FileNotFoundException {
-		super(new FileInputStream(geometry), scale, builder);
-		
 
-		
+	public LWJGLModel3D(String filename, float scale, Quaternion quat, IBufferBuilder builder)
+			throws FileNotFoundException {
+		super(new FileInputStream(filename), scale, builder, quat);
+
 		loadTextures();
 	}
 
+	public LWJGLModel3D(String filename, float scale, IBufferBuilder builder)
+			throws FileNotFoundException {
+		super(new FileInputStream(filename), scale, builder, new Quaternion().identity());
+
+		loadTextures();
+	}
+	
+	/**
+	 * Load textures.
+	 */
 	public void loadTextures() {
+		
+		
 		for (final Material m : materials.values()) {
+
 			m.load(new ITextureLoader() {
 
 				@Override
 				public int load() {
+
 					return TextureLoader.loadTexture(m.filename);
 				}
 			});
@@ -64,6 +71,8 @@ public class Model3D extends XModel3D {
 	/**
 	 * Draw.
 	 *
+	 * @param obj
+	 *          the obj
 	 * @param shader
 	 *          the shader
 	 * @param handler
@@ -84,22 +93,4 @@ public class Model3D extends XModel3D {
 		}
 
 	}
-
-	private static final Vector3 TEMP_MIN = new Vector3();
-	private static final Vector3 TEMP_MAX = new Vector3();
-
-	/**
-	 * Draw boxs.
-	 *
-	 * @param shader
-	 *          the shader
-	 */
-	public void drawBoxs(ShaderProgram shader) {
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
-		for (Group g : groups) {
-			box.draw(shader, TEMP_MIN.set(g).subtract(g.getRadius()), TEMP_MAX.set(g)
-					.add(g.getRadius()));
-		}
-	}
-
 }

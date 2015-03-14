@@ -58,7 +58,7 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		program.reset();
 
 		final Matrix matrix = getModelMatrix();
-		final Model3D model = (Model3D) getModel();
+		final LWJGLModel3D model = (LWJGLModel3D) getModel();
 		for (final Group g : model.getGroups()) {
 			for (final IBufferObject ib : g.getBuffers()) {
 				BufferObject b = (BufferObject) ib;
@@ -75,7 +75,7 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 
 	public IntersectionInfo closestTriangle(final Ray ray) {
 		IntersectionInfo info = null;
-		final Model3D model = (Model3D) getModel();
+		final LWJGLModel3D model = (LWJGLModel3D) getModel();
 
 		for (Group g : model.getGroups()) {
 			for (IBufferObject ib : g.getBuffers()) {

@@ -12,7 +12,7 @@
 	<classpathentry kind="lib" path="libs/lzma.jar"/>
 	<classpathentry kind="lib" path="libs/TWL.jar"/>
 	<classpathentry kind="lib" path="../lib/json-20140107.jar"/>
-	<classpathentry kind="lib" path="../lib/jackson-core-2.4.2.jar"/>
+	<classpathentry kind="lib" path="../lib/jackson-core-2.5.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/hidrogine.math"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

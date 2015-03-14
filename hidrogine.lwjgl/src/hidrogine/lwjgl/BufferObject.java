@@ -66,17 +66,6 @@ public class BufferObject extends IBufferObject {
 	 * 
 	 * @see hidrogine.lwjgl.IBufferObject#getMaterial()
 	 */
-	/**
-	 * Gets the material.
-	 *
-	 * @return the material
-	 */
-	public Material getMaterial() {
-		return material;
-	}
-
-	/** The material. */
-	private Material material;
 
 
 	/** The vao id. */
@@ -99,15 +88,6 @@ public class BufferObject extends IBufferObject {
 		super(explodeTriangles);
 	}
 
-	/**
-	 * Sets the material.
-	 *
-	 * @param f
-	 *          the new material
-	 */
-	public final void setMaterial(final Material f) {
-		material = f;
-	}
 
 
 	/**

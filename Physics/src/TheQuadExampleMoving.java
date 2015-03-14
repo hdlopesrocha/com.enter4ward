@@ -1,11 +1,11 @@
 import hidrogine.lwjgl.BufferObject;
 import hidrogine.lwjgl.DrawableBox;
 import hidrogine.lwjgl.Game;
-import hidrogine.lwjgl.Model3D;
+import hidrogine.lwjgl.LWJGLModel3D;
 import hidrogine.lwjgl.Object3D;
 import hidrogine.math.BoundingBox;
-import hidrogine.math.IBufferBuilder;
 import hidrogine.math.Camera;
+import hidrogine.math.IBufferBuilder;
 import hidrogine.math.IBufferObject;
 import hidrogine.math.Matrix;
 import hidrogine.math.ObjectCollisionHandler;
@@ -51,19 +51,16 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	/** The draws. */
 	public static int draws = 0;
 
-	private static int scene = 0;
+	private static int scene = 2;
 
-
-	
 	private static IBufferBuilder bufferBuilder = new IBufferBuilder() {
-		
+
 		@Override
 		public IBufferObject build() {
 			return new BufferObject(true);
 		}
 	};
-	
-	
+
 	/**
 	 * Instantiates a new the quad example moving.
 	 */
@@ -95,11 +92,13 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		space = new Space(32);
 		box = new DrawableBox();
 		/** The box. */
-		Model3D car = null,box = null,surface = null;
+		LWJGLModel3D car = null, box = null, surface = null;
 		try {
-			car = new Model3D("car.json", 1f, bufferBuilder);
-			box = new Model3D("box.json", 1f, bufferBuilder);
-			surface = new Model3D("half.json", 50f, bufferBuilder);
+			car = new LWJGLModel3D("car.json", 1f,
+					new Quaternion().createFromAxisAngle(new Vector3(1, 0, 0),
+							(float) (-Math.PI / 2)), bufferBuilder);
+			box = new LWJGLModel3D("box.json", 1f, bufferBuilder);
+			surface = new LWJGLModel3D("half.json", 50f, bufferBuilder);
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -135,10 +134,6 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 
 			(concreteCar = new MyCar3D(new Vector3(0, 0, 0), car)).insert(space);
 
-			concreteCar.getRotation().set(
-					new Quaternion().createFromAxisAngle(new Vector3(1, 0, 0),
-							(float) (-Math.PI / 2)));
-
 		}
 
 		camera.lookAt(new Vector3(0, 6, 32), new Vector3(), new Vector3(0, 1, 0));
@@ -160,12 +155,6 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	public void update(float deltaTime) {
 		time += deltaTime;
 		if (scene == 2) {
-			concreteCar
-					.getRotation()
-					.multiply(
-							new Quaternion().createFromAxisAngle(new Vector3(0, 0, 1),
-									-deltaTime)).normalize();
-
 			concreteCar.update(deltaTime, space);
 		}
 
@@ -254,7 +243,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		space.handleVisibleNodes(camera, this);
 		getProgram().setAmbientColor(0f, 0f, 0f);
 		GL20.glUseProgram(0);
-		 setTitle();
+		setTitle();
 	}
 
 	private static final Vector3 TEMP_MIN = new Vector3();
@@ -275,10 +264,8 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 			Vector3 min = TEMP_MIN.set(obj.getMinX(), obj.getMinY(), obj.getMinZ());
 			Vector3 max = TEMP_MAX.set(obj.getMaxX(), obj.getMaxY(), obj.getMaxZ());
 
-			
-			
 			box.draw(getProgram(), min, max);
-		} 
+		}
 
 	}
 
@@ -296,6 +283,5 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		// TODO Auto-generated method stub
 		Object3D obj3d = (Object3D) obj;
 		obj3d.draw(getProgram(), camera);
-		// sphere.draw(getProgram(), obj3d);
 	}
 }

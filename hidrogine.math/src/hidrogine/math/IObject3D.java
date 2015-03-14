@@ -40,15 +40,7 @@ public abstract class IObject3D {
         return model;
     }
 
-    /**
-     * Sets the model.
-     *
-     * @param model
-     *            the new model
-     */
-    public void setModel(IModel3D model) {
-        this.model = model;
-    }
+
 
     /**
      * Instantiates a new i object3 d.
@@ -76,9 +68,10 @@ public abstract class IObject3D {
     public BoundingSphere getBoundingSphere() {
         // return new
         // Vector3(model.getContainer().getCenter()).transform(rotation).add(position);
-        TEMP_SPHERE.set(model.getContainer()).transform(rotation).add(position);
-        TEMP_SPHERE.setRadius(model.getContainer()
-                .getRadius());
+        BoundingSphere cont = model.getContainer();
+        
+        TEMP_SPHERE.set(cont).transform(rotation).add(position);
+        TEMP_SPHERE.setRadius(cont.getRadius());
         return TEMP_SPHERE;
     }
 

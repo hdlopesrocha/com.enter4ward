@@ -1,5 +1,5 @@
 import hidrogine.lwjgl.BufferObject;
-import hidrogine.lwjgl.Model3D;
+import hidrogine.lwjgl.LWJGLModel3D;
 import hidrogine.lwjgl.Object3D;
 import hidrogine.lwjgl.ShaderProgram;
 import hidrogine.math.BoundingFrustum;
@@ -14,7 +14,7 @@ public class MyObject3D extends Object3D {
 
 	public boolean collided = false;
 
-	public MyObject3D(Vector3 position, Model3D model) {
+	public MyObject3D(Vector3 position, LWJGLModel3D model) {
 		super(position, model);
 		// TODO Auto-generated constructor stub
 	}
@@ -24,7 +24,7 @@ public class MyObject3D extends Object3D {
 
 		program.reset();
 		final Matrix modelMatrix = getModelMatrix();
-		final Model3D model = (Model3D) getModel();
+		final LWJGLModel3D model = (LWJGLModel3D) getModel();
 
 		program.setAmbientColor(collided? 1:0, 0, 0);
 		program.setModelMatrix(modelMatrix);

@@ -83,6 +83,19 @@ public abstract class IBufferObject extends BoundingSphere {
         
     }
     
+    /**
+     * Gets the material.
+     *
+     * @return the material
+     */
+    public Material getMaterial() {
+            return material;
+    }
+
+    /** The material. */
+    protected Material material;
+
+    
     
     public void buildBuffer() {
 
@@ -96,6 +109,8 @@ public abstract class IBufferObject extends BoundingSphere {
                 .sqrt((maxX - minX) * (maxX - minX) + (maxY - minY)
                         * (maxY - minY) + (maxZ - minZ) * (maxZ - minZ)) / 2d));
 
+   
+        
         /* EXTRACT TRIANGLES */
         if (explodeTriangles) {
             for (int i = 0; i < indexDataPointer; i += 3) {
@@ -151,4 +166,15 @@ public abstract class IBufferObject extends BoundingSphere {
     public Iterable<Triangle> getTriangles() {
             return triangles;
     }
+
+    /**
+     * Sets the material.
+     *
+     * @param f
+     *          the new material
+     */
+    public final void setMaterial(final Material f) {
+            material = f;
+    }
+
 }
