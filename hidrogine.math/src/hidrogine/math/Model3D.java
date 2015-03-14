@@ -29,16 +29,15 @@ public class Model3D implements IModel3D {
     }
 
     public Model3D() {
-        
+
     }
-    
+
     private List<Vector3> lights = new ArrayList<Vector3>();
 
     public List<Vector3> getLights() {
         return lights;
     }
 
-    
     /**
      * Instantiates a new model3 d.
      *
@@ -143,7 +142,6 @@ public class Model3D implements IModel3D {
                                 Float value = jsonParser.getFloatValue();
                                 currentMaterial.Ni = value;
                             }
-
                         }
                     }
 
@@ -152,25 +150,14 @@ public class Model3D implements IModel3D {
                     System.out.println("######### LIGHTS ###################");
 
                     while (jsonParser.nextToken() != JsonToken.END_ARRAY) { // [[
-                        float x = 0, y = 0;
-                        int k = 0;
                         while (jsonParser.nextToken() != JsonToken.END_ARRAY) { // [[(...)]
-                            float val = jsonParser.getFloatValue() * scale;
-                            if (k == 0) {
-                                x = val;
-                                ++k;
-                            } else if (k == 1) {
-                                y = val;
-                                ++k;
-                            } else if (k == 2) {
-                                k = 0;
-                                Vector3 vec = new Vector3(x, y, val);
-                                if (rot != null) {
-                                    vec.transform(rot);
-                                }
-                                lights.add(vec);
-                            }
-
+                            float x = jsonParser.getFloatValue() * scale;
+                            jsonParser.nextToken();
+                            float y = jsonParser.getFloatValue() * scale;
+                            jsonParser.nextToken();
+                            float z = jsonParser.getFloatValue() * scale;
+                            Vector3 vec = new Vector3(x, y, z);
+                            lights.add(vec);
                         }
                     }
 
@@ -185,7 +172,7 @@ public class Model3D implements IModel3D {
 
                         groups.add(currentGroup);
                         while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                          //  jsonParser.nextToken(); // {
+                            // jsonParser.nextToken(); // {
                             IBufferObject currentSubGroup = builder.build();
                             currentGroup.addBuffer(currentSubGroup);
                             // System.out.println("JSON INIT");
@@ -196,13 +183,13 @@ public class Model3D implements IModel3D {
                                 if ("mm".equals(key)) {
                                     String mm = jsonParser.getValueAsString();
                                     Material mat = materials.get(mm);
-                                    if(mat!=null)
+                                    if (mat != null)
                                         currentSubGroup.setMaterial(mat);
                                 } else if ("vv".equals(key)) {
-                                     while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                                    while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                                         float x = jsonParser.getFloatValue()
                                                 * scale;
-                                        
+
                                         jsonParser.nextToken();
                                         float y = jsonParser.getFloatValue()
                                                 * scale;
@@ -210,8 +197,7 @@ public class Model3D implements IModel3D {
                                         float z = jsonParser.getFloatValue()
                                                 * scale;
                                         Vector3 vec = new Vector3(x, y, z);
-                                        
-                                        
+
                                         if (rot != null) {
                                             vec.transform(rot);
                                         }
@@ -240,7 +226,8 @@ public class Model3D implements IModel3D {
                                     while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                                         float x = jsonParser.getFloatValue();
                                         jsonParser.nextToken();
-                                        float y = 1f-jsonParser.getFloatValue();
+                                        float y = 1f - jsonParser
+                                                .getFloatValue();
                                         currentSubGroup.addTexture(x, y);
                                     }
                                 } else if ("ii".equals(key)) {
