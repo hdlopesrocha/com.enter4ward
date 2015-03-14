@@ -1,6 +1,7 @@
 package hidrogine.lwjgl;
 
 import hidrogine.math.BoundingSphere;
+import hidrogine.math.BufferBuilder;
 import hidrogine.math.Group;
 import hidrogine.math.IBufferObject;
 import hidrogine.math.IModel3D;
@@ -36,6 +37,7 @@ public class Model3D implements IModel3D {
 
 	/** The materials. */
 	private TreeMap<String, Material> materials = new TreeMap<String, Material>();
+	private BufferBuilder bufferBuilder;
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -59,10 +61,11 @@ public class Model3D implements IModel3D {
 	 * @param scale
 	 *            the scale
 	 */
-	public Model3D(String materials, String geometry, float scale, boolean explodeTriangles) {
+	public Model3D(String materials, String geometry, float scale, BufferBuilder builder) {
+		this.bufferBuilder = builder;
 		try {
 			loadMaterials(materials);
-			loadGeometry(geometry, scale,explodeTriangles);
+			loadGeometry(geometry, scale);
 		} catch (JSONException | IOException e) {
 			e.printStackTrace();
 		}
@@ -161,7 +164,7 @@ public class Model3D implements IModel3D {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@SuppressWarnings("unchecked")
-	private void loadGeometry(final String filename, final float scale, final boolean explodeTriangles)
+	private void loadGeometry(final String filename, final float scale)
 			throws JSONException, IOException {
 		final List<Vector3> points = new ArrayList<Vector3>();
 		final FileInputStream file = new FileInputStream(filename);
@@ -177,10 +180,13 @@ public class Model3D implements IModel3D {
 			final JSONArray subGroups = jObject.getJSONArray(groupName);
 			for (int j = 0; j < subGroups.length(); ++j) {
 				final JSONObject jSubGroup = subGroups.getJSONObject(j);
-				final BufferObject currentSubGroup = new BufferObject(explodeTriangles);
+				
+				
+				
+				final IBufferObject currentSubGroup = bufferBuilder.build();
 				currentGroup.addBuffer(currentSubGroup);
 				if (jSubGroup.has("mm")) {
-					currentSubGroup.setMaterial(materials.get(jSubGroup
+					((BufferObject)currentSubGroup).setMaterial(materials.get(jSubGroup
 							.getString("mm")));
 				}
 				final JSONArray vv = jSubGroup.getJSONArray("vv");
