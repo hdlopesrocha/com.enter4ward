@@ -53,7 +53,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	public static int draws = 0;
 
 	/** The scene. */
-	private static int scene = 2;
+	private static int scene = 1;
 
 	/** The buffer builder. */
 	private static IBufferBuilder bufferBuilder = new IBufferBuilder() {
@@ -89,7 +89,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	 */
 	@Override
 	public void setup() {
-		camera = new Camera(0.1f, 256);
+		camera = new Camera(0.1f, 512+256);
 		camera.update(1280, 720);
 		objects = new ArrayList<MyObject3D>();
 		space = new Space(16);
@@ -246,7 +246,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 		space.handleVisibleNodes(camera, this);
 		getProgram().setAmbientColor(0f, 0f, 0f);
 		GL20.glUseProgram(0);
-		setTitle();
+	//	setTitle();
 	}
 
 	/** The Constant TEMP_MIN. */
