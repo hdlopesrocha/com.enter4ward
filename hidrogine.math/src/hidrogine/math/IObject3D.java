@@ -16,6 +16,10 @@ public abstract class IObject3D {
     /** The model. */
     private IModel3D model;
 
+    public void setModel(IModel3D model) {
+        this.model = model;
+    }
+
     /** The node. */
     private Space.Node node;
 
