@@ -1,3 +1,5 @@
+package com.enter4ward.physics;
+
 import com.enter4ward.lwjgl.BufferObject;
 import com.enter4ward.lwjgl.LWJGLModel3D;
 import com.enter4ward.lwjgl.Object3D;

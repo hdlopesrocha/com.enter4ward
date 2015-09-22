@@ -1,4 +1,4 @@
-package app;
+package com.enter4ward.myserver;
 
 import com.enter4ward.webserver.HttpServer;
 

@@ -1,4 +1,4 @@
-package app.controllers;
+package com.enter4ward.myserver.controllers;
 
 import com.enter4ward.wavefront.MaterialLibrary;
 import com.enter4ward.wavefront.WaveFront;
