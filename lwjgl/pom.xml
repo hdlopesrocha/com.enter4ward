@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>com.enter4ward.lwjgl</artifactId>
+  <packaging>jar</packaging>
+
+  <name>com.enter4ward.lwjgl</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+    	<groupId>com.enter4ward</groupId>
+    	<artifactId>com.enter4ward.math</artifactId>
+    	<version>1.0</version>
+    </dependency>
+	<dependency>
+		<groupId>org.lwjgl.lwjgl</groupId>
+		<artifactId>lwjgl</artifactId>
+		<version>2.9.3</version>
+	</dependency>
+	<dependency>
+		<groupId>org.l33tlabs.twl</groupId>
+		<artifactId>pngdecoder</artifactId>
+		<version>1.0</version>
+	</dependency>
+
+  </dependencies>
+  
+  
+  <parent>
+  	<groupId>com.enter4ward</groupId>
+  	<artifactId>com.enter4ward.shared</artifactId>
+  	<version>1.0</version>
+  </parent>
+</project>
