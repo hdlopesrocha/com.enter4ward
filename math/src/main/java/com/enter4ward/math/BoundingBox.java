@@ -1,4 +1,4 @@
-package hidrogine.math;
+package com.enter4ward.math;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -35,7 +35,7 @@ public class BoundingBox {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.IBox#getLengthX()
+     * @see com.enter4ward.math.IBox#getLengthX()
      */
     /**
      * Gets the length x.
@@ -49,7 +49,7 @@ public class BoundingBox {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.IBox#getLengthY()
+     * @see com.enter4ward.math.IBox#getLengthY()
      */
     /**
      * Gets the length y.
@@ -63,7 +63,7 @@ public class BoundingBox {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.IBox#getLengthZ()
+     * @see com.enter4ward.math.IBox#getLengthZ()
      */
     /**
      * Gets the length z.
@@ -77,7 +77,7 @@ public class BoundingBox {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.IBox#getCenterX()
+     * @see com.enter4ward.math.IBox#getCenterX()
      */
     /**
      * Gets the center x.
@@ -91,7 +91,7 @@ public class BoundingBox {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.IBox#getCenterY()
+     * @see com.enter4ward.math.IBox#getCenterY()
      */
     /**
      * Gets the center y.
@@ -105,7 +105,7 @@ public class BoundingBox {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.IBox#getCenterZ()
+     * @see com.enter4ward.math.IBox#getCenterZ()
      */
     /**
      * Gets the center z.
@@ -119,7 +119,7 @@ public class BoundingBox {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.IBox#toString()
+     * @see com.enter4ward.math.IBox#toString()
      */
     public String toString() {
         return "{Min:" + "{" + getMin().getX() + "," + getMin().getY() + ","

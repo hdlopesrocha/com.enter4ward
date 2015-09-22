@@ -1,4 +1,4 @@
-package hidrogine.math;
+package com.enter4ward.math;
 
 public class Material {
     public Float[] Ka;

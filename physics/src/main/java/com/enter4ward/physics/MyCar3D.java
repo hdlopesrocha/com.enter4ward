@@ -1,18 +1,18 @@
-import hidrogine.lwjgl.BufferObject;
-import hidrogine.lwjgl.DrawableSphere;
-import hidrogine.lwjgl.LWJGLModel3D;
-import hidrogine.lwjgl.Object3D;
-import hidrogine.lwjgl.ShaderProgram;
-import hidrogine.math.BoundingFrustum;
-import hidrogine.math.BoundingSphere;
-import hidrogine.math.ContainmentType;
-import hidrogine.math.Group;
-import hidrogine.math.IBufferObject;
-import hidrogine.math.Material;
-import hidrogine.math.Matrix;
-import hidrogine.math.Quaternion;
-import hidrogine.math.Space;
-import hidrogine.math.Vector3;
+import com.enter4ward.lwjgl.BufferObject;
+import com.enter4ward.lwjgl.DrawableSphere;
+import com.enter4ward.lwjgl.LWJGLModel3D;
+import com.enter4ward.lwjgl.Object3D;
+import com.enter4ward.lwjgl.ShaderProgram;
+import com.enter4ward.math.BoundingFrustum;
+import com.enter4ward.math.BoundingSphere;
+import com.enter4ward.math.ContainmentType;
+import com.enter4ward.math.Group;
+import com.enter4ward.math.IBufferObject;
+import com.enter4ward.math.Material;
+import com.enter4ward.math.Matrix;
+import com.enter4ward.math.Quaternion;
+import com.enter4ward.math.Space;
+import com.enter4ward.math.Vector3;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -42,7 +42,7 @@ public class MyCar3D extends Object3D {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see hidrogine.lwjgl.Object3D#update(float, hidrogine.math.Space)
+	 * @see com.enter4ward.lwjgl.Object3D#update(float, com.enter4ward.math.Space)
 	 */
 	public void update(float delta_t, Space space) {
 		super.update(delta_t, space);
@@ -68,8 +68,8 @@ public class MyCar3D extends Object3D {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see hidrogine.lwjgl.Object3D#draw(hidrogine.lwjgl.ShaderProgram,
-	 * hidrogine.math.BoundingFrustum)
+	 * @see com.enter4ward.lwjgl.Object3D#draw(com.enter4ward.lwjgl.ShaderProgram,
+	 * com.enter4ward.math.BoundingFrustum)
 	 */
 	@Override
 	public void draw(final ShaderProgram program, final BoundingFrustum frustum) {

@@ -1,4 +1,4 @@
-package hidrogine.math;
+package com.enter4ward.math;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -43,7 +43,7 @@ public class BoundingSphere extends Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.ISphere#getRadius()
+     * @see com.enter4ward.math.ISphere#getRadius()
      */
     /**
      * Gets the radius.
@@ -57,7 +57,7 @@ public class BoundingSphere extends Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.ISphere#setRadius(float)
+     * @see com.enter4ward.math.ISphere#setRadius(float)
      */
     /**
      * Sets the radius.

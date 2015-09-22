@@ -1,4 +1,4 @@
-package hidrogine.math;
+package com.enter4ward.math;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -273,7 +273,7 @@ public class Model3D implements IModel3D {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.api.IModel3D#getContainer()
+     * @see com.enter4ward.math.api.IModel3D#getContainer()
      */
     @Override
     public BoundingSphere getContainer() {

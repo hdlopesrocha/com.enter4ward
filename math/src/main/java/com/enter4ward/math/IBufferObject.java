@@ -1,4 +1,4 @@
-package hidrogine.math;
+package com.enter4ward.math;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

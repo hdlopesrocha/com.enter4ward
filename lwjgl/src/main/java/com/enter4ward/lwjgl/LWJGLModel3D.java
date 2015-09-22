@@ -1,14 +1,14 @@
-package hidrogine.lwjgl;
+package com.enter4ward.lwjgl;
 
-import hidrogine.math.Group;
-import hidrogine.math.IBufferBuilder;
-import hidrogine.math.IBufferObject;
-import hidrogine.math.IObject3D;
-import hidrogine.math.ITextureLoader;
-import hidrogine.math.Material;
-import hidrogine.math.Matrix;
-import hidrogine.math.Model3D;
-import hidrogine.math.Quaternion;
+import com.enter4ward.math.Group;
+import com.enter4ward.math.IBufferBuilder;
+import com.enter4ward.math.IBufferObject;
+import com.enter4ward.math.IObject3D;
+import com.enter4ward.math.ITextureLoader;
+import com.enter4ward.math.Material;
+import com.enter4ward.math.Matrix;
+import com.enter4ward.math.Model3D;
+import com.enter4ward.math.Quaternion;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

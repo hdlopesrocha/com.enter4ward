@@ -1,4 +1,4 @@
-package hidrogine.sessionmanager;
+package com.enter4ward.session;
 
 import java.util.TreeMap;
 import java.util.concurrent.Delayed;

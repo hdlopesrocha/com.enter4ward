@@ -1,6 +1,6 @@
-package hidrogine.lwjgl;
+package com.enter4ward.lwjgl;
 
-import hidrogine.math.IBufferObject;
+import com.enter4ward.math.IBufferObject;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -63,7 +63,7 @@ public class BufferObject extends IBufferObject {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see hidrogine.lwjgl.IBufferObject#getMaterial()
+	 * @see com.enter4ward.lwjgl.IBufferObject#getMaterial()
 	 */
 
 
@@ -135,7 +135,7 @@ public class BufferObject extends IBufferObject {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see hidrogine.lwjgl.IBufferObject#bind(hidrogine.lwjgl.ShaderProgram)
+	 * @see com.enter4ward.lwjgl.IBufferObject#bind(com.enter4ward.lwjgl.ShaderProgram)
 	 */
 	/**
 	 * Bind.

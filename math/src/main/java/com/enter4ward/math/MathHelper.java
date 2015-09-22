@@ -1,4 +1,4 @@
-package hidrogine.math;
+package com.enter4ward.math;
 
 /**
  * Created by Henrique on 20/02/2015.

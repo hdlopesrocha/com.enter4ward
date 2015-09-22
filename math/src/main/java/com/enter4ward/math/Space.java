@@ -1,4 +1,4 @@
-package hidrogine.math;
+package com.enter4ward.math;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -189,7 +189,7 @@ public class Space {
         /*
          * (non-Javadoc)
          * 
-         * @see hidrogine.math.BoundingBox#toString()
+         * @see com.enter4ward.math.BoundingBox#toString()
          */
         public String toString() {
             return super.toString();

@@ -1,19 +1,19 @@
-import hidrogine.lwjgl.BufferObject;
-import hidrogine.lwjgl.DrawableBox;
-import hidrogine.lwjgl.Game;
-import hidrogine.lwjgl.LWJGLModel3D;
-import hidrogine.lwjgl.Object3D;
-import hidrogine.math.BoundingBox;
-import hidrogine.math.Camera;
-import hidrogine.math.IBufferBuilder;
-import hidrogine.math.IBufferObject;
-import hidrogine.math.Matrix;
-import hidrogine.math.ObjectCollisionHandler;
-import hidrogine.math.Quaternion;
-import hidrogine.math.Space;
-import hidrogine.math.Vector3;
-import hidrogine.math.VisibleNodeHandler;
-import hidrogine.math.VisibleObjectHandler;
+import com.enter4ward.lwjgl.BufferObject;
+import com.enter4ward.lwjgl.DrawableBox;
+import com.enter4ward.lwjgl.Game;
+import com.enter4ward.lwjgl.LWJGLModel3D;
+import com.enter4ward.lwjgl.Object3D;
+import com.enter4ward.math.BoundingBox;
+import com.enter4ward.math.Camera;
+import com.enter4ward.math.IBufferBuilder;
+import com.enter4ward.math.IBufferObject;
+import com.enter4ward.math.Matrix;
+import com.enter4ward.math.ObjectCollisionHandler;
+import com.enter4ward.math.Quaternion;
+import com.enter4ward.math.Space;
+import com.enter4ward.math.Vector3;
+import com.enter4ward.math.VisibleNodeHandler;
+import com.enter4ward.math.VisibleObjectHandler;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -85,7 +85,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see hidrogine.lwjgl.Game#setup()
+	 * @see com.enter4ward.lwjgl.Game#setup()
 	 */
 	@Override
 	public void setup() {
@@ -152,7 +152,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see hidrogine.lwjgl.Game#update()
+	 * @see com.enter4ward.lwjgl.Game#update()
 	 */
 	@Override
 	public void update(float deltaTime) {
@@ -223,7 +223,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see hidrogine.lwjgl.Game#draw()
+	 * @see com.enter4ward.lwjgl.Game#draw()
 	 */
 
 	@Override
@@ -259,7 +259,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * hidrogine.math.VisibleNodeHandler#onNodeVisible(hidrogine.math.BoundingBox
+	 * com.enter4ward.math.VisibleNodeHandler#onNodeVisible(com.enter4ward.math.BoundingBox
 	 * , int)
 	 */
 	@Override
@@ -279,7 +279,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * hidrogine.math.ObjectCollisionHandler#onObjectCollision(java.lang.Object)
+	 * com.enter4ward.math.ObjectCollisionHandler#onObjectCollision(java.lang.Object)
 	 */
 	@Override
 	public void onObjectCollision(Object obj) {
@@ -293,7 +293,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see hidrogine.math.VisibleObjectHandler#onObjectVisible(java.lang.Object)
+	 * @see com.enter4ward.math.VisibleObjectHandler#onObjectVisible(java.lang.Object)
 	 */
 	@Override
 	public void onObjectVisible(Object obj) {

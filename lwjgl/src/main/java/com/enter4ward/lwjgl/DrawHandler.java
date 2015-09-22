@@ -1,8 +1,8 @@
-package hidrogine.lwjgl;
+package com.enter4ward.lwjgl;
 
-import hidrogine.math.Group;
-import hidrogine.math.IObject3D;
-import hidrogine.math.Matrix;
+import com.enter4ward.math.Group;
+import com.enter4ward.math.IObject3D;
+import com.enter4ward.math.Matrix;
 
 public interface DrawHandler {
 

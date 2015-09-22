@@ -1,4 +1,4 @@
-package hidrogine.webserver;
+package com.enter4ward.webserver;
 
 import java.io.IOException;
 import java.nio.file.Files;

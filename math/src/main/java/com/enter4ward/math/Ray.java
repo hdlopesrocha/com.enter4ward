@@ -1,4 +1,4 @@
-package hidrogine.math;
+package com.enter4ward.math;
 
 // TODO: Auto-generated Javadoc
 //MIT License - Copyright (C) The Mono.Xna Team

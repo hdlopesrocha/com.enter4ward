@@ -1,7 +1,7 @@
-package hidrogine.lwjgl;
+package com.enter4ward.lwjgl;
 
-import hidrogine.math.Matrix;
-import hidrogine.math.Vector3;
+import com.enter4ward.math.Matrix;
+import com.enter4ward.math.Vector3;
 
 import org.lwjgl.opengl.GL11;
 

@@ -1,4 +1,4 @@
-package hidrogine.wavefront;
+package com.enter4ward.wavefront;
 
 import java.util.TreeMap;
 

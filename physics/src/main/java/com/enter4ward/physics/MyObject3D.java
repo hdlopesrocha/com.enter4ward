@@ -1,14 +1,14 @@
-import hidrogine.lwjgl.BufferObject;
-import hidrogine.lwjgl.LWJGLModel3D;
-import hidrogine.lwjgl.Object3D;
-import hidrogine.lwjgl.ShaderProgram;
-import hidrogine.math.BoundingFrustum;
-import hidrogine.math.BoundingSphere;
-import hidrogine.math.ContainmentType;
-import hidrogine.math.Group;
-import hidrogine.math.IBufferObject;
-import hidrogine.math.Matrix;
-import hidrogine.math.Vector3;
+import com.enter4ward.lwjgl.BufferObject;
+import com.enter4ward.lwjgl.LWJGLModel3D;
+import com.enter4ward.lwjgl.Object3D;
+import com.enter4ward.lwjgl.ShaderProgram;
+import com.enter4ward.math.BoundingFrustum;
+import com.enter4ward.math.BoundingSphere;
+import com.enter4ward.math.ContainmentType;
+import com.enter4ward.math.Group;
+import com.enter4ward.math.IBufferObject;
+import com.enter4ward.math.Matrix;
+import com.enter4ward.math.Vector3;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -35,8 +35,8 @@ public class MyObject3D extends Object3D {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see hidrogine.lwjgl.Object3D#draw(hidrogine.lwjgl.ShaderProgram,
-	 * hidrogine.math.BoundingFrustum)
+	 * @see com.enter4ward.lwjgl.Object3D#draw(com.enter4ward.lwjgl.ShaderProgram,
+	 * com.enter4ward.math.BoundingFrustum)
 	 */
 	@Override
 	public void draw(ShaderProgram program, BoundingFrustum frustum) {

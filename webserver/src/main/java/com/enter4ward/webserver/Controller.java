@@ -1,6 +1,6 @@
-package hidrogine.webserver;
+package com.enter4ward.webserver;
 
-import hidrogine.sessionmanager.Session;
+import com.enter4ward.session.Session;
 
 import java.io.File;
 import java.io.FileInputStream;

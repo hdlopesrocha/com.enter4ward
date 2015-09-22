@@ -1,4 +1,4 @@
-package hidrogine.math;
+package com.enter4ward.math;
 
 
 // TODO: Auto-generated Javadoc
@@ -64,7 +64,7 @@ public abstract class IObject3D {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.api.ISphere#getPosition()
+     * @see com.enter4ward.math.api.ISphere#getPosition()
      */
     /**
      * Gets the bounding sphere.

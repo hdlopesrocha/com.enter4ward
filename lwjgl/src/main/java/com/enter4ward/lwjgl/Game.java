@@ -1,4 +1,4 @@
-package hidrogine.lwjgl;
+package com.enter4ward.lwjgl;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.ContextAttribs;

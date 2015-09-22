@@ -1,6 +1,6 @@
-package hidrogine.math;
+package com.enter4ward.math;
 
-import hidrogine.math.IBufferObject;
+import com.enter4ward.math.IBufferObject;
 
 public interface IBufferBuilder {
 

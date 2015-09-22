@@ -1,4 +1,4 @@
-package hidrogine.lwjgl;
+package com.enter4ward.lwjgl;
 
 import java.io.FileInputStream;
 import java.io.IOException;

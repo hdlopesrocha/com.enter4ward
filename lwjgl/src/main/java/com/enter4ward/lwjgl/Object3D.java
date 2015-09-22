@@ -1,18 +1,18 @@
-package hidrogine.lwjgl;
+package com.enter4ward.lwjgl;
 
-import hidrogine.math.BoundingFrustum;
-import hidrogine.math.BoundingSphere;
-import hidrogine.math.ContainmentType;
-import hidrogine.math.Group;
-import hidrogine.math.IBufferObject;
-import hidrogine.math.IModel3D;
-import hidrogine.math.IObject3D;
-import hidrogine.math.IntersectionInfo;
-import hidrogine.math.Matrix;
-import hidrogine.math.Ray;
-import hidrogine.math.RayCollisionHandler;
-import hidrogine.math.Space;
-import hidrogine.math.Vector3;
+import com.enter4ward.math.BoundingFrustum;
+import com.enter4ward.math.BoundingSphere;
+import com.enter4ward.math.ContainmentType;
+import com.enter4ward.math.Group;
+import com.enter4ward.math.IBufferObject;
+import com.enter4ward.math.IModel3D;
+import com.enter4ward.math.IObject3D;
+import com.enter4ward.math.IntersectionInfo;
+import com.enter4ward.math.Matrix;
+import com.enter4ward.math.Ray;
+import com.enter4ward.math.RayCollisionHandler;
+import com.enter4ward.math.Space;
+import com.enter4ward.math.Vector3;
 
 public class Object3D extends IObject3D implements RayCollisionHandler {
 

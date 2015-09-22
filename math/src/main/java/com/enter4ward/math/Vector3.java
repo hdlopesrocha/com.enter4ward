@@ -1,4 +1,4 @@
-package hidrogine.math;
+package com.enter4ward.math;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -68,7 +68,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#getZ()
+     * @see com.enter4ward.math.Vector3#getZ()
      */
 
     /**
@@ -83,7 +83,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#setZ(float)
+     * @see com.enter4ward.math.Vector3#setZ(float)
      */
     /**
      * Sets the z.
@@ -101,7 +101,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#getX()
+     * @see com.enter4ward.math.Vector3#getX()
      */
     /**
      * Gets the x.
@@ -115,7 +115,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#setX(float)
+     * @see com.enter4ward.math.Vector3#setX(float)
      */
     /**
      * Sets the x.
@@ -132,7 +132,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#y
+     * @see com.enter4ward.math.Vector3#y
      */
     /**
      * Gets the y.
@@ -146,7 +146,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#setY(float)
+     * @see com.enter4ward.math.Vector3#setY(float)
      */
     /**
      * Sets the y.
@@ -163,7 +163,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#add(hidrogine.math.Vector3)
+     * @see com.enter4ward.math.Vector3#add(com.enter4ward.math.Vector3)
      */
     /**
      * Adds the.
@@ -198,7 +198,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#addX(float)
+     * @see com.enter4ward.math.Vector3#addX(float)
      */
     /**
      * Adds the x.
@@ -215,7 +215,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#addY(float)
+     * @see com.enter4ward.math.Vector3#addY(float)
      */
     /**
      * Adds the y.
@@ -232,7 +232,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#addZ(float)
+     * @see com.enter4ward.math.Vector3#addZ(float)
      */
     /**
      * Adds the z.
@@ -249,7 +249,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#subtract(hidrogine.math.Vector3)
+     * @see com.enter4ward.math.Vector3#subtract(com.enter4ward.math.Vector3)
      */
     /**
      * Subtract.
@@ -296,7 +296,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#multiply(hidrogine.math.Vector3)
+     * @see com.enter4ward.math.Vector3#multiply(com.enter4ward.math.Vector3)
      */
     /**
      * Multiply.
@@ -384,7 +384,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#divide(hidrogine.math.Vector3)
+     * @see com.enter4ward.math.Vector3#divide(com.enter4ward.math.Vector3)
      */
     /**
      * Divide.
@@ -403,7 +403,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#divide(float)
+     * @see com.enter4ward.math.Vector3#divide(float)
      */
     /**
      * Divide.
@@ -464,7 +464,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#length()
+     * @see com.enter4ward.math.Vector3#length()
      */
     /**
      * Length.
@@ -487,7 +487,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#distance(hidrogine.math.Vector3)
+     * @see com.enter4ward.math.Vector3#distance(com.enter4ward.math.Vector3)
      */
     /**
      * Distance.
@@ -525,7 +525,7 @@ public class Vector3 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.Vector3#toString()
+     * @see com.enter4ward.math.Vector3#toString()
      */
     public String toString() {
         return x + "," + y + "," + z;

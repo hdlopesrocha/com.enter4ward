@@ -1,4 +1,4 @@
-package hidrogine.math;
+package com.enter4ward.math;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -98,7 +98,7 @@ public class Vector2 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.IVector2#subtract(hidrogine.math.IVector2)
+     * @see com.enter4ward.math.IVector2#subtract(com.enter4ward.math.IVector2)
      */
     /**
      * Subtract.
@@ -116,7 +116,7 @@ public class Vector2 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.IVector2#multiply(hidrogine.math.IVector2)
+     * @see com.enter4ward.math.IVector2#multiply(com.enter4ward.math.IVector2)
      */
     /**
      * Multiply.
@@ -134,7 +134,7 @@ public class Vector2 {
     /*
      * (non-Javadoc)
      * 
-     * @see hidrogine.math.IVector2#divide(hidrogine.math.IVector2)
+     * @see com.enter4ward.math.IVector2#divide(com.enter4ward.math.IVector2)
      */
     /**
      * Divide.

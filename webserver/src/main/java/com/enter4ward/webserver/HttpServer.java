@@ -1,7 +1,7 @@
-package hidrogine.webserver;
+package com.enter4ward.webserver;
 
-import hidrogine.sessionmanager.Session;
-import hidrogine.sessionmanager.SessionManager;
+import com.enter4ward.session.Session;
+import com.enter4ward.session.SessionManager;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;

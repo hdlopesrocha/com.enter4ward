@@ -1,4 +1,4 @@
-package hidrogine.wavefront;
+package com.enter4ward.wavefront;
 
 import org.json.JSONObject;
 

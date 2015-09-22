@@ -1,6 +1,6 @@
 package app;
 
-import hidrogine.webserver.HttpServer;
+import com.enter4ward.webserver.HttpServer;
 
 /**
  * The Class Global.

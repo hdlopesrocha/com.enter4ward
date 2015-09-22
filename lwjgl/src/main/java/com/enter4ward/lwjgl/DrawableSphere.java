@@ -1,7 +1,7 @@
-package hidrogine.lwjgl;
+package com.enter4ward.lwjgl;
 
-import hidrogine.math.BoundingSphere;
-import hidrogine.math.Matrix;
+import com.enter4ward.math.BoundingSphere;
+import com.enter4ward.math.Matrix;
 
 import org.lwjgl.opengl.GL11;
 

@@ -1,4 +1,4 @@
-package hidrogine.lwjgl;
+package com.enter4ward.lwjgl;
 
 import static org.lwjgl.opengl.ARBShaderObjects.GL_OBJECT_COMPILE_STATUS_ARB;
 import static org.lwjgl.opengl.ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB;
@@ -20,9 +20,9 @@ import static org.lwjgl.opengl.ARBShaderObjects.glUniform3fARB;
 import static org.lwjgl.opengl.ARBShaderObjects.glUniformMatrix4ARB;
 import static org.lwjgl.opengl.ARBShaderObjects.glUseProgramObjectARB;
 import static org.lwjgl.opengl.ARBShaderObjects.glValidateProgramARB;
-import hidrogine.math.Camera;
-import hidrogine.math.Matrix;
-import hidrogine.math.Vector3;
+import com.enter4ward.math.Camera;
+import com.enter4ward.math.Matrix;
+import com.enter4ward.math.Vector3;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

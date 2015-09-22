@@ -1,6 +1,6 @@
-package hidrogine.webserver;
+package com.enter4ward.webserver;
 
-import hidrogine.sessionmanager.Session;
+import com.enter4ward.session.Session;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -97,7 +97,7 @@ public class Response {
         s += "Date: " + getServerTime() + "\n";
         s += "Content-Type: " + contentType + "\n";
         s += "Content-Length: " + size + "\n";
-        s += "Server: hidrogine/" + HttpServer.VERSION + "\n";
+        s += "Server: com.enter4ward/" + HttpServer.VERSION + "\n";
         s += "Connection: "+(request.keepAlive()? "keep-alive":"close")+"\n";
        
         if (encoding != null) {
