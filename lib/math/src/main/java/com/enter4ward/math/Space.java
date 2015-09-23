@@ -10,7 +10,13 @@ import java.util.HashMap;
 public class Space {
 
     private static final Vector3 TEMP_LENGTH = new Vector3();
-
+    /** The Constant LEFT. */
+    private static final int LEFT = 0;
+    /** The Constant RIGHT. */
+    private static final int RIGHT = 1;
+    /** The Constant CENTER. */
+    private static final int CENTER = 2;
+    
     private static HashMap<Vector3,Vector3> lenghts = new HashMap<Vector3,Vector3>();
     public static int LENS = 0;
 
@@ -31,19 +37,8 @@ public class Space {
      * The Class Node.
      */
     class Node extends BoundingBox {
-
-        /** The Constant LEFT. */
-        static final int LEFT = 0;
-
-        /** The Constant RIGHT. */
-        static final int RIGHT = 1;
-
-        /** The Constant CENTER. */
-        static final int CENTER = 2;
-
         /** The container. */
         private ArrayList<Object> container;
-
         /** The parent. */
         private Node parent, left, right, center;
 
@@ -364,36 +359,6 @@ public class Space {
                     || getLengthX() > minSize|| getLengthY() > minSize|| getLengthZ() > minSize;
         }
 
-        /**
-         * Iterate.
-         *
-         * @param frustum
-         *            the frustum
-         * @param nodeh
-         *            the nodeh
-         * @param j
-         *            the j
-         */
-        @Deprecated
-        public void handleVisibleNodes(BoundingFrustum frustum,
-                VisibleNodeHandler handler, int j) {
-            // String tabs = "";
-            // for(int k = 0; k < j; ++k){
-            // tabs += "  |  ";
-            // }
-            handler.onNodeVisible(this, containerSize());
-            // System.out.println(tabs+"["+container.size()+"/"+count+"] "+toString());
-
-            int intersections = 0;
-            for (int i = 0; i < 3; ++i) {
-                final Node node = child(i);
-                if (node != null
-                        && (intersections == 2 || frustum.contains(node) != ContainmentType.Disjoint)) {
-                    ++intersections;
-                    node.handleVisibleNodes(frustum, handler, 1 + j);
-                }
-            }
-        }
 
         /**
          * Iterate.
@@ -406,6 +371,7 @@ public class Space {
         public void handleVisibleObjects(final BoundingFrustum frustum,
                 final VisibleObjectHandler handler) {
             if (container != null) {
+            	handler.onObjectVisible(this);
                 for (Object obj : container) {
                     handler.onObjectVisible(obj);
                 }
@@ -654,36 +620,7 @@ public class Space {
          */
     }
 
-    /**
-     * Iterate.
-     *
-     * @param frustum
-     *            the frustum
-     * @param handler
-     *            the handler
-     */
-    public void handleVisibleObjects(final BoundingFrustum frustum,
-            final VisibleObjectHandler handler) {
-        if (root != null) {
-            root.handleVisibleObjects(frustum, handler);
-        }
-    }
 
-    /**
-     * Iterate.
-     *
-     * @param frustum
-     *            the frustum
-     * @param handler
-     *            the handler
-     */
-    @Deprecated
-    public void handleVisibleNodes(BoundingFrustum frustum,
-            VisibleNodeHandler handler) {
-        if (root != null) {
-            root.handleVisibleNodes(frustum, handler, 0);
-        }
-    }
 
     /**
      * Handle object collisions.
@@ -756,7 +693,20 @@ public class Space {
         }
         return node;
     }
-
+    /**
+     * Iterate.
+     *
+     * @param frustum
+     *            the frustum
+     * @param handler
+     *            the handler
+     */
+    public void handleVisibleObjects(BoundingFrustum frustum,
+            VisibleObjectHandler handler) {
+        if (root != null) {
+            root.handleVisibleObjects(frustum, handler);
+        }
+    }
     /**
      * Insert.
      *
@@ -773,5 +723,6 @@ public class Space {
         root = root.compress();
         return node;
     }
+
 
 }

@@ -24,15 +24,13 @@ import com.enter4ward.math.ObjectCollisionHandler;
 import com.enter4ward.math.Quaternion;
 import com.enter4ward.math.Space;
 import com.enter4ward.math.Vector3;
-import com.enter4ward.math.VisibleNodeHandler;
 import com.enter4ward.math.VisibleObjectHandler;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class TheQuadExampleMoving.
  */
-public class Main extends Game implements VisibleObjectHandler,
-		ObjectCollisionHandler, VisibleNodeHandler {
+public class Main extends Game implements VisibleObjectHandler, ObjectCollisionHandler {
 
 	/** The box. */
 	private DrawableBox box;
@@ -76,7 +74,7 @@ public class Main extends Game implements VisibleObjectHandler,
 	 * The main method.
 	 *
 	 * @param args
-	 *          the arguments
+	 *            the arguments
 	 */
 	public static void main(String[] args) {
 		new Main();
@@ -89,7 +87,7 @@ public class Main extends Game implements VisibleObjectHandler,
 	 */
 	@Override
 	public void setup() {
-		camera = new Camera(0.1f, 512+256);
+		camera = new Camera(0.1f, 512 + 256);
 		camera.update(1280, 720);
 		objects = new ArrayList<MyObject3D>();
 		space = new Space(16);
@@ -98,8 +96,7 @@ public class Main extends Game implements VisibleObjectHandler,
 		LWJGLModel3D car = null, box = null, surface = null;
 		try {
 			car = new LWJGLModel3D("car.json", 1f,
-					new Quaternion().createFromAxisAngle(new Vector3(1, 0, 0),
-							(float) (-Math.PI / 2)), bufferBuilder);
+					new Quaternion().createFromAxisAngle(new Vector3(1, 0, 0), (float) (-Math.PI / 2)), bufferBuilder);
 			box = new LWJGLModel3D("box.json", 1f, bufferBuilder);
 			surface = new LWJGLModel3D("half.json", 50f, bufferBuilder);
 
@@ -116,8 +113,8 @@ public class Main extends Game implements VisibleObjectHandler,
 		if (scene == 0) {
 			obj1.insert(space);
 			for (int i = 0; i < 128; ++i) {
-				objects.add((MyObject3D) new MyObject3D(new Vector3(
-						rand.nextInt(40) - 20, 10f, rand.nextInt(40) - 20), box) {
+				objects.add((MyObject3D) new MyObject3D(new Vector3(rand.nextInt(40) - 20, 10f, rand.nextInt(40) - 20),
+						box) {
 				}.insert(space));
 			}
 		}
@@ -127,9 +124,8 @@ public class Main extends Game implements VisibleObjectHandler,
 			for (int i = 0; i < 1000000; ++i) {
 				if (i % 10000 == 0)
 					System.out.println(i);
-				new MyObject3D(new Vector3(rand.nextInt(size) - size / 2,
-						rand.nextInt(size) - size / 2, rand.nextInt(size) - size / 2), box)
-						.insert(space);
+				new MyObject3D(new Vector3(rand.nextInt(size) - size / 2, rand.nextInt(size) - size / 2,
+						rand.nextInt(size) - size / 2), box).insert(space);
 
 			}
 		}
@@ -211,9 +207,8 @@ public class Main extends Game implements VisibleObjectHandler,
 		Runtime runtime = Runtime.getRuntime();
 
 		// Print used memory
-		System.out.println("Used Memory:"
-				+ (runtime.totalMemory() - runtime.freeMemory()) / mb + " Draws:"
-				+ draws + " Lens:" + Space.LENS);
+		System.out.println("Used Memory:" + (runtime.totalMemory() - runtime.freeMemory()) / mb + " Draws:" + draws
+				+ " Lens:" + Space.LENS);
 		/*
 		 * Display.setTitle("Used Memory:" + (runtime.totalMemory() -
 		 * runtime.freeMemory()) / mb + " Draws:" + draws);
@@ -243,10 +238,9 @@ public class Main extends Game implements VisibleObjectHandler,
 		getProgram().setOpaque(false);
 		space.handleVisibleObjects(camera, this);
 
-		space.handleVisibleNodes(camera, this);
 		getProgram().setAmbientColor(0f, 0f, 0f);
 		GL20.glUseProgram(0);
-	//	setTitle();
+		// setTitle();
 	}
 
 	/** The Constant TEMP_MIN. */
@@ -259,18 +253,10 @@ public class Main extends Game implements VisibleObjectHandler,
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.enter4ward.math.VisibleNodeHandler#onNodeVisible(com.enter4ward.math.BoundingBox
-	 * , int)
+	 * com.enter4ward.math.VisibleNodeHandler#onNodeVisible(com.enter4ward.math.
+	 * BoundingBox , int)
 	 */
 	public void onNodeVisible(BoundingBox obj, int storedObjectsCount) {
-		if (storedObjectsCount > 0) {
-			getProgram().setMaterialAlpha(1f);
-			getProgram().setAmbientColor(1f, 1f, 1f);
-			Vector3 min = TEMP_MIN.set(obj.getMinX(), obj.getMinY(), obj.getMinZ());
-			Vector3 max = TEMP_MAX.set(obj.getMaxX(), obj.getMaxY(), obj.getMaxZ());
-
-			box.draw(getProgram(), min, max);
-		}
 
 	}
 
@@ -278,7 +264,8 @@ public class Main extends Game implements VisibleObjectHandler,
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.enter4ward.math.ObjectCollisionHandler#onObjectCollision(java.lang.Object)
+	 * com.enter4ward.math.ObjectCollisionHandler#onObjectCollision(java.lang.
+	 * Object)
 	 */
 	public void onObjectCollision(Object obj) {
 		if (obj instanceof MyObject3D) {
@@ -291,11 +278,24 @@ public class Main extends Game implements VisibleObjectHandler,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.enter4ward.math.VisibleObjectHandler#onObjectVisible(java.lang.Object)
+	 * @see com.enter4ward.math.VisibleObjectHandler#onObjectVisible(java.lang.
+	 * Object)
 	 */
 	public void onObjectVisible(Object obj) {
-		// TODO Auto-generated method stub
-		Object3D obj3d = (Object3D) obj;
-		obj3d.draw(getProgram(), camera);
+
+		if (obj instanceof BoundingBox) {
+			BoundingBox bbox = (BoundingBox) obj;
+			getProgram().setMaterialAlpha(1f);
+			getProgram().setAmbientColor(1f, 1f, 1f);
+			Vector3 min = TEMP_MIN.set(bbox.getMinX(), bbox.getMinY(), bbox.getMinZ());
+			Vector3 max = TEMP_MAX.set(bbox.getMaxX(), bbox.getMaxY(), bbox.getMaxZ());
+
+			box.draw(getProgram(), min, max);
+
+		} else if (obj instanceof Object3D) {
+			// TODO Auto-generated method stub
+			Object3D obj3d = (Object3D) obj;
+			obj3d.draw(getProgram(), camera);
+		}
 	}
 }
