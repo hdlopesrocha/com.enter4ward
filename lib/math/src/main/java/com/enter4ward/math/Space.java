@@ -36,7 +36,7 @@ public class Space {
     /**
      * The Class Node.
      */
-    class Node extends BoundingBox {
+    public class Node extends BoundingBox {
         /** The container. */
         private ArrayList<Object> container;
         /** The parent. */
@@ -103,7 +103,7 @@ public class Space {
          *            the sphere
          * @return the int
          */
-        public int containsIndex(final BoundingSphere sphere) {
+        private int containsIndex(final BoundingSphere sphere) {
             final float sr = sphere.getRadius();
             final float lenX = getLengthX();
             final float lenY = getLengthY();
@@ -150,7 +150,7 @@ public class Space {
          * @param obj
          *            the obj
          */
-        public void containerAdd(final Object obj) {
+        private void containerAdd(final Object obj) {
             if (container == null)
                 container = new ArrayList<Object>(1);
             container.add(obj);
@@ -163,7 +163,7 @@ public class Space {
          * @param obj
          *            the obj
          */
-        void containerRemove(final Object obj) {
+        private void containerRemove(final Object obj) {
             if (container != null) {
                 container.remove(obj);
                 if (container.size() == 0) {
@@ -252,7 +252,7 @@ public class Space {
          *            the i
          * @return the child
          */
-        public Node getChild(int i) {
+        private Node getChild(int i) {
 
             switch (i) {
             case LEFT:
@@ -284,7 +284,7 @@ public class Space {
          *            the i
          * @return the node
          */
-        public Node child(int i) {
+        private Node child(int i) {
             switch (i) {
             case LEFT:
                 return left;
@@ -351,7 +351,7 @@ public class Space {
          *
          * @return true, if successful
          */
-        protected boolean canSplit() {
+        private boolean canSplit() {
             // if(containerSize()==0)
             // return false;
 
@@ -368,7 +368,7 @@ public class Space {
          * @param handler
          *            the handler
          */
-        public void handleVisibleObjects(final BoundingFrustum frustum,
+        private void handleVisibleObjects(final BoundingFrustum frustum,
                 final VisibleObjectHandler handler) {
             if (container != null) {
             	handler.onObjectVisible(this);
@@ -396,7 +396,7 @@ public class Space {
          * @param obj
          *            the obj
          */
-        public void remove(final Object obj) {
+        protected void remove(final Object obj) {
             containerRemove(obj);
 
             Node node = this;
@@ -432,7 +432,7 @@ public class Space {
          *            the sph
          * @return the node
          */
-        public Node update(BoundingSphere sph) {
+        private Node update(BoundingSphere sph) {
             Node node = this;
             while (node != null) {
                 node.clearChild();
@@ -454,7 +454,7 @@ public class Space {
          *            the obj
          * @return the node
          */
-        public Node expand(final BoundingSphere obj) {
+        private Node expand(final BoundingSphere obj) {
             Node node = this;
             while (!node.onlyContains(obj)) {
                 node.clearChild();
@@ -471,7 +471,7 @@ public class Space {
          * @param handler
          *            the handler
          */
-        public void handleObjectCollisions(final BoundingSphere sph,
+        private void handleObjectCollisions(final BoundingSphere sph,
                 final ObjectCollisionHandler handler) {
             if (container != null) {
                 for (Object obj : container) {
@@ -497,7 +497,7 @@ public class Space {
          *            the sph
          * @return the space node
          */
-        protected Node insert(final BoundingSphere sph) {
+        private Node insert(final BoundingSphere sph) {
             Node node = this;
 
             // insertion
@@ -529,7 +529,7 @@ public class Space {
          * @param handler
          *            the handler
          */
-        public boolean handleRayCollisions(final Space space, final Ray ray,
+        private boolean handleRayCollisions(final Space space, final Ray ray,
                 final RayCollisionHandler handler) {
             final float len = ray.getDirection().length();
             boolean result = false;
@@ -562,7 +562,7 @@ public class Space {
          *
          * @return true, if is empty
          */
-        public boolean isEmpty() {
+        private boolean isEmpty() {
             return containerSize() == 0
                     && (left == null && center == null && right == null);
         }
@@ -572,7 +572,7 @@ public class Space {
          *
          * @return the node
          */
-        public Node compress() {
+        private Node compress() {
             Node node = this;
             while (true) {
                 if (node.containerSize() == 0) {

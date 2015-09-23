@@ -56,7 +56,7 @@ public class Main extends Game implements VisibleObjectHandler, ObjectCollisionH
 	public static int draws = 0;
 
 	/** The scene. */
-	private static int scene = 1;
+	private static int scene = 2;
 
 	/** The buffer builder. */
 	private static IBufferBuilder bufferBuilder = new IBufferBuilder() {
@@ -273,12 +273,12 @@ public class Main extends Game implements VisibleObjectHandler, ObjectCollisionH
 	
 	public void onObjectVisible(Object obj) {
 
-		if (obj instanceof BoundingBox) {
-			BoundingBox box = (BoundingBox) obj;
+		if (obj instanceof Space.Node) {
+			Space.Node node = (Space.Node) obj;
 			getProgram().setMaterialAlpha(1f);
 			getProgram().setAmbientColor(1f, 1f, 1f);
-			Vector3 min = TEMP_MIN.set(box.getMinX(), box.getMinY(), box.getMinZ());
-			Vector3 max = TEMP_MAX.set(box.getMaxX(), box.getMaxY(), box.getMaxZ());
+			Vector3 min = TEMP_MIN.set(node.getMinX(), node.getMinY(), node.getMinZ());
+			Vector3 max = TEMP_MAX.set(node.getMaxX(), node.getMaxY(), node.getMaxZ());
 			cubeModel.draw(getProgram(), min, max);
 		} else if (obj instanceof Object3D) {
 			Object3D obj3d = (Object3D) obj;
