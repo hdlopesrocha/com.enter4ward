@@ -244,22 +244,6 @@ public class Main extends Game implements VisibleObjectHandler, ObjectCollisionH
 		// setTitle();
 	}
 
-	/** The Constant TEMP_MIN. */
-	private static final Vector3 TEMP_MIN = new Vector3();
-
-	/** The Constant TEMP_MAX. */
-	private static final Vector3 TEMP_MAX = new Vector3();
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.enter4ward.math.VisibleNodeHandler#onNodeVisible(com.enter4ward.math.
-	 * BoundingBox , int)
-	 */
-	public void onNodeVisible(BoundingBox obj, int storedObjectsCount) {
-
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -272,7 +256,6 @@ public class Main extends Game implements VisibleObjectHandler, ObjectCollisionH
 		if (obj instanceof MyObject3D) {
 			((MyObject3D) obj).collided = true;
 			((MyObject3D) obj).getVelocity().setY(0);
-
 		}
 	}
 
@@ -282,6 +265,12 @@ public class Main extends Game implements VisibleObjectHandler, ObjectCollisionH
 	 * @see com.enter4ward.math.VisibleObjectHandler#onObjectVisible(java.lang.
 	 * Object)
 	 */
+	/** The Constant TEMP_MIN. */
+	private static final Vector3 TEMP_MIN = new Vector3();
+
+	/** The Constant TEMP_MAX. */
+	private static final Vector3 TEMP_MAX = new Vector3();
+	
 	public void onObjectVisible(Object obj) {
 
 		if (obj instanceof BoundingBox) {
@@ -290,11 +279,8 @@ public class Main extends Game implements VisibleObjectHandler, ObjectCollisionH
 			getProgram().setAmbientColor(1f, 1f, 1f);
 			Vector3 min = TEMP_MIN.set(box.getMinX(), box.getMinY(), box.getMinZ());
 			Vector3 max = TEMP_MAX.set(box.getMaxX(), box.getMaxY(), box.getMaxZ());
-
 			cubeModel.draw(getProgram(), min, max);
-
 		} else if (obj instanceof Object3D) {
-			// TODO Auto-generated method stub
 			Object3D obj3d = (Object3D) obj;
 			obj3d.draw(getProgram(), camera);
 		}
