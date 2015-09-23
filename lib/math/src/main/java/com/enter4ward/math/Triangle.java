@@ -37,7 +37,7 @@ public class Triangle {
         float area1 = new Triangle(a, b, point).getArea();
         float area2 = new Triangle(a, c, point).getArea();
         float area3 = new Triangle(b, c, point).getArea();
-        return area1 + area2 + area3 < thisArea + 0.00001f;
+        return area1 + area2 + area3 < thisArea + 0.0001f;
     }
 
     /**
@@ -86,7 +86,7 @@ private static final Vector3 TEMP_NORMAL = new Vector3();
     public Vector3 getNormal(){
         
         Vector3 ac = TEMP_VECTOR.set(c).subtract(a);
-        return TEMP_NORMAL.set(b).subtract(a).cross(ac);
+        return TEMP_NORMAL.set(b).subtract(a).cross(ac).normalize();
         
     }
     

@@ -50,14 +50,9 @@ public class MyCar3D extends Object3D {
 	 */
 	public void update(float delta_t, Space space) {
 		super.update(delta_t, space);
-
-		getRotation().multiply(
-				new Quaternion().createFromAxisAngle(new Vector3(0, 1, 0), -delta_t))
-				.normalize();
-
+		getRotation().multiply(new Quaternion().createFromAxisAngle(new Vector3(0, 1, 0), -delta_t)).normalize();
 		time += delta_t;
 		update(space);
-
 	};
 
 	/** The Constant TEMP_CENTER. */

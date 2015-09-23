@@ -56,7 +56,7 @@ public class Main extends Game implements VisibleObjectHandler, ObjectCollisionH
 	public static int draws = 0;
 
 	/** The scene. */
-	private static int scene = 2;
+	private static int scene = 0;
 
 	/** The buffer builder. */
 	private static IBufferBuilder bufferBuilder = new IBufferBuilder() {
@@ -255,7 +255,6 @@ public class Main extends Game implements VisibleObjectHandler, ObjectCollisionH
 	public void onObjectCollision(Object obj) {
 		if (obj instanceof MyObject3D) {
 			((MyObject3D) obj).collided = true;
-			((MyObject3D) obj).getVelocity().setY(0);
 		}
 	}
 

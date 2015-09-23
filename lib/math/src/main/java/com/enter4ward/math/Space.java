@@ -529,13 +529,16 @@ public class Space {
          * @param handler
          *            the handler
          */
-        private boolean handleRayCollisions(final Space space, final Ray ray,
+        private IntersectionInfo handleRayCollisions(final Space space, final Ray ray,
                 final RayCollisionHandler handler) {
             final float len = ray.getDirection().length();
-            boolean result = false;
+            IntersectionInfo result = null;
             if (container != null) {
                 for (Object obj : container) {
-                    result |= handler.onObjectCollision(space, ray, obj);
+                	IntersectionInfo r = handler.onObjectCollision(space, ray, obj);
+                	if(r!=null && (result==null ||  r.distance<result.distance)){
+                		result = r;
+                	}
                 }
             }
             int intersections = 0;
@@ -551,7 +554,10 @@ public class Space {
                         idist = 0f;
                     }
                     // System.out.println("#"+node+"#"+ray+"#"+idist+"#"+handler);
-                    result |= node.handleRayCollisions(space, ray, handler);
+                    IntersectionInfo r = node.handleRayCollisions(space, ray, handler);
+                    if(r!=null && (result==null ||  r.distance <result.distance)){
+                		result = r;
+                	}
                 }
             }
             return result;
@@ -645,13 +651,13 @@ public class Space {
      * @param handler
      *            the handler
      */
-    public boolean handleRayCollisions(final Ray ray,
+    public IntersectionInfo handleRayCollisions(final Ray ray,
             final RayCollisionHandler handler) {
         // System.out.println(handler+":"+ ray);
         if (root != null) {
             return root.handleRayCollisions(this, ray, handler);
         }
-        return false;
+        return null;
     }
 
     /** The root. */

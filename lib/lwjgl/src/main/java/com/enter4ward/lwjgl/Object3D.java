@@ -18,8 +18,8 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 
 	private Vector3 aceleration;
 	private Vector3 velocity;
-	private float time;
 	
+
 	public Vector3 getAceleration() {
 		return aceleration;
 	}
@@ -32,29 +32,47 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		super(position, model);
 		aceleration = new Vector3().setY(-9.8f);
 		velocity = new Vector3();
-
 		// TODO Auto-generated constructor stub
 	}
 
-	private static final Vector3 TEMP_DIRECTION  =new Vector3();
-	
-	public void update(float delta_t, Space space) {
-		// System.out.println("update");
-		time = delta_t;
-		velocity.addMultiply(aceleration, delta_t);
+	private static final Ray TEMP_RAY = new Ray(new Vector3(),new Vector3());
 
-		Ray ray = new Ray(getPosition(),TEMP_DIRECTION.set(velocity).multiply(delta_t));
-		
-		if(!space.handleRayCollisions(ray, this)){
-			getPosition().addMultiply(velocity, delta_t);
+	private static final Vector3 TEMP_REFL =new Vector3();
+
+	public void update(float delta_t, Space space) {
+
+		velocity.addMultiply(aceleration, delta_t);
+		int i =0;
+		while (delta_t > 0 && i++ < 5) {
+			TEMP_RAY.getPosition().set(getPosition());
+			TEMP_RAY.getDirection().set(velocity).multiply(delta_t);
+			IntersectionInfo inter = space.handleRayCollisions(TEMP_RAY, this);
+			if (inter == null) {
+				getPosition().add(TEMP_RAY.getDirection());
+				break;
+			} else {
+				float maxShift = TEMP_RAY.getDirection().length();
+
+				Vector3 normal = inter.triangle.getNormal();
+
+				getPosition().addMultiply(TEMP_RAY.getDirection(), /*0.9f*/inter.distance).addMultiply(normal,0.001f);
+				TEMP_REFL.set(velocity).reflect(normal);
+				velocity.add(TEMP_REFL).multiply(.5f);
+				delta_t -= delta_t* inter.distance / maxShift;
+			}
 		}
-		
+		if(i>=4){
+			System.out.println("exceeded!");
+		}
 
 		update(space);
 	}
 
-	private static BoundingSphere TEMP_SPHERE_DRAW = new BoundingSphere();
+
 	
+
+	private static BoundingSphere TEMP_SPHERE_DRAW = new BoundingSphere();
+
 	public void draw(ShaderProgram program, BoundingFrustum frustum) {
 		program.reset();
 
@@ -74,43 +92,20 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		}
 	}
 
-
 	// AQUI APENAS RECEBO OS OBJECOS CUJO O RAIO INTERSECTA O NO
 	// FALTA FAZER COLISOES MAIS DETALHADAS
 
 	@Override
-	public boolean onObjectCollision(Space space, Ray ray, Object obj) {
-		boolean collided = false;
-		
-		final float vel = velocity.length();
-		final float delta = ray.getDirection().length();
-		if(obj!=this){
-			Object3D obj3D = (Object3D)obj;
+	public IntersectionInfo onObjectCollision(Space space, Ray ray, Object obj) {
+		IntersectionInfo collided = null;
+
+		if (obj != this) {
+			Object3D obj3D = (Object3D) obj;
 			BoundingSphere sph = obj3D.getBoundingSphere();
 			Float inter = ray.intersects(sph);
-			
-			if(inter!=null && inter <= 1){
-				IntersectionInfo info = obj3D.closestTriangle(ray);
-				if(info!=null){
-				
-					Vector3 normal = info.triangle.getNormal().normalize();
-					getPosition().addMultiply(ray.getDirection(), info.distance)
-							.addMultiply(normal, 0.01f);
-					ray.getDirection().add(normal.multiply(-ray.getDirection().dot(normal)));
-					velocity.set(ray.getDirection()).multiply(vel / delta);
-					time -= info.distance / time;
-					collided = true;
-					if (time > 0) {
-						space.handleRayCollisions(ray, this);
-					}
-					// R=V-2N(V.N)
-					/*
-					 * float v_dot_n = ray.getDirection().dot(n); Vector3 n2 = new
-					 * Vector3(n).multiply(v_dot_n*2); Vector3 v2n = new
-					 * Vector3(ray.getDirection()).subtract(n2).normalize(); float len =
-					 * velocity.length(); velocity.set(v2n).multiply(len);
-					 */
-				}
+
+			if (inter != null && inter <= 1) {
+				return obj3D.closestTriangle(ray);
 			}
 		}
 		return collided;

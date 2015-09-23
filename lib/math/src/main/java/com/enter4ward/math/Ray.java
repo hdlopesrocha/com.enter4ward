@@ -188,9 +188,9 @@ public class Ray {
     public Float intersects(Plane plane) {
         // Vector3 nrm = new Vector3(direction).normalize();
 
-        float den = plane.dotNormal(direction);
-        if (Math.abs(den) > 0.000001f) {
-            return -(plane.getDistance() + plane.dotNormal(position)) / den;
+        float den = -plane.dotNormal(direction);
+        if (den > 0.000001f) {
+            return (plane.getDistance() + plane.dotNormal(position)) / den;
         }
         return null;
     }
