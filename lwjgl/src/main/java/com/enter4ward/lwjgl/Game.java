@@ -1,5 +1,7 @@
 package com.enter4ward.lwjgl;
 
+import java.io.File;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
@@ -44,12 +46,15 @@ public abstract class Game {
 	 * @param h
 	 *            the h
 	 */
-	public Game(int w, int h) {
-		try {
-			LibraryLoader.loadNativeLibraries();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public Game(int w, int h) {		 
+		
+		// -Djava.library.path="target/natives"
+		System.out.println("java.library.path="+	System.getProperty("java.library.path"));
+		
+		
+	
+		
+		
 		// Setup an OpenGL context with API version 3.2
 		try {
 			PixelFormat pixelFormat = new PixelFormat();

@@ -1,9 +1,9 @@
 package com.enter4ward.lwjgl;
 
+import org.lwjgl.opengl.GL11;
+
 import com.enter4ward.math.BoundingSphere;
 import com.enter4ward.math.Matrix;
-
-import org.lwjgl.opengl.GL11;
 
 public class DrawableSphere {
 

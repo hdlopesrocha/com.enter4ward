@@ -31,7 +31,28 @@
 
   </dependencies>
   
+<build>
+<plugins>
+      <plugin>
+        <artifactId>maven-remote-resources-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>bundle</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <includes>
+            <include>*</include>
+          </includes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
   
+
   <parent>
   	<groupId>com.enter4ward</groupId>
   	<artifactId>com.enter4ward.shared</artifactId>

@@ -60,7 +60,7 @@ public class MyObject3D extends Object3D {
 					final BoundingSphere bufferSphere = new BoundingSphere(b);
 					bufferSphere.transform(getRotation()).add(getPosition());
 					if (frustum.contains(bufferSphere) != ContainmentType.Disjoint) {
-						TheQuadExampleMoving.draws++;
+						Main.draws++;
 						b.draw(program);
 					}
 				}

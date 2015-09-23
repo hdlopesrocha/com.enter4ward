@@ -65,12 +65,18 @@ public class Model3D implements IModel3D {
      * @param rot
      *            the rot
      */
-    public Model3D(InputStream fis, float scale, IBufferBuilder builder,
-            final Quaternion rot) {
+    
 
+    
+    public Model3D(String filename, float scale, IBufferBuilder builder,
+            final Quaternion rot) {
+		ClassLoader classLoader = getClass().getClassLoader();
+		InputStream stream = classLoader.getResourceAsStream(filename);
+
+    	
         try {
 
-            JsonParser jsonParser = new JsonFactory().createParser(fis);
+            JsonParser jsonParser = new JsonFactory().createParser(stream);
             // loop through the JsonTokens
             while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
                 String name = jsonParser.getCurrentName();

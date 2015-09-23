@@ -1,5 +1,7 @@
 package com.enter4ward.lwjgl;
 
+import java.io.FileNotFoundException;
+
 import com.enter4ward.math.Group;
 import com.enter4ward.math.IBufferBuilder;
 import com.enter4ward.math.IBufferObject;
@@ -9,9 +11,6 @@ import com.enter4ward.math.Material;
 import com.enter4ward.math.Matrix;
 import com.enter4ward.math.Model3D;
 import com.enter4ward.math.Quaternion;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -32,16 +31,20 @@ public class LWJGLModel3D extends Model3D {
 	 *           the file not found exception
 	 */
 
+	
+	
 	public LWJGLModel3D(String filename, float scale, Quaternion quat, IBufferBuilder builder)
 			throws FileNotFoundException {
-		super(new FileInputStream(filename), scale, builder, quat);
+		super(filename, scale, builder, quat);
 
+		
+		
 		loadTextures();
 	}
 
 	public LWJGLModel3D(String filename, float scale, IBufferBuilder builder)
 			throws FileNotFoundException {
-		super(new FileInputStream(filename), scale, builder, new Quaternion().identity());
+		super(filename, scale, builder, new Quaternion().identity());
 
 		loadTextures();
 	}
@@ -59,7 +62,7 @@ public class LWJGLModel3D extends Model3D {
 				@Override
 				public int load() {
 
-					return TextureLoader.loadTexture(m.filename);
+					return new TextureLoader().loadTexture(m.filename);
 				}
 			});
 		}

@@ -1,21 +1,27 @@
-#version 150 core
+#version 330 core
 
+in vec3 in_Position;
+in vec3 in_Normal;
+in vec2 in_TextureCoord;
+
+
+uniform vec3 cameraPosition;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
+uniform vec3 ambientColor;
+uniform float ftime;
 
-in vec4 in_Position;
-in vec4 in_Color;
-in vec2 in_TextureCoord;
 
-out vec4 pass_Color;
-out vec2 pass_TextureCoord;
+
+out vec3 vPosition;
+out vec3 vNormal;
+out vec2 vTexCoord;
 
 void main(void) {
-	gl_Position = in_Position;
-	// Override gl_Position with our new calculated position
-	gl_Position = projectionMatrix * viewMatrix * modelMatrix * in_Position;
-	
-	pass_Color = in_Color;
-	pass_TextureCoord = in_TextureCoord;
+	mat4 modelViewProjection = projectionMatrix * viewMatrix * modelMatrix;
+	vPosition = mat3(modelMatrix)*in_Position;
+	vNormal = mat3(modelMatrix)*in_Normal;
+	vTexCoord = in_TextureCoord;
+	gl_Position = modelViewProjection * vec4(in_Position,1.0);
 }

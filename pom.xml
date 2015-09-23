@@ -12,18 +12,18 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	      <maven.compiler.target>1.8</maven.compiler.target>
-	      <maven.compiler.source>1.8</maven.compiler.source>
-	      <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
-	      <maven.compiler.testSource>1.8</maven.compiler.testSource>	
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.testTarget>1.8</maven.compiler.testTarget>
+		<maven.compiler.testSource>1.8</maven.compiler.testSource>	
 	</properties>
 
 	<distributionManagement>
-	    <repository>
-		<id>ip-172-31-36-194</id>
-		<name>ip-172-31-36-194-releases</name>
-		<url>http://git.bullray-cit.net:8081/artifactory/libs-release-local</url>
-	    </repository>
+		<repository>
+			<id>ip-172-31-36-194</id>
+			<name>ip-172-31-36-194-releases</name>
+			<url>http://git.bullray-cit.net:8081/artifactory/libs-release-local</url>
+		</repository>
 	</distributionManagement>
 
 	<modules>
@@ -60,7 +60,12 @@
 			<artifactId>jackson-core</artifactId>
 			<version>2.5.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-resources-plugin</artifactId>
+			<version>2.7</version>
+			<type>maven-plugin</type>
+		</dependency>
 	</dependencies>
-
 
 </project>

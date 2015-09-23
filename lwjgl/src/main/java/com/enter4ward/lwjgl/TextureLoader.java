@@ -1,6 +1,5 @@
 package com.enter4ward.lwjgl;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -18,7 +17,7 @@ public class TextureLoader {
 
     private static Map<String,Integer> loadedTextures = new TreeMap<String, Integer>();
     
-    public static int loadTexture(String filename){
+    public int loadTexture(String filename){
         Integer res = loadedTextures.get(filename);
         if(res==null){
             res = loadPNGTexture(filename,GL13.GL_TEXTURE0);
@@ -37,16 +36,17 @@ public class TextureLoader {
      *            the texture unit
      * @return the int
      */
-    private static int loadPNGTexture(String filename, int textureUnit) {
+    private int loadPNGTexture(String filename, int textureUnit) {
         ByteBuffer buf = null;
         int tWidth = 0;
         int tHeight = 0;
 
+		ClassLoader classLoader = getClass().getClassLoader();
+		InputStream stream = classLoader.getResourceAsStream(filename);
+        
         try {
-            // Open the PNG file as an InputStream
-            InputStream in = new FileInputStream(filename);
             // Link the PNG decoder to this stream
-            PNGDecoder decoder = new PNGDecoder(in);
+            PNGDecoder decoder = new PNGDecoder(stream);
 
             // Get the width and height of the texture
             tWidth = decoder.getWidth();
@@ -58,7 +58,7 @@ public class TextureLoader {
             decoder.decode(buf, decoder.getWidth() * 4, Format.RGBA);
             buf.flip();
 
-            in.close();
+            stream.close();
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);

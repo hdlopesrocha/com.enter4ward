@@ -114,7 +114,7 @@ public class MyCar3D extends Object3D {
 						}
 
 						program.setModelMatrix(matrix.multiply(modelMatrix));
-						TheQuadExampleMoving.draws++;
+						Main.draws++;
 						b.draw(program);
 					}
 				}

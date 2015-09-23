@@ -20,19 +20,20 @@ import static org.lwjgl.opengl.ARBShaderObjects.glUniform3fARB;
 import static org.lwjgl.opengl.ARBShaderObjects.glUniformMatrix4ARB;
 import static org.lwjgl.opengl.ARBShaderObjects.glUseProgramObjectARB;
 import static org.lwjgl.opengl.ARBShaderObjects.glValidateProgramARB;
-import com.enter4ward.math.Camera;
-import com.enter4ward.math.Matrix;
-import com.enter4ward.math.Vector3;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.File;
+import java.io.InputStream;
 import java.nio.FloatBuffer;
+import java.util.Scanner;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBVertexShader;
 import org.lwjgl.opengl.GL11;
+
+import com.enter4ward.math.Camera;
+import com.enter4ward.math.Matrix;
+import com.enter4ward.math.Vector3;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -116,11 +117,9 @@ public class ShaderProgram {
 		matrix44Buffer = BufferUtils.createFloatBuffer(16);
 	
 		// Load the vertex shader
-		int vsId = this.createShader("vertex.glsl",
-				ARBVertexShader.GL_VERTEX_SHADER_ARB);
+		int vsId = this.createShader("vertex.glsl",	ARBVertexShader.GL_VERTEX_SHADER_ARB);
 		// Load the fragment shader
-		int fsId = this.createShader("fragment.glsl",
-				ARBFragmentShader.GL_FRAGMENT_SHADER_ARB);
+		int fsId = this.createShader("fragment.glsl",ARBFragmentShader.GL_FRAGMENT_SHADER_ARB);
 
 		// Create a new shader program that links both shaders
 		program = glCreateProgramObjectARB();
@@ -403,17 +402,21 @@ public class ShaderProgram {
 	 */
 	private String readFileAsString(String filename) throws Exception {
 		StringBuilder source = new StringBuilder();
-		FileInputStream in = new FileInputStream(filename);
+		ClassLoader classLoader = getClass().getClassLoader();
+		
+		InputStream stream= classLoader.getResourceAsStream(filename);
+	
 		Exception exception = null;
-		BufferedReader reader;
+		Scanner reader;
 		try {
-			reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+			reader = new Scanner(stream);
 
 			Exception innerExc = null;
 			try {
-				String line;
-				while ((line = reader.readLine()) != null)
+				while (reader.hasNextLine()){					
+					String line = reader.nextLine();
 					source.append(line).append('\n');
+				}
 			} catch (Exception exc) {
 				exception = exc;
 			} finally {
@@ -432,15 +435,6 @@ public class ShaderProgram {
 		} catch (Exception exc) {
 			exception = exc;
 		} finally {
-			try {
-				in.close();
-			} catch (Exception exc) {
-				if (exception == null)
-					exception = exc;
-				else
-					exc.printStackTrace();
-			}
-
 			if (exception != null)
 				throw exception;
 		}

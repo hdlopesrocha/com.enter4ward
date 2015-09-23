@@ -1,12 +1,12 @@
 package com.enter4ward.lwjgl;
 
-import com.enter4ward.math.IBufferObject;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+
+import com.enter4ward.math.IBufferObject;
 
 // TODO: Auto-generated Javadoc
 /**

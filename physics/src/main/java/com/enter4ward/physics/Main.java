@@ -31,7 +31,7 @@ import org.lwjgl.opengl.GL20;
 /**
  * The Class TheQuadExampleMoving.
  */
-public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
+public class Main extends Game implements VisibleObjectHandler,
 		ObjectCollisionHandler, VisibleNodeHandler {
 
 	/** The box. */
@@ -69,7 +69,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	/**
 	 * Instantiates a new the quad example moving.
 	 */
-	public TheQuadExampleMoving() {
+	public Main() {
 		super(1280, 720);
 	}
 
@@ -81,7 +81,7 @@ public class TheQuadExampleMoving extends Game implements VisibleObjectHandler,
 	 *          the arguments
 	 */
 	public static void main(String[] args) {
-		new TheQuadExampleMoving();
+		new Main();
 	}
 
 	/*
