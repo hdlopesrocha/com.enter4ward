@@ -33,8 +33,11 @@ import com.enter4ward.math.VisibleObjectHandler;
 public class Main extends Game implements VisibleObjectHandler, ObjectCollisionHandler {
 
 	/** The box. */
-	private DrawableBox box;
-
+	private DrawableBox cubeModel;
+	private LWJGLModel3D carModel;
+	private LWJGLModel3D boxModel;
+	private LWJGLModel3D surfaceModel;	
+	
 	/** The concrete car. */
 	private static MyCar3D concreteCar;
 	/** The camera. */
@@ -91,21 +94,19 @@ public class Main extends Game implements VisibleObjectHandler, ObjectCollisionH
 		camera.update(1280, 720);
 		objects = new ArrayList<MyObject3D>();
 		space = new Space(16);
-		box = new DrawableBox();
-		/** The box. */
-		LWJGLModel3D car = null, box = null, surface = null;
+		cubeModel = new DrawableBox();
 		try {
-			car = new LWJGLModel3D("car.json", 1f,
+			carModel = new LWJGLModel3D("car.json", 1f,
 					new Quaternion().createFromAxisAngle(new Vector3(1, 0, 0), (float) (-Math.PI / 2)), bufferBuilder);
-			box = new LWJGLModel3D("box.json", 1f, bufferBuilder);
-			surface = new LWJGLModel3D("half.json", 50f, bufferBuilder);
+			boxModel = new LWJGLModel3D("box.json", 1f, bufferBuilder);
+			surfaceModel = new LWJGLModel3D("half.json", 50f, bufferBuilder);
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		Object3D obj1 = new Object3D(new Vector3(0, 0, 0), surface) {
+		Object3D obj1 = new Object3D(new Vector3(0, 0, 0), surfaceModel) {
 		};
 
 		Random rand = new Random();
@@ -114,7 +115,7 @@ public class Main extends Game implements VisibleObjectHandler, ObjectCollisionH
 			obj1.insert(space);
 			for (int i = 0; i < 128; ++i) {
 				objects.add((MyObject3D) new MyObject3D(new Vector3(rand.nextInt(40) - 20, 10f, rand.nextInt(40) - 20),
-						box) {
+						boxModel) {
 				}.insert(space));
 			}
 		}
@@ -125,13 +126,13 @@ public class Main extends Game implements VisibleObjectHandler, ObjectCollisionH
 				if (i % 10000 == 0)
 					System.out.println(i);
 				new MyObject3D(new Vector3(rand.nextInt(size) - size / 2, rand.nextInt(size) - size / 2,
-						rand.nextInt(size) - size / 2), box).insert(space);
+						rand.nextInt(size) - size / 2), boxModel).insert(space);
 
 			}
 		}
 		if (scene == 2) {
 
-			(concreteCar = new MyCar3D(new Vector3(0, 0, 0), car)).insert(space);
+			(concreteCar = new MyCar3D(new Vector3(0, 0, 0), carModel)).insert(space);
 
 		}
 
@@ -284,13 +285,13 @@ public class Main extends Game implements VisibleObjectHandler, ObjectCollisionH
 	public void onObjectVisible(Object obj) {
 
 		if (obj instanceof BoundingBox) {
-			BoundingBox bbox = (BoundingBox) obj;
+			BoundingBox box = (BoundingBox) obj;
 			getProgram().setMaterialAlpha(1f);
 			getProgram().setAmbientColor(1f, 1f, 1f);
-			Vector3 min = TEMP_MIN.set(bbox.getMinX(), bbox.getMinY(), bbox.getMinZ());
-			Vector3 max = TEMP_MAX.set(bbox.getMaxX(), bbox.getMaxY(), bbox.getMaxZ());
+			Vector3 min = TEMP_MIN.set(box.getMinX(), box.getMinY(), box.getMinZ());
+			Vector3 max = TEMP_MAX.set(box.getMaxX(), box.getMaxY(), box.getMaxZ());
 
-			box.draw(getProgram(), min, max);
+			cubeModel.draw(getProgram(), min, max);
 
 		} else if (obj instanceof Object3D) {
 			// TODO Auto-generated method stub
