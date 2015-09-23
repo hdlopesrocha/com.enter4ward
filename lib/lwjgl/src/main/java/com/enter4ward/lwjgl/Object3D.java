@@ -54,15 +54,12 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 				float maxShift = TEMP_RAY.getDirection().length();
 
 				Vector3 normal = inter.triangle.getNormal();
-
+				// XXX fucked up on corners, must multiply instead of sum
 				getPosition().addMultiply(TEMP_RAY.getDirection(), /*0.9f*/inter.distance).addMultiply(normal,0.001f);
 				TEMP_REFL.set(velocity).reflect(normal);
 				velocity.add(TEMP_REFL).multiply(.5f);
 				delta_t -= delta_t* inter.distance / maxShift;
 			}
-		}
-		if(i>=4){
-			System.out.println("exceeded!");
 		}
 
 		update(space);
