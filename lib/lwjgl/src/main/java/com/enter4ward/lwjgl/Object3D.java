@@ -49,15 +49,12 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 				getPosition().add(TEMP_RAY.getDirection());
 				break;
 			} else {
-				float maxShift = TEMP_RAY.getDirection().length();
-
 				Vector3 normal = inter.triangle.getNormal();
 				// XXX da barraca quando comeca a subir
-				getPosition().addMultiply(TEMP_RAY.getDirection(), 0.9f*inter.distance);
-			
+				getPosition().addMultiply(velocity,  inter.distance*delta_t-0.001f);
 				// slide direction
 				velocity.slide(normal);
-				delta_t -= delta_t* inter.distance / maxShift;
+				delta_t -= delta_t* inter.distance;
 			}
 		}
 
