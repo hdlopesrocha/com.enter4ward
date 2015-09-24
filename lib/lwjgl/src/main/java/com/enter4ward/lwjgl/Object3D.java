@@ -37,8 +37,6 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 
 	private static final Ray TEMP_RAY = new Ray(new Vector3(),new Vector3());
 
-	private static final Vector3 TEMP_REFL =new Vector3();
-
 	public void update(float delta_t, Space space) {
 
 		velocity.addMultiply(aceleration, delta_t);
@@ -54,10 +52,11 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 				float maxShift = TEMP_RAY.getDirection().length();
 
 				Vector3 normal = inter.triangle.getNormal();
-				// XXX fucked up on corners, must multiply instead of sum
-				getPosition().addMultiply(TEMP_RAY.getDirection(), /*0.9f*/inter.distance).addMultiply(normal,0.001f);
-				TEMP_REFL.set(velocity).reflect(normal);
-				velocity.add(TEMP_REFL).multiply(.5f);
+				// XXX da barraca quando comeca a subir
+				getPosition().addMultiply(TEMP_RAY.getDirection(), 0.9f*inter.distance);
+			
+				// slide direction
+				velocity.slide(normal);
 				delta_t -= delta_t* inter.distance / maxShift;
 			}
 		}
@@ -89,8 +88,7 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 		}
 	}
 
-	// AQUI APENAS RECEBO OS OBJECOS CUJO O RAIO INTERSECTA O NO
-	// FALTA FAZER COLISOES MAIS DETALHADAS
+	// O facto de ter colidido aqui, nao faz com que tenha realmente colidido, um objecto mais proximo pode estar a frente
 
 	@Override
 	public IntersectionInfo onObjectCollision(Space space, Ray ray, Object obj) {
