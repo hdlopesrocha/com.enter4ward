@@ -188,15 +188,32 @@ public class Ray {
     public Float intersects(Plane plane) {
         // Vector3 nrm = new Vector3(direction).normalize();
 
+    	
+    	
+    	
         float den = -plane.dotNormal(direction);
-        if (den > 0.000001f) {
-            return (plane.getDistance() + plane.dotNormal(position)) / den;
+        if (den > 0f) {  	
+        	float ret = (plane.getDistance() + plane.dotNormal(position)) / den;
+            if(Float.isFinite(ret)){
+            	return ret;            	
+            }
         }
+        else if(den == 0){
+        	float ret = plane.getDistance()+ plane.dotNormal(position);
+        	if(ret==0)
+        		return ret;
+        }
+        
+        
         return null;
     }
 
-    private static final Vector3 TEMP_INTERSECTION = new Vector3();
+    private static final Vector3 TEMP_IP = new Vector3();
+    private static final Vector3 TEMP_IU = new Vector3();
+    private static final Vector3 TEMP_IV = new Vector3();
+    private static final Vector3 TEMP_IW = new Vector3();
 
+    
     /**
      * Intersects.
      *
@@ -204,22 +221,24 @@ public class Ray {
      *            the triangle
      * @return the i vector3
      */
-    public Float intersects(final Triangle triangle) {
-        final Float distance = intersects(triangle.getPlane());
-        // if (distance != null && distance<= direction.length()) {
-        // System.out.println("this:"+toString());
-
-        if (distance != null && distance >= 0 && distance <= 1f) {
-            Vector3 intersection = TEMP_INTERSECTION.set(position).addMultiply(
-                    direction, distance);
-            /*
-             * System.out.println("dist:"+distance);
-             * System.out.println("tri:"+triangle.toString());
-             * System.out.println("ray:"+toString());
-             * System.out.println("inter:"+intersection);
-             */
-            if (triangle.contains(intersection)) {
-
+    public synchronized Float intersects(final Triangle triangle) {
+    	final Float distance = intersects(triangle.getPlane());
+        if (distance != null && distance >= 0 && distance <= 1f) {        	
+            TEMP_IP.set(position).addMultiply(direction, distance);
+            TEMP_IU.set(triangle.getB()).subtract(triangle.getA());
+            TEMP_IV.set(triangle.getC()).subtract(triangle.getA());
+            TEMP_IW.set(TEMP_IP).subtract(triangle.getA());
+        	
+        	float uv = TEMP_IU.dot(TEMP_IV);
+        	float uu = TEMP_IU.dot(TEMP_IU);
+        	float wv = TEMP_IW.dot(TEMP_IV);
+        	float vv = TEMP_IV.dot(TEMP_IV);
+        	float wu = TEMP_IW.dot(TEMP_IU);
+            	
+        	float s1 = (uv*wv-vv*wu)/(uv*uv-uu*vv);
+        	float t1 = (uv*wu-uu*wv)/(uv*uv-uu*vv);
+            
+            if (s1>=0f && t1>=0f && s1+t1<=1f) {
                 return distance;
             }
         }

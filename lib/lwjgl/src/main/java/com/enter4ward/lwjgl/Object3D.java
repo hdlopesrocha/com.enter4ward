@@ -51,9 +51,15 @@ public class Object3D extends IObject3D implements RayCollisionHandler {
 			} else {
 				Vector3 normal = inter.triangle.getNormal();
 				// XXX da barraca quando comeca a subir
-				getPosition().addMultiply(velocity,  inter.distance*delta_t-0.001f);
+				float factor = inter.distance*delta_t-0.01f;
+				if(factor>0){
+					getPosition().addMultiply(velocity, factor);
+				}
+				
 				// slide direction
 				velocity.slide(normal);
+					
+				
 				delta_t -= delta_t* inter.distance;
 			}
 		}

@@ -47,7 +47,7 @@ public class Plane {
     public Plane(Vector3 a, Vector3 b, Vector3 c) {
         Vector3 ac = TEMP_VECTOR.set(c).subtract(a);
         this.normal = new Vector3(b).subtract(a);
-        this.normal.cross(ac);
+        this.normal.cross(ac).normalize();
         distance = -normal.dot(a);
         // Ax + By + Cz + d = 0
 
