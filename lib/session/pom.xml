@@ -5,7 +5,7 @@
   <artifactId>com.enter4ward.session</artifactId>
   <packaging>jar</packaging>
 
-  <name>com.enter4ward.session</name>
+  <name>session</name>
   <url>http://maven.apache.org</url>
 
   <properties>

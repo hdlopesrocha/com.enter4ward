@@ -5,7 +5,7 @@
   <artifactId>com.enter4ward.lwjgl</artifactId>
   <packaging>jar</packaging>
 
-  <name>com.enter4ward.lwjgl</name>
+  <name>lwjgl</name>
   <url>http://maven.apache.org</url>
 
   <properties>

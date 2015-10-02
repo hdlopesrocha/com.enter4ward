@@ -5,7 +5,7 @@
   <artifactId>com.enter4ward.webserver</artifactId>
   <packaging>jar</packaging>
 
-  <name>com.enter4ward.webserver</name>
+  <name>webserver</name>
   <url>http://maven.apache.org</url>
 
   <properties>
