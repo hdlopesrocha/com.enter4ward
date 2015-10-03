@@ -65,14 +65,15 @@ public class Criteria {
 					solver.composeEquation(t1, -1);
 					System.out.print("\t");
 					solver.createEquation(ConstraintType.EQ, 0);
-				} else if (j1.getLower() <= j1.getUpper()) {
+
 					solver.composeEquation(f1, -1);
 					solver.composeEquation(t1, 1);
 					System.out.print("\t");
-					solver.createEquation(ConstraintType.LE, -j1.getLower());
-			
-					solver.composeEquation(f1, 1);
-					solver.composeEquation(t1, -1);
+					solver.createEquation(ConstraintType.EQ, 0);
+
+				} else if (j1.getLower() <= j1.getUpper()) {
+					solver.composeEquation(f1, -1);
+					solver.composeEquation(t1, 1);
 					System.out.print("\t");
 					solver.createEquation(ConstraintType.LE, -j1.getLower());
 				}
