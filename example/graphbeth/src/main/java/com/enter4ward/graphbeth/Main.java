@@ -1,23 +1,12 @@
 package com.enter4ward.graphbeth;
 
-import java.io.File;
-import java.net.URL;
-
 public class Main {
 
-	public static void main(String[] args) {
-        
-       ClassLoader cl = Main.class.getClassLoader();
-       URL url = cl.getResource("library");
-       if(url != null) {
-    	   File file = new File( url.getFile() );
-//    	   System.load(file.getAbsolutePath());
-    	   System.setProperty("java.library.path", file.getAbsolutePath());
-       }
-       String javaLibPath = System.getProperty("java.library.path");
-       System.out.println("XXX: "+javaLibPath);
-       
-       
+	public static void main(String[] args) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+
+
+
+
 		Criteria testCriteria = new Criteria();
 		Alternative a = new Alternative("a");
 		Alternative b = new Alternative("b");

@@ -1,96 +1,125 @@
 package com.enter4ward.graphbeth;
 
-import lpsolve.LpSolve;
-import lpsolve.LpSolveException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.joptimizer.optimizers.LPOptimizationRequest;
+import com.joptimizer.optimizers.LPPrimalDualMethod;
 
 enum ConstraintType {
 	EQ, LE, GE
 };
 
 class Solver {
-	private LpSolve solver;
-	private int varIndex = 1;
+	private int varIndex = 0;
 	private double[] values;
 	private int _numVars;
-	private boolean _first = true;
 	private double[] _result;
 
-	public Solver(int numVars) {
-	     try {
-			solver = LpSolve.makeLp(0, numVars);
-			solver.setVerbose(0);
-		} catch (LpSolveException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	     values = new double[numVars + 1];
+	
+	//      Ax = b,   
+	private List<double[]> A = new ArrayList<double[]>(); 
+	private List<Double> b = new ArrayList<Double>(); 
+
+	
+	public Solver(int numVars) {		
+	     values = new double[numVars];
          _numVars = numVars;
      
-	     
 	}
 	
-	public int AddDecision() {
-		try {
-			solver.setColName(varIndex, "x" + varIndex);
-		} catch (LpSolveException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public int createVariable() {
 		return varIndex++;
 	}
 
-	public void AddConstraint(int i, double value) {
+	public void composeEquation(int i, double value) {
 		values[i] += value;
 	}
 
-	public void AddConstraints(ConstraintType type, double value) {
-		if (_first) {
-			solver.setAddRowmode(true);
-			_first = false;
+	public void createEquation(ConstraintType type, double value) {
+		
+		if(type==ConstraintType.GE){
+			value = -value;
+			for(int i=0; i < values.length; ++i){
+				values[i]=-values[i];
+			}
+		}
+		
+		A.add(values);
+		b.add(value);
+		values = new double[_numVars];
+
+	}
+
+	public boolean Solve()  {
+		double [] c = new double[_numVars];
+		double [] ub = new double[_numVars];
+		double [] lb = new double[_numVars];
+		
+		
+		for(int i=0; i<c.length ; ++i){
+			c[i]=1;
+			lb[i]=0;
+			ub[i]=Float.MAX_VALUE;
+		}
+		
+
+		double [][] G  = new double[A.size()][];
+		for(int i=0; i < G.length; ++i){
+			G[i]=A.get(i);
+		}
+		
+		double [] h = new double[b.size()];
+		for(int i=0;i<h.length;++i){
+			h[i]=b.get(i);
 		}
 
-		int ltype = (type == ConstraintType.EQ) ? LpSolve.EQ: (type == ConstraintType.GE) ? LpSolve.GE : LpSolve.LE;
+		
+		for(int i=0; i< G.length ; ++i){
+			for(int j=0; j< G[i].length ; ++j){
+				
+
+				System.out.print("\t"+G[i][j]);
+			}	
+			System.out.print("\t<=\t"+h[i]);
+
+			System.out.println();
+		}
+		
+		
+		
+		
+		
+		LPOptimizationRequest or = new LPOptimizationRequest();
+	
+		or.setC(c);
+		or.setG(G);
+		or.setH(h);
+		or.setLb(lb);
+		or.setUb(ub);
+		or.setDumpProblem(true); 
+		
+		//optimization
+		LPPrimalDualMethod opt = new LPPrimalDualMethod();
+		
+		opt.setLPOptimizationRequest(or);
 		try {
-			solver.addConstraintex(values.length, values, null, ltype, value);
-		} catch (LpSolveException e) {
+			int returnCode = opt.optimize();
+			
+			_result = opt.getOptimizationResponse().getSolution();
+			return true;
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		values = new double[_numVars + 1];
+		return false;
 
 	}
 
-	public boolean Solve() throws LpSolveException {
-		_result = new double[_numVars];
 
-		solver.setAddRowmode(false);
-		/* set the objective in lpsolve */
-		for (int i = 1; i <= _numVars; ++i) {
-			values[i] = 1;
-		}
-		solver.setObjFnex(values.length, values, null);
-
-		solver.setMinim();
-		int ret = solver.solve();
-		solver.getVariables( _result);
-
-		return (ret == LpSolve.OPTIMAL);
-
-	}
-
-	public void WriteFile(String filename) {
-		try {
-			solver.writeLp(filename + ".lp");
-		} catch (LpSolveException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
 
 	public double GetDecision(int i) {
 
-		return _result[i - 1];
+		return _result[i];
 	}
 }
