@@ -10,16 +10,30 @@ import java.util.TreeMap;
 public class Graph {
 
 	private Map<Alternative, Map<Alternative, Judgement>> fromTransitions;
+	private Map<Alternative, Map<Alternative, Judgement>> toTransitions;
 
 	public Graph(List<Judgement> judgements) {
 		this.fromTransitions = new TreeMap<Alternative, Map<Alternative, Judgement>>();
+		this.toTransitions = new TreeMap<Alternative, Map<Alternative, Judgement>>();
+
 		for (Judgement j : judgements) {
-			Map<Alternative, Judgement> ts = fromTransitions.get(j.getFrom());
-			if (ts == null) {
-				ts = new TreeMap<Alternative, Judgement>();
-				fromTransitions.put(j.getFrom(), ts);
+			{
+				Map<Alternative, Judgement> fts = fromTransitions.get(j.getFrom());
+				if (fts == null) {
+					fts = new TreeMap<Alternative, Judgement>();
+					fromTransitions.put(j.getFrom(), fts);
+				}
+				fts.put(j.getTo(), j);
 			}
-			ts.put(j.getTo(), j);
+			{
+				Map<Alternative, Judgement> tts = toTransitions.get(j.getTo());
+				if (tts == null) {
+					tts = new TreeMap<Alternative, Judgement>();
+					toTransitions.put(j.getTo(), tts);
+				}
+				tts.put(j.getFrom(), j);
+			}
+
 		}
 	}
 
@@ -31,11 +45,15 @@ public class Graph {
 		return null;
 	}
 
+	public Collection<Judgement> getTo(Alternative a) {
+		return toTransitions.get(a).values();
+	}
+
 	public Collection<Judgement> getFrom(Alternative a) {
 		return fromTransitions.get(a).values();
 	}
-	
-	public Collection<Alternative> getAlternatives(){
+
+	public Collection<Alternative> getAlternatives() {
 		return fromTransitions.keySet();
 	}
 
