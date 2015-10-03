@@ -27,7 +27,6 @@ public class Criteria {
 	public boolean check() {
 		boolean ans = false;
 		Graph graph = new Graph(judgements);
-		
 		if (!graph.hasCycle()) {
 
 			Map<String, Integer> variables = new TreeMap<String, Integer>();
@@ -67,7 +66,6 @@ public class Criteria {
 
 						// j1 must be much better than j2, j1.low>j2.high
 						if (j1.getLower() > j2.getUpper() && j1.getUpper() != 0 && j2.getUpper() != 0) {
-
 							System.out.print("\t[" + j2.getFrom().getId() + "->" + j2.getTo().getId() + "]");
 							solver.composeEquation(f1, -1);
 							solver.composeEquation(t1, 1);
@@ -84,16 +82,13 @@ public class Criteria {
 			for (Judgement j1 : judgements) {
 				int f1 = variables.get(j1.getFrom().getId());
 				int t1 = variables.get(j1.getTo().getId());
-
 				double dec = (solver.getDecision(f1) - solver.getDecision(t1));
-
 				System.out.println(j1.getFrom().getId() + "->" + j1.getTo().getId() + " = " + dec);
 			}
 			System.out.println("SCALE");
 			for (Alternative a : alternatives) {
 				int var = variables.get(a.getId());
 				double dec = (solver.getDecision(var));
-
 				System.out.println(a.getId() + "=" + dec);
 			}
 		}else {
