@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>com.enter4ward.physics</artifactId>
+	<artifactId>physics</artifactId>
 	<packaging>jar</packaging>
 	<name>com.enter4ward.physics</name>
 	<url>http://maven.apache.org</url>

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>graphbeth</artifactId>
-	<name>graphbeth</name>
+	<name>com.enter4ward.graphbeth</name>
 	<packaging>jar</packaging>
 
 
