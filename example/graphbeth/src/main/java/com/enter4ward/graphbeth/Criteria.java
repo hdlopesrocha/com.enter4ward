@@ -37,30 +37,37 @@ public class Criteria {
 			int f1 = variables.get(j1.getFrom().getId());
 			int t1 = variables.get(j1.getTo().getId());
 
+			System.out.println(j1.getFrom().getId() +" -> "+j1.getTo().getId());
+
 			// NULL JUDGEMENT
 			if (j1.getUpper() == 0 && j1.getLower() == 0) {
 
 				solver.composeEquation(f1, 1);
 				solver.composeEquation(t1, -1);
+				System.out.print("\t");
 				solver.createEquation(ConstraintType.EQ, 0);
 			}
-			// lol
 			else if (j1.getLower() <= j1.getUpper()) {
-				solver.composeEquation(f1, 1);
-				solver.composeEquation(t1, -1);
-				solver.createEquation(ConstraintType.GE, j1.getLower());
+				solver.composeEquation(f1, -1);
+				solver.composeEquation(t1, 1);
+				System.out.print("\t");
+				solver.createEquation(ConstraintType.LE, -j1.getLower());				
 			}
 
 			for (Judgement j2 : judgements) {
-				int f2 = variables.get(j2.getFrom().getId());
-				int t2 = variables.get(j2.getTo().getId());
+				if(j1 != j2 ){
 
-				if (j1 != j2 && j1.getLower() > j2.getUpper() && j1.getUpper() != 0 && j2.getUpper() != 0) {
-					solver.composeEquation(f1, 1);
-					solver.composeEquation(t1, -1);
-					solver.composeEquation(f2, -1);
-					solver.composeEquation(t2, 1);
-					solver.createEquation(ConstraintType.GE, j1.getLower() - j2.getUpper());
+					int f2 = variables.get(j2.getFrom().getId());
+					int t2 = variables.get(j2.getTo().getId());
+
+					if (j1.getLower() > j2.getUpper() && j1.getUpper() != 0 && j2.getUpper() != 0) {
+						System.out.print("\t["+j2.getFrom().getId() +"->"+j2.getTo().getId()+"]");
+						solver.composeEquation(f1, -1);
+						solver.composeEquation(t1, 1);
+						solver.composeEquation(f2, 1);
+						solver.composeEquation(t2, -1);
+						solver.createEquation(ConstraintType.LE, j2.getUpper() - j1.getLower());
+					}
 				}
 			}
 		}

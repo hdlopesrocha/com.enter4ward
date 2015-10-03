@@ -45,6 +45,11 @@ class Solver {
 			}
 		}
 		
+		for(int i=0; i < values.length; ++i){
+			System.out.print("\t"+values[i]);
+		}		
+		System.out.println("\t<=\t"+value);
+
 		A.add(values);
 		b.add(value);
 		values = new double[_numVars];
@@ -74,7 +79,7 @@ class Solver {
 			h[i]=b.get(i);
 		}
 
-		
+		/*
 		for(int i=0; i< G.length ; ++i){
 			for(int j=0; j< G[i].length ; ++j){
 				
@@ -85,7 +90,7 @@ class Solver {
 
 			System.out.println();
 		}
-		
+		*/
 		
 		
 		
