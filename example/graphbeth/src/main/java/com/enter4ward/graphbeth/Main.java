@@ -4,9 +4,6 @@ public class Main {
 
 	public static void main(String[] args) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 
-
-
-
 		Criteria testCriteria = new Criteria();
 		Alternative a = new Alternative("a");
 		Alternative b = new Alternative("b");

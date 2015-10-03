@@ -56,7 +56,7 @@ class Solver {
 
 	}
 
-	public boolean Solve()  {
+	public boolean solve()  {
 		double [] c = new double[_numVars];
 		double [] ub = new double[_numVars];
 		double [] lb = new double[_numVars];
@@ -78,22 +78,6 @@ class Solver {
 		for(int i=0;i<h.length;++i){
 			h[i]=b.get(i);
 		}
-
-		/*
-		for(int i=0; i< G.length ; ++i){
-			for(int j=0; j< G[i].length ; ++j){
-				
-
-				System.out.print("\t"+G[i][j]);
-			}	
-			System.out.print("\t<=\t"+h[i]);
-
-			System.out.println();
-		}
-		*/
-		
-		
-		
 		
 		LPOptimizationRequest or = new LPOptimizationRequest();
 	
@@ -109,10 +93,10 @@ class Solver {
 		
 		opt.setLPOptimizationRequest(or);
 		try {
-			int returnCode = opt.optimize();
-			
-			_result = opt.getOptimizationResponse().getSolution();
-			return true;
+			if(opt.optimize()==0){
+				_result = opt.getOptimizationResponse().getSolution();
+				return true;
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -123,7 +107,7 @@ class Solver {
 
 
 
-	public double GetDecision(int i) {
+	public double getDecision(int i) {
 
 		return _result[i];
 	}

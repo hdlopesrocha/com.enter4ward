@@ -1,10 +1,8 @@
 package com.enter4ward.graphbeth;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 public class Criteria {
@@ -24,61 +22,13 @@ public class Criteria {
 		judgements.add(judgement);
 	}
 
-	private boolean hasCycle(Alternative current, Set<Alternative> processing,
-			Map<Alternative, List<Judgement>> transitions, Set<Alternative> visited) {
-		List<Judgement> ts = transitions.get(current);
-		visited.add(current);
-		processing.add(current);
-		boolean ans = false;
 
-		if (ts != null) {
-			for (Judgement j : ts) {
-				if (processing.contains(j.getTo())) {
-					return true;
-				}
-				if (!visited.contains(j.getTo())) {
-					ans |= hasCycle(j.getTo(), processing, transitions, visited);
-					if (ans) {
-						break;
-					}
-				}
-			}
-		}
-		processing.remove(current);
-
-		return ans;
-	}
-
-	public boolean hasCycle() {
-		Map<Alternative, List<Judgement>> transitions = new TreeMap<Alternative, List<Judgement>>();
-
-		for (Judgement j : judgements) {
-			List<Judgement> ts = transitions.get(j.getFrom());
-			if (ts == null) {
-				ts = new ArrayList<Judgement>();
-				transitions.put(j.getFrom(), ts);
-			}
-			ts.add(j);
-		}
-
-		boolean ans = false;
-		Set<Alternative> visited = new HashSet<Alternative>();
-		for (Alternative a : alternatives) {
-			Set<Alternative> processing = new HashSet<Alternative>();
-			if (!visited.contains(a)) {
-				ans |= hasCycle(a, processing, transitions, visited);
-				if (ans) {
-					break;
-				}
-			}
-		}
-
-		return ans;
-	}
 
 	public boolean check() {
 		boolean ans = false;
-		if (!hasCycle()) {
+		Graph graph = new Graph(judgements);
+		
+		if (!graph.hasCycle()) {
 
 			Map<String, Integer> variables = new TreeMap<String, Integer>();
 			Solver solver = new Solver(alternatives.size());
@@ -129,20 +79,20 @@ public class Criteria {
 				}
 			}
 
-			ans = solver.Solve();
+			ans = solver.solve();
 			System.out.println("JUDGEMENTS");
 			for (Judgement j1 : judgements) {
 				int f1 = variables.get(j1.getFrom().getId());
 				int t1 = variables.get(j1.getTo().getId());
 
-				double dec = (solver.GetDecision(f1) - solver.GetDecision(t1));
+				double dec = (solver.getDecision(f1) - solver.getDecision(t1));
 
 				System.out.println(j1.getFrom().getId() + "->" + j1.getTo().getId() + " = " + dec);
 			}
 			System.out.println("SCALE");
 			for (Alternative a : alternatives) {
 				int var = variables.get(a.getId());
-				double dec = (solver.GetDecision(var));
+				double dec = (solver.getDecision(var));
 
 				System.out.println(a.getId() + "=" + dec);
 			}
