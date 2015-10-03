@@ -10,12 +10,14 @@ public class Main {
 		Alternative c = new Alternative("c");
 		Alternative d = new Alternative("d");
 		Alternative e = new Alternative("e");
-
+		//Alternative f = new Alternative("f");
+		
 		testCriteria.addAlternative(a);
 		testCriteria.addAlternative(b);
 		testCriteria.addAlternative(c);
 		testCriteria.addAlternative(d);
 		testCriteria.addAlternative(e);
+		//testCriteria.addAlternative(f);
 		
 		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, e, 5));
 		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, d, 4,5));
@@ -26,6 +28,7 @@ public class Main {
 		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, c, 1));
 		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, c, d, 1));
 		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, d, e, 1));
+		//testCriteria.addJudgement(new Judgement(JudgementType.FIXED, e, f, 0));
 		
 		testCriteria.check();
 	}
