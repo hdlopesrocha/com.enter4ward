@@ -22,7 +22,21 @@ public class Criteria {
 		judgements.add(judgement);
 	}
 
-
+	public void gaps(Graph graph) {
+		for (Alternative a : alternatives) {
+			for (Alternative b : alternatives) {
+				if (a != b) {
+					Judgement j = graph.get(a, b);
+					if (j == null) {
+						j = graph.get(b, a);
+					}
+					if (j == null) {
+						System.out.println("need judgement between " + a.getId() + " and " + b.getId());
+					}
+				}
+			}
+		}
+	}
 
 	public boolean check() {
 		boolean ans = false;
@@ -91,9 +105,11 @@ public class Criteria {
 				double dec = (solver.getDecision(var));
 				System.out.println(a.getId() + "=" + dec);
 			}
-		}else {
+		} else {
 			System.out.println("Cycle detected!");
 		}
+
+		gaps(graph);
 		return ans;
 
 	}
