@@ -1,6 +1,6 @@
 package com.enter4ward.graphbeth;
 
-public class Alternative {
+public class Alternative implements Comparable<Alternative>{
 	
 
 
@@ -12,6 +12,17 @@ public class Alternative {
 	
 	public String getId() {
 		return id;
+	}
+
+	public int compareTo(Alternative a) {
+		return id.compareTo(a.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
 	}	
+	
+	
 
 }

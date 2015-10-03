@@ -30,7 +30,15 @@ public class Main {
 		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, c, d, 1));
 		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, d, e, 1));
 		
-		testCriteria.check();
+		
+		boolean cycle = testCriteria.hasCycle();
+		if(!cycle){
+			testCriteria.check();
+		}
+		else {
+			System.out.println("Cycle detected!");
+		}
+		
 	}
 
 }
