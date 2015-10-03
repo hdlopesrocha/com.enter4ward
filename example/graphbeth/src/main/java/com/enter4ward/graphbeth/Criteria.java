@@ -66,7 +66,15 @@ public class Criteria {
 		}
 
 		boolean ret = solver.Solve();
+		System.out.println("JUDGEMENTS");
+		for (Judgement j1 : judgements) {
+			int f1 = variables.get(j1.getFrom().getId());
+			int t1 = variables.get(j1.getTo().getId());
 
+			double dec = (solver.GetDecision(f1) - solver.GetDecision(t1));
+
+			System.out.println(j1.getFrom().getId() + "->" + j1.getTo().getId() + " = " + dec);
+		}
 		System.out.println("SCALE");
 		for (Alternative a : alternatives) {
 			int var = variables.get(a.getId());
