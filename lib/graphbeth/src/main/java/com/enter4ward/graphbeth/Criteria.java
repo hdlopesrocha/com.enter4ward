@@ -1,6 +1,7 @@
 package com.enter4ward.graphbeth;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -65,8 +66,7 @@ public class Criteria {
 					solver.composeEquation(t1, -1);
 					System.out.print("\t");
 					solver.createEquation(ConstraintType.EQ, 0);
-					
-				
+
 				} else if (j1.getLower() <= j1.getUpper()) {
 					solver.composeEquation(f1, -1);
 					solver.composeEquation(t1, 1);
@@ -112,8 +112,71 @@ public class Criteria {
 		}
 
 		gaps(graph);
+		autoComplete(graph);
+		
 		return ans;
 
+	}
+
+	private boolean merge(Judgement j, Graph graph, String rule){
+		boolean changed = false;
+		Judgement k = graph.get(j.getFrom(), j.getTo());
+		
+		
+		if(k==null){
+			addJudgement(j);
+			changed |= true;
+		}
+		else if(k.getJudgementType()==JudgementType.DYNAMIC){
+			try {
+				changed |= k.merge(j);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(changed){
+			System.out.println(rule + " | " + j.toString());
+		}
+		
+		
+		return changed;
+	}
+	
+	
+    private boolean startRule(Alternative a, Graph graph) {
+    	boolean changed = false;
+    	Collection<Judgement> judgements = graph.getFrom(a);
+    	
+    	for (Judgement j1 : judgements)       // [x,y]
+        {
+            for (Judgement j2 : judgements)   // [z,w]
+            {
+                if (j1 != j2)
+                {
+                    // NULL RULE
+                    if (j2.isNull())
+                    {
+                    	Judgement j = new Judgement(JudgementType.DYNAMIC, j2.getTo(), j1.getTo(), j1.getLower(),j1.getUpper());
+                    	changed |= merge(j,graph, "SR1");
+                    }
+                    // DIFFERENT ONES
+                    else if (j1.isStronger(j2))
+                    {
+                    	Judgement j = new Judgement(JudgementType.DYNAMIC, j2.getTo(), j1.getTo(), j1.difference(j2), j1.getUpper());
+                    	changed |= merge(j,graph, "SR2");
+                    }
+                }
+            }
+        }
+        return changed;
+    }
+
+	
+	public void autoComplete(Graph graph) {
+		for (Alternative a : graph.getFromAlternatives()) {
+			startRule(a, graph);
+		}
 	}
 
 }

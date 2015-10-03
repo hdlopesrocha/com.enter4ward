@@ -106,7 +106,6 @@ class Solver {
 	}
 
 
-
 	public double getDecision(int i) {
 
 		return _result[i];
