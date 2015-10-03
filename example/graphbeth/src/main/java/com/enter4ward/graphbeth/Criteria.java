@@ -70,6 +70,11 @@ public class Criteria {
 					solver.composeEquation(t1, 1);
 					System.out.print("\t");
 					solver.createEquation(ConstraintType.LE, -j1.getLower());
+			
+					solver.composeEquation(f1, 1);
+					solver.composeEquation(t1, -1);
+					System.out.print("\t");
+					solver.createEquation(ConstraintType.LE, -j1.getLower());
 				}
 
 				for (Judgement j2 : judgements) {
