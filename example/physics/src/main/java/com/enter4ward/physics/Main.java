@@ -15,7 +15,6 @@ import com.enter4ward.lwjgl.DrawableBox;
 import com.enter4ward.lwjgl.Game;
 import com.enter4ward.lwjgl.LWJGLModel3D;
 import com.enter4ward.lwjgl.Object3D;
-import com.enter4ward.math.BoundingBox;
 import com.enter4ward.math.Camera;
 import com.enter4ward.math.IBufferBuilder;
 import com.enter4ward.math.IBufferObject;

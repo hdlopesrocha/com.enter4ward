@@ -33,6 +33,7 @@
 		<module>wavefront</module>
 		<module>webserver</module>
 		<module>lwjgl</module>
+		<module>graphbeth</module>
 	</modules>
 
 

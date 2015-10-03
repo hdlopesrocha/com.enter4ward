@@ -1,4 +1,9 @@
-package com.enter4ward.graphbeth;
+package com.enter4ward.testbeth;
+
+import com.enter4ward.graphbeth.Alternative;
+import com.enter4ward.graphbeth.Criteria;
+import com.enter4ward.graphbeth.Judgement;
+import com.enter4ward.graphbeth.JudgementType;
 
 public class Main {
 
@@ -11,14 +16,14 @@ public class Main {
 		Alternative d = new Alternative("d");
 		Alternative e = new Alternative("e");
 		//Alternative f = new Alternative("f");
-		
+
 		testCriteria.addAlternative(a);
 		testCriteria.addAlternative(b);
 		testCriteria.addAlternative(c);
 		testCriteria.addAlternative(d);
 		testCriteria.addAlternative(e);
 		//testCriteria.addAlternative(f);
-		
+
 		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, e, 5));
 		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, d, 4,5));
 		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, c, 3));
@@ -29,7 +34,7 @@ public class Main {
 		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, c, d, 1));
 		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, d, e, 1));
 		//testCriteria.addJudgement(new Judgement(JudgementType.FIXED, e, f, 0));
-		
+
 		testCriteria.check();
 	}
 
