@@ -2,7 +2,7 @@ package com.enter4ward.graphbeth;
 
 public class Main {
 
-	public static void main(String[] args) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public static void main(String[] args)  {
 
 		Criteria testCriteria = new Criteria();
 		Alternative a = new Alternative("a");

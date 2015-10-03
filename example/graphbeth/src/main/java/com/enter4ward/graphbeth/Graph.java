@@ -46,11 +46,13 @@ public class Graph {
 	}
 
 	public Collection<Judgement> getTo(Alternative a) {
-		return toTransitions.get(a).values();
+		Map<Alternative, Judgement> map =toTransitions.get(a);
+		return map!=null? map.values() : null;
 	}
 
 	public Collection<Judgement> getFrom(Alternative a) {
-		return fromTransitions.get(a).values();
+		Map<Alternative, Judgement> map =fromTransitions.get(a);
+		return map!=null? map.values() : null;
 	}
 
 	public Collection<Alternative> getAlternatives() {
