@@ -55,10 +55,14 @@ public class Graph {
 		return map!=null? map.values() : null;
 	}
 
-	public Collection<Alternative> getAlternatives() {
+	public Collection<Alternative> getFromAlternatives() {
 		return fromTransitions.keySet();
 	}
 
+	public Collection<Alternative> getToAlternatives() {
+		return toTransitions.keySet();
+	}
+	
 	private boolean hasCycle(Alternative current, Set<Alternative> processing, Set<Alternative> visited) {
 		Collection<Judgement> ts = getFrom(current);
 		visited.add(current);
@@ -86,7 +90,7 @@ public class Graph {
 	public boolean hasCycle() {
 		boolean ans = false;
 		Set<Alternative> visited = new HashSet<Alternative>();
-		for (Alternative a : getAlternatives()) {
+		for (Alternative a : getFromAlternatives()) {
 			Set<Alternative> processing = new HashSet<Alternative>();
 			if (!visited.contains(a)) {
 				ans |= hasCycle(a, processing, visited);
