@@ -12,31 +12,37 @@ public class Graph {
 	private Map<Alternative, Map<Alternative, Judgement>> fromTransitions;
 	private Map<Alternative, Map<Alternative, Judgement>> toTransitions;
 
+	
+	
+	
 	public Graph(List<Judgement> judgements) {
 		this.fromTransitions = new TreeMap<Alternative, Map<Alternative, Judgement>>();
 		this.toTransitions = new TreeMap<Alternative, Map<Alternative, Judgement>>();
 
 		for (Judgement j : judgements) {
-			{
-				Map<Alternative, Judgement> fts = fromTransitions.get(j.getFrom());
-				if (fts == null) {
-					fts = new TreeMap<Alternative, Judgement>();
-					fromTransitions.put(j.getFrom(), fts);
-				}
-				fts.put(j.getTo(), j);
-			}
-			{
-				Map<Alternative, Judgement> tts = toTransitions.get(j.getTo());
-				if (tts == null) {
-					tts = new TreeMap<Alternative, Judgement>();
-					toTransitions.put(j.getTo(), tts);
-				}
-				tts.put(j.getFrom(), j);
-			}
-
+			add(j);
 		}
 	}
 
+	public void add(Judgement j){
+		{
+			Map<Alternative, Judgement> fts = fromTransitions.get(j.getFrom());
+			if (fts == null) {
+				fts = new TreeMap<Alternative, Judgement>();
+				fromTransitions.put(j.getFrom(), fts);
+			}
+			fts.put(j.getTo(), j);
+		}
+		{
+			Map<Alternative, Judgement> tts = toTransitions.get(j.getTo());
+			if (tts == null) {
+				tts = new TreeMap<Alternative, Judgement>();
+				toTransitions.put(j.getTo(), tts);
+			}
+			tts.put(j.getFrom(), j);
+		}	
+	}
+	
 	public Judgement get(Alternative from, Alternative to) {
 		Map<Alternative, Judgement> a = fromTransitions.get(from);
 		if (a != null) {

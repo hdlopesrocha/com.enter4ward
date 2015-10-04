@@ -113,69 +113,124 @@ public class Criteria {
 
 		gaps(graph);
 		autoComplete(graph);
-		
+
 		return ans;
 
 	}
 
-	private boolean merge(Judgement j, Graph graph, String rule){
+	private boolean merge(Judgement j, Graph graph, String rule) {
 		boolean changed = false;
 		Judgement k = graph.get(j.getFrom(), j.getTo());
-		
-		
-		if(k==null){
+
+		if (k == null) {
 			addJudgement(j);
+			graph.add(j);
 			changed |= true;
-		}
-		else if(k.getJudgementType()==JudgementType.DYNAMIC){
+		} else if (k.getJudgementType() == JudgementType.DYNAMIC) {
 			try {
 				changed |= k.merge(j);
-			} catch (Exception e) {
+			} catch (MergeException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		if(changed){
+		if (changed) {
 			System.out.println(rule + " | " + j.toString());
+		}
+
+		return changed;
+	}
+
+	private boolean startRule(Alternative a, Graph graph) {
+		boolean changed = false;
+		Collection<Judgement> judgements = graph.getFrom(a);
+
+		for (Judgement j1 : judgements) // [x,y]
+		{
+			for (Judgement j2 : judgements) // [z,w]
+			{
+				if (j1 != j2 && j1.getJudgementType().equals(JudgementType.FIXED)
+						&& j2.getJudgementType().equals(JudgementType.FIXED)) {
+					// NULL RULE
+					if (j2.isNull()) {
+						Judgement j = new Judgement(JudgementType.DYNAMIC, j2.getTo(), j1.getTo(), j1.getLower(),
+								j1.getUpper());
+						changed |= merge(j, graph, "SR1");
+					}
+					// DIFFERENT ONES
+					else if (j1.isStronger(j2)) {
+						Judgement j = new Judgement(JudgementType.DYNAMIC, j2.getTo(), j1.getTo(), j1.difference(j2),
+								j1.getUpper());
+						changed |= merge(j, graph, "SR2");
+					}
+				}
+			}
+		}
+		return changed;
+	}
+
+	private boolean pathRule(Alternative s, Graph graph) {
+		boolean changed = false;
+
+		Collection<Judgement> js1 = graph.getFrom(s);
+		if (js1 != null) {
+			for (Judgement j1 : js1) {
+				Collection<Judgement> js2 = graph.getFrom(j1.getTo());
+				if (js2 != null) {
+					for (Judgement j2 : js2) {
+						if (j1 != j2 && j1.getJudgementType().equals(JudgementType.FIXED)
+								&& j2.getJudgementType().equals(JudgementType.FIXED)) {
+							if (j1.isNull()) {
+
+								Judgement j3 = new Judgement(JudgementType.DYNAMIC, j1.getFrom(), j2.getTo(),
+										j2.getLower(), j2.getUpper());
+								changed |= merge(j3, graph, "PR1");
+
+							} else if (j2.isNull()) {
+
+								Judgement j3 = new Judgement(JudgementType.DYNAMIC, j1.getFrom(), j2.getTo(),
+										j1.getLower(), j1.getUpper());
+								changed |= merge(j3, graph, "PR2");
+
+							} else {
+								Judgement j3 = new Judgement(JudgementType.DYNAMIC, j1.getFrom(), j2.getTo(),
+										Math.max(j1.getLower(), j2.getLower()), j1.getUpper() + j2.getUpper() );
+								// Judgement j3 = new
+								// Judgement(JudgementType.DYNAMIC,
+								// j1.getFrom(), j2.getTo(),
+								// Math.max(j1.getLower(), j2.getLower()),
+								// j1.getUpper()+ j2.getUpper()+1);
+								changed |= merge(j3, graph, "PR3");
+
+							}
+						}
+					}
+				}
+			}
+		}
+		return changed;
+	}
+
+	public void autoComplete(Graph graph) {
+
+		for (Alternative a : graph.getFromAlternatives()) {
+			pathRule(a, graph);
+		}
+
+		for (Alternative a : graph.getFromAlternatives()) {
+			startRule(a, graph);
+		}
+
+		for(Judgement j : new ArrayList<Judgement>(judgements)){
+			if(!j.isValid()){
+				judgements.remove(j);
+			}
 		}
 		
 		
-		return changed;
-	}
-	
-	
-    private boolean startRule(Alternative a, Graph graph) {
-    	boolean changed = false;
-    	Collection<Judgement> judgements = graph.getFrom(a);
-    	
-    	for (Judgement j1 : judgements)       // [x,y]
-        {
-            for (Judgement j2 : judgements)   // [z,w]
-            {
-                if (j1 != j2)
-                {
-                    // NULL RULE
-                    if (j2.isNull())
-                    {
-                    	Judgement j = new Judgement(JudgementType.DYNAMIC, j2.getTo(), j1.getTo(), j1.getLower(),j1.getUpper());
-                    	changed |= merge(j,graph, "SR1");
-                    }
-                    // DIFFERENT ONES
-                    else if (j1.isStronger(j2))
-                    {
-                    	Judgement j = new Judgement(JudgementType.DYNAMIC, j2.getTo(), j1.getTo(), j1.difference(j2), j1.getUpper());
-                    	changed |= merge(j,graph, "SR2");
-                    }
-                }
-            }
-        }
-        return changed;
-    }
-
-	
-	public void autoComplete(Graph graph) {
-		for (Alternative a : graph.getFromAlternatives()) {
-			startRule(a, graph);
+		System.out.println("FINAL RESULT");
+		for (Judgement j : judgements) {
+			System.out.println(j.toString());
 		}
 	}
 

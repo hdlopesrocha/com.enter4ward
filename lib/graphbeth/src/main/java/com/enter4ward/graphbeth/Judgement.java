@@ -37,10 +37,14 @@ public class Judgement {
 	}
 	
 	public String toString(){
-		return from.getId()+" -> "+to.getId()+" = "+ min+"/"+max;
+		return from.getId()+" -> "+to.getId()+" = "+ min+"/"+max + " | "+judgementType.toString();
 	}
 	
-	public boolean merge(Judgement j) throws Exception {
+	public boolean isValid(){
+		return min <= max;
+	}
+	
+	public boolean merge(Judgement j) throws MergeException {
 		boolean changed = false;
 		if (max != 0) {
 
@@ -54,7 +58,7 @@ public class Judgement {
 			}
 			// XXX PROBLEMATICO XXX
 			if (max < min) {
-				throw new Exception("MERDA");
+				throw new MergeException();
 				// Max = bmax;
 				// Min = bmin;
 				// changed = false;
