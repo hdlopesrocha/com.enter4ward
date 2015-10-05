@@ -10,6 +10,7 @@ public class Criteria {
 
 	private List<Judgement> judgements = new ArrayList<Judgement>();
 	private List<Alternative> alternatives = new ArrayList<Alternative>();
+	private static final float EPSILON = 0.00001f;
 
 	public Criteria() {
 
@@ -23,96 +24,79 @@ public class Criteria {
 		judgements.add(judgement);
 	}
 
-	public void gaps(Graph graph) {
-		for (Alternative a : alternatives) {
-			for (Alternative b : alternatives) {
-				if (a != b) {
-					Judgement j = graph.get(a, b);
-					if (j == null) {
-						j = graph.get(b, a);
-					}
-					if (j == null) {
-						System.out.println("need judgement between " + a.getId() + " and " + b.getId());
-					}
-				}
-			}
-		}
-	}
 
 	public boolean check() {
 		boolean ans = false;
 		Graph graph = new Graph(judgements);
 		if (!graph.hasCycle()) {
 
-			Map<String, Integer> variables = new TreeMap<String, Integer>();
+			Map<Alternative, Integer> variables = new TreeMap<Alternative, Integer>();
 			Solver solver = new Solver(alternatives.size());
 
 			// #region CREATE_VARIABLES
 			for (Alternative a : alternatives) {
-				variables.put(a.getId(), solver.createVariable());
+				variables.put(a, solver.createVariable());
 			}
 
 			// #region ADD_RULES_SCALE
 			for (Judgement j1 : judgements) {
-				int f1 = variables.get(j1.getFrom().getId());
-				int t1 = variables.get(j1.getTo().getId());
+				int f1 = variables.get(j1.getFrom());
+				int t1 = variables.get(j1.getTo());
 
 				System.out.println(j1.getFrom().getId() + " -> " + j1.getTo().getId());
 
 				// NULL JUDGEMENT
-				if (j1.getUpper() == 0 && j1.getLower() == 0) {
+				if (j1.getMax() == 0 && j1.getMin() == 0) {
 
 					solver.composeEquation(f1, 1);
 					solver.composeEquation(t1, -1);
 					System.out.print("\t");
 					solver.createEquation(ConstraintType.EQ, 0);
 
-				} else if (j1.getLower() <= j1.getUpper()) {
+				} else if (j1.getMin() <= j1.getMax()) {
 					solver.composeEquation(f1, -1);
 					solver.composeEquation(t1, 1);
 					System.out.print("\t");
-					solver.createEquation(ConstraintType.LE, -j1.getLower());
+					solver.createEquation(ConstraintType.LE, -j1.getMin());
 				}
 
 				for (Judgement j2 : judgements) {
 					if (j1 != j2) {
 
-						int f2 = variables.get(j2.getFrom().getId());
-						int t2 = variables.get(j2.getTo().getId());
+						int f2 = variables.get(j2.getFrom());
+						int t2 = variables.get(j2.getTo());
 
 						// j1 must be much better than j2, j1.low>j2.high
-						if (j1.getLower() > j2.getUpper() && j1.getUpper() != 0 && j2.getUpper() != 0) {
+						if (j1.getMin() > j2.getMax() && j1.getMax() != 0 && j2.getMax() != 0) {
 							System.out.print("\t[" + j2.getFrom().getId() + "->" + j2.getTo().getId() + "]");
 							solver.composeEquation(f1, -1);
 							solver.composeEquation(t1, 1);
 							solver.composeEquation(f2, 1);
 							solver.composeEquation(t2, -1);
-							solver.createEquation(ConstraintType.LE, j2.getUpper() - j1.getLower());
+							solver.createEquation(ConstraintType.LE, j2.getMax() - j1.getMin());
 						}
 					}
 				}
 			}
 
 			ans = solver.solve();
-			System.out.println("JUDGEMENTS");
-			for (Judgement j1 : judgements) {
-				int f1 = variables.get(j1.getFrom().getId());
-				int t1 = variables.get(j1.getTo().getId());
-				double dec = (solver.getDecision(f1) - solver.getDecision(t1));
-				System.out.println(j1.getFrom().getId() + "->" + j1.getTo().getId() + " = " + dec);
-			}
+			Map<Alternative, Double> scale = new TreeMap<Alternative, Double>();
+
+		
 			System.out.println("SCALE");
 			for (Alternative a : alternatives) {
-				int var = variables.get(a.getId());
+				int var = variables.get(a);
 				double dec = (solver.getDecision(var));
 				System.out.println(a.getId() + "=" + dec);
+				scale.put(a, dec);
 			}
+
+			autoComplete(graph,scale);
+			
 		} else {
 			System.out.println("Cycle detected!");
 		}
 
-		gaps(graph);
-		autoComplete(graph);
 
 		return ans;
 
@@ -140,9 +124,9 @@ public class Criteria {
 
 		return changed;
 	}
+	
 
-	private boolean startRule(Alternative a, Graph graph) {
-		boolean changed = false;
+	private void startRule(Alternative a, Graph graph) {
 		Collection<Judgement> judgements = graph.getFrom(a);
 
 		for (Judgement j1 : judgements) // [x,y]
@@ -153,80 +137,62 @@ public class Criteria {
 						&& j2.getJudgementType().equals(JudgementType.FIXED)) {
 					// NULL RULE
 					if (j2.isNull()) {
-						Judgement j = new Judgement(JudgementType.DYNAMIC, j2.getTo(), j1.getTo(), j1.getLower(),
-								j1.getUpper());
-						changed |= merge(j, graph, "SR1");
+						Judgement j = new Judgement(JudgementType.DYNAMIC, j2.getTo(), j1.getTo(), j1.getMin(),
+								j1.getMax());
+						merge(j, graph, "SR1");
 					}
 					// DIFFERENT ONES
 					else if (j1.isStronger(j2)) {
 						Judgement j = new Judgement(JudgementType.DYNAMIC, j2.getTo(), j1.getTo(), j1.difference(j2),
-								j1.getUpper());
-						changed |= merge(j, graph, "SR2");
+								Float.MAX_VALUE);
+						merge(j, graph, "SR2");
 					}
 				}
 			}
 		}
-		return changed;
 	}
-
-	private boolean pathRule(Alternative s, Graph graph) {
-		boolean changed = false;
-
-		Collection<Judgement> js1 = graph.getFrom(s);
-		if (js1 != null) {
-			for (Judgement j1 : js1) {
-				Collection<Judgement> js2 = graph.getFrom(j1.getTo());
-				if (js2 != null) {
-					for (Judgement j2 : js2) {
-						if (j1 != j2 && j1.getJudgementType().equals(JudgementType.FIXED)
-								&& j2.getJudgementType().equals(JudgementType.FIXED)) {
-							if (j1.isNull()) {
-
-								Judgement j3 = new Judgement(JudgementType.DYNAMIC, j1.getFrom(), j2.getTo(),
-										j2.getLower(), j2.getUpper());
-								changed |= merge(j3, graph, "PR1");
-
-							} else if (j2.isNull()) {
-
-								Judgement j3 = new Judgement(JudgementType.DYNAMIC, j1.getFrom(), j2.getTo(),
-										j1.getLower(), j1.getUpper());
-								changed |= merge(j3, graph, "PR2");
-
-							} else {
-								Judgement j3 = new Judgement(JudgementType.DYNAMIC, j1.getFrom(), j2.getTo(),
-										Math.max(j1.getLower(), j2.getLower()), j1.getUpper() + j2.getUpper() );
-								// Judgement j3 = new
-								// Judgement(JudgementType.DYNAMIC,
-								// j1.getFrom(), j2.getTo(),
-								// Math.max(j1.getLower(), j2.getLower()),
-								// j1.getUpper()+ j2.getUpper()+1);
-								changed |= merge(j3, graph, "PR3");
-
-							}
+	
+	public void scoreCompleter(Graph graph,Map<Alternative, Double> scale){
+		for (Alternative a : alternatives) {
+			for (Alternative b : alternatives) {
+				if (a != b) {
+					Judgement j = graph.get(a, b);
+					if (j == null) {
+						j = graph.get(b, a);
+					}
+					if (j == null) {
+						float dif = (float)(scale.get(a)-scale.get(b));
+						if(dif>1){
+							merge(new Judgement(JudgementType.DYNAMIC, a, b,1,dif), graph, "SC1");
+						}
+						else if(dif<-1) {
+							merge(new Judgement(JudgementType.DYNAMIC, b, a,1,-dif), graph, "SC2");							
 						}
 					}
 				}
 			}
-		}
-		return changed;
+		}	
 	}
-
-	public void autoComplete(Graph graph) {
-
+	
+	
+	public void autoComplete(Graph graph, Map<Alternative, Double> scale) {
+		scoreCompleter(graph, scale);
+		
+		/*
 		for (Alternative a : graph.getFromAlternatives()) {
 			pathRule(a, graph);
 		}
-
+*/
 		for (Alternative a : graph.getFromAlternatives()) {
 			startRule(a, graph);
 		}
-
+/*
 		for(Judgement j : new ArrayList<Judgement>(judgements)){
 			if(!j.isValid()){
 				judgements.remove(j);
 			}
 		}
-		
+		*/
 		
 		System.out.println("FINAL RESULT");
 		for (Judgement j : judgements) {

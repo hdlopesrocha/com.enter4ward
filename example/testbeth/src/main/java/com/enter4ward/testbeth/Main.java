@@ -7,6 +7,29 @@ import com.enter4ward.graphbeth.JudgementType;
 
 public class Main {
 
+	public static void main0(String[] args)  {
+
+		Criteria testCriteria = new Criteria();
+		Alternative a = new Alternative("a");
+		Alternative b = new Alternative("b");
+		Alternative c = new Alternative("c");
+		//Alternative f = new Alternative("f");
+
+		testCriteria.addAlternative(a);
+		testCriteria.addAlternative(b);
+		testCriteria.addAlternative(c);
+		//testCriteria.addAlternative(f);
+
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, b, 1));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, c, 1));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, c, 1));
+		
+		//testCriteria.addJudgement(new Judgement(JudgementType.FIXED, e, f, 0));
+
+		testCriteria.check();
+	}
+	
+	
 	public static void main(String[] args)  {
 
 		Criteria testCriteria = new Criteria();

@@ -5,9 +5,9 @@ public class Judgement {
 	private JudgementType judgementType;
 	private Alternative from;
 	private Alternative to;
-	private int min, max;
+	private float min, max;
 
-	public Judgement(JudgementType judgementType, Alternative from, Alternative to, int value) {
+	public Judgement(JudgementType judgementType, Alternative from, Alternative to, float value) {
 		super();
 		this.judgementType = judgementType;
 		this.from = from;
@@ -15,35 +15,35 @@ public class Judgement {
 		this.min = this.max = value;
 	}
 
-	public Judgement(JudgementType judgementType, Alternative from, Alternative to, int lower, int upper) {
+	public Judgement(JudgementType judgementType, Alternative from, Alternative to, float min, float max) {
 		super();
 		this.judgementType = judgementType;
 		this.from = from;
 		this.to = to;
-		this.min = lower;
-		this.max = upper;
+		this.min = min;
+		this.max = max;		
 	}
 
-	public boolean isStronger(Judgement j){
-		return min>j.max;
+	public boolean isStronger(Judgement j) {
+		return min > j.max;
 	}
-	
-	public int difference(Judgement j){
+
+	public float difference(Judgement j) {
 		return min - j.max;
 	}
-	
-	public boolean isNull(){
-		return min==0 && max == 0;
+
+	public boolean isNull() {
+		return min == 0 && max == 0;
 	}
-	
-	public String toString(){
-		return from.getId()+" -> "+to.getId()+" = "+ min+"/"+max + " | "+judgementType.toString();
+
+	public String toString() {
+		return from.getId() + " -> " + to.getId() + " = " + min + "/" + max + " | " + judgementType.toString();
 	}
-	
-	public boolean isValid(){
+
+	public boolean isValid() {
 		return min <= max;
 	}
-	
+
 	public boolean merge(Judgement j) throws MergeException {
 		boolean changed = false;
 		if (max != 0) {
@@ -80,11 +80,11 @@ public class Judgement {
 		return to;
 	}
 
-	public int getLower() {
+	public float getMin() {
 		return min;
 	}
 
-	public int getUpper() {
+	public float getMax() {
 		return max;
 	}
 

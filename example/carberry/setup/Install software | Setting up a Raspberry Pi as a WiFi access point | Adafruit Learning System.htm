@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html class="js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths js-ready" lang="en-US"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+<script src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/308175db61" type="text/javascript"></script><script src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/nr-686.js"></script><script src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/ga.js" async="" type="text/javascript"></script><script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","errorBeacon":"bam.nr-data.net","licenseKey":"308175db61","applicationID":"3238541","transactionName":"cVZXRUFeWghRShtEVlVcSh5AWVkT","queueTime":0,"applicationTime":48,"agent":"js-agent.newrelic.com/nr-686.min.js"}</script>
+<script type="text/javascript">(window.NREUM||(NREUM={})).loader_config={xpid:"UQUGWV5XGwACV1lXAwA="};window.NREUM||(NREUM={}),__nr_require=function(t,e,n){function r(n){if(!e[n]){var o=e[n]={exports:{}};t[n][0].call(o.exports,function(e){var o=t[n][1][e];return r(o?o:e)},o,o.exports)}return e[n].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<n.length;o++)r(n[o]);return r}({QJf3ax:[function(t,e){function n(t){function e(e,n,a){t&&t(e,n,a),a||(a={});for(var c=s(e),u=c.length,f=i(a,o,r),d=0;u>d;d++)c[d].apply(f,n);return f}function a(t,e){u[t]=s(t).concat(e)}function s(t){return u[t]||[]}function c(){return n(e)}var u={};return{on:a,emit:e,create:c,listeners:s,_events:u}}function r(){return{}}var o="nr@context",i=t("gos");e.exports=n()},{gos:"7eSDFh"}],ee:[function(t,e){e.exports=t("QJf3ax")},{}],3:[function(t){function e(t){try{i.console&&console.log(t)}catch(e){}}var n,r=t("ee"),o=t(1),i={};try{n=localStorage.getItem("__nr_flags").split(","),console&&"function"==typeof console.log&&(i.console=!0,-1!==n.indexOf("dev")&&(i.dev=!0),-1!==n.indexOf("nr_dev")&&(i.nrDev=!0))}catch(a){}i.nrDev&&r.on("internal-error",function(t){e(t.stack)}),i.dev&&r.on("fn-err",function(t,n,r){e(r.stack)}),i.dev&&(e("NR AGENT IN DEVELOPMENT MODE"),e("flags: "+o(i,function(t){return t}).join(", ")))},{1:20,ee:"QJf3ax"}],4:[function(t){function e(t,e,n,i,s){try{c?c-=1:r("err",[s||new UncaughtException(t,e,n)])}catch(u){try{r("ierr",[u,(new Date).getTime(),!0])}catch(f){}}return"function"==typeof a?a.apply(this,o(arguments)):!1}function UncaughtException(t,e,n){this.message=t||"Uncaught error with no additional information",this.sourceURL=e,this.line=n}function n(t){r("err",[t,(new Date).getTime()])}var r=t("handle"),o=t(6),i=t("ee"),a=window.onerror,s=!1,c=0;t("loader").features.err=!0,t(3),window.onerror=e;try{throw new Error}catch(u){"stack"in u&&(t(4),t(5),"addEventListener"in window&&t(1),window.XMLHttpRequest&&XMLHttpRequest.prototype&&XMLHttpRequest.prototype.addEventListener&&window.XMLHttpRequest&&XMLHttpRequest.prototype&&XMLHttpRequest.prototype.addEventListener&&!/CriOS/.test(navigator.userAgent)&&t(2),s=!0)}i.on("fn-start",function(){s&&(c+=1)}),i.on("fn-err",function(t,e,r){s&&(this.thrown=!0,n(r))}),i.on("fn-end",function(){s&&!this.thrown&&c>0&&(c-=1)}),i.on("internal-error",function(t){r("ierr",[t,(new Date).getTime(),!0])})},{1:5,2:8,3:3,4:7,5:6,6:21,ee:"QJf3ax",handle:"D5DuLP",loader:"G9z0Bl"}],5:[function(t,e){function n(t){i.inPlace(t,["addEventListener","removeEventListener"],"-",r)}function r(t){return t[1]}var o=t("ee").create(),i=t(1)(o),a=t("gos");if(e.exports=o,n(window),"getPrototypeOf"in Object){for(var s=document;s&&!s.hasOwnProperty("addEventListener");)s=Object.getPrototypeOf(s);s&&n(s);for(var c=XMLHttpRequest.prototype;c&&!c.hasOwnProperty("addEventListener");)c=Object.getPrototypeOf(c);c&&n(c)}else XMLHttpRequest.prototype.hasOwnProperty("addEventListener")&&n(XMLHttpRequest.prototype);o.on("addEventListener-start",function(t){if(t[1]){var e=t[1];"function"==typeof e?this.wrapped=t[1]=a(e,"nr@wrapped",function(){return i(e,"fn-",null,e.name||"anonymous")}):"function"==typeof e.handleEvent&&i.inPlace(e,["handleEvent"],"fn-")}}),o.on("removeEventListener-start",function(t){var e=this.wrapped;e&&(t[1]=e)})},{1:22,ee:"QJf3ax",gos:"7eSDFh"}],6:[function(t,e){var n=t("ee").create(),r=t(1)(n);e.exports=n,r.inPlace(window,["requestAnimationFrame","mozRequestAnimationFrame","webkitRequestAnimationFrame","msRequestAnimationFrame"],"raf-"),n.on("raf-start",function(t){t[0]=r(t[0],"fn-")})},{1:22,ee:"QJf3ax"}],7:[function(t,e){function n(t,e,n){t[0]=o(t[0],"fn-",null,n)}var r=t("ee").create(),o=t(1)(r);e.exports=r,o.inPlace(window,["setTimeout","setInterval","setImmediate"],"setTimer-"),r.on("setTimer-start",n)},{1:22,ee:"QJf3ax"}],8:[function(t,e){function n(){u.inPlace(this,p,"fn-")}function r(t,e){u.inPlace(e,["onreadystatechange"],"fn-")}function o(t,e){return e}function i(t,e){for(var n in t)e[n]=t[n];return e}var a=t("ee").create(),s=t(1),c=t(2),u=c(a),f=c(s),d=window.XMLHttpRequest,p=["onload","onerror","onabort","onloadstart","onloadend","onprogress","ontimeout"];e.exports=a,window.XMLHttpRequest=function(t){var e=new d(t);try{a.emit("new-xhr",[],e),f.inPlace(e,["addEventListener","removeEventListener"],"-",o),e.addEventListener("readystatechange",n,!1)}catch(r){try{a.emit("internal-error",[r])}catch(i){}}return e},i(d,XMLHttpRequest),XMLHttpRequest.prototype=d.prototype,u.inPlace(XMLHttpRequest.prototype,["open","send"],"-xhr-",o),a.on("send-xhr-start",r),a.on("open-xhr-start",r)},{1:5,2:22,ee:"QJf3ax"}],9:[function(t){function e(t){var e=this.params,r=this.metrics;if(!this.ended){this.ended=!0;for(var i=0;c>i;i++)t.removeEventListener(s[i],this.listener,!1);if(!e.aborted){if(r.duration=(new Date).getTime()-this.startTime,4===t.readyState){e.status=t.status;var a=t.responseType,u="arraybuffer"===a||"blob"===a||"json"===a?t.response:t.responseText,f=n(u);if(f&&(r.rxSize=f),this.sameOrigin){var d=t.getResponseHeader("X-NewRelic-App-Data");d&&(e.cat=d.split(", ").pop())}}else e.status=0;r.cbTime=this.cbTime,o("xhr",[e,r,this.startTime])}}}function n(t){if("string"==typeof t&&t.length)return t.length;if("object"!=typeof t)return void 0;if("undefined"!=typeof ArrayBuffer&&t instanceof ArrayBuffer&&t.byteLength)return t.byteLength;if("undefined"!=typeof Blob&&t instanceof Blob&&t.size)return t.size;if("undefined"!=typeof FormData&&t instanceof FormData)return void 0;try{return JSON.stringify(t).length}catch(e){return void 0}}function r(t,e){var n=i(e),r=t.params;r.host=n.hostname+":"+n.port,r.pathname=n.pathname,t.sameOrigin=n.sameOrigin}if(window.XMLHttpRequest&&XMLHttpRequest.prototype&&XMLHttpRequest.prototype.addEventListener&&!/CriOS/.test(navigator.userAgent)){t("loader").features.xhr=!0;var o=t("handle"),i=t(2),a=t("ee"),s=["load","error","abort","timeout"],c=s.length,u=t(1);t(4),t(3),a.on("new-xhr",function(){this.totalCbs=0,this.called=0,this.cbTime=0,this.end=e,this.ended=!1,this.xhrGuids={}}),a.on("open-xhr-start",function(t){this.params={method:t[0]},r(this,t[1]),this.metrics={}}),a.on("open-xhr-end",function(t,e){"loader_config"in NREUM&&"xpid"in NREUM.loader_config&&this.sameOrigin&&e.setRequestHeader("X-NewRelic-ID",NREUM.loader_config.xpid)}),a.on("send-xhr-start",function(t,e){var r=this.metrics,o=t[0],i=this;if(r&&o){var u=n(o);u&&(r.txSize=u)}this.startTime=(new Date).getTime(),this.listener=function(t){try{"abort"===t.type&&(i.params.aborted=!0),("load"!==t.type||i.called===i.totalCbs&&(i.onloadCalled||"function"!=typeof e.onload))&&i.end(e)}catch(n){try{a.emit("internal-error",[n])}catch(r){}}};for(var f=0;c>f;f++)e.addEventListener(s[f],this.listener,!1)}),a.on("xhr-cb-time",function(t,e,n){this.cbTime+=t,e?this.onloadCalled=!0:this.called+=1,this.called!==this.totalCbs||!this.onloadCalled&&"function"==typeof n.onload||this.end(n)}),a.on("xhr-load-added",function(t,e){var n=""+u(t)+!!e;this.xhrGuids&&!this.xhrGuids[n]&&(this.xhrGuids[n]=!0,this.totalCbs+=1)}),a.on("xhr-load-removed",function(t,e){var n=""+u(t)+!!e;this.xhrGuids&&this.xhrGuids[n]&&(delete this.xhrGuids[n],this.totalCbs-=1)}),a.on("addEventListener-end",function(t,e){e instanceof XMLHttpRequest&&"load"===t[0]&&a.emit("xhr-load-added",[t[1],t[2]],e)}),a.on("removeEventListener-end",function(t,e){e instanceof XMLHttpRequest&&"load"===t[0]&&a.emit("xhr-load-removed",[t[1],t[2]],e)}),a.on("fn-start",function(t,e,n){e instanceof XMLHttpRequest&&("onload"===n&&(this.onload=!0),("load"===(t[0]&&t[0].type)||this.onload)&&(this.xhrCbStart=(new Date).getTime()))}),a.on("fn-end",function(t,e){this.xhrCbStart&&a.emit("xhr-cb-time",[(new Date).getTime()-this.xhrCbStart,this.onload,e],e)})}},{1:"XL7HBI",2:10,3:8,4:5,ee:"QJf3ax",handle:"D5DuLP",loader:"G9z0Bl"}],10:[function(t,e){e.exports=function(t){var e=document.createElement("a"),n=window.location,r={};e.href=t,r.port=e.port;var o=e.href.split("://");return!r.port&&o[1]&&(r.port=o[1].split("/")[0].split("@").pop().split(":")[1]),r.port&&"0"!==r.port||(r.port="https"===o[0]?"443":"80"),r.hostname=e.hostname||n.hostname,r.pathname=e.pathname,r.protocol=o[0],"/"!==r.pathname.charAt(0)&&(r.pathname="/"+r.pathname),r.sameOrigin=!e.hostname||e.hostname===document.domain&&e.port===n.port&&e.protocol===n.protocol,r}},{}],11:[function(t,e){function n(t){return function(){r(t,[(new Date).getTime()].concat(i(arguments)))}}var r=t("handle"),o=t(1),i=t(2);"undefined"==typeof window.newrelic&&(newrelic=window.NREUM);var a=["setPageViewName","addPageAction","setCustomAttribute","finished","addToTrace","inlineHit","noticeError"];o(a,function(t,e){window.NREUM[e]=n("api-"+e)}),e.exports=window.NREUM},{1:20,2:21,handle:"D5DuLP"}],gos:[function(t,e){e.exports=t("7eSDFh")},{}],"7eSDFh":[function(t,e){function n(t,e,n){if(r.call(t,e))return t[e];var o=n();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(t,e,{value:o,writable:!0,enumerable:!1}),o}catch(i){}return t[e]=o,o}var r=Object.prototype.hasOwnProperty;e.exports=n},{}],D5DuLP:[function(t,e){function n(t,e,n){return r.listeners(t).length?r.emit(t,e,n):void(r.q&&(r.q[t]||(r.q[t]=[]),r.q[t].push(e)))}var r=t("ee").create();e.exports=n,n.ee=r,r.q={}},{ee:"QJf3ax"}],handle:[function(t,e){e.exports=t("D5DuLP")},{}],XL7HBI:[function(t,e){function n(t){var e=typeof t;return!t||"object"!==e&&"function"!==e?-1:t===window?0:i(t,o,function(){return r++})}var r=1,o="nr@id",i=t("gos");e.exports=n},{gos:"7eSDFh"}],id:[function(t,e){e.exports=t("XL7HBI")},{}],G9z0Bl:[function(t,e){function n(){var t=p.info=NREUM.info,e=u.getElementsByTagName("script")[0];if(t&&t.licenseKey&&t.applicationID&&e){s(d,function(e,n){e in t||(t[e]=n)});var n="https"===f.split(":")[0]||t.sslForHttp;p.proto=n?"https://":"http://",a("mark",["onload",i()]);var r=u.createElement("script");r.src=p.proto+t.agent,e.parentNode.insertBefore(r,e)}}function r(){"complete"===u.readyState&&o()}function o(){a("mark",["domContent",i()])}function i(){return(new Date).getTime()}var a=t("handle"),s=t(1),c=window,u=c.document;t(2);var f=(""+location).split("?")[0],d={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-686.min.js"},p=e.exports={offset:i(),origin:f,features:{}};u.addEventListener?(u.addEventListener("DOMContentLoaded",o,!1),c.addEventListener("load",n,!1)):(u.attachEvent("onreadystatechange",r),c.attachEvent("onload",n)),a("mark",["firstbyte",i()])},{1:20,2:11,handle:"D5DuLP"}],loader:[function(t,e){e.exports=t("G9z0Bl")},{}],20:[function(t,e){function n(t,e){var n=[],o="",i=0;for(o in t)r.call(t,o)&&(n[i]=e(o,t[o]),i+=1);return n}var r=Object.prototype.hasOwnProperty;e.exports=n},{}],21:[function(t,e){function n(t,e,n){e||(e=0),"undefined"==typeof n&&(n=t?t.length:0);for(var r=-1,o=n-e||0,i=Array(0>o?0:o);++r<o;)i[r]=t[e+r];return i}e.exports=n},{}],22:[function(t,e){function n(t){return!(t&&"function"==typeof t&&t.apply&&!t[i])}var r=t("ee"),o=t(1),i="nr@wrapper",a=Object.prototype.hasOwnProperty;e.exports=function(t){function e(t,e,r,a){function nrWrapper(){var n,i,s,u;try{i=this,n=o(arguments),s=r&&r(n,i)||{}}catch(d){f([d,"",[n,i,a],s])}c(e+"start",[n,i,a],s);try{return u=t.apply(i,n)}catch(p){throw c(e+"err",[n,i,p],s),p}finally{c(e+"end",[n,i,u],s)}}return n(t)?t:(e||(e=""),nrWrapper[i]=!0,u(t,nrWrapper),nrWrapper)}function s(t,r,o,i){o||(o="");var a,s,c,u="-"===o.charAt(0);for(c=0;c<r.length;c++)s=r[c],a=t[s],n(a)||(t[s]=e(a,u?s+o:o,i,s))}function c(e,n,r){try{t.emit(e,n,r)}catch(o){f([o,e,n,r])}}function u(t,e){if(Object.defineProperty&&Object.keys)try{var n=Object.keys(t);return n.forEach(function(n){Object.defineProperty(e,n,{get:function(){return t[n]},set:function(e){return t[n]=e,e}})}),e}catch(r){f([r])}for(var o in t)a.call(t,o)&&(e[o]=t[o]);return e}function f(e){try{t.emit("internal-error",e)}catch(n){}}return t||(t=r),e.inPlace=s,e.flag=i,e}},{1:21,ee:"QJf3ax"}]},{},["G9z0Bl",4,9]);</script>
+  <link rel="shortcut icon" type="image/x-icon" href="https://learn.adafruit.com/assets/favicon-0c79bd4bc582e6d4cf3afe417bd1e28120527c09d92c08a6464690c5bf6b85f4.ico">
+    <title>Install software | Setting up a Raspberry Pi as a WiFi access point | Adafruit Learning System</title>
+  <meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="Ug/FsBC+GDHdFS1ktaoFem8r6IUYrrcAV59uxKTEq1JTzpWp75onm4ivTunmDKPj9TPNNlFOKUgAQ5eXel7b0A==">
+  <link rel="alternate" type="application/atom+xml" title="ATOM" href="https://learn.adafruit.com/feed">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://learn.adafruit.com/feed.rss">
+  <link rel="stylesheet" media="screen" href="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/fonts.css">
+  <link rel="stylesheet" media="screen" href="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/application-0221dfe1cd745343724e0317b61e9fb83ee78705d2635355.css">
+  <!--[if lt IE 9]>
+    <script src="/assets/ie.html5.js"></script>
+    <script src="/assets/ie.respond.js"></script>
+  <![endif]-->
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@adafruit">
+  <meta name="twitter:title" content="Setting up a Raspberry Pi as a WiFi access point">
+  <meta name="twitter:description" content="Make the most adorable little WiFi router">
+  <meta name="twitter:image:src" content="https://learn.adafruit.com/system/guides/images/000/000/305/medium800/pi_ap.jpg">
+  <meta name="twitter:domain" content="https://learn.adafruit.com">
+
+  <link rel="canonical" href="https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software">
+<style id="fit-vids-style">.fluid-width-video-wrapper{width:100%;position:relative;padding:0;}.fluid-width-video-wrapper iframe,.fluid-width-video-wrapper object,.fluid-width-video-wrapper embed {position:absolute;top:0;left:0;width:100%;height:100%;}</style></head>
+
+<body class="application pages show">
+  <div id="outer-wrapper">
+    <div id="inner-wrapper">
+      
+      <header id="adafruit-header">
+    <div id="small-header-content" class="container visible-xs">
+    <a id="small-header-menu-button" class="menu-link" href="#small-header-nav">
+      <i class="fa fa-bars"> </i>
+    </a>
+    <div class="small-header-logo">
+      <a href="https://www.adafruit.com/">
+        <img id="small-logo" alt="Adafruit Logo" title="Breast Cancer Awareness Month" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/adafruit_logo_small.png" height="50" width="50">
+</a>    </div>
+    <a class="small-header-cart" href="https://www.adafruit.com/shopping_cart">
+      <span class="small-cart-count">0</span>
+      <i class="fa fa-shopping-cart"></i>
+</a>  </div>
+    <nav id="small-header-nav" role="navigation" class="visible-xs">
+      <div class="block">
+        <ul>
+          <li>
+            <div id="small-search-wrapper">
+              <div id="small-search-inner-wrapper">
+                <form action="https://learn.adafruit.com/search" method="get">
+                  <label for="mobile-search" style="display:none;">Search</label>
+                  <input id="mobile-search" name="q" placeholder="Search Adafruit" type="text">
+                  <i class="fa fa-search"></i>
+                </form>
+              </div>
+            </div>
+          </li>
+          <li>
+            <a href="https://www.adafruit.com/categories">SHOP</a>
+          </li>
+          <li>
+            <a href="https://blog.adafruit.com/">BLOG</a>
+          </li>
+          <li>
+            <a href="https://learn.adafruit.com/">LEARN</a>
+          </li>
+          <li>
+            <a href="https://forums.adafruit.com/">FORUMS</a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/adafruit">VIDEOS</a>
+          </li>
+            <li>
+              <a href="https://learn.adafruit.com/users/sign_in">SIGN IN</a>
+            </li>
+          <li>
+            <a class="close-btn" id="small-nav-close-button" href="#top">CLOSE MENU</a>
+          </li>
+        </ul>
+
+    </div>
+  </nav>
+
+  <div id="header-content" class="container hidden-xs">
+    <div id="header-profile">
+      <a id="header-cart" href="https://www.adafruit.com/shopping_cart">
+        0 Items <i class="fa fa-shopping-cart"></i>
+</a>      <div id="account">
+          <a href="https://learn.adafruit.com/users/sign_in">Sign In</a>
+      </div>
+      <div id="search-wrapper">
+        <form action="https://learn.adafruit.com/search" method="get">
+          <label for="search" style="display:none;">Search</label>
+          <span style="position: relative; display: inline-block;" class="twitter-typeahead"><input style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; background: rgb(0, 0, 0) none repeat scroll 0% 0%;" class="tt-hint" autocomplete="off" spellcheck="off" disabled="disabled" type="text"><input dir="auto" style="position: relative; vertical-align: top; background-color: transparent;" spellcheck="false" autocomplete="off" class="tt-query" id="search" name="q" type="text"><span style="position: absolute; left: -9999px; visibility: hidden; white-space: nowrap; font-family: &quot;Gotham SSm A&quot;,&quot;Gotham SSm B&quot;; font-size: 12px; font-style: normal; font-variant: normal; font-weight: 300; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: optimizelegibility; text-transform: none;"></span><span style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;" class="tt-dropdown-menu"></span></span>
+          <i class="fa fa-search"></i>
+          <input style="visibility: hidden; position: fixed;" type="submit">
+        </form>
+      </div>
+    </div>
+    <div id="navigation">
+      <a href="https://www.adafruit.com/">
+        <img id="logo" alt="Adafruit Logo" title="Breast Cancer Awareness Month" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/logo_2x.png" height="60" width="172">
+</a>        <nav class="hover-menu">
+    <ul>
+      <li id="nav-shop"><a href="https://www.adafruit.com/">SHOP</a>
+        <div class="flyouts">
+<div class="flyout">
+<div class="container">
+<div class="flyout-content row"><div class="column col-lg-6 col-md-6 col-sm-6">
+<div class="title categories">
+PRODUCT CATEGORIES <br class="hidden-lg"><a href="http://www.adafruit.com/categories">(SEE ALL 28)</a>
+</div>
+<div class="row">
+<div class="col-lg-6 col-md-6 col-sm-6">
+<ul class="links categories"><li><a href="http://www.adafruit.com/category/17">ARDUINO (137)</a></li>
+<li><a href="http://www.adafruit.com/category/105">RASPBERRY PI (330)</a></li>
+<li><a href="http://www.adafruit.com/category/75">BEAGLEBONE (27)</a></li>
+<li><a href="http://www.adafruit.com/category/168">NEOPIXELS (38)</a></li>
+<li><a href="http://www.adafruit.com/category/65">WEARABLES (100)</a></li>
+<li><a href="http://www.adafruit.com/category/117">YOUNG ENGINEERS (85)</a></li>
+<li><a href="http://www.adafruit.com/category/290">COSPLAY/COSTUMING (148)</a></li>
+<li><a href="http://www.adafruit.com/category/82">PROTOTYPING (173)</a></li>
+<li><a href="http://www.adafruit.com/category/307">HALLOWEEN (210)</a></li>
+<li><a href="http://www.adafruit.com/category/203">KITS &amp; PROJECTS (147)</a></li>
+<li><a href="http://www.adafruit.com/category/196">BOARDS (175)</a></li>
+<li><a href="http://www.adafruit.com/category/63">LCDS &amp; DISPLAYS (77)</a></li>
+<li><a href="http://www.adafruit.com/category/328">RESELLER &amp; UNIVERSITY PACKS (2)</a></li>
+<li><a href="http://www.adafruit.com/category/37">LEDS (231)</a></li>
+</ul>
+</div>
+<div class="col-lg-6 col-md-6 col-sm-6">
+<ul class="links"><li><a href="http://www.adafruit.com/category/44">POWER (156)</a></li>
+<li><a href="http://www.adafruit.com/category/33">CABLES (117)</a></li>
+<li><a href="http://www.adafruit.com/category/8">TOOLS (155)</a></li>
+<li><a href="http://www.adafruit.com/category/227">ROBOTICS &amp; CNC (129)</a></li>
+<li><a href="http://www.adafruit.com/category/234">ACCESSORIES (112)</a></li>
+<li><a href="http://www.adafruit.com/category/54">COMPONENTS &amp; PARTS (268)</a></li>
+<li><a href="http://www.adafruit.com/category/35">SENSORS (168)</a></li>
+<li><a href="http://www.adafruit.com/category/50">EL WIRE/TAPE/PANEL (82)</a></li>
+<li><a href="http://www.adafruit.com/category/128">3D PRINTING (62)</a></li>
+<li><a href="http://www.adafruit.com/category/40">BOOKS (92)</a></li>
+<li><a href="http://www.adafruit.com/category/254">SOFTWARE (10)</a></li>
+<li><a href="http://www.adafruit.com/category/112">WIRELESS (87)</a></li>
+<li><a href="http://www.adafruit.com/category/14">GIFT CERTIFICATES (4)</a></li>
+<li><a href="http://www.adafruit.com/category/342">INTERNET OF THINGS - IOT (30)</a></li>
+</ul>
+</div>
+</div>
+</div><div class="column col-lg-3 col-md-3 col-sm-6 new-column">
+<div class="title new">
+NEW PRODUCTS <a href="http://www.adafruit.com/new"><br class="hidden-lg">(SEE ALL 58)</a>
+</div>
+<ul class="links new"><li>
+<a href="http://www.adafruit.com/product/2698"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/x2698-01.jpg" alt="3.5mm Male/Male Stereo Cable - 1m"></a>
+<a href="http://www.adafruit.com/product/2698" class="name">3.5mm Male/Male Stereo Cable - 1m<span class="price">$2.50</span></a>
+<div class="clear"></div>
+</li><li>
+<a href="http://www.adafruit.com/product/2697"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/x2697-01.jpg" alt="USB to 2.1mm Male Barrel Jack Cable - 22AWG &amp; 1 meter"></a>
+<a href="http://www.adafruit.com/product/2697" class="name">USB to 2.1mm Male Barrel Jack Cable - 22AWG &amp; 1 meter<span class="price">$2.75</span></a>
+<div class="clear"></div>
+</li><li>
+<a href="http://www.adafruit.com/product/2742"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/x2742-00.jpg" alt="Flashforge Creator PRO"></a>
+<a href="http://www.adafruit.com/product/2742" class="name">Flashforge Creator PRO<span class="price">$1,299.00</span></a>
+<div class="clear"></div>
+</li><li>
+<a href="http://www.adafruit.com/product/2033"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/x2033-01.jpg" alt="Pimoroni Raspberry Pi 7" touchscreen="" display="" case="" -="" noir"=""></a>
+<a href="http://www.adafruit.com/product/2033" class="name">Pimoroni Raspberry Pi 7" Touchscreen Display Case - Noir<span class="price">$14.95</span></a>
+<div class="clear"></div>
+</li><li>
+<a href="http://www.adafruit.com/product/1089"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/x1089-04.jpg" alt="Programming the Raspberry Pi: Getting Started with Python - Second Edition"></a>
+<a href="http://www.adafruit.com/product/1089" class="name">Programming the Raspberry Pi: Getting Started with Python - Second Edition<span class="price">$15.00</span></a>
+<div class="clear"></div>
+</li></ul>
+</div><div class="column col-lg-3 col-md-3 hidden-sm">
+<div class="title featured">
+FEATURED PRODUCTS <a href="http://www.adafruit.com/featured"><br class="hidden-lg">(SEE ALL 45)</a>
+</div>
+<ul class="links featured"><li>
+<a href="http://www.adafruit.com/product/2468"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/x2468-01.jpg" alt="Adafruit FONA 800 Shield - Voice/Data Cellular GSM for Arduino"></a>
+<a href="http://www.adafruit.com/product/2468" class="name">Adafruit FONA 800 Shield - Voice/Data Cellular GSM for Arduino<span class="price">$39.95</span></a>
+<div class="clear"></div>
+</li><li>
+<a href="http://www.adafruit.com/product/2534"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/x2534-04.jpg" alt="Adafruit VESA Mount Plus for Raspberry Pi 2 / B+ / A+"></a>
+<a href="http://www.adafruit.com/product/2534" class="name">Adafruit VESA Mount Plus for Raspberry Pi 2 / B+ / A+<span class="price">$9.95</span></a>
+<div class="clear"></div>
+</li><li>
+<a href="http://www.adafruit.com/product/2590"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/x2590-01.jpg" alt="Adafruit Metro Mini 328 - 5V 16MHz"></a>
+<a href="http://www.adafruit.com/product/2590" class="name">Adafruit Metro Mini 328 - 5V 16MHz<span class="price">$14.95</span></a>
+<div class="clear"></div>
+</li><li>
+<a href="http://www.adafruit.com/product/2465"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/x2465-08.jpg" alt="PowerBoost 1000 Charger - Rechargeable 5V Lipo USB Boost @ 1A"></a>
+<a href="http://www.adafruit.com/product/2465" class="name">PowerBoost 1000 Charger - Rechargeable 5V Lipo USB Boost @ 1A<span class="price">$19.95</span></a>
+<div class="clear"></div>
+</li><li>
+<a href="http://www.adafruit.com/product/2479"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/x2479-00.jpg" alt="Adafruit Bluefruit LE UART Friend - Bluetooth Low Energy (BLE)"></a>
+<a href="http://www.adafruit.com/product/2479" class="name">Adafruit Bluefruit LE UART Friend - Bluetooth Low Energy (BLE)<span class="price">$17.50</span></a>
+<div class="clear"></div>
+</li> </ul>
+</div></div>
+</div>
+</div>
+</div>
+      </li>
+      <li id="nav-blog"><a href="https://blog.adafruit.com/">BLOG</a>
+          <div class="flyouts">
+    <div class="flyout">
+      <div class="container">
+        <div class="flyout-content row">
+
+          <div class="column col-lg-6 col-md-6 col-sm-6">
+            <div class="title categories">
+              POPULAR CATEGORIES <br class="hidden-lg"><a href="https://blog.adafruit.com/categories/">(SEE ALL 172)</a>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-6">
+                <ul class="links categories">
+																	<li><a href="https://blog.adafruit.com/category/3d-printing/">3D PRINTING (3556)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/art/">ART (3466)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/raspberry-pi/">RASPBERRY PI (3128)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/random/">RANDOM (2783)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/arduino/">ARDUINO (2378)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/wearables/">WEARABLES (2357)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/science/">SCIENCE (1409)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/costuming/">COSTUMING (1257)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/robotics/">ROBOTICS (1252)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/ledslcds/">LEDS-LCDS (1239)</a>
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																									              </li></ul></div>
+              <div class="col-lg-6 col-md-6 col-sm-6">
+                <ul class="links categories">
+																																																																													<li><a href="https://blog.adafruit.com/category/maker-business/">MAKER BUSINESS (1191)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/ee/">EE (1130)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/cosplay/">COSPLAY (1114)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/educators/">EDUCATORS (1019)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/announce/">ANNOUNCE (1008)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/ask-an-engineer/">ASK-AN-ENGINEER (923)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/community/">COMMUNITY (894)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/opensourcehardware/">OPEN SOURCE HARDWARE (800)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/tutorials/">TUTORIALS (760)</a>
+																	</li><li><a href="https://blog.adafruit.com/category/events/">EVENTS (599)</a>
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																																								
+																																																					                </li></ul>
+              </div>
+            </div>
+          </div> 
+          <div class="column col-lg-3 col-md-3 col-sm-3">
+			            <div class="title new">
+              NEW POSTS <br class="hidden-lg"><a href="https://blog.adafruit.com/">(SEE ALL)</a>
+            </div>
+            <ul class="links new">
+									<li>
+						<a href="https://blog.adafruit.com/2015/10/05/make-a-voltmeter-clock/"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/make-a-voltmeter-clock-300x196.jpg"></a>						<span class="blog-flyout-datetime">October 5, 2015 at 8:00 am</span>
+						<a href="https://blog.adafruit.com/2015/10/05/make-a-voltmeter-clock/" class="name">Make A Voltmeter Clock</a>
+						<div class="clear"></div>
+					</li>
+									<li>
+						<a href="https://blog.adafruit.com/2015/10/05/nyc-event-harware-workshop-nycevents-nyc-hardware/"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/NewImage15-300x200.png"></a>						<span class="blog-flyout-datetime">October 5, 2015 at 7:00 am</span>
+						<a href="https://blog.adafruit.com/2015/10/05/nyc-event-harware-workshop-nycevents-nyc-hardware/" class="name">NYC Event: Harware Workshop #NYCEvents #NYC…</a>
+						<div class="clear"></div>
+					</li>
+									<li>
+						<a href="https://blog.adafruit.com/2015/10/05/dog-with-bones-a-new-mural-by-shok-1-in-london-uk/"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/Dog-With-Bones-from-jpg-IMG_5222-300x200.jpg"></a>						<span class="blog-flyout-datetime">October 5, 2015 at 6:00 am</span>
+						<a href="https://blog.adafruit.com/2015/10/05/dog-with-bones-a-new-mural-by-shok-1-in-london-uk/" class="name">“Dog With Bones”, a new mural by…</a>
+						<div class="clear"></div>
+					</li>
+				            </ul>
+          </div>
+          <div class="column col-lg-3 col-md-3 col-sm-3">
+			            <div class="title featured">
+              FEATURED POSTS <br class="hidden-lg"><a href="https://blog.adafruit.com/category/featured">(SEE ALL 89)</a>
+            </div>
+            <ul class="links featured">
+									<li>
+						<a href="https://blog.adafruit.com/2015/09/24/whats-next-for-windows-10-iot-core-windowsdev-windows10-iot/"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/windowsiot-300x101.jpg"></a>						<span class="blog-flyout-datetime">September 24, 2015 at 1:36 pm</span>
+						<a href="https://blog.adafruit.com/2015/09/24/whats-next-for-windows-10-iot-core-windowsdev-windows10-iot/" class="name">What’s next for Windows 10 IoT Core…</a>
+						<div class="clear"></div>
+					</li>
+									<li>
+						<a href="https://blog.adafruit.com/2015/09/23/adafruit-reaches-19-million-views-on-youtube-yt_creators/"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/adafruit_19M_blog-300x101.jpg"></a>						<span class="blog-flyout-datetime">September 23, 2015 at 11:37 am</span>
+						<a href="https://blog.adafruit.com/2015/09/23/adafruit-reaches-19-million-views-on-youtube-yt_creators/" class="name">Adafruit Reaches 19 Million Views on @YouTube…</a>
+						<div class="clear"></div>
+					</li>
+									<li>
+						<a href="https://blog.adafruit.com/2015/09/23/5-million-raspberry-pi-units-raspberry_pi-raspberrypi/"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/adafruit_0378-141x150.jpg"></a>						<span class="blog-flyout-datetime">September 23, 2015 at 8:33 am</span>
+						<a href="https://blog.adafruit.com/2015/09/23/5-million-raspberry-pi-units-raspberry_pi-raspberrypi/" class="name">5 million Raspberry Pi units @raspberry_pi…</a>
+						<div class="clear"></div>
+					</li>
+				            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+      </li>
+      <li id="nav-learn"><a href="https://learn.adafruit.com/">LEARN</a>
+          <div class="flyouts">
+    <div class="flyout">
+      <div class="container">
+        <div class="flyout-content row">
+
+          <div class="column col-lg-6 col-md-6 col-sm-6">
+            <div class="title categories">
+              GUIDE CATEGORIES <br class="hidden-lg"><a href="https://learn.adafruit.com/">(SEE ALL 854)</a>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-6">
+                <ul class="links categories">
+                    <li><a href="https://learn.adafruit.com/category/components">COMPONENTS (43)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/sensors">SENSORS (155)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/hacks">HACKS (33)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/microcomputers">MICROCOMPUTERS (10)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/adafruit-products">ADAFRUIT PRODUCTS (248)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/maker-business">MAKER BUSINESS (22)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/projects">PROJECTS (105)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/leds">LEDS (150)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/raspberry-pi">RASPBERRY PI (172)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/braincrafts">BRAINCRAFTS (32)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/lcds-and-displays">LCDS &amp; DISPLAYS (50)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/el">EL WIRE/TAPE/PANEL (12)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/tools">TOOLS (43)</a></li>
+                </ul>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6">
+                <ul class="links categories">
+                    <li><a href="https://learn.adafruit.com/category/microcontrollers">MICROCONTROLLERS (76)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/learn-arduino">LEARN ARDUINO (38)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/customer-projects">CUSTOMER PROJECTS (18)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/beaglebone">BEAGLEBONE (37)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/circuit-playground">CIRCUIT PLAYGROUND (9)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/3d-printing">3D PRINTING (118)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/trinket">TRINKET (68)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/robotics">ROBOTICS (15)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/collins-lab">COLLIN'S LAB (7)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/community-support">COMMUNITY SUPPORT (22)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/wearables">WEARABLES (146)</a></li>
+                    <li><a href="https://learn.adafruit.com/category/adafruit-io">ADAFRUIT IO (20)</a></li>
+                </ul>
+              </div>
+            </div>
+          </div> 
+          <div class="column col-lg-3 col-md-3 col-sm-3">
+            <div class="title new">
+              NEW GUIDES <br class="hidden-lg"><a href="https://learn.adafruit.com/guides/latest">(SEE ALL 52)</a>
+            </div>
+            <ul class="links new">
+                    <li>
+                      <a href="https://learn.adafruit.com/bluetooth-motorized-camera-slider"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/hero-slide-02.jpg" alt="Bluetooth Controlled Motorized Camera Slider"></a>
+                      <a href="https://learn.adafruit.com/bluetooth-motorized-camera-slider" class="name">BLUETOOTH CONTROLLED MOTORIZED CAMERA SLIDER</a>
+                      <div class="clear"></div>
+                    </li>
+                    <li>
+                      <a href="https://learn.adafruit.com/datalogging-hat-with-flora-ble"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/graph.gif" alt="Datalogging Hat with FLORA BLE"></a>
+                      <a href="https://learn.adafruit.com/datalogging-hat-with-flora-ble" class="name">DATALOGGING HAT WITH FLORA BLE</a>
+                      <div class="clear"></div>
+                    </li>
+                    <li>
+                      <a href="https://learn.adafruit.com/huzzah-weather-display"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/Weather_Station_iso_screen_01_ORIG_scale.jpg" alt="Huzzah Weather Display"></a>
+                      <a href="https://learn.adafruit.com/huzzah-weather-display" class="name">HUZZAH WEATHER DISPLAY</a>
+                      <div class="clear"></div>
+                    </li>
+                    <li>
+                      <a href="https://learn.adafruit.com/pulse-sensor-displayed-with-neopixels"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/heartshort50.gif" alt="Your Pulse Displayed with NeoPixels"></a>
+                      <a href="https://learn.adafruit.com/pulse-sensor-displayed-with-neopixels" class="name">YOUR PULSE DISPLAYED WITH NEOPIXELS</a>
+                      <div class="clear"></div>
+                    </li>
+            </ul>
+          </div>
+          <div class="column col-lg-3 col-md-3 col-sm-3">
+            <div class="title featured">
+              FEATURED GUIDES <br class="hidden-lg"><a href="https://learn.adafruit.com/guides/featured">(SEE ALL 126)</a>
+            </div>
+            <ul class="links featured">
+                    <li>
+                      <a href="https://learn.adafruit.com/flora-gps-jacket"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/gps-jacket.jpg" alt="Flora GPS Jacket"></a>
+                      <a href="https://learn.adafruit.com/flora-gps-jacket" class="name">FLORA GPS JACKET</a>
+                      <div class="clear"></div>
+                    </li>
+                    <li>
+                      <a href="https://learn.adafruit.com/making-adabot-part-1"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/IMG_9504.JPG" alt="Making Adabot: Part 1"></a>
+                      <a href="https://learn.adafruit.com/making-adabot-part-1" class="name">MAKING ADABOT: PART 1</a>
+                      <div class="clear"></div>
+                    </li>
+                    <li>
+                      <a href="https://learn.adafruit.com/all-about-stepper-motors"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/IMG_4810_crop.jpg" alt="All About Stepper Motors"></a>
+                      <a href="https://learn.adafruit.com/all-about-stepper-motors" class="name">ALL ABOUT STEPPER MOTORS</a>
+                      <div class="clear"></div>
+                    </li>
+                    <li>
+                      <a href="https://learn.adafruit.com/untztrument-trellis-midi-instrument"><img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/oontz-thumbnail.jpg" alt="UNTZtrument: a Trellis MIDI Instrument"></a>
+                      <a href="https://learn.adafruit.com/untztrument-trellis-midi-instrument" class="name">UNTZTRUMENT: A TRELLIS MIDI INSTRUMENT</a>
+                      <div class="clear"></div>
+                    </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+      </li>
+      <li id="nav-forums"><a href="https://forums.adafruit.com/">FORUMS</a>
+      </li>
+      <li id="nav-forums"><a href="https://www.youtube.com/adafruit">VIDEOS</a>
+      </li>
+    </ul>
+  </nav>
+
+    </div>
+  </div>
+</header>
+
+      <div id="main-content">
+        <div id="page-wrapper">
+	<div id="categories-block" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div id="categories-content" class="container">
+      <span class="category page-home-link"><a href="https://learn.adafruit.com/">
+        <i class="fa fa-home"></i>
+      </a></span>
+        <span class="category ">
+    <a href="https://learn.adafruit.com/category/raspberry-pi">RASPBERRY PI</a>
+  </span>
+
+      
+      <span id="guide-favorite">
+  <a data-original-title="Favorite this guide?" class="favorites-link category right red" title="" data-toggle="tooltip" data-placement="left" data-remote="true" rel="nofollow" data-method="post" href="https://learn.adafruit.com/guides/305/favorites.js">
+    <i class="fa fa-heart-o"></i>
+</a></span>
+    <div class="clear"></div>
+  </div>
+</div>
+<div class="clear"></div>
+
+		<div id="content-wrapper" class="container" data-page-id="1955" data-guide-id="305">
+			<div class="row">
+				<div class="sidebar-left-wrapper hidden-phone hidden-tablet col-lg-two-and-half col-md-3 col-sm-4 col-xs-12">
+					<div style="width: 255px;" class="sidebar-left-content affix" data-clampedwidth=".sidebar-left-wrapper">
+							<nav class="sidebar-left">
+		<div class="title-bar">
+			<img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/pi_ap.jpg" class="img-responsive">
+	    <div class="title">
+		    <h1><a href="https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/overview">Setting up a Raspberry Pi as a WiFi access point</a></h1>
+		    <span class="tagline"><a href="https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/overview">Make the most adorable little WiFi router</a></span>
+		  </div>
+	  </div>
+	  <ul class="page-parent nav">
+			  <li class="">
+      <a class="sidebar-parent" href="https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/overview">Overview</a>
+      <span class="page-draft-status">
+      </span>
+</li>
+  <li class="">
+      <a class="sidebar-parent" href="https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/what-youll-need">What you'll need</a>
+      <span class="page-draft-status">
+      </span>
+</li>
+  <li class="">
+      <a class="sidebar-parent" href="https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/preparation">Preparation</a>
+      <span class="page-draft-status">
+      </span>
+</li>
+  <li class="">
+      <a class="sidebar-parent" href="https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/check-ethernet-and-wifi">Check Ethernet &amp; Wifi</a>
+      <span class="page-draft-status">
+      </span>
+</li>
+  <li class="active">
+      <a class="sidebar-parent" href="https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software">Install software</a>
+      <span class="page-draft-status">
+      </span>
+</li>
+  <li class="">
+      <a class="sidebar-parent" href="https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/connect">Connect and Test</a>
+      <span class="page-draft-status">
+      </span>
+</li>
+  <li class="">
+      <a class="sidebar-parent" href="https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/compiling-hostapd">Compiling hostapd</a>
+      <span class="page-draft-status">
+      </span>
+</li>
+
+			<li class="single-page-spacer"></li>
+	      <li class="single-page-link"><a href="https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point?view=all">Single Page</a></li>
+			<li><a href="https://learn.adafruit.com/downloads/pdf/setting-up-a-raspberry-pi-as-a-wifi-access-point.pdf">Download PDF</a></li>
+	  </ul>
+	</nav>
+	  <header class="sidebar-meta hidden-xs">
+    <h4>Contributors</h4>
+      <div><a href="https://learn.adafruit.com/users/adafruit2">lady ada</a></div>
+  </header>
+
+	  <header class="sidebar-meta hidden-xs">
+    <a class="feedback-link" title="Feedback? Corrections?" rel="nofollow" data-remote="true" data-method="get" href="https://learn.adafruit.com/pages/1955/settings_modal">
+          Feedback?  Corrections?
+</a>  </header>
+
+
+					</div>
+				</div>
+					<article class="col-lg-7 col-md-6 col-sm-8 col-xs-12">
+					<div class="content">
+							<div class="page-title-wrapper">
+								<h1 class="headline">
+									<span id="install-software">Install software</span>
+								</h1>
+								    <a class="author" style="background-color: #e40d84;" data-hover-color="#c20b70" data-default-color="#e40d84" href="https://learn.adafruit.com/users/adafruit2">
+        <img alt="Author Gravatar Image" class="user-gravatar load-gravatar" data-gravatar_hash="3f7ca151e1f7f7dead8b2db60aa744c1" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/3f7ca151e1f7f7dead8b2db60aa744c1.png" height="30" width="30">
+        <span class="name">LADY ADA</span>
+</a>    <div class="clear"></div>
+
+							</div>
+							<div class="page-content">
+									      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+<p>Next up we install the software onto the Pi that will act as the 'hostap' (host access point) <strong>You need internet access for this step so make sure that Ethernet connection is up!</strong><br><br></p>
+<blockquote>
+<strong>sudo apt-get update<br></strong><strong>sudo apt-get install hostapd isc-dhcp-server</strong>
+</blockquote>
+<p><br>(You may need to <strong>sudo apt-get update</strong> if the Pi can't seem to get to the apt-get repositories)</p>
+
+    
+    
+    
+    
+    
+      </div>
+        <div class="row-fluid build-image">
+          <a href="https://learn.adafruit.com/assets/9021">
+            <img class="9021-asset img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/raspberry_pi_aptgethostapd.gif" alt="raspberry_pi_aptgethostapd.gif">
+</a>        </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+<i>(text above shows udhcpd but that doesnt work as well as isc-dhcp-server, still, the output should look similar)</i><br>
+    
+    
+    
+    
+    
+    
+      </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+<h1>
+<a href="#set-up-dhcp-server" class="anchor-link"><span class="fa fa-link"></span></a><span id="set-up-dhcp-server" class="anchor-link-target"></span>Set up DHCP server</h1>
+<p><br>Next we will edit /etc/dhcp/dhcpd.conf, a file that sets up our 
+DHCP server - this allows wifi connections to automatically get IP 
+addresses, DNS, etc.<br><br>Run this command to edit the file</p>
+<blockquote><strong> sudo nano /etc/dhcp/dhcpd.conf </strong></blockquote>
+<p>Find the lines that say</p>
+
+    
+    
+    
+    
+    
+      </div>
+      <div class="build-code">
+        <div class="code-copy-container" style="position: absolute;">
+           <div class="code-copy-button">Copy Code</div>
+           <div class="zero-clipboard" style="position:absolute; left:0px; top:0px; width:63px; height:14px; z-index:99"><embed id="ZeroClipboardMovie_1" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" name="ZeroClipboardMovie_1" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=1&amp;width=63&amp;height=14" wmode="transparent" align="middle" height="14" width="63"><div class="here">here</div></div>
+        </div>
+        <pre class="code-text-only" style="display: none;">option domain-name "example.org";
+option domain-name-servers ns1.example.org, ns2.example.org;</pre>
+        <pre class="prettyprint linenums"><ol class="linenums"><li class="L0"><span class="pln">option domain</span><span class="pun">-</span><span class="pln">name </span><span class="str">"example.org"</span><span class="pun">;</span></li><li class="L1"><span class="pln">option domain</span><span class="pun">-</span><span class="pln">name</span><span class="pun">-</span><span class="pln">servers ns1</span><span class="pun">.</span><span class="pln">example</span><span class="pun">.</span><span class="pln">org</span><span class="pun">,</span><span class="pln"> ns2</span><span class="pun">.</span><span class="pln">example</span><span class="pun">.</span><span class="pln">org</span><span class="pun">;</span></li></ol></pre>
+      </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      <p>and change them to add a # in the beginning so they say</p>
+    
+    
+    
+    
+    
+      </div>
+      <div class="build-code">
+        <div class="code-copy-container" style="position: absolute;">
+           <div class="code-copy-button">Copy Code</div>
+           <div class="zero-clipboard" style="position:absolute; left:0px; top:0px; width:63px; height:14px; z-index:99"><embed id="ZeroClipboardMovie_2" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" name="ZeroClipboardMovie_2" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=2&amp;width=63&amp;height=14" wmode="transparent" align="middle" height="14" width="63"><div class="here">here</div></div>
+        </div>
+        <pre class="code-text-only" style="display: none;">#option domain-name "example.org";
+#option domain-name-servers ns1.example.org, ns2.example.org;</pre>
+        <pre class="prettyprint linenums"><ol class="linenums"><li class="L0"><span class="com">#option domain-name "example.org";</span></li><li class="L1"><span class="com">#option domain-name-servers ns1.example.org, ns2.example.org;</span></li></ol></pre>
+      </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      <p>Find the lines that say</p>
+    
+    
+    
+    
+    
+      </div>
+      <div class="build-code">
+        <div class="code-copy-container" style="position: absolute;">
+           <div class="code-copy-button">Copy Code</div>
+           <div class="zero-clipboard" style="position:absolute; left:0px; top:0px; width:63px; height:14px; z-index:99"><embed id="ZeroClipboardMovie_3" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" name="ZeroClipboardMovie_3" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=3&amp;width=63&amp;height=14" wmode="transparent" align="middle" height="14" width="63"><div class="here">here</div></div>
+        </div>
+        <pre class="code-text-only" style="display: none;"># If this DHCP server is the official DHCP server for the local
+# network, the authoritative directive should be uncommented.
+#authoritative;</pre>
+        <pre class="prettyprint linenums"><ol class="linenums"><li class="L0"><span class="com"># If this DHCP server is the official DHCP server for the local</span></li><li class="L1"><span class="com"># network, the authoritative directive should be uncommented.</span></li><li class="L2"><span class="com">#authoritative;</span></li></ol></pre>
+      </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      <p>and remove the # so it says</p>
+    
+    
+    
+    
+    
+      </div>
+      <div class="build-code">
+        <div class="code-copy-container" style="position: absolute;">
+           <div class="code-copy-button">Copy Code</div>
+           <div class="zero-clipboard" style="position:absolute; left:0px; top:0px; width:63px; height:14px; z-index:99"><embed id="ZeroClipboardMovie_4" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" name="ZeroClipboardMovie_4" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=4&amp;width=63&amp;height=14" wmode="transparent" align="middle" height="14" width="63"><div class="here">here</div></div>
+        </div>
+        <pre class="code-text-only" style="display: none;"># If this DHCP server is the official DHCP server for the local
+# network, the authoritative directive should be uncommented.
+authoritative;</pre>
+        <pre class="prettyprint linenums"><ol class="linenums"><li class="L0"><span class="com"># If this DHCP server is the official DHCP server for the local</span></li><li class="L1"><span class="com"># network, the authoritative directive should be uncommented.</span></li><li class="L2"><span class="pln">authoritative</span><span class="pun">;</span></li></ol></pre>
+      </div>
+        <div class="row-fluid build-image">
+          <a href="https://learn.adafruit.com/assets/9037">
+            <img class="9037-asset img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/raspberry_pi_authoritatinve.gif" alt="raspberry_pi_authoritatinve.gif">
+</a>        </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      Then scroll down to the bottom and add the following lines<br>
+    
+    
+    
+    
+    
+    
+      </div>
+      <div class="build-code">
+        <div class="code-copy-container" style="position: absolute;">
+           <div class="code-copy-button">Copy Code</div>
+           <div class="zero-clipboard" style="position:absolute; left:0px; top:0px; width:63px; height:14px; z-index:99"><embed id="ZeroClipboardMovie_5" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" name="ZeroClipboardMovie_5" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=5&amp;width=63&amp;height=14" wmode="transparent" align="middle" height="14" width="63"><div class="here">here</div></div>
+        </div>
+        <pre class="code-text-only" style="display: none;">subnet 192.168.42.0 netmask 255.255.255.0 {
+	range 192.168.42.10 192.168.42.50;
+	option broadcast-address 192.168.42.255;
+	option routers 192.168.42.1;
+	default-lease-time 600;
+	max-lease-time 7200;
+	option domain-name "local";
+	option domain-name-servers 8.8.8.8, 8.8.4.4;
+}</pre>
+        <pre class="prettyprint linenums"><ol class="linenums"><li class="L0"><span class="pln">subnet </span><span class="lit">192.168</span><span class="pun">.</span><span class="lit">42.0</span><span class="pln"> netmask </span><span class="lit">255.255</span><span class="pun">.</span><span class="lit">255.0</span><span class="pln"> </span><span class="pun">{</span></li><li class="L1"><span class="pln">	range </span><span class="lit">192.168</span><span class="pun">.</span><span class="lit">42.10</span><span class="pln"> </span><span class="lit">192.168</span><span class="pun">.</span><span class="lit">42.50</span><span class="pun">;</span></li><li class="L2"><span class="pln">	option broadcast</span><span class="pun">-</span><span class="pln">address </span><span class="lit">192.168</span><span class="pun">.</span><span class="lit">42.255</span><span class="pun">;</span></li><li class="L3"><span class="pln">	option routers </span><span class="lit">192.168</span><span class="pun">.</span><span class="lit">42.1</span><span class="pun">;</span></li><li class="L4"><span class="pln">	</span><span class="kwd">default</span><span class="pun">-</span><span class="pln">lease</span><span class="pun">-</span><span class="pln">time </span><span class="lit">600</span><span class="pun">;</span></li><li class="L5"><span class="pln">	max</span><span class="pun">-</span><span class="pln">lease</span><span class="pun">-</span><span class="pln">time </span><span class="lit">7200</span><span class="pun">;</span></li><li class="L6"><span class="pln">	option domain</span><span class="pun">-</span><span class="pln">name </span><span class="str">"local"</span><span class="pun">;</span></li><li class="L7"><span class="pln">	option domain</span><span class="pun">-</span><span class="pln">name</span><span class="pun">-</span><span class="pln">servers </span><span class="lit">8.8</span><span class="pun">.</span><span class="lit">8.8</span><span class="pun">,</span><span class="pln"> </span><span class="lit">8.8</span><span class="pun">.</span><span class="lit">4.4</span><span class="pun">;</span></li><li class="L8"><span class="pun">}</span></li></ol></pre>
+      </div>
+        <div class="row-fluid build-image">
+          <a href="https://learn.adafruit.com/assets/9038">
+            <img class="9038-asset img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/raspberry_pi_iscdhcpconf.gif" alt="raspberry_pi_iscdhcpconf.gif">
+</a>        </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      Save the file by typing in<b> Control-X</b> then <b>Y </b>then <b>return</b><br><br>Run<br><blockquote>
+<b> sudo nano /etc/default/isc-dhcp-server</b><br>
+</blockquote>and scroll down to <b>INTERFACES="" </b>and update it to say <b>INTERFACES="wlan0" </b><br>
+    
+    
+    
+    
+    
+    
+      </div>
+        <div class="row-fluid build-image">
+          <a href="https://learn.adafruit.com/assets/9039">
+            <img class="9039-asset img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/raspberry_pi_dhcpwlan0.gif" alt="raspberry_pi_dhcpwlan0.gif">
+</a>        </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      <p>close and save the file</p>
+    
+    
+    
+    
+      </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+<h1>
+<a href="#set-up-wlan0-for-static-ip" class="anchor-link"><span class="fa fa-link"></span></a><span id="set-up-wlan0-for-static-ip" class="anchor-link-target"></span>Set up wlan0 for static IP</h1>
+<br>If you happen to have <span class="editor-monospace">wlan0</span> active because you set it up, run <b><span class="editor-monospace">sudo ifdown wlan0</span><br></b>There's no harm in running it if you're not sure<br>
+    
+    
+    
+    
+    
+    
+      </div>
+        <div class="row-fluid build-image">
+          <a href="https://learn.adafruit.com/assets/9023">
+            <img class="9023-asset img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/raspberry_pi_ifdownwlan0.gif" alt="raspberry_pi_ifdownwlan0.gif">
+</a>        </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+      
+      
+      Next we will set up the <b>wlan0</b> connection to be static and incoming. run<span class="editor-monospace"> <b>sudo nano /etc/network/interfaces </b></span>to edit the file<br><br>Find the line <b>auto wlan0</b> and add a <b>#</b>
+ in front of the line, and in front of every line afterwards. If you 
+don't have that line, just make sure it looks like the screenshot below 
+in the end! Basically just remove any old <b>wlan0</b> configuration settings, we'll be changing them up<br><br>Depending on your existing setup/distribution there might be more or less text and it may vary a little bit<br><br>Add the lines<br>
+    
+    
+    
+    
+    
+    
+      </div>
+      <div class="build-code">
+        <div class="code-copy-container" style="position: absolute;">
+           <div class="code-copy-button">Copy Code</div>
+           <div class="zero-clipboard" style="position:absolute; left:0px; top:0px; width:63px; height:14px; z-index:99"><embed id="ZeroClipboardMovie_6" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" name="ZeroClipboardMovie_6" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=6&amp;width=63&amp;height=14" wmode="transparent" align="middle" height="14" width="63"><div class="here">here</div></div>
+        </div>
+        <pre class="code-text-only" style="display: none;">iface wlan0 inet static
+  address 192.168.42.1
+  netmask 255.255.255.0</pre>
+        <pre class="prettyprint linenums"><ol class="linenums"><li class="L0"><span class="pln">iface wlan0 inet </span><span class="kwd">static</span></li><li class="L1"><span class="pln">  address </span><span class="lit">192.168</span><span class="pun">.</span><span class="lit">42.1</span></li><li class="L2"><span class="pln">  netmask </span><span class="lit">255.255</span><span class="pun">.</span><span class="lit">255.0</span></li></ol></pre>
+      </div>
+      <div class="row-fluid build-text">
+        
+      <p>After <strong>allow-hotplug wlan0</strong> - see below for an example of what it should look like.&nbsp; Any other lines afterwards should have a <strong>#</strong> in front to disable them</p>
+    
+      </div>
+        <div class="row-fluid build-image">
+          <a href="https://learn.adafruit.com/assets/9024">
+            <img class="9024-asset img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/raspberry_pi_staticip.gif" alt="raspberry_pi_staticip.gif">
+</a>        </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      Save the file (Control-X Y &lt;return&gt;) <br><br>Assign a static IP address to the wifi adapter by running <br><span><b><span class="editor-monospace">sudo ifconfig wlan0 192.168.42.1</span></b></span><br>
+    
+    
+    
+    
+    
+    
+      </div>
+        <div class="row-fluid build-image">
+          <a href="https://learn.adafruit.com/assets/9025">
+            <img class="9025-asset img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/raspberry_pi_ifconfigwlan0.gif" alt="raspberry_pi_ifconfigwlan0.gif">
+</a>        </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+<h1>
+<a href="#configure-access-point" class="anchor-link"><span class="fa fa-link"></span></a><span id="configure-access-point" class="anchor-link-target"></span>Configure Access Point</h1>
+<br>Now we can configure the access point details. We will set up a 
+password-protected network so only people with the password can connect.<br><br>Create a new file by running <b></b><span class="editor-monospace"><b>sudo nano /etc/hostapd/hostapd.conf</b></span><br><br>Paste the following in, you can change the text after <b></b><b></b><span class="editor-monospace"><b>ssid=</b></span> to another name, that will  be the network broadcast name. The password can be changed with the text after <span class="editor-monospace"><b>wpa_passphrase=</b></span><br>
+    
+    
+    
+    
+    
+    
+      </div>
+      <div class="build-code">
+        <div class="code-copy-container" style="position: absolute;">
+           <div class="code-copy-button">Copy Code</div>
+           <div class="zero-clipboard" style="position:absolute; left:0px; top:0px; width:63px; height:14px; z-index:99"><embed id="ZeroClipboardMovie_7" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" name="ZeroClipboardMovie_7" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=7&amp;width=63&amp;height=14" wmode="transparent" align="middle" height="14" width="63"><div class="here">here</div></div>
+        </div>
+        <pre class="code-text-only" style="display: none;">interface=wlan0
+driver=rtl871xdrv
+ssid=Pi_AP
+hw_mode=g
+channel=6
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+wpa=2
+wpa_passphrase=Raspberry
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+rsn_pairwise=CCMP</pre>
+        <pre class="prettyprint linenums"><ol class="linenums"><li class="L0"><span class="kwd">interface</span><span class="pun">=</span><span class="pln">wlan0</span></li><li class="L1"><span class="pln">driver</span><span class="pun">=</span><span class="pln">rtl871xdrv</span></li><li class="L2"><span class="pln">ssid</span><span class="pun">=</span><span class="typ">Pi_AP</span></li><li class="L3"><span class="pln">hw_mode</span><span class="pun">=</span><span class="pln">g</span></li><li class="L4"><span class="pln">channel</span><span class="pun">=</span><span class="lit">6</span></li><li class="L5"><span class="pln">macaddr_acl</span><span class="pun">=</span><span class="lit">0</span></li><li class="L6"><span class="pln">auth_algs</span><span class="pun">=</span><span class="lit">1</span></li><li class="L7"><span class="pln">ignore_broadcast_ssid</span><span class="pun">=</span><span class="lit">0</span></li><li class="L8"><span class="pln">wpa</span><span class="pun">=</span><span class="lit">2</span></li><li class="L9"><span class="pln">wpa_passphrase</span><span class="pun">=</span><span class="typ">Raspberry</span></li><li class="L0"><span class="pln">wpa_key_mgmt</span><span class="pun">=</span><span class="pln">WPA</span><span class="pun">-</span><span class="pln">PSK</span></li><li class="L1"><span class="pln">wpa_pairwise</span><span class="pun">=</span><span class="pln">TKIP</span></li><li class="L2"><span class="pln">rsn_pairwise</span><span class="pun">=</span><span class="pln">CCMP</span></li></ol></pre>
+      </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+      
+      If you are not using the Adafruit wifi adapters, you may have to change the <b>driver=rtl871xdrv</b> to say <b>driver=nl80211</b> or something, we don't have tutorial support for that tho, YMMV!<br>
+    
+    
+    
+    
+    
+    
+      </div>
+        <div class="row-fluid build-image">
+          <a href="https://learn.adafruit.com/assets/9027">
+            <img class="9027-asset img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/raspberry_pi_edithostapdconf.gif" alt="raspberry_pi_edithostapdconf.gif">
+</a>        </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+      
+      Save as usual. Make sure each line has no extra spaces or tabs at the end or beginning - this file is pretty picky!<br><br>Now we will tell the Pi where to find this configuration file. Run <span class="editor-monospace"><b>sudo nano  /etc/default/hostapd</b></span><br><br>Find the line <b><span class="editor-monospace">#DAEMON_CONF=""</span></b> and edit it so it says <b><span class="editor-monospace">DAEMON_CONF="/etc/hostapd/hostapd.conf"</span></b><br>Don't forget to remove the <b>#</b> in front to activate it!<br><br>Then save the file<br>
+    
+    
+    
+    
+    
+    
+      </div>
+        <div class="row-fluid build-image">
+          <a href="https://learn.adafruit.com/assets/9026">
+            <img class="9026-asset img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/raspberry_pi_hostapdconf.gif" alt="raspberry_pi_hostapdconf.gif">
+</a>        </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+<h1>
+<a href="#configure-network-address-translation" class="anchor-link"><span class="fa fa-link"></span></a><span id="configure-network-address-translation" class="anchor-link-target"></span>Configure Network Address Translation</h1>
+<br>Setting up NAT will allow multiple clients to connect to the WiFi 
+and have all the data 'tunneled' through the single Ethernet IP. (But 
+you should do it even if only one client is going to connect)<br><br>Run <b><span class="editor-monospace">sudo nano /etc/sysctl.conf</span></b><br><br>Scroll to the bottom and add <b><br></b><blockquote>
+<span class="editor-monospace"><b>net.ipv4.ip_forward=1</b></span><b><span class="editor-monospace"> </span></b>
+</blockquote>on a new line. Save the file. This will start IP forwarding on boot up<br><br>Also run <br><blockquote>
+<b><span class="editor-monospace">sudo sh -c "echo 1 &gt; /proc/sys/net/ipv4/ip_forward</span></b><span class="editor-monospace">"</span><br>
+</blockquote>
+<span>to activate it immediately<br></span>
+<br>
+    
+    
+    
+    
+    
+    
+      </div>
+        <div class="row-fluid build-image">
+          <a href="https://learn.adafruit.com/assets/9028">
+            <img class="9028-asset img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/raspberry_pi_sysctrl.gif" alt="raspberry_pi_sysctrl.gif">
+</a>        </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      Run the following commands to create the network translation between the ethernet port <b>eth0</b> and the wifi port <b>wlan0</b><br>
+    
+    
+    
+    
+    
+    
+      </div>
+      <div class="build-code">
+        <div class="code-copy-container" style="position: absolute;">
+           <div class="code-copy-button">Copy Code</div>
+           <div class="zero-clipboard" style="position:absolute; left:0px; top:0px; width:63px; height:14px; z-index:99"><embed id="ZeroClipboardMovie_8" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" name="ZeroClipboardMovie_8" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=8&amp;width=63&amp;height=14" wmode="transparent" align="middle" height="14" width="63"><div class="here">here</div></div>
+        </div>
+        <pre class="code-text-only" style="display: none;">sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT</pre>
+        <pre class="prettyprint linenums"><ol class="linenums"><li class="L0"><span class="pln">sudo iptables </span><span class="pun">-</span><span class="pln">t nat </span><span class="pun">-</span><span class="pln">A POSTROUTING </span><span class="pun">-</span><span class="pln">o eth0 </span><span class="pun">-</span><span class="pln">j MASQUERADE</span></li><li class="L1"><span class="pln">sudo iptables </span><span class="pun">-</span><span class="pln">A FORWARD </span><span class="pun">-</span><span class="pln">i eth0 </span><span class="pun">-</span><span class="pln">o wlan0 </span><span class="pun">-</span><span class="pln">m state </span><span class="pun">--</span><span class="pln">state RELATED</span><span class="pun">,</span><span class="pln">ESTABLISHED </span><span class="pun">-</span><span class="pln">j ACCEPT</span></li><li class="L2"><span class="pln">sudo iptables </span><span class="pun">-</span><span class="pln">A FORWARD </span><span class="pun">-</span><span class="pln">i wlan0 </span><span class="pun">-</span><span class="pln">o eth0 </span><span class="pun">-</span><span class="pln">j ACCEPT</span></li></ol></pre>
+      </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      You can check to see whats in the tables with<br><blockquote>
+<span class="editor-monospace"><b>sudo iptables -t nat -S</b></span><br><span class="editor-monospace"><b>sudo iptables -S</b></span><br>
+</blockquote>To make this happen on reboot (so you don't have to type it every time) run<br><br><blockquote>
+<b><span class="editor-monospace">sudo sh -c "iptables-save &gt; /etc/iptables.ipv4.nat"</span></b>
+</blockquote>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      </div>
+        <div class="row-fluid build-image">
+          <a href="https://learn.adafruit.com/assets/9029">
+            <img class="9029-asset img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/raspberry_pi_iptables.gif" alt="raspberry_pi_iptables.gif">
+</a>        </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      run <b>sudo nano  /etc/network/interfaces</b> and add <br><blockquote>
+<span class="editor-monospace">up iptables-restore &lt; /etc/iptables.ipv4.nat</span><br><span></span>
+</blockquote>
+<span>to the very end<br><br></span><br>
+    
+    
+    
+    
+    
+    
+      </div>
+        <div class="row-fluid build-image">
+          <a href="https://learn.adafruit.com/assets/9036">
+            <img class="9036-asset img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/raspberry_pi_etcnetworkinterface.gif" alt="raspberry_pi_etcnetworkinterface.gif">
+</a>        </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+<h1>
+<a href="#update-hostapd" class="anchor-link"><span class="fa fa-link"></span></a><span id="update-hostapd" class="anchor-link-target"></span>Update hostapd</h1>
+<p><br>Before we can run the access point software, we have to update it to a version that supports the WiFi adapter. <br>First get the new version by typing in <strong><br></strong></p>
+<blockquote><strong>wget http://adafruit-download.s3.amazonaws.com/adafruit_hostapd_14128.zip</strong></blockquote>
+<p>to download the new version (check the next section for how to compile your own updated <strong>hostapd</strong>) then <strong><br></strong></p>
+<blockquote><strong>unzip adafruit_hostapd_14128.zip</strong></blockquote>
+<p>to uncompress it. Move the old version out of the way with</p>
+<blockquote><strong>sudo mv /usr/sbin/hostapd /usr/sbin/hostapd.ORIG</strong></blockquote>
+<p>And move the new version back with <strong><br></strong></p>
+<blockquote><strong>sudo mv hostapd /usr/sbin</strong></blockquote>
+<p>set it up so its valid to run with</p>
+<blockquote><strong>sudo chmod 755 /usr/sbin/hostapd</strong></blockquote>
+<p>&nbsp;</p>
+
+    
+    
+      </div>
+        <div class="row-fluid build-image">
+          <a href="https://learn.adafruit.com/assets/9030">
+            <img class="9030-asset img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/raspberry_pi_swaphostapd.gif" alt="raspberry_pi_swaphostapd.gif">
+</a>        </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+<h1>
+<a href="#first-test" class="anchor-link"><span class="fa fa-link"></span></a><span id="first-test" class="anchor-link-target"></span>First test!</h1>
+<br>Finally we can test the access point host! Run<br><blockquote>
+<b>sudo /usr/sbin/hostapd /etc/hostapd/hostapd.conf</b><br>
+</blockquote>To manually run <b>hostapd</b> with our configuration file. You should see it set up and use <b>wlan0</b>
+ then you can check with another wifi computer that you see your SSID 
+show up. If so, you have successfully set up the access point.<br>
+    
+    
+    
+    
+    
+    
+      </div>
+        <div class="row-fluid build-image">
+          <a href="https://learn.adafruit.com/assets/9031">
+            <img class="9031-asset img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/raspberry_pi_testap.gif" alt="raspberry_pi_testap.gif">
+</a>        </div>
+        <div class="row-fluid build-image">
+          <a href="https://learn.adafruit.com/assets/9032">
+            <img class="9032-asset img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/raspberry_pi_pi_ap.gif" alt="raspberry_pi_pi_ap.gif">
+</a>        </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      <p>You can try connecting and disconnecting from the Pi_AP with the password you set before (probably <code>Raspberry</code>
+ if you copied our hostapd config), debug text will display on the Pi 
+console but you won't be able to connect through to the Ethernet 
+connection yet. <br>Cancel the test by typing <strong>Control-C</strong> in the Pi console to get back to the Pi command line</p>
+    
+    
+    
+      </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+<h1>
+<a href="#finishing-up" class="anchor-link"><span class="fa fa-link"></span></a><span id="finishing-up" class="anchor-link-target"></span>Finishing up!</h1>
+<br>OK now that we know it works, time to set it up as a 'daemon' - a program that will start when the Pi boots.<br>Run the following commands<br><blockquote>
+<span class="editor-monospace"><b>sudo service hostapd start
+</b></span><br><span class="editor-monospace"><b>sudo service isc-dhcp-server start</b></span><br>
+</blockquote>you can always check the status of the host AP server and the DHCP server with<br><blockquote>
+<span class="editor-monospace"><b>sudo service hostapd status</b></span><br><b><span class="editor-monospace">sudo service isc-dhcp-server status</span></b><br>
+</blockquote>To start the daemon services. Verify that they both start successfully (no 'failure' or 'errors')<br>Then to make it so it runs every time on boot<br><blockquote>
+<span class="editor-monospace"><b>sudo update-rc.d hostapd enable
+</b></span><br><span class="editor-monospace"><b>sudo update-rc.d </b></span><span class="editor-monospace"><b><b><span class="editor-monospace">isc-dhcp-server </span></b>enable</b></span>
+</blockquote>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      </div>
+        <div class="row-fluid build-image">
+          <a href="https://learn.adafruit.com/assets/9040">
+            <img class="9040-asset img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/raspberry_pi_updaterc.gif" alt="raspberry_pi_updaterc.gif">
+</a>        </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      
+<h2>
+<a href="#extra-removing-wpa-supplicant" class="anchor-link"><span class="fa fa-link"></span></a><span id="extra-removing-wpa-supplicant" class="anchor-link-target"></span>Extra: Removing WPA-Supplicant</h2>
+<p>Depending on your distro, you<em> may</em> need to remove WPASupplicant. Do so by running this command:</p>
+
+    
+    
+    
+      </div>
+      <div class="build-code">
+        <div class="code-copy-container" style="position: absolute;">
+           <div class="code-copy-button">Copy Code</div>
+           <div class="zero-clipboard" style="position:absolute; left:0px; top:0px; width:63px; height:14px; z-index:99"><embed id="ZeroClipboardMovie_9" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" name="ZeroClipboardMovie_9" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=9&amp;width=63&amp;height=14" wmode="transparent" align="middle" height="14" width="63"><div class="here">here</div></div>
+        </div>
+        <pre class="code-text-only" style="display: none;">sudo mv /usr/share/dbus-1/system-services/fi.epitest.hostap.WPASupplicant.service ~/</pre>
+        <pre class="prettyprint linenums"><ol class="linenums"><li class="L0"><span class="pln">sudo mv </span><span class="pun">/</span><span class="pln">usr</span><span class="pun">/</span><span class="pln">share</span><span class="pun">/</span><span class="pln">dbus</span><span class="pun">-</span><span class="lit">1</span><span class="pun">/</span><span class="pln">system</span><span class="pun">-</span><span class="pln">services</span><span class="pun">/</span><span class="kwd">fi</span><span class="pun">.</span><span class="pln">epitest</span><span class="pun">.</span><span class="pln">hostap</span><span class="pun">.</span><span class="typ">WPASupplicant</span><span class="pun">.</span><span class="pln">service </span><span class="pun">~/</span></li></ol></pre>
+      </div>
+      <div class="row-fluid build-text">
+        
+      
+      
+      <p>and then rebooting (<strong>sudo reboot</strong>)</p>
+    
+    
+    
+      </div>
+
+								<div class="page-navigation">
+										<a class="previous-page" href="https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/check-ethernet-and-wifi">
+											<i class="fa fa-chevron-left"></i>CHECK ETHERNET &amp; WIFI
+</a>										<a class="next-page" href="https://learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/connect">
+											CONNECT AND TEST<i class="fa fa-chevron-right"></i>
+</a>									<div class="clear"></div>
+								</div>
+								<span class="page-last-updated">Last updated on 2015-05-04 at 04.27.56 PM</span>
+									<span class="page-last-updated">Published on 2013-06-12 at 04.30.11 PM</span>
+							</div>
+					</div>
+				</article>
+				<div class="col-lg-two-and-half col-md-3 hidden-sm hidden-xs">
+  <header class="sidebar-right">
+    <div class="sidebar-right-content">
+      
+        <div class="product-wrapper">
+    <div class="product-image">
+      <a href="http://www.adafruit.com/product/1914">
+          <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/1914-01.jpg" alt="1914-01.jpg" class="img-responsive" height="233">
+</a>    </div>
+    <div class="product-details">
+      <span class="product-price">$29.95</span>
+      <div class="product-title">Raspberry Pi Model B+ 512MB RAM</div>
+        <a id="1914-product" class="product-buy" data-pid="1914" data-qty="1" href="http://www.adafruit.com/product/1914">
+          ADD TO CART
+</a>    </div>
+  </div>
+  <div class="product-wrapper">
+    <div class="product-image">
+      <a href="http://www.adafruit.com/product/2258">
+          <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/2258-01.jpg" alt="2258-01.jpg" class="img-responsive" height="233">
+</a>    </div>
+    <div class="product-details">
+      <span class="product-price">$7.95</span>
+      <div class="product-title">Adafruit Raspberry Pi B+ / Pi 2 Case - Smoke Base w/ Clear Top</div>
+        <a id="2258-product" class="product-buy" data-pid="2258" data-qty="1" href="http://www.adafruit.com/product/2258">
+          ADD TO CART
+</a>    </div>
+  </div>
+  <div class="product-wrapper">
+    <div class="product-image">
+      <a href="http://www.adafruit.com/product/1995">
+          <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/1995-02.jpg" alt="1995-02.jpg" class="img-responsive" height="233">
+</a>    </div>
+    <div class="product-details">
+      <span class="product-price">$7.95</span>
+      <div class="product-title">5V 2A Switching Power Supply w/ 20AWG 6' MicroUSB Cable</div>
+        <a id="1995-product" class="product-buy" data-pid="1995" data-qty="1" href="http://www.adafruit.com/product/1995">
+          ADD TO CART
+</a>    </div>
+  </div>
+  <div class="product-wrapper">
+    <div class="product-image">
+      <a href="http://www.adafruit.com/product/730">
+          <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/730-00.jpg" alt="730-00.jpg" class="img-responsive" height="233">
+</a>    </div>
+    <div class="product-details">
+      <span class="product-price">$2.95</span>
+      <div class="product-title">Ethernet Cable - 10 ft long</div>
+        <a id="730-product" class="product-buy" data-pid="730" data-qty="1" href="http://www.adafruit.com/product/730">
+          ADD TO CART
+</a>    </div>
+  </div>
+  <div class="product-wrapper">
+    <div class="product-image">
+      <a href="http://www.adafruit.com/product/814">
+          <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/814-07.jpg" alt="814-07.jpg" class="img-responsive" height="233">
+</a>    </div>
+    <div class="product-details">
+      <span class="product-price">$11.95</span>
+      <div class="product-title">Miniature WiFi (802.11b/g/n) Module: For Raspberry Pi and more</div>
+        <a id="814-product" class="product-buy" data-pid="814" data-qty="1" href="http://www.adafruit.com/product/814">
+          ADD TO CART
+</a>    </div>
+  </div>
+  <div class="product-wrapper">
+    <div class="product-image">
+      <a href="http://www.adafruit.com/product/1012">
+          <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/1012-02.jpg" alt="1012-02.jpg" class="img-responsive" height="233">
+</a>    </div>
+    <div class="product-details">
+      <span class="product-price">$12.95</span>
+      <div class="product-title">USB WiFi (802.11b/g/n) Module: For Raspberry Pi and more</div>
+        <a id="1012-product" class="product-buy" data-pid="1012" data-qty="1" href="http://www.adafruit.com/product/1012">
+          ADD TO CART
+</a>    </div>
+  </div>
+  <div class="product-wrapper">
+    <div class="product-image">
+      <a href="http://www.adafruit.com/product/1030">
+          <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/1030-03.jpg" alt="1030-03.jpg" class="img-responsive" height="233">
+</a>    </div>
+    <div class="product-details">
+      <span class="product-price">$19.95</span>
+      <div class="product-title">USB WiFi (802.11b/g/n) Module with Antenna for Raspberry Pi</div>
+        <a id="1030-product" class="product-buy" data-pid="1030" data-qty="1" href="http://www.adafruit.com/product/1030">
+          ADD TO CART
+</a>    </div>
+  </div>
+  <div class="product-wrapper">
+    <div class="product-image">
+      <a href="http://www.adafruit.com/product/1121">
+          <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/1121-03.jpg" alt="1121-03.jpg" class="img-responsive" height="233">
+</a>    </div>
+    <div class="product-details">
+      <span class="product-price">$9.95</span>
+      <div class="product-title">4GB SD card for Raspberry Pi preinstalled with Raspbian Wheezy</div>
+        <a id="1121-product" class="product-buy" data-pid="1121" data-qty="1" href="http://www.adafruit.com/product/1121">
+          ADD TO CART
+</a>    </div>
+  </div>
+  <div class="product-wrapper">
+    <div class="product-image">
+      <a href="http://www.adafruit.com/product/102">
+          <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/102-01.jpg" alt="102-01.jpg" class="img-responsive" height="233">
+</a>    </div>
+    <div class="product-details">
+      <span class="product-price">$7.95</span>
+      <div class="product-title">SD/MicroSD Memory Card (4 GB SDHC)</div>
+        <a id="102-product" class="product-buy" data-pid="102" data-qty="1" href="http://www.adafruit.com/product/102">
+          ADD TO CART
+</a>    </div>
+  </div>
+  <div class="product-wrapper">
+    <div class="product-image">
+      <a href="http://www.adafruit.com/product/939">
+          <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/939-00.jpg" alt="939-00.jpg" class="img-responsive" height="233">
+</a>    </div>
+    <div class="product-details">
+      <span class="product-price">$5.95</span>
+      <div class="product-title">USB MicroSD Card Reader/Writer - microSD / microSDHC / microSDXC</div>
+        <a id="939-product" class="product-buy" data-pid="939" data-qty="1" href="http://www.adafruit.com/product/939">
+          ADD TO CART
+</a>    </div>
+  </div>
+  <div class="product-wrapper">
+    <div class="product-image">
+      <a href="http://www.adafruit.com/product/954">
+          <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/954-02.jpg" alt="954-02.jpg" class="img-responsive" height="233">
+</a>    </div>
+    <div class="product-details">
+      <span class="product-price">$9.95</span>
+      <div class="product-title">USB to TTL Serial Cable - Debug / Console Cable for Raspberry Pi</div>
+        <a id="954-product" class="product-buy" data-pid="954" data-qty="1" href="http://www.adafruit.com/product/954">
+          ADD TO CART
+</a>    </div>
+  </div>
+  <div class="product-wrapper">
+    <div class="product-image">
+      <a href="http://www.adafruit.com/product/998">
+          <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/998-00.jpg" alt="998-00.jpg" class="img-responsive" height="233">
+</a>    </div>
+    <div class="product-details">
+      <span class="product-price">$39.95</span>
+      <div class="product-title">Raspberry Pi Model B 512MB RAM</div>
+        <a id="998-product" class="notify product-buy" href="http://www.adafruit.com/product/998">OUT OF STOCK (NOTIFY ME)</a>
+    </div>
+  </div>
+  <div class="product-wrapper">
+    <div class="product-image">
+      <a href="http://www.adafruit.com/product/1326">
+          <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/1326-00.jpg" alt="1326-00.jpg" class="img-responsive" height="233">
+</a>    </div>
+    <div class="product-details">
+      <span class="product-price">$9.95</span>
+      <div class="product-title">Adafruit Pi Case- Enclosure for Raspberry Pi Model A or B</div>
+        <a id="1326-product" class="product-buy" data-pid="1326" data-qty="1" href="http://www.adafruit.com/product/1326">
+          ADD TO CART
+</a>    </div>
+  </div>
+
+        <div class="add-all-to-cart-container">
+          <a class="add-all-to-cart" href="#">ADD ALL TO CART</a>
+          <div class="add-all-to-cart-progress"></div>
+        </div>
+      <div class="clear"></div>
+    </div>
+  </header>
+</div>
+
+			</div>
+		</div>
+			<div class="related-guides-wrapper container">
+  <div class="row">
+    <div class="related-guides-title col-lg-12">
+      <h2>
+        RELATED GUIDES
+      </h2>
+    </div>
+  </div>
+  <div class="related-guides-content row">
+    	<div class="975-guide masonry-block col-lg-3 col-md-3 col-sm-4 col-xs-12">
+        <div class="guide-block">
+            <div class="title-bar">
+                <div class="guide-categories">
+                    <ul>
+                            <li class="category ">
+                                <a href="https://learn.adafruit.com/category/raspberry-pi">RASPBERRY PI</a>
+                            </li>
+                            <li class="category ">
+                                <a href="https://learn.adafruit.com/category/lcds-and-displays">LCDS &amp; DISPLAYS</a>
+                            </li>
+                    </ul>
+                </div>
+                <a href="https://learn.adafruit.com/raspipe-a-raspberry-pi-pipeline-viewer-part-2">
+                    <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/MVI_5346_56-179.gif" class="img-responsive guide-image" data-standard-image="/system/guides/images/000/000/975/medium310/MVI_5346_56-179.gif?1427313128" data-mobile-image="/system/guides/images/000/000/975/medium800/MVI_5346_56-179.gif?1427313128">
+</a>                <div class="title">
+                    <h5>
+                        <a href="https://learn.adafruit.com/raspipe-a-raspberry-pi-pipeline-viewer-part-2">
+                            RasPipe: A Raspberry Pi Pipeline Viewer, Part 2<br>
+</a>                    </h5>
+                                    <div class="tagline">
+                    <a href="https://learn.adafruit.com/raspipe-a-raspberry-pi-pipeline-viewer-part-2">
+                    An exploration of network communication from the shell using Pygame and the PiTFT.
+</a>                </div>
+                </div>
+            </div>
+
+            <div class="details">
+
+                <div class="description">
+                    <a href="https://learn.adafruit.com/raspipe-a-raspberry-pi-pipeline-viewer-part-2">
+                        Extending our PiTFT text visualizer Using netcat
+ (a command-line utility for easily pushing traffic around a network),  
+Node.js (a fast, capable server-side JavaScript implementation with a 
+bunch of useful library code available) and Flask (a fast and easy 
+Python web application framework.)
+</a>                </div>
+                    <a class="author" style="background-color: #1a1a94;" data-hover-color="#16167e" data-default-color="#1a1a94" href="https://learn.adafruit.com/users/bpb">
+        <img alt="Author Gravatar Image" class="user-gravatar load-gravatar" data-gravatar_hash="6661fcdfe29d168b3201cd3e6bfbdeef" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/6661fcdfe29d168b3201cd3e6bfbdeef.jpe" height="30" width="30">
+        <span class="name">BRENNEN BEARNES</span>
+</a>    <div class="clear"></div>
+
+            </div>
+
+
+        </div>
+	</div>
+	<div class="918-guide masonry-block col-lg-3 col-md-3 col-sm-4 col-xs-12">
+        <div class="guide-block">
+            <div class="title-bar">
+                <div class="guide-categories">
+                    <ul>
+                            <li class="category ">
+                                <a href="https://learn.adafruit.com/category/raspberry-pi">RASPBERRY PI</a>
+                            </li>
+                    </ul>
+                </div>
+                <a href="https://learn.adafruit.com/raspberry-pi-video-looper">
+                    <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/IMG_20150212_021512647.jpg" class="img-responsive guide-image" data-standard-image="/system/guides/images/000/000/918/medium310/IMG_20150212_021512647.jpg?1423736241" data-mobile-image="/system/guides/images/000/000/918/medium800/IMG_20150212_021512647.jpg?1423736241">
+</a>                <div class="title">
+                    <h5>
+                        <a href="https://learn.adafruit.com/raspberry-pi-video-looper">
+                            Raspberry Pi Video Looper<br>
+</a>                    </h5>
+                                    <div class="tagline">
+                    <a href="https://learn.adafruit.com/raspberry-pi-video-looper">
+                    Turn a Raspberry Pi into a dedicated 1080p video 
+playback tool for art installations, digital signs, or just playing cat 
+videos!
+</a>                </div>
+                </div>
+            </div>
+
+            <div class="details">
+
+                <div class="description">
+                    <a href="https://learn.adafruit.com/raspberry-pi-video-looper">
+                        Learn how to install software on a Raspberry Pi 
+to automatically play video files on USB drives. It even does seamless 
+looping with audio support! Your Raspberry Pi can be an awesome little 
+video playback appliance with up to 1080p HDMI playback
+</a>                </div>
+                    <a class="author" style="background-color: #00cd56;" data-hover-color="#00ae49" data-default-color="#00cd56" href="https://learn.adafruit.com/users/tdicola">
+        <img alt="Author Gravatar Image" class="user-gravatar load-gravatar" data-gravatar_hash="aeabe842a307a6d1eaf5eeec3d28598f" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/aeabe842a307a6d1eaf5eeec3d28598f.jpe" height="30" width="30">
+        <span class="name">TONY DICOLA</span>
+</a>    <div class="clear"></div>
+
+            </div>
+
+
+        </div>
+	</div>
+	<div class="317-guide masonry-block col-lg-3 col-md-3 col-sm-4 col-xs-12">
+        <div class="guide-block">
+            <div class="title-bar">
+                <div class="guide-categories">
+                    <ul>
+                            <li class="category child-category">
+                                    <a href="https://learn.adafruit.com/category/leds">LEDS</a>
+                                    <span class="category-link-spacer">/</span>
+                                <a href="https://learn.adafruit.com/category/led-matrix">LED MATRIX</a>
+                            </li>
+                    </ul>
+                </div>
+                    <div class="guide-type featured-guide">
+                        <a href="https://learn.adafruit.com/guides/featured">FEATURED</a>
+                    </div>
+                <a href="https://learn.adafruit.com/adafruit-diy-led-video-wall">
+                    <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/james3_2.jpg" class="img-responsive guide-image" data-standard-image="/system/guides/images/000/000/317/medium310/james3_2.jpg?1396718844" data-mobile-image="/system/guides/images/000/000/317/medium800/james3_2.jpg?1396718844">
+</a>                <div class="title">
+                    <h5>
+                        <a href="https://learn.adafruit.com/adafruit-diy-led-video-wall">
+                            DIY LED Video Wall<br>
+</a>                    </h5>
+                                    <div class="tagline">
+                    <a href="https://learn.adafruit.com/adafruit-diy-led-video-wall">
+                    Tile together multiple RGB LED panels to create a giant LED wall!
+</a>                </div>
+                </div>
+            </div>
+
+            <div class="details">
+
+                <div class="description">
+                    <a href="https://learn.adafruit.com/adafruit-diy-led-video-wall">
+                        Now you can be just like those big stores with 
+your very own video LED wall. Make the ultimate video blinky! Learn how 
+to build, power and program a modular LED wall using our RGB LED panels.
+ 
+</a>                </div>
+                    <a class="author" style="background-color: #5000ff;" data-hover-color="#4400d9" data-default-color="#5000ff" href="https://learn.adafruit.com/users/jamesdevito">
+        <img alt="Author Gravatar Image" class="user-gravatar load-gravatar" data-gravatar_hash="b25763aacee9b323913d540170d3dc98" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/b25763aacee9b323913d540170d3dc98.jpe" height="30" width="30">
+        <span class="name">JAMES DEVITO</span>
+</a>    <div class="clear"></div>
+
+            </div>
+
+
+        </div>
+	</div>
+	<div class="308-guide masonry-block col-lg-3 col-md-3 col-sm-4 col-xs-12">
+        <div class="guide-block">
+            <div class="title-bar">
+                <div class="guide-categories">
+                    <ul>
+                            <li class="category ">
+                                <a href="https://learn.adafruit.com/category/raspberry-pi">RASPBERRY PI</a>
+                            </li>
+                    </ul>
+                </div>
+                    <div class="guide-type featured-guide">
+                        <a href="https://learn.adafruit.com/guides/featured">FEATURED</a>
+                    </div>
+                <a href="https://learn.adafruit.com/onion-pi">
+                    <img src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/onionpi.jpg" class="img-responsive guide-image" data-standard-image="/system/guides/images/000/000/308/medium310/onionpi.jpg?1396718940" data-mobile-image="/system/guides/images/000/000/308/medium800/onionpi.jpg?1396718940">
+</a>                <div class="title">
+                    <h5>
+                        <a href="https://learn.adafruit.com/onion-pi">
+                            Onion Pi<br>
+</a>                    </h5>
+                                    <div class="tagline">
+                    <a href="https://learn.adafruit.com/onion-pi">
+                    Make a Raspberry Pi into a Anonymizing Tor Proxy!
+</a>                </div>
+                </div>
+            </div>
+
+            <div class="details">
+
+                <div class="description">
+                    <a href="https://learn.adafruit.com/onion-pi">
+                        Feel like someone is snooping on you? Browse 
+anonymously anywhere you go with the Onion Pi Tor proxy. This is a fun 
+weekend project that uses a Raspberry Pi, a USB WiFi adapter and 
+Ethernet cable to create a small, low-power and portable privacy Pi.
+
+Plug the Ethernet cable into any Internet provider in your home, work, 
+hotel or conference/event. Power up the Pi with the micro USB cable to 
+your laptop or to the wall adapter. The Pi will boot up and create a new
+ secure wireless access point called Onion Pi. Connecting to that access
+ point will automatically route any web browsing from your computer 
+through the anonymizing Tor network.
+</a>                </div>
+                    <a class="author" style="background-color: #e40d84;" data-hover-color="#c20b70" data-default-color="#e40d84" href="https://learn.adafruit.com/users/adafruit2">
+        <img alt="Author Gravatar Image" class="user-gravatar load-gravatar" data-gravatar_hash="3f7ca151e1f7f7dead8b2db60aa744c1" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/3f7ca151e1f7f7dead8b2db60aa744c1.png" height="30" width="30">
+        <span class="name">LADY ADA</span>
+</a>    <div class="clear"></div>
+
+            </div>
+
+
+        </div>
+	</div>
+
+  </div>
+</div>
+
+		<div class="footer-spacer"></div>
+</div>
+
+
+
+  <div class="modal fade" id="notify-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">  
+        <div class="modal-header">
+          <a href="#" class="close" data-dismiss="modal">×</a>
+          <h5>OUT OF STOCK NOTIFICATION</h5>
+        </div>
+        <div class="modal-body">
+          <p class="notify-modal-form-header"></p>
+          <div class="notify-modal-products"></div>
+          <form id="notify-modal-form" name="back_in_stock_notification">
+            <p class="notify-modal-form-notice"></p>
+            <div class="notify-modal-break"></div>
+            <div class="form-group">
+              <label class="inputLabel" for="name">YOUR NAME</label>
+              <input size="25" maxlength="64" name="name" type="text">
+            </div>
+
+            <div class="form-group">
+              <label class="inputLabel" for="email">YOUR EMAIL</label>
+              <input size="25" maxlength="96" name="email" type="email">
+            </div>
+          
+            <input name="daigo" style="display:none;" type="text">
+            <input name="notify_me" value="true" type="hidden">
+          </form>
+          <div id="notify-modal-success" style="display:none">
+            <p>You have been successfully subscribed to the Notification
+ List for this product and will therefore receive an e-mail from us when
+ it is back in stock!</p>
+            <p>For security reasons, an e-mail has been sent to you 
+acknowledging your subscription. Please remember that this subscription 
+will not result in you receiving any e-mail from us about anything other
+ than the restocking of this item.</p>
+            <p>If, for any reason, you would like to unsubscribe from 
+the Notification List for this product you will find details of how to 
+do so in the e-mail that has just been sent to you!</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a href="#" id="close-notify" style="display: none" data-dismiss="modal" data-target="#notify-modal">CLOSE</a>
+          <a href="#" id="submit-notify" rel="nofollow" class="blue-button">NOTIFY ME</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+      </div>
+        <footer id="adafruit-footer">
+    <div id="footer-content" class="container">
+      <div class="row">
+        <div class=" col-lg-6 col-md-6 col-sm-4 col-xs-12">
+          <nav>
+            <ul>
+              <li><a href="http://www.adafruit.com/contact_us">CONTACT</a></li>
+              <li><a href="http://www.adafruit.com/support">SUPPORT</a>
+              </li><li><a href="http://www.adafruit.com/distributors">DISTRIBUTORS</a></li>
+              <li><a href="http://www.adafruit.com/educators">EDUCATORS</a></li>
+              <li><a href="http://www.adafruit.com/jobs">JOBS</a></li>
+              <li><a href="http://www.adafruit.com/faq">FAQ</a></li>
+              <li><a href="http://www.adafruit.com/shippinginfo/">SHIPPING &amp; RETURNS</a></li>
+              <li><a href="http://www.adafruit.com/terms_of_service/">TERMS OF SERVICE</a></li>
+              <li><a href="http://www.adafruit.com/privacy">PRIVACY &amp; LEGAL</a></li>
+              <li><a href="http://www.adafruit.com/about">ABOUT US</a></li>
+            </ul>
+          </nav>
+          <div id="footer-copyright">
+            <a href="http://nytm.org/made-in-nyc/">ENGINEERED IN NYC</a> <span>Adafruit&nbsp;®</span>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-8 hidden-xs">
+          <div id="footer-quote" class="">
+            
+"There are a few people out there who really enjoy hacking things..."
+            <span class="quote-author">- <a href="http://www.nytimes.com/2006/03/08/technology/08iht-ptbot09.html?_r=0">Helen Greiner</a>
+</span>
+          </div>
+          
+        </div>
+        <div id="footer-seals">
+          <img class="img-responsive" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/seals_2x.jpg" alt="Seals 2x">
+        </div>
+      </div>
+    </div>
+  </footer>
+
+    </div>
+  </div>
+
+    <!-- Google Analytics -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-7723544-1']);
+      _gaq.push(['_setDomainName', 'adafruit.com']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+
+      <!-- Google Code for Remarketing Tag -->
+      <!--------------------------------------------------
+      Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. See more information and instructions on how to setup the tag on: http://google.com/ads/remarketingsetup
+      --------------------------------------------------->
+      <script type="text/javascript">
+      /* <![CDATA[ */
+      var google_conversion_id = 1014834932;
+      var google_custom_params = window.google_tag_params;
+      var google_remarketing_only = true;
+      /* ]]> */
+      </script>
+      <script type="text/javascript" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/conversion.js">
+      </script><iframe name="google_conversion_frame" title="Google conversion frame" src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/a.htm" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" frameborder="0" height="13" width="300">&lt;img
+ height="1" width="1" border="0" alt="" 
+src="https://googleads.g.doubleclick.net/pagead/viewthroughconversion/1014834932/?frame=0&amp;random=1444051914670&amp;cv=8&amp;fst=1444051914670&amp;num=1&amp;fmt=1&amp;guid=ON&amp;u_h=1080&amp;u_w=1920&amp;u_ah=1053&amp;u_aw=1920&amp;u_cd=24&amp;u_his=2&amp;u_tz=0&amp;u_java=true&amp;u_nplug=2&amp;u_nmime=41&amp;frm=0&amp;url=https%3A//learn.adafruit.com/setting-up-a-raspberry-pi-as-a-wifi-access-point/install-software"
+ /&gt;</iframe>
+      <noscript>
+      <div style="display:inline;">
+      <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1014834932/?value=0&amp;guid=ON&amp;script=0"/>
+      </div>
+      </noscript>
+  <script src="Install%20software%20%7C%20Setting%20up%20a%20Raspberry%20Pi%20as%20a%20WiFi%20access%20point%20%7C%20Adafruit%20Learning%20System_files/application-735d3ed7d84ebc4e04c5d8f9e22f39658210ac858fd763d84.js"></script>
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "url": "https://learn.adafruit.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://learn.adafruit.com/search?q={search_term}",
+        "query-input": "required name=search_term"
+      }
+    }
+  </script>
+
+
+</body></html>
