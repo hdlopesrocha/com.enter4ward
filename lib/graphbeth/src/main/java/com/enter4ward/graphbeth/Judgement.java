@@ -88,4 +88,8 @@ public class Judgement {
 		return max;
 	}
 
+	public double getDifference() {
+		return max-min;
+	}
+
 }

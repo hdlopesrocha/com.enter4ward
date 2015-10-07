@@ -30,7 +30,7 @@ public class Main {
 	}
 	
 	
-	public static void main(String[] args)  {
+	public static void main2(String[] args)  {
 
 		Criteria testCriteria = new Criteria();
 		Alternative a = new Alternative("a");
@@ -58,7 +58,7 @@ public class Main {
 		testCriteria.check();
 	}
 	
-	public static void main2(String[] args)  {
+	public static void main(String[] args)  {
 
 		Criteria testCriteria = new Criteria();
 		Alternative a = new Alternative("a");

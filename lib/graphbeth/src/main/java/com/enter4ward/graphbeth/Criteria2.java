@@ -6,12 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class Criteria {
+public class Criteria2 {
 
 	private List<Judgement> judgements = new ArrayList<Judgement>();
 	private List<Alternative> alternatives = new ArrayList<Alternative>();
+	private static final float EPSILON = 0.00001f;
 
-	public Criteria() {
+	public Criteria2() {
 
 	}
 
@@ -29,94 +30,65 @@ public class Criteria {
 		Graph graph = new Graph(judgements);
 		if (!graph.hasCycle()) {
 
-			Map<String, Integer> variables = new TreeMap<String, Integer>();
-			Solver solver = new Solver(alternatives.size()*2);
+			Map<Alternative, Integer> variables = new TreeMap<Alternative, Integer>();
+			Solver solver = new Solver(alternatives.size());
 
 			// #region CREATE_VARIABLES
 			for (Alternative a : alternatives) {
-				int aLow = solver.createVariable();
-				int aHigh = solver.createVariable();				
-				
-				variables.put(a.getId() + "-",aLow );
-				variables.put(a.getId() + "+",aHigh );
-				solver.composeEquation(aLow, 1);
-				solver.composeEquation(aHigh, -1);
-				solver.createEquation(ConstraintType.LE,0);
+				variables.put(a, solver.createVariable());
 			}
 
 			// #region ADD_RULES_SCALE
 			for (Judgement j1 : judgements) {
-				int from1Min = variables.get(j1.getFrom().getId()+"-");
-				int from1Max = variables.get(j1.getFrom().getId()+"+");
-				int to1Max = variables.get(j1.getTo().getId()+"+");
-				int to1Min = variables.get(j1.getTo().getId()+"-");
+				int f1 = variables.get(j1.getFrom());
+				int t1 = variables.get(j1.getTo());
 
-				
 				System.out.println(j1.getFrom().getId() + " -> " + j1.getTo().getId());
 
 				// NULL JUDGEMENT
 				if (j1.getMax() == 0 && j1.getMin() == 0) {
-/*
+
 					solver.composeEquation(f1, 1);
 					solver.composeEquation(t1, -1);
 					System.out.print("\t");
 					solver.createEquation(ConstraintType.EQ, 0);
-*/
-				} else {
-					
-		
-							
-					solver.composeEquation(to1Max, 1);
-					solver.composeEquation(from1Max, -1);
-					System.out.print("\t");
-					solver.createEquation(ConstraintType.LE, -j1.getMax());
-			
-					
-					solver.composeEquation(to1Max, 1);
-					solver.composeEquation(from1Min, -1);
+
+				} else if (j1.getMin() <= j1.getMax()) {
+					solver.composeEquation(f1, -1);
+					solver.composeEquation(t1, 1);
 					System.out.print("\t");
 					solver.createEquation(ConstraintType.LE, -j1.getMin());
-		
-			
-					solver.composeEquation(from1Min, 1);
-					solver.composeEquation(from1Max, -1);
-					System.out.print("\t");
-					solver.createEquation(ConstraintType.LE, j1.getDifference());
-			
 				}
-				/*
+
 				for (Judgement j2 : judgements) {
 					if (j1 != j2) {
 
-						int f2 = variables.get(j2.getFrom().getId()+"+");
-						int t2 = variables.get(j2.getTo().getId()+"-");
+						int f2 = variables.get(j2.getFrom());
+						int t2 = variables.get(j2.getTo());
 
 						// j1 must be much better than j2, j1.low>j2.high
-						if (j1.isStronger(j2)) {
+						if (j1.getMin() > j2.getMax() && j1.getMax() != 0 && j2.getMax() != 0) {
 							System.out.print("\t[" + j2.getFrom().getId() + "->" + j2.getTo().getId() + "]");
-							solver.composeEquation(from1Min, -1);
-							solver.composeEquation(to1Max, 1);
+							solver.composeEquation(f1, -1);
+							solver.composeEquation(t1, 1);
 							solver.composeEquation(f2, 1);
 							solver.composeEquation(t2, -1);
 							solver.createEquation(ConstraintType.LE, j2.getMax() - j1.getMin());
 						}
 					}
 				}
-*/
-
 			}
 
 			ans = solver.solve();
-			Map<Alternative, Solution> scale = new TreeMap<Alternative, Solution>();
+			Map<Alternative, Double> scale = new TreeMap<Alternative, Double>();
 
 		
 			System.out.println("SCALE");
 			for (Alternative a : alternatives) {
-				
-				double decLow = (solver.getDecision(variables.get(a.getId()+"-")));
-				double decHigh = (solver.getDecision(variables.get(a.getId()+"+")));
-				System.out.println(a.getId() + "= [" + (float)decLow+ ","+(float)decHigh+"]");
-				scale.put(a, new Solution(a, decLow, decHigh));
+				int var = variables.get(a);
+				double dec = (solver.getDecision(var));
+				System.out.println(a.getId() + "=" + dec);
+				scale.put(a, dec);
 			}
 
 			autoComplete(graph,scale);
@@ -154,10 +126,33 @@ public class Criteria {
 	}
 	
 
+	private void startRule(Alternative a, Graph graph) {
+		Collection<Judgement> judgements = graph.getFrom(a);
 
+		for (Judgement j1 : judgements) // [x,y]
+		{
+			for (Judgement j2 : judgements) // [z,w]
+			{
+				if (j1 != j2 && j1.getJudgementType().equals(JudgementType.FIXED)
+						&& j2.getJudgementType().equals(JudgementType.FIXED)) {
+					// NULL RULE
+					if (j2.isNull()) {
+						Judgement j = new Judgement(JudgementType.DYNAMIC, j2.getTo(), j1.getTo(), j1.getMin(),
+								j1.getMax());
+						merge(j, graph, "SR1");
+					}
+					// DIFFERENT ONES
+					else if (j1.isStronger(j2)) {
+						Judgement j = new Judgement(JudgementType.DYNAMIC, j2.getTo(), j1.getTo(), j1.difference(j2),
+								Float.MAX_VALUE);
+						merge(j, graph, "SR2");
+					}
+				}
+			}
+		}
+	}
 	
-	
-	public void autoComplete(Graph graph, Map<Alternative, Solution> scale) {
+	public void scoreCompleter(Graph graph,Map<Alternative, Double> scale){
 		for (Alternative a : alternatives) {
 			for (Alternative b : alternatives) {
 				if (a != b) {
@@ -166,26 +161,38 @@ public class Criteria {
 						j = graph.get(b, a);
 					}
 					if (j == null) {
-						Solution solA = scale.get(a);
-						Solution solB = scale.get(b);
-						
-						
-						float dif = (float)(solA.getMin()-solB.getMax());
-						float difHigh = (float)(solA.getMax()-solB.getMin());
-						if(dif<0){
-							dif = -dif;
-							difHigh = -difHigh;
-							Alternative t = a;
-							a=b;
-							b=t;
+						float dif = (float)(scale.get(a)-scale.get(b));
+						if(dif>1){
+							merge(new Judgement(JudgementType.DYNAMIC, a, b,1,dif), graph, "SC1");
 						}
-						
-						merge(new Judgement(JudgementType.DYNAMIC, a, b,dif,difHigh), graph, "SC1");
+						else if(dif<-1) {
+							merge(new Judgement(JudgementType.DYNAMIC, b, a,1,-dif), graph, "SC2");							
+						}
 					}
 				}
 			}
-		}		
+		}	
+	}
 	
+	
+	public void autoComplete(Graph graph, Map<Alternative, Double> scale) {
+		scoreCompleter(graph, scale);
+		
+		/*
+		for (Alternative a : graph.getFromAlternatives()) {
+			pathRule(a, graph);
+		}
+*/
+		for (Alternative a : graph.getFromAlternatives()) {
+			startRule(a, graph);
+		}
+/*
+		for(Judgement j : new ArrayList<Judgement>(judgements)){
+			if(!j.isValid()){
+				judgements.remove(j);
+			}
+		}
+		*/
 		
 		System.out.println("FINAL RESULT");
 		for (Judgement j : judgements) {
