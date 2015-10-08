@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class Criteria {
 
 	private List<Judgement> judgements = new ArrayList<Judgement>();
@@ -23,93 +26,112 @@ public class Criteria {
 		judgements.add(judgement);
 	}
 
-
-	public boolean check() {
-		boolean ans = false;
+	public JSONObject check() {
 		Graph graph = new Graph(judgements);
+		JSONObject result = new JSONObject();
+
 		if (!graph.hasCycle()) {
 
 			Map<String, Integer> variables = new TreeMap<String, Integer>();
-			Solver solver = new Solver(alternatives.size()*2);
+			Solver solver = new Solver(alternatives.size() * 2);
 
 			// #region CREATE_VARIABLES
 			for (Alternative a : alternatives) {
-				int aLow = solver.createVariable();
-				int aHigh = solver.createVariable();				
-				
-				variables.put(a.getId() + "-",aLow );
-				variables.put(a.getId() + "+",aHigh );
-				solver.composeEquation(aLow, 1);
-				solver.composeEquation(aHigh, -1);
-				solver.createEquation(ConstraintType.LE,0);
+				int aMin = solver.createVariable();
+				int aMax = solver.createVariable();
+
+				variables.put(a.getId() + "-", aMin);
+				variables.put(a.getId() + "+", aMax);
+
+				// solver.composeEquation(aMin, 1);
+				// solver.composeEquation(aMax, -1);
+				// solver.createEquation(ConstraintType.LE, 0);
 			}
 
-			// #region ADD_RULES_SCALE
-			for (Judgement j1 : judgements) {
-				int from1Min = variables.get(j1.getFrom().getId()+"-");
-				int from1Max = variables.get(j1.getFrom().getId()+"+");
-				int to1Max = variables.get(j1.getTo().getId()+"+");
-				int to1Min = variables.get(j1.getTo().getId()+"-");
-
-				
-				System.out.println(j1.getFrom().getId() + " -> " + j1.getTo().getId());
-
-				// NULL JUDGEMENT
-				if (j1.getMax() == 0 && j1.getMin() == 0) {
-/*
-					solver.composeEquation(f1, 1);
-					solver.composeEquation(t1, -1);
-					System.out.print("\t");
-					solver.createEquation(ConstraintType.EQ, 0);
-*/
-				} else {
-					
-		
-							
-					solver.composeEquation(to1Max, 1);
-					solver.composeEquation(from1Max, -1);
-					System.out.print("\t");
-					solver.createEquation(ConstraintType.LE, -j1.getMax());
-			
-					
-					solver.composeEquation(to1Max, 1);
-					solver.composeEquation(from1Min, -1);
-					System.out.print("\t");
-					solver.createEquation(ConstraintType.LE, -j1.getMin());
-		
-			
-					solver.composeEquation(from1Min, 1);
-					solver.composeEquation(from1Max, -1);
-					System.out.print("\t");
-					solver.createEquation(ConstraintType.LE, j1.getDifference());
-			
-				}
-		
-
-
-			}
-
-			ans = solver.solve();
-			Map<Alternative, Solution> scale = new TreeMap<Alternative, Solution>();
-
-		
-			System.out.println("SCALE");
+			System.out.println("SCORES");
 			for (Alternative a : alternatives) {
-				
-				double decLow = (solver.getDecision(variables.get(a.getId()+"-")));
-				double decHigh = (solver.getDecision(variables.get(a.getId()+"+")));
-				System.out.println(a.getId() + "= [" + (float)decLow+ ","+(float)decHigh+"]");
-				scale.put(a, new Solution(a, decLow, decHigh));
+				for (Alternative b : alternatives) {
+					if (a != b) {
+
+						Float min = graph.shortestPath(a, b);
+						Float max = graph.longestPath(a, b);
+						if (min != null && max != null) {
+							System.out.println(a.getId() + "->" + b.getId() + "=" + min + "/" + max);
+							int aMin = variables.get(a.getId() + "-");
+							int aMax = variables.get(a.getId() + "+");
+							int bMax = variables.get(b.getId() + "+");
+
+							solver.composeEquation(aMin, -1);
+							solver.composeEquation(bMax, 1);
+							solver.createEquation(ConstraintType.LE, -min);
+							solver.composeEquation(aMax, -1);
+							solver.composeEquation(bMax, 1);
+							solver.createEquation(ConstraintType.LE, -max);
+							solver.composeEquation(aMin, 1);
+							solver.composeEquation(aMax, -1);
+							solver.createEquation(ConstraintType.LE, min - max);
+
+							Judgement j = graph.get(a, b);
+							if (j == null) {
+								j = graph.get(b, a);
+							}
+							if (j == null) {
+
+								merge(new Judgement(JudgementType.DYNAMIC, a, b, min, max), graph, "SC1");
+							}
+						}
+
+					}
+				}
 			}
 
-			autoComplete(graph,scale);
+			System.out.println("FINAL RESULT");
+			for (Judgement j : judgements) {
+				System.out.println(j.toString());
+			}
 			
+			JSONObject judgements = new JSONObject();
+			
+			
+			
+			if (solver.solve()) {
+
+				System.out.println("SCALE");
+
+				JSONObject scale = new JSONObject();
+				for (Alternative a : alternatives) {
+					// Building judgements
+					JSONObject fObj = new JSONObject();
+					for(Judgement j : graph.getFrom(a)){
+						JSONObject tObj = new JSONObject();
+						tObj.put("min", j.getMin());
+						tObj.put("max", j.getMax());
+						tObj.put("type", j.getJudgementType());
+						fObj.put(j.getTo().getId().toString(), tObj);
+					}
+					judgements.put(a.getId().toString(), fObj);
+					
+					
+					
+					// Building scale
+					double decLow = (solver.getDecision(variables.get(a.getId() + "-")));
+					double decHigh = (solver.getDecision(variables.get(a.getId() + "+")));
+					JSONArray array = new JSONArray();
+					array.put(decLow);
+					array.put(decHigh);
+					scale.put(a.getId(), array);
+				}
+				result.put("scale", scale);
+				result.put("judgements", judgements);
+				
+			}
+			
+
 		} else {
 			System.out.println("Cycle detected!");
 		}
 
-
-		return ans;
+		return result;
 
 	}
 
@@ -134,50 +156,6 @@ public class Criteria {
 		}
 
 		return changed;
-	}
-	
-
-
-	
-	
-	public void autoComplete(Graph graph, Map<Alternative, Solution> scale) {
-
-		
-	
-		
-
-		System.out.println("SCORES");
-		for (Alternative a : alternatives) {
-			for (Alternative b : alternatives) {
-				if (a != b) {
-	
-					Float min = graph.shortestPath(a, b);
-					Float max = graph.longestPath(a, b);
-					if(min!= null && max!=null){
-						System.out.println(a.getId()+"->"+b.getId()+"="+min+"/"+max);
-	
-										
-						Judgement j = graph.get(a, b);
-						if (j == null) {
-							j = graph.get(b, a);
-						}
-						if (j == null) {
-			
-							
-							merge(new Judgement(JudgementType.DYNAMIC, a, b,min,max), graph, "SC1");
-						}
-					}
-					
-					
-					
-				}
-			}
-		}
-		
-		System.out.println("FINAL RESULT");
-		for (Judgement j : judgements) {
-			System.out.println(j.toString());
-		}	
 	}
 
 }

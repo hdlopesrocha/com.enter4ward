@@ -1,5 +1,11 @@
 package com.enter4ward.testbeth;
 
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.handler.ResourceHandler;
+
 import com.enter4ward.graphbeth.Alternative;
 import com.enter4ward.graphbeth.Criteria;
 import com.enter4ward.graphbeth.Judgement;
@@ -7,86 +13,45 @@ import com.enter4ward.graphbeth.JudgementType;
 
 public class Main {
 
-	public static void main0(String[] args)  {
 
-		Criteria testCriteria = new Criteria();
-		Alternative a = new Alternative("a");
-		Alternative b = new Alternative("b");
-		Alternative c = new Alternative("c");
-		//Alternative f = new Alternative("f");
 
-		testCriteria.addAlternative(a);
-		testCriteria.addAlternative(b);
-		testCriteria.addAlternative(c);
-		//testCriteria.addAlternative(f);
+	public static void main(String[] args) throws Exception  {
 
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, b, 1f));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, c, 1f));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, c, 1f));
-		
-		//testCriteria.addJudgement(new Judgement(JudgementType.FIXED, e, f, 0));
 
-		testCriteria.check();
+	    	 Server server = new Server(8080);
+
+		 ContextHandler handlerRoot = new ContextHandler("");
+		 ContextHandler handlerCall = new ContextHandler("/call");
+		 ContextHandler handlerAssets = new ContextHandler("/assets");
+
+		 ResourceHandler root = new ResourceHandler();
+		 root.setResourceBase("src/main/resources/root.html");
+
+
+		 handlerRoot.setHandler(root);
+		 handlerCall.setHandler(new CallServlet());
+
+
+
+
+		 ResourceHandler rh0 = new ResourceHandler();
+		 rh0.setDirectoriesListed(true);
+		 rh0.setResourceBase("src/main/resources/assets");
+
+		 handlerAssets.setHandler(rh0);
+
+
+		 ContextHandlerCollection contexts = new ContextHandlerCollection();
+		 contexts.setHandlers(new Handler[] {  handlerCall , handlerAssets,handlerRoot});
+		 server.setHandler(contexts);
+
+		 server.start();
+		 server.join();
+
+
+
 	}
-	
-	
-	public static void main2(String[] args)  {
 
-		Criteria testCriteria = new Criteria();
-		Alternative a = new Alternative("a");
-		Alternative b = new Alternative("b");
-		Alternative c = new Alternative("c");
-		Alternative d = new Alternative("d");
-		Alternative e = new Alternative("e");
-		//Alternative f = new Alternative("f");
 
-		testCriteria.addAlternative(a);
-		testCriteria.addAlternative(b);
-		testCriteria.addAlternative(c);
-		testCriteria.addAlternative(d);
-		testCriteria.addAlternative(e);
-		//testCriteria.addAlternative(f);
-
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, b, 2f));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, c, 1f));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, c, d, 1f));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, d, e, 1f));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, e, 4f));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, d, 1f,4f));
-		//testCriteria.addJudgement(new Judgement(JudgementType.FIXED, e, f, 0));
-
-		testCriteria.check();
-	}
-	
-	public static void main(String[] args)  {
-
-		Criteria testCriteria = new Criteria();
-		Alternative a = new Alternative("a");
-		Alternative b = new Alternative("b");
-		Alternative c = new Alternative("c");
-		Alternative d = new Alternative("d");
-		Alternative e = new Alternative("e");
-		//Alternative f = new Alternative("f");
-
-		testCriteria.addAlternative(a);
-		testCriteria.addAlternative(b);
-		testCriteria.addAlternative(c);
-		testCriteria.addAlternative(d);
-		testCriteria.addAlternative(e);
-		//testCriteria.addAlternative(f);
-
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, e, 5f));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, d, 4f,5f));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, c, 3f));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, b, 2f));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, e, 4f));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, d, 1f,4f));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, c, 1f));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, c, d, 1f));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, d, e, 1f));
-		//testCriteria.addJudgement(new Judgement(JudgementType.FIXED, e, f, 0));
-
-		testCriteria.check();
-	}
 
 }

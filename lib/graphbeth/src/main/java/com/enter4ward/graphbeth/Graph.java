@@ -1,11 +1,11 @@
 package com.enter4ward.graphbeth;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 import java.util.TreeMap;
 
 public class Graph {
@@ -51,12 +51,12 @@ public class Graph {
 
 	public Collection<Judgement> getTo(Alternative a) {
 		Map<Alternative, Judgement> map = toTransitions.get(a);
-		return map != null ? map.values() : null;
+		return map != null ? map.values() : new ArrayList<Judgement>();
 	}
 
 	public Collection<Judgement> getFrom(Alternative a) {
 		Map<Alternative, Judgement> map = fromTransitions.get(a);
-		return map != null ? map.values() : null;
+		return map != null ? map.values() : new ArrayList<Judgement>();
 	}
 
 	public Collection<Alternative> getFromAlternatives() {
@@ -73,19 +73,18 @@ public class Graph {
 		processing.add(current);
 		boolean ans = false;
 
-		if (ts != null) {
-			for (Judgement j : ts) {
-				if (processing.contains(j.getTo())) {
-					return true;
-				}
-				if (!visited.contains(j.getTo())) {
-					ans |= hasCycle(j.getTo(), processing, visited);
-					if (ans) {
-						break;
-					}
+		for (Judgement j : ts) {
+			if (processing.contains(j.getTo())) {
+				return true;
+			}
+			if (!visited.contains(j.getTo())) {
+				ans |= hasCycle(j.getTo(), processing, visited);
+				if (ans) {
+					break;
 				}
 			}
 		}
+
 		processing.remove(current);
 
 		return ans;
@@ -109,41 +108,38 @@ public class Graph {
 	private Float shortestPathAux(Alternative current, Alternative to, float cost) {
 		Float bestDistance = null;
 
-		Map<Alternative, Judgement> judgements = fromTransitions.get(current);
-		if (judgements != null) {
-			for (Judgement j : judgements.values()) {
-				Float attempt = cost + j.getMax();
-				if (!j.getTo().equals(to)) {					
-					attempt = shortestPathAux(j.getTo(), to, attempt);
-				}
-				if (attempt != null && (bestDistance == null || attempt < bestDistance)) {
-					bestDistance = attempt;
-				}
+		Collection<Judgement> judgements = getFrom(current);
+		for (Judgement j : judgements) {
+			Float attempt = cost + j.getMax();
+			if (!j.getTo().equals(to)) {
+				attempt = shortestPathAux(j.getTo(), to, attempt);
+			}
+			if (attempt != null && (bestDistance == null || attempt < bestDistance)) {
+				bestDistance = attempt;
 			}
 		}
+
 		return bestDistance;
 	}
 
 	public Float shortestPath(Alternative from, Alternative to) {
 		return shortestPathAux(from, to, 0);
 	}
-	
-	
+
 	private Float longestPathAux(Alternative current, Alternative to, float cost) {
 		Float bestDistance = null;
 
-		Map<Alternative, Judgement> judgements = fromTransitions.get(current);
-		if (judgements != null) {
-			for (Judgement j : judgements.values()) {
-				Float attempt = cost + j.getMax();
-				if (!j.getTo().equals(to)) {					
-					attempt = longestPathAux(j.getTo(), to, attempt);
-				}
-				if (attempt != null && (bestDistance == null || attempt > bestDistance)) {
-					bestDistance = attempt;
-				}
+		Collection<Judgement> judgements = getFrom(current);
+		for (Judgement j : judgements) {
+			Float attempt = cost + j.getMax();
+			if (!j.getTo().equals(to)) {
+				attempt = longestPathAux(j.getTo(), to, attempt);
+			}
+			if (attempt != null && (bestDistance == null || attempt > bestDistance)) {
+				bestDistance = attempt;
 			}
 		}
+
 		return bestDistance;
 	}
 

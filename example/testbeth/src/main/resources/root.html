@@ -1,0 +1,144 @@
+<html>
+<head>
+<script src="/assets/js/jquery.js"></script>
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="/assets/css/bootstrap-theme.min.css">
+<script src="/assets/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+td {
+    border:1px solid #aaaaaa;
+    width:48px;
+    height:48px;
+    text-align: center;
+}
+
+table {
+  border-spacing: 0px;
+}
+
+body {
+  padding-top: 50px;
+}
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.fixed {
+	background-color: #d9edf7;
+}
+
+.locked {
+	background-color: #eeeeee;
+}
+
+.table tbody tr > td.success {
+  background-color: #dff0d8 !important;
+}
+
+.table tbody tr > td.error {
+  background-color: #f2dede !important;
+}
+
+.table tbody tr > td.warning {
+  background-color: #fcf8e3 !important;
+}
+</style>
+
+</head>
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="starter-template">
+        <h3><b>M</b>easuring <b>A</b>ttractiveness with <b>C</b>ontinuous <b>G</b>raph <b>O</b>riented for <b>D</b>ecision (MACGOD)</h3>
+        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+      </div>
+
+		DEBUG:<div id="debug"></div><br>
+	
+		MSG:<div id="msg"></div><br>
+
+		<div class="row">
+			<div class="col-md-8">
+				<div class="panel panel-info">
+					<div class="panel-heading">Matrix</div>
+					<div class="panel-body">		
+						<table id="matrix">
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="panel panel-info">
+					<div class="panel-heading">Scale</div>
+					<div class="panel-body">
+						<table id="scale">
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div><!-- /.container -->
+
+	<script type="text/javascript">
+		$.get( "/call", function( data ) {
+			var obj = JSON.parse(data);
+			$( "#msg" ).html( data );
+			$( "#debug" ).html(Object.keys(obj.scale).length );
+			
+			var matrix = "";
+			var scale = "";
+			// top 
+			matrix += "<tr><td class='locked'></td>";
+			for(var i in obj.scale){
+				matrix+="<td class='locked'>"+i+"</td>";		
+				scale +="<tr><td class='locked'>"+i+"</td><td>["+Math.round(obj.scale[i][0]*100)/100+","+Math.round(obj.scale[i][1]*100)/100 +"]</td></tr>";
+			}
+			matrix += "</tr>";
+			for(var from in obj.judgements){
+				matrix+="<tr><td class='locked'>"+from+"</td>";
+				for(var to in obj.scale){
+					var jud = obj.judgements[from][to];
+					if(jud){
+						var clazz = jud.type =="FIXED" ? "class='fixed'":"";
+						matrix+="<td "+clazz+">["+ jud.min+"," +jud.max+"]</td>";
+					}
+					else{
+						var clazz = from==to? "class='locked'":"";
+						matrix+="<td "+clazz+"></td>";
+					}
+				}
+				matrix+="</tr>";		
+			}
+			$( "#matrix" ).html( matrix );
+			$( "#scale" ).html( scale );
+		});
+	
+	</script>
+
+</body>
+
+</html>
+
