@@ -5,9 +5,9 @@ public class Judgement {
 	private JudgementType judgementType;
 	private Alternative from;
 	private Alternative to;
-	private float min, max;
+	private Float min, max;
 
-	public Judgement(JudgementType judgementType, Alternative from, Alternative to, float value) {
+	public Judgement(JudgementType judgementType, Alternative from, Alternative to, Float value) {
 		super();
 		this.judgementType = judgementType;
 		this.from = from;
@@ -15,7 +15,7 @@ public class Judgement {
 		this.min = this.max = value;
 	}
 
-	public Judgement(JudgementType judgementType, Alternative from, Alternative to, float min, float max) {
+	public Judgement(JudgementType judgementType, Alternative from, Alternative to, Float min, Float max) {
 		super();
 		this.judgementType = judgementType;
 		this.from = from;
@@ -28,7 +28,7 @@ public class Judgement {
 		return min > j.max;
 	}
 
-	public float difference(Judgement j) {
+	public Float difference(Judgement j) {
 		return min - j.max;
 	}
 
@@ -80,15 +80,15 @@ public class Judgement {
 		return to;
 	}
 
-	public float getMin() {
+	public Float getMin() {
 		return min;
 	}
 
-	public float getMax() {
+	public Float getMax() {
 		return max;
 	}
 
-	public double getDifference() {
+	public Float getDifference() {
 		return max-min;
 	}
 

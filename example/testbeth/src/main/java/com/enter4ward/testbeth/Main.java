@@ -20,9 +20,9 @@ public class Main {
 		testCriteria.addAlternative(c);
 		//testCriteria.addAlternative(f);
 
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, b, 1));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, c, 1));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, c, 1));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, b, 1f));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, c, 1f));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, c, 1f));
 		
 		//testCriteria.addJudgement(new Judgement(JudgementType.FIXED, e, f, 0));
 
@@ -47,12 +47,12 @@ public class Main {
 		testCriteria.addAlternative(e);
 		//testCriteria.addAlternative(f);
 
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, b, 2));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, c, 1));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, c, d, 1));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, d, e, 1));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, e, 4));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, d, 1,4));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, b, 2f));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, c, 1f));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, c, d, 1f));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, d, e, 1f));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, e, 4f));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, d, 1f,4f));
 		//testCriteria.addJudgement(new Judgement(JudgementType.FIXED, e, f, 0));
 
 		testCriteria.check();
@@ -75,15 +75,15 @@ public class Main {
 		testCriteria.addAlternative(e);
 		//testCriteria.addAlternative(f);
 
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, e, 5));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, d, 4,5));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, c, 3));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, b, 2));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, e, 4));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, d, 1,4));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, c, 1));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, c, d, 1));
-		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, d, e, 1));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, e, 5f));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, d, 4f,5f));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, c, 3f));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, a, b, 2f));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, e, 4f));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, d, 1f,4f));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, b, c, 1f));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, c, d, 1f));
+		testCriteria.addJudgement(new Judgement(JudgementType.FIXED, d, e, 1f));
 		//testCriteria.addJudgement(new Judgement(JudgementType.FIXED, e, f, 0));
 
 		testCriteria.check();

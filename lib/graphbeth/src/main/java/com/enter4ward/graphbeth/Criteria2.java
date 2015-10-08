@@ -80,13 +80,13 @@ public class Criteria2 {
 			}
 
 			ans = solver.solve();
-			Map<Alternative, Double> scale = new TreeMap<Alternative, Double>();
+			Map<Alternative, Float> scale = new TreeMap<Alternative, Float>();
 
 		
 			System.out.println("SCALE");
 			for (Alternative a : alternatives) {
 				int var = variables.get(a);
-				double dec = (solver.getDecision(var));
+				float dec = (float)(solver.getDecision(var));
 				System.out.println(a.getId() + "=" + dec);
 				scale.put(a, dec);
 			}
@@ -152,7 +152,7 @@ public class Criteria2 {
 		}
 	}
 	
-	public void scoreCompleter(Graph graph,Map<Alternative, Double> scale){
+	public void scoreCompleter(Graph graph,Map<Alternative, Float> scale){
 		for (Alternative a : alternatives) {
 			for (Alternative b : alternatives) {
 				if (a != b) {
@@ -161,12 +161,12 @@ public class Criteria2 {
 						j = graph.get(b, a);
 					}
 					if (j == null) {
-						float dif = (float)(scale.get(a)-scale.get(b));
+						float dif = scale.get(a)-scale.get(b);
 						if(dif>1){
-							merge(new Judgement(JudgementType.DYNAMIC, a, b,1,dif), graph, "SC1");
+							merge(new Judgement(JudgementType.DYNAMIC, a, b,1f,dif), graph, "SC1");
 						}
 						else if(dif<-1) {
-							merge(new Judgement(JudgementType.DYNAMIC, b, a,1,-dif), graph, "SC2");							
+							merge(new Judgement(JudgementType.DYNAMIC, b, a,1f,-dif), graph, "SC2");							
 						}
 					}
 				}
@@ -175,7 +175,7 @@ public class Criteria2 {
 	}
 	
 	
-	public void autoComplete(Graph graph, Map<Alternative, Double> scale) {
+	public void autoComplete(Graph graph, Map<Alternative, Float> scale) {
 		scoreCompleter(graph, scale);
 		
 		/*

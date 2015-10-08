@@ -84,25 +84,8 @@ public class Criteria {
 					solver.createEquation(ConstraintType.LE, j1.getDifference());
 			
 				}
-				/*
-				for (Judgement j2 : judgements) {
-					if (j1 != j2) {
+		
 
-						int f2 = variables.get(j2.getFrom().getId()+"+");
-						int t2 = variables.get(j2.getTo().getId()+"-");
-
-						// j1 must be much better than j2, j1.low>j2.high
-						if (j1.isStronger(j2)) {
-							System.out.print("\t[" + j2.getFrom().getId() + "->" + j2.getTo().getId() + "]");
-							solver.composeEquation(from1Min, -1);
-							solver.composeEquation(to1Max, 1);
-							solver.composeEquation(f2, 1);
-							solver.composeEquation(t2, -1);
-							solver.createEquation(ConstraintType.LE, j2.getMax() - j1.getMin());
-						}
-					}
-				}
-*/
 
 			}
 
@@ -158,39 +141,43 @@ public class Criteria {
 	
 	
 	public void autoComplete(Graph graph, Map<Alternative, Solution> scale) {
+
+		
+	
+		
+
+		System.out.println("SCORES");
 		for (Alternative a : alternatives) {
 			for (Alternative b : alternatives) {
 				if (a != b) {
-					Judgement j = graph.get(a, b);
-					if (j == null) {
-						j = graph.get(b, a);
-					}
-					if (j == null) {
-						Solution solA = scale.get(a);
-						Solution solB = scale.get(b);
-						
-						
-						float dif = (float)(solA.getMin()-solB.getMax());
-						float difHigh = (float)(solA.getMax()-solB.getMin());
-						if(dif<0){
-							dif = -dif;
-							difHigh = -difHigh;
-							Alternative t = a;
-							a=b;
-							b=t;
+	
+					Float min = graph.shortestPath(a, b);
+					Float max = graph.longestPath(a, b);
+					if(min!= null && max!=null){
+						System.out.println(a.getId()+"->"+b.getId()+"="+min+"/"+max);
+	
+										
+						Judgement j = graph.get(a, b);
+						if (j == null) {
+							j = graph.get(b, a);
 						}
-						
-						merge(new Judgement(JudgementType.DYNAMIC, a, b,dif,difHigh), graph, "SC1");
+						if (j == null) {
+			
+							
+							merge(new Judgement(JudgementType.DYNAMIC, a, b,min,max), graph, "SC1");
+						}
 					}
+					
+					
+					
 				}
 			}
-		}		
-	
+		}
 		
 		System.out.println("FINAL RESULT");
 		for (Judgement j : judgements) {
 			System.out.println(j.toString());
-		}
+		}	
 	}
 
 }
