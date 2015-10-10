@@ -2,56 +2,38 @@ package com.enter4ward.testbeth;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.ContextHandler;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-
-import com.enter4ward.graphbeth.Alternative;
-import com.enter4ward.graphbeth.Criteria;
-import com.enter4ward.graphbeth.Judgement;
-import com.enter4ward.graphbeth.JudgementType;
+import org.eclipse.jetty.servlet.ServletHandler;
 
 public class Main {
 
+	public static void main(String[] args) throws Exception {
 
-
-	public static void main(String[] args) throws Exception  {
-
-
-	    	 Server server = new Server(8080);
-
-		 ContextHandler handlerRoot = new ContextHandler("");
-		 ContextHandler handlerCall = new ContextHandler("/call");
-		 ContextHandler handlerAssets = new ContextHandler("/assets");
-
-		 ResourceHandler root = new ResourceHandler();
-		 root.setResourceBase("src/main/resources/root.html");
-
-
-		 handlerRoot.setHandler(root);
-		 handlerCall.setHandler(new CallServlet());
-
-
-
-
-		 ResourceHandler rh0 = new ResourceHandler();
-		 rh0.setDirectoriesListed(true);
-		 rh0.setResourceBase("src/main/resources/assets");
-
-		 handlerAssets.setHandler(rh0);
-
-
-		 ContextHandlerCollection contexts = new ContextHandlerCollection();
-		 contexts.setHandlers(new Handler[] {  handlerCall , handlerAssets,handlerRoot});
-		 server.setHandler(contexts);
-
-		 server.start();
-		 server.join();
-
-
+	
+		// call
+		ServletHandler handlerCall = new ServletHandler();
+		{
+			handlerCall.addServletWithMapping(CallServlet.class, "/call");
+		}
+		// resources
+		ResourceHandler handlerAssets = new ResourceHandler();
+		{
+			handlerAssets.setDirectoriesListed(true);
+			handlerAssets.setWelcomeFiles(new String[]{ "index.html" });
+			handlerAssets.setResourceBase("src/main/resources");			
+		}
+		// mixing all stuff
+		HandlerList handlerList = new HandlerList();
+		{
+			handlerList.setHandlers(new Handler[] { handlerAssets,handlerCall });
+		}
+		// start server
+		Server server = new Server(8080);
+		server.setHandler(handlerList);
+		server.start();
+		server.join();
 
 	}
-
-
 
 }

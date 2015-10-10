@@ -99,6 +99,8 @@ table tbody tr > td.warning {
 
 
     <div class="container">
+	<a onclick="createFile(this,JSON.stringify(state), 'model.json', 'text/plain')">Create file</a>
+	<input type='file' accept='application/json' onchange='openFile(event)'>
 	<div id="debug">
 	</div>
 
@@ -139,33 +141,50 @@ table tbody tr > td.warning {
     </div><!-- /.container -->
 
 	<script type="text/javascript">
-		var alternatives = [];
+	
+
+		var state = {"alternatives":[],"judgements":{}};
 		
-		$.get( "/call", function( data ) {
-			var obj = JSON.parse(data);
+		
+
+		
+
+		$(document).ready(function(){	
+			$("#createAlternative").submit(function(){
+				createAlternative($("#alternativeName").val());
+				$('#myModal').modal('hide');
+				
+	            return false;
+			});
+			
+		});
+		
+		function createMatrix(judgements,alternatives){
 			var matrix = "";
-			var scale = "";
-			// top 
+			var keys = Object.keys(alternatives);
+
 			matrix += "<tr><td class='locked'></td>";
-			for(var i in obj.scale){
-				matrix+="<td class='locked'>"+i+"</td>";		
-				scale +="<tr><td class='locked'>"+i+"</td><td>["+obj.scale[i][0]+","+obj.scale[i][1] +"]</td></tr>";
+			for(var i in keys){
+				matrix+="<td class='locked'>"+keys[i]+"</td>";		
 			}
 			matrix += "</tr>";
-			for(var from in obj.judgements){
+			for(var i in keys){
+				var from = keys[i];
+				
 				matrix+="<tr><td class='locked'>"+from+"</td>";
-				for(var to in obj.scale){
-					var jud = obj.judgements[from][to];
+				for(var j in keys){
+					var to = keys[j];
+					var jud = judgements[from] ? judgements[from][to] : null;
 					if(jud){
 						var warn =  jud.smin || jud.smax;
 						var icon = warn ? "<i class='fa fa-exclamation'></i>" :"";
 						var tooltip = warn ? "data-toggle='tooltip' title='["+jud.smin+","+jud.smax+"]'" : "";
 						var clazz = warn ?"class='warning'":"";
 						
-						if(jud.type =="FIXED"){
-							matrix+="<td "+clazz+" "+tooltip+">"+icon+"<i class='fa fa-user'></i><br>["+ jud.min+"," +jud.max+"]</td>";								 
-						}else {							 
+						if(jud.type =="DYNAMIC"){
 							matrix+="<td "+clazz+" "+tooltip+">"+icon+"<i class='fa fa-magic'></i><br>["+ jud.min+"," +jud.max+"]</td>";
+						}else {							 
+							matrix+="<td "+clazz+" "+tooltip+">"+icon+"<i class='fa fa-user'></i><br>["+ jud.min+"," +jud.max+"]</td>";								 
  						}	 
 					}
 					else{
@@ -176,41 +195,50 @@ table tbody tr > td.warning {
 				matrix+="</tr>";		
 			}
 			$( "#matrix" ).html( matrix );
-			$( "#scale" ).html( scale );
-		});
-
-		$(document).ready(function(){
-			if(typeof(Storage) !== "undefined") {	
-				try {
-					alternatives = JSON.parse(localStorage.getItem("alternatives"));
-				}
-				catch(err) {
-					
-				}
-				if(!alternatives){
-					alternatives = [];
-				}
-				$("#debug").html(JSON.stringify(alternatives));
-			}
 			
-			$("#createAlternative").submit(function(){
-				createAlternative($("#alternativeName").val());
-				$('#myModal').modal('hide');
-				
-	            return false;
-			});
-			
-		});
-		
-		
+		}
 		
 		function createAlternative(name){
 			alternatives.push(name);
 			localStorage.setItem("alternatives", JSON.stringify(alternatives));			
 		}
-		
+	
+		function createFile(a,text, name, type) {
+		    var file = new Blob([text], {type: type});
+		    a.href = URL.createObjectURL(file);
+		    a.download = name;
+		}
+	  	
+		function openFile(event) {
+			var input = event.target;
+			var reader = new FileReader();
+			reader.onload = function() {
+				var text = reader.result;
+				state = JSON.parse(text);
+
+				$.ajax({
+					type: "POST",
+					url: "/call",
+					data: text,
+					success: function( obj ) {
+							var scale = "";
+							for(var i in obj.scale){
+								scale +="<tr><td class='locked'>"+i+"</td><td>["+obj.scale[i][0]+","+obj.scale[i][1] +"]</td></tr>";
+							}						
+							createMatrix(obj.judgements,obj.scale);
+							
+							$( "#scale" ).html( scale );
+					},
+					contentType: "application/json",
+					dataType: 'json'
+				});
+				
+			};
+			reader.readAsText(input.files[0]);
+		};
 	</script>
 
+ 
 </body>
 
 </html>
