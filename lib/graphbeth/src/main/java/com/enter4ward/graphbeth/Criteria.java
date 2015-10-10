@@ -48,6 +48,12 @@ public class Criteria {
 				variables.put(a.getId() + "-", aMin);
 				variables.put(a.getId() + "+", aMax);
 
+				solver.composeEquation(aMin, -1);
+				solver.createEquation(ConstraintType.LE, 0);
+				solver.composeEquation(aMax, -1);
+				solver.createEquation(ConstraintType.LE, 0);
+				
+				
 				// solver.composeEquation(aMin, 1);
 				// solver.composeEquation(aMax, -1);
 				// solver.createEquation(ConstraintType.LE, 0);
