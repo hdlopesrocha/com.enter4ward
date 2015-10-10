@@ -199,8 +199,8 @@ table tbody tr > td.warning {
 		}
 		
 		function createAlternative(name){
-			alternatives.push(name);
-			localStorage.setItem("alternatives", JSON.stringify(alternatives));			
+			state.alternatives[name]="x";
+			check(JSON.stringify(state));
 		}
 	
 		function createFile(a,text, name, type) {
@@ -209,29 +209,33 @@ table tbody tr > td.warning {
 		    a.download = name;
 		}
 	  	
+		function check(text){
+			$.ajax({
+				type: "POST",
+				url: "/call",
+				data: text,
+				success: function( obj ) {
+						var scale = "";
+						for(var i in obj.scale){
+							scale +="<tr><td class='locked'>"+i+"</td><td>["+obj.scale[i][0]+","+obj.scale[i][1] +"]</td></tr>";
+						}						
+						createMatrix(obj.judgements,obj.scale);						
+						$( "#scale" ).html( scale );
+				},
+				contentType: "application/json",
+				dataType: 'json'
+			});
+			
+		}
+		
 		function openFile(event) {
 			var input = event.target;
 			var reader = new FileReader();
 			reader.onload = function() {
 				var text = reader.result;
 				state = JSON.parse(text);
-
-				$.ajax({
-					type: "POST",
-					url: "/call",
-					data: text,
-					success: function( obj ) {
-							var scale = "";
-							for(var i in obj.scale){
-								scale +="<tr><td class='locked'>"+i+"</td><td>["+obj.scale[i][0]+","+obj.scale[i][1] +"]</td></tr>";
-							}						
-							createMatrix(obj.judgements,obj.scale);
-							
-							$( "#scale" ).html( scale );
-					},
-					contentType: "application/json",
-					dataType: 'json'
-				});
+				check(text);
+				
 				
 			};
 			reader.readAsText(input.files[0]);
