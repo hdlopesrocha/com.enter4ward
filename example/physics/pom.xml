@@ -8,6 +8,14 @@
 	<url>http://maven.apache.org</url>
 	<version>1.0</version>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.testTarget>1.8</maven.compiler.testTarget>
+		<maven.compiler.testSource>1.8</maven.compiler.testSource>	
+	</properties>
+
 	<build>
 		<finalName>physics</finalName>
 		<plugins>

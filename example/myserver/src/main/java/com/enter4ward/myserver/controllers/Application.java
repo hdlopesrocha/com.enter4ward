@@ -17,17 +17,17 @@ import org.json.JSONException;
 public class Application extends Controller {
 
 	/** The Constant upload. */
-	private static final String CONVERT = Html.fromFile("src/app/views/convert.html");
+	private static final String CONVERT = Html.fromFile("convert.html");
 	/** The Constant login. */
-	private static final String LOGIN = Html.fromFile("src/app/views/login.html");
+	private static final String LOGIN = Html.fromFile("login.html");
 	/** The Constant upload. */
-	private static final String UPLOAD = Html.fromFile("src/app/views/upload.html");
+	private static final String UPLOAD = Html.fromFile("upload.html");
 	/** The Constant store. */
-	private static final String STORE = Html.fromFile("src/app/views/store.html");
+	private static final String STORE = Html.fromFile("store.html");
 	/** The Constant img. */
 	private static final String IMAGE = "<div><img src='res/test.png'></div>";
 	/** The Constant template. */
-	private static final String TEMPLATE = Html.fromFile("src/app/views/template.html");
+	private static final String TEMPLATE = Html.fromFile("template.html");
 
 	private String getTemplate(final String main, final String nav) {
 		return TEMPLATE.replace("@main", main).replace("@nav", nav);
