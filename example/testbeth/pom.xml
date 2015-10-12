@@ -4,7 +4,7 @@
 	<groupId>com.enter4ward</groupId>
 	<artifactId>testbeth</artifactId>
 	<version>1.0</version>
-	<name>com.enter4ward.testbeth</name>
+	<name>testbeth</name>
 
 
 	<properties>

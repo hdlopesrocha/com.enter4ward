@@ -92,7 +92,7 @@ table tbody tr > td.warning {
 					</b>
 				</h3>
 								
-				<form role="form" id="createJud">
+				<form role="form" id="createJudgement">
 					<div class="modal-body">
 						<div class="form-group">
 							<label for="alternativeName">Minimum:</label> 
@@ -181,7 +181,9 @@ table tbody tr > td.warning {
 	
 
 		var state = {"alternatives":{},"judgements":{}};
-
+		var suggestions;
+		var fromJud;
+		var toJud;
 		
 
 		
@@ -193,16 +195,39 @@ table tbody tr > td.warning {
 				
 	            return false;
 			});
-			
+			$("#createJudgement").submit(function(){
+				createJudgement(fromJud,toJud,parseFloat($("#minimumJud").val()),parseFloat($("#maximumJud").val()));
+				$('#myModal2').modal('hide');
+				
+	            return false;
+			});	
 		});
 		
 		function judge(from,to){
 			$('#myModal2').modal('show');
 			$('#jFrom').html(from);
 			$('#jTo').html(to);
+			if(suggestions && suggestions.judgements[from] && suggestions.judgements[from][to]){
+				$("#minimumJud").val(suggestions.judgements[from][to].min);
+				$("#maximumJud").val(suggestions.judgements[from][to].max);
+			}
 			
+			
+			fromJud = from;
+			toJud = to;
 
 		}
+		
+		function createJudgement(from,to,min,max){
+			if(!state.judgements[from]){
+				state.judgements[from] = {};
+			}
+			state.judgements[from][to]={"min":min,"max":max};
+			
+			
+			check(JSON.stringify(state));
+		}
+		
 		
 		function createMatrix(judgements,alternatives){
 			var matrix = "";
@@ -247,6 +272,8 @@ table tbody tr > td.warning {
 			
 		}
 		
+		
+		
 		function createAlternative(name){
 			state.alternatives[name]="x";
 			check(JSON.stringify(state));
@@ -264,6 +291,7 @@ table tbody tr > td.warning {
 				url: "/call",
 				data: text,
 				success: function( obj ) {
+					suggestions = obj;
 						var scale = "";
 						for(var i in obj.scale){
 							scale +="<tr><td class='locked'>"+i+"</td><td>["+obj.scale[i][0]+","+obj.scale[i][1] +"]</td></tr>";

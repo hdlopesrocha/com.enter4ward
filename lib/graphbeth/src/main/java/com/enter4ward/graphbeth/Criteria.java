@@ -223,7 +223,6 @@ public class Criteria {
 			try {
 				changed |= k.merge(j);
 			} catch (MergeException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

@@ -15,7 +15,7 @@
   <dependencies>
     <dependency>
     	<groupId>com.enter4ward</groupId>
-    	<artifactId>com.enter4ward.session</artifactId>
+    	<artifactId>session</artifactId>
     	<version>1.0</version>
     </dependency>
 	
