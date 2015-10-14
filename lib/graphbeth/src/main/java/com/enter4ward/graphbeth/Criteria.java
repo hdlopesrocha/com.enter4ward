@@ -61,10 +61,10 @@ public class Criteria {
 			for (Alternative a : alternatives) {
 				for (Alternative b : alternatives) {
 					if (a != b) {
-
-						Float min = graph.shortestPath(a, b);
-						Float max = graph.longestPath(a, b);
-						if (min != null && max != null) {
+						Solution s = graph.pathSize(a, b, null);
+						if (s != null) {
+							Float min = s.getMin();
+							Float max = s.getMax();
 							System.out.println(a.getId() + "->" + b.getId() + "=" + min + "/" + max);
 							int aMin = variables.get(a.getId() + "-");
 							int aMax = variables.get(a.getId() + "+");
@@ -76,9 +76,11 @@ public class Criteria {
 							solver.composeEquation(aMax, -1);
 							solver.composeEquation(bMax, 1);
 							solver.createEquation(ConstraintType.LE, -max);
-							solver.composeEquation(aMin, 1);
-							solver.composeEquation(aMax, -1);
-							solver.createEquation(ConstraintType.LE, min - max);
+
+							// solver.composeEquation(aMin, 1);
+							// solver.composeEquation(bMax, -1);
+							// solver.createEquation(ConstraintType.LE, min -
+							// max);
 
 							Judgement j = graph.get(a, b);
 							if (j == null) {
@@ -119,6 +121,8 @@ public class Criteria {
 					jScale.put(a.getId(), array);
 				}
 
+				// graph = scoreCompleter(graph, scale);
+
 				graph = scoreCompleter(graph, scale);
 
 				for (Alternative a : alternatives) {
@@ -133,19 +137,29 @@ public class Criteria {
 						tObj.put("max", jMax);
 						tObj.put("type", j.getJudgementType());
 
-						Solution fromS = scale.get(j.getFrom());
-						Solution toS = scale.get(j.getTo());
+						{
+							Solution sug = graph.pathSize(j.getFrom(), j.getTo(), j);
 
-						double sMax = fromS.getMax() - toS.getMin();
-						double sMin = fromS.getMin() - toS.getMax();
+							// boolean warn = (jMin > sMin || jMax < sMax);
 
-						boolean warn = (jMin > sMin || jMax < sMax);
-						if (warn) {
-							tObj.put("smin", sMin);
-							tObj.put("smax", sMax);
+							boolean warn1 = (sug != null && (jMin != sug.getMin() || jMax != sug.getMax()));
+							if (warn1) {
+								tObj.put("smin", sug.getMin());
+								tObj.put("smax", sug.getMax());
+							}
+						
+							Solution fromS = scale.get(j.getFrom());
+							Solution toS = scale.get(j.getTo());
 
+							double sMax = fromS.getMax() - toS.getMin();
+							double sMin = fromS.getMin() - toS.getMax();
+
+							boolean warn2 = (jMin > sMin || jMax < sMax);
+							if (warn2 && !warn1) {
+								tObj.put("smin", sMin);
+								tObj.put("smax", sMax);
+							}
 						}
-
 						fObj.put(j.getTo().getId().toString(), tObj);
 					}
 					judgements.put(a.getId().toString(), fObj);

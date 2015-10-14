@@ -105,45 +105,42 @@ public class Graph {
 		return ans;
 	}
 
-	private Float shortestPathAux(Alternative current, Alternative to, float cost) {
-		Float bestDistance = null;
+
+	private Solution pathSizeAux(Alternative current, Alternative to, Solution cost, Judgement exc) {
+		Solution solution = null;
 
 		Collection<Judgement> judgements = getFrom(current);
 		for (Judgement j : judgements) {
-			Float attempt = cost + j.getMax();
-			if (!j.getTo().equals(to)) {
-				attempt = shortestPathAux(j.getTo(), to, attempt);
-			}
-			if (attempt != null && (bestDistance == null || attempt < bestDistance)) {
-				bestDistance = attempt;
-			}
-		}
+			if (j != exc) {
+				Solution attempt = new Solution(cost.getMin() + j.getMin(), cost.getMax() + j.getMax());
 
-		return bestDistance;
-	}
+				if (!j.getTo().equals(to)) {
+					attempt = pathSizeAux(j.getTo(), to, attempt, exc);
+				}
+				
+				if(attempt != null){
+					if(solution==null){
+						solution = attempt;						
+					}
+					else { 
+						if(attempt.getMax() > solution.getMax()){
+							solution.setMax(attempt.getMax());
+						}
+						if(attempt.getMin() < solution.getMin()){
+							solution.setMin(attempt.getMin());
 
-	public Float shortestPath(Alternative from, Alternative to) {
-		return shortestPathAux(from, to, 0);
-	}
-
-	private Float longestPathAux(Alternative current, Alternative to, float cost) {
-		Float bestDistance = null;
-
-		Collection<Judgement> judgements = getFrom(current);
-		for (Judgement j : judgements) {
-			Float attempt = cost + j.getMax();
-			if (!j.getTo().equals(to)) {
-				attempt = longestPathAux(j.getTo(), to, attempt);
-			}
-			if (attempt != null && (bestDistance == null || attempt > bestDistance)) {
-				bestDistance = attempt;
+						}
+					}
+					
+				}
+				
 			}
 		}
 
-		return bestDistance;
+		return solution;
 	}
 
-	public Float longestPath(Alternative from, Alternative to) {
-		return longestPathAux(from, to, 0);
+	public Solution pathSize(Alternative from, Alternative to, Judgement exc) {
+		return pathSizeAux(from, to, new Solution(0,0), exc);
 	}
 }

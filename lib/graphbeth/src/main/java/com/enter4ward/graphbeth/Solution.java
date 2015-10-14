@@ -18,8 +18,15 @@ public class Solution  {
 	public float getMax() {
 		return max;
 	}
-	
 
+	public void setMax(float x) {
+		this.max = x;
+	}
+	
+	public void setMin(float x) {
+		this.min = x;
+	}
+	
 	
 
 	
