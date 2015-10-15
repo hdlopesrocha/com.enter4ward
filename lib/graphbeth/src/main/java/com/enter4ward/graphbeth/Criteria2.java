@@ -136,7 +136,7 @@ public class Criteria2 {
 				if (j1 != j2 && j1.getJudgementType().equals(JudgementType.FIXED)
 						&& j2.getJudgementType().equals(JudgementType.FIXED)) {
 					// NULL RULE
-					if (j2.isNull()) {
+					if (j2.getInterval().isNull()) {
 						Judgement j = new Judgement(JudgementType.DYNAMIC, j2.getTo(), j1.getTo(), j1.getMin(),
 								j1.getMax());
 						merge(j, graph, "SR1");

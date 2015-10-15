@@ -1,18 +1,22 @@
 package com.enter4ward.graphbeth;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Judgement {
 
 	private JudgementType judgementType;
 	private Alternative from;
 	private Alternative to;
-	private Float min, max;
+	private Interval interval;
+	private List<Interval> suggestions = new ArrayList<Interval>();
 
 	public Judgement(JudgementType judgementType, Alternative from, Alternative to, Float value) {
 		super();
 		this.judgementType = judgementType;
 		this.from = from;
 		this.to = to;
-		this.min = this.max = value;
+		this.interval = new Interval(value, value);
 	}
 
 	public Judgement(JudgementType judgementType, Alternative from, Alternative to, Float min, Float max) {
@@ -20,44 +24,53 @@ public class Judgement {
 		this.judgementType = judgementType;
 		this.from = from;
 		this.to = to;
-		this.min = min;
-		this.max = max;		
+		this.interval = new Interval(min, max);
+
+	}
+
+	public void addSuggestion(Interval s) {
+		if (!interval.equals(s) && s.getMax()>=s.getMin() && s.getMin()>0) {
+
+			for (Interval i : suggestions) {
+				if (i.equals(s)) {
+					return;
+				}
+			}
+
+			suggestions.add(s);
+		}
 	}
 
 	public boolean isStronger(Judgement j) {
-		return min > j.max;
+		return getMin() > j.getMax();
 	}
 
 	public Float difference(Judgement j) {
-		return min - j.max;
-	}
-
-	public boolean isNull() {
-		return min == 0 && max == 0;
+		return getMin() - j.getMax();
 	}
 
 	public String toString() {
-		return from.getId() + " -> " + to.getId() + " = " + min + "/" + max + " | " + judgementType.toString();
+		return from.getId() + " -> " + to.getId() + " = " + interval.toString() + " | " + judgementType.toString();
 	}
 
 	public boolean isValid() {
-		return min <= max;
+		return getMin() <= getMax();
 	}
 
 	public boolean merge(Judgement j) throws MergeException {
 		boolean changed = false;
-		if (max != 0) {
+		if (getMax() != 0) {
 
-			if (j.min > min) {
-				min = j.min;
+			if (j.getMin() > getMin()) {
+				interval.setMin(j.getMin());
 				changed |= true;
 			}
-			if (j.max < max) {
-				max = j.max;
+			if (j.getMax() < getMax()) {
+				interval.setMax(j.getMax());
 				changed |= true;
 			}
 			// XXX PROBLEMATICO XXX
-			if (max < min) {
+			if (getMax() < getMin()) {
 				throw new MergeException();
 				// Max = bmax;
 				// Min = bmin;
@@ -81,15 +94,23 @@ public class Judgement {
 	}
 
 	public Float getMin() {
-		return min;
+		return interval.getMin();
 	}
 
 	public Float getMax() {
-		return max;
+		return interval.getMax();
 	}
 
 	public Float getDifference() {
-		return max-min;
+		return getMax() - getMin();
+	}
+
+	public Interval getInterval() {
+		return interval;
+	}
+
+	public List<Interval> getSuggestions() {
+		return suggestions;
 	}
 
 }

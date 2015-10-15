@@ -91,7 +91,9 @@ table tbody tr > td.warning {
 					
 					</b>
 				</h3>
-								
+					<b id="jSugs">
+					
+					</b>			
 				<form role="form" id="createJudgement">
 					<div class="modal-body">
 						<div class="form-group">
@@ -203,10 +205,12 @@ table tbody tr > td.warning {
 			});	
 		});
 		
-		function judge(from,to){
+		function judge(from,to,sugs){
 			$('#myModal2').modal('show');
 			$('#jFrom').html(from);
 			$('#jTo').html(to);
+			$('#jSugs').html(JSON.stringify(sugs));
+			
 			if(suggestions && suggestions.judgements[from] && suggestions.judgements[from][to]){
 				$("#minimumJud").val(suggestions.judgements[from][to].min);
 				$("#maximumJud").val(suggestions.judgements[from][to].max);
@@ -245,19 +249,23 @@ table tbody tr > td.warning {
 				for(var j in keys){
 					var to = keys[j];
 					var jud = judgements[from] ? judgements[from][to] : null;
-					var onclick = "onclick=\"judge('"+from+"','"+to+"');\"";
+					var warn = jud && jud.sug && jud.sug.length>0;
+					var sug = warn ? JSON.stringify(jud.sug) : "[]";
+					var onclick = "onclick=\"judge('"+from+"','"+to+"',"+sug+");\"";
 					
 					if(jud){
-						var warn =  jud.smin || jud.smax;
 						var icon = warn ? "<i class='fa fa-exclamation'></i>" :"";
-						var tooltip = warn ? "data-toggle='tooltip' title='["+jud.smin+","+jud.smax+"]'" : "";
+						var tooltip = warn ? "data-toggle='tooltip' title='"+sug+"'" : "";
 						var clazz = warn ?"class='warning'":"";
 						
 						if(jud.type =="DYNAMIC"){
 							matrix+="<td "+clazz+" "+tooltip+" "+onclick+">"+icon+"<i class='fa fa-magic'></i><br>["+ jud.min+"," +jud.max+"]</td>";
 						}else {							 
 							matrix+="<td "+clazz+" "+tooltip+" "+onclick+">"+icon+"<i class='fa fa-user'></i><br>["+ jud.min+"," +jud.max+"]</td>";								 
- 						}	 
+						}
+						
+
+						
 					}
 					else{
 						jud = judgements[to] ? judgements[to][from] : null;
@@ -291,6 +299,8 @@ table tbody tr > td.warning {
 				url: "/call",
 				data: text,
 				success: function( obj ) {
+					console.log(obj);
+					
 					suggestions = obj;
 						var scale = "";
 						for(var i in obj.scale){

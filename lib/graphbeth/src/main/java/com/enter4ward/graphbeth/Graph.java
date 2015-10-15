@@ -105,42 +105,90 @@ public class Graph {
 		return ans;
 	}
 
-
-	private Solution pathSizeAux(Alternative current, Alternative to, Solution cost, Judgement exc) {
-		Solution solution = null;
-
-		Collection<Judgement> judgements = getFrom(current);
-		for (Judgement j : judgements) {
-			if (j != exc) {
-				Solution attempt = new Solution(cost.getMin() + j.getMin(), cost.getMax() + j.getMax());
-
-				if (!j.getTo().equals(to)) {
-					attempt = pathSizeAux(j.getTo(), to, attempt, exc);
-				}
-				
-				if(attempt != null){
-					if(solution==null){
-						solution = attempt;						
+	private Interval pathSizeAux(Alternative current, Alternative goal, Interval cost, Judgement except,
+			Set<Alternative> reachable) {
+		Interval solution = null;
+		for (Judgement j : getFrom(current)) {
+			if (j != except) {
+				Interval t = new Interval(cost).add(j.getInterval());
+				Interval recursion = null;
+				if (!j.getTo().equals(goal)) {
+					if (!reachable.contains(j.getTo())) {
+						recursion = pathSizeAux(j.getTo(), goal, t, except, reachable);
 					}
-					else { 
-						if(attempt.getMax() > solution.getMax()){
-							solution.setMax(attempt.getMax());
-						}
-						if(attempt.getMin() < solution.getMin()){
-							solution.setMin(attempt.getMin());
+				} else {
+					recursion = t;
+				}
 
+				if (recursion != null) {
+					if (solution == null) {
+						solution = new Interval(recursion);
+					} else {
+						if (recursion.getMax() > solution.getMax()) {
+							solution.setMax(recursion.getMax());
+						}
+						if (recursion.getMin() < solution.getMin()) {
+							solution.setMin(recursion.getMin());
 						}
 					}
-					
 				}
-				
 			}
 		}
-
 		return solution;
 	}
 
-	public Solution pathSize(Alternative from, Alternative to, Judgement exc) {
-		return pathSizeAux(from, to, new Solution(0,0), exc);
+	private boolean enforceAux(Alternative current, Alternative goal, Interval remainder, Judgement except,
+			Set<Alternative> reachable) {
+		boolean found = false;
+		for (Judgement j : getFrom(current)) {
+			if (j != except && !reachable.contains(j.getTo())) {
+				if (j.getTo().equals(goal)) {
+					found = true;
+				} else {
+					found |= enforceAux(j.getTo(), goal, remainder, except, reachable);
+				}
+
+				if (found) {
+					Interval i = new Interval(j.getInterval()).add(remainder);
+					System.out.println(j.toString() + " ### " + i.toString());
+
+					j.addSuggestion(i);
+				}
+
+			}
+		}
+		return found;
+	}
+
+	private Set<Alternative> calculateReachable(Alternative alt, Set<Alternative> reachable) {
+		Collection<Judgement> judgements = getFrom(alt);
+		for (Judgement j : judgements) {
+			if (!reachable.contains(j.getTo())) {
+				reachable.add(j.getTo());
+				calculateReachable(j.getTo(), reachable);
+			}
+		}
+		return reachable;
+	}
+
+	public void enforce(Judgement j) {
+		Interval s = pathSize(j.getFrom(), j.getTo(), j);
+		if (s != null) {
+			Set<Alternative> reachable = calculateReachable(j.getTo(), new HashSet<Alternative>());
+			Interval remainder = new Interval(j.getInterval()).subtract(s);
+			
+			j.addSuggestion(new Interval(j.getInterval()).subtract(remainder));
+
+			
+			if (!remainder.isNull()) {
+				System.out.println(j.toString() + " # " + remainder.toString());
+				enforceAux(j.getFrom(), j.getTo(), remainder, j, reachable);
+			}
+		}
+	}
+
+	public Interval pathSize(Alternative from, Alternative to, Judgement exc) {
+		Set<Alternative> reachable = calculateReachable(to, new HashSet<Alternative>());
+		return pathSizeAux(from, to, new Interval(0, 0), exc, reachable);
 	}
 }
