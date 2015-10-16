@@ -34,6 +34,7 @@
 		<module>webserver</module>
 		<module>lwjgl</module>
 		<module>graphbeth</module>
+		<module>stream</module>
 	</modules>
 
 
