@@ -4,7 +4,6 @@
 
   <artifactId>math</artifactId>
   <packaging>jar</packaging>
-
   <name>com.enter4ward.math</name>
   <url>http://maven.apache.org</url>
 
