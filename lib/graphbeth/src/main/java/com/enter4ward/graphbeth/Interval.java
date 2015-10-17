@@ -5,17 +5,27 @@ public class Interval  {
 	private float min;
 	private float max;
 	
+
 	
 	public Interval(float min, float max) {
 		super();
 		this.min = min;
 		this.max = max;
+	}	
+	public Interval(float v) {
+		super();
+		this.min = this.max = v;
 	}
 
 	public Interval(Interval i) {
 		super();
 		this.min = i.min;
 		this.max = i.max;
+	}
+	
+
+	public float getDifference() {
+		return max-min;
 	}
 	
 	public float getMin() {

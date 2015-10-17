@@ -3,6 +3,7 @@ package com.enter4ward.graphbeth;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -105,6 +106,43 @@ public class Graph {
 		return ans;
 	}
 
+	private Paths extremePathsAux(Alternative current, Alternative goal, Interval cost, Judgement except,
+			Set<Alternative> reachable, LinkedList<Judgement> path) {
+		Paths solution = null;
+		for (Judgement j : getFrom(current)) {
+
+			if (j != except) {
+				path.push(j);
+				Interval t = new Interval(cost).add(j.getInterval());
+				Interval recursion = null;
+				if (!j.getTo().equals(goal)) {
+					if (!reachable.contains(j.getTo())) {
+						recursion = pathSizeAux(j.getTo(), goal, t, except, reachable);
+					}
+				} else {
+					recursion = t;
+				}
+
+				if (recursion != null) {
+					if (solution == null) {
+						solution = new Paths(recursion, path);
+					} else {
+						if (recursion.getMax() > solution.getMax()) {
+							solution.setMax(recursion.getMax());
+							solution.setMaxPath(path);
+						}
+						if (recursion.getMin() < solution.getMin()) {
+							solution.setMin(recursion.getMin());
+							solution.setMinPath(path);
+						}
+					}
+				}
+				path.pop();
+			}
+		}
+		return solution;
+	}
+
 	private Interval pathSizeAux(Alternative current, Alternative goal, Interval cost, Judgement except,
 			Set<Alternative> reachable) {
 		Interval solution = null;
@@ -171,19 +209,43 @@ public class Graph {
 		return reachable;
 	}
 
-	public void enforce(Judgement j) {
-		Interval s = pathSize(j.getFrom(), j.getTo(), j);
-		if (s != null) {
-			Set<Alternative> reachable = calculateReachable(j.getTo(), new HashSet<Alternative>());
-			Interval remainder = new Interval(j.getInterval()).subtract(s);
-			
-			j.addSuggestion(new Interval(j.getInterval()).subtract(remainder));
+	public void enforce() {
+		
+		for(Alternative to : getToAlternatives()){
+			Set<Alternative> reachable = calculateReachable(to, new HashSet<Alternative>());
+			for(Alternative from : getFromAlternatives()){
+				Judgement judgement = get(from, to);
+				if(judgement!=null){
+					Paths s = extremePathsAux(from, to, new Interval(0, 0), judgement, reachable,
+							new LinkedList<Judgement>());
+					if (s != null) {
+						System.out.println("%%%"+ judgement.toString() + " $$$ " +s.toString());
+						float d = s.getDifference(); 
+						if (d>0) {
 
-			
-			if (!remainder.isNull()) {
-				System.out.println(j.toString() + " # " + remainder.toString());
-				enforceAux(j.getFrom(), j.getTo(), remainder, j, reachable);
-			}
+							for (Judgement j : s.getMinPath()) {
+								Interval i = new Interval(j.getInterval()).add(new Interval(d,0));
+								if(i.getMin()>i.getMax()){
+									i.setMax(i.getMin());
+								}
+								System.out.println(j.toString() + " ### " + i.toString() +"|"+d);
+								j.addSuggestion(i);
+							}
+
+							for (Judgement j2 : s.getMaxPath()) {
+								Interval i = new Interval(j2.getInterval()).subtract(new Interval(0,d));
+								if(i.getMax()<i.getMin()){
+									i.setMin(i.getMax());
+								}
+								System.out.println(j2.toString() + " ### " + i.toString()+"|"+d);
+								j2.addSuggestion(i);
+							}
+
+						//	enforceAux(j.getFrom(), j.getTo(), remainder, j, reachable);
+						}
+					}					
+				}
+			}	
 		}
 	}
 

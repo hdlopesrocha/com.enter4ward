@@ -65,7 +65,6 @@ public class Main {
 			Socket connectionSocket = welcomeSocket.accept();
 			InputStream inFromClient = connectionSocket.getInputStream();
 			OutputStream outToClient = connectionSocket.getOutputStream();
-			String path = "/stream";
 
 			String line = readLine(inFromClient);
 			if (line.startsWith("POST")) {

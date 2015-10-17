@@ -71,21 +71,20 @@ public class Criteria {
 							solver.composeEquation(aMin, -1);
 							solver.composeEquation(bMax, 1);
 							solver.createEquation(ConstraintType.LE, -min);
-							
-							  solver.composeEquation(aMax, -1);
-							  solver.composeEquation(bMax, 1);
-							  solver.createEquation(ConstraintType.LE, -max);
-							 
-							//solver.composeEquation(aMin, 1);
-							//solver.composeEquation(aMax, -1);
-							//solver.createEquation(ConstraintType.LE, min - max);
+
+							solver.composeEquation(aMax, -1);
+							solver.composeEquation(bMax, 1);
+							solver.createEquation(ConstraintType.LE, -max);
+
+							// solver.composeEquation(aMin, 1);
+							// solver.composeEquation(aMax, -1);
+							// solver.createEquation(ConstraintType.LE, min - max);
 
 							Judgement j = graph.get(a, b);
 							if (j == null) {
 								j = graph.get(b, a);
 							}
 							if (j == null) {
-
 								merge(new Judgement(JudgementType.DYNAMIC, a, b, min, max), graph, "SC1");
 							}
 						}
@@ -119,16 +118,8 @@ public class Criteria {
 					jScale.put(a.getId(), array);
 				}
 
-				// graph = scoreCompleter(graph, scale);
-
 				//graph = scoreCompleter(graph, scale);
-
-				for (Alternative a : alternatives) {
-					// Building judgements
-					for (Judgement j : graph.getFrom(a)) {
-						graph.enforce(j);
-					}
-				}
+				graph.enforce();
 
 				for (Alternative a : alternatives) {
 					// Building judgements
