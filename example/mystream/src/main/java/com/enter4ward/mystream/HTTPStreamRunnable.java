@@ -14,77 +14,65 @@ import java.util.TreeMap;
 
 public class HTTPStreamRunnable implements Runnable {
 
-	private static final byte[] CRLF = "\r\n".getBytes();
+	private static final String CRLF = "\r\n";
 	private static final int CHUNK_SIZE = 32768;
 
-	
-	
 	public void doPost(String uri, Map<String, List<String>> args, InputStream is) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		int maxChunkSize =0;
+		int maxChunkSize = 0;
 		while (true) {
 			String line = readLine(is);
-			
 			boolean isHex = line.matches("^[0-9a-fA-F]+$");
 			if (isHex) {
 				int len = Integer.valueOf(line, 16);
-				// System.out.println("L=" + len);
-				int l = len;
 				byte[] data = new byte[len];
-
-				while (l > 0) {
-					int read = is.read(data, 0, l);
-					baos.write(data, 0, read);
-					l -= read;
-				}
-
+				is.read(data);
+				baos.write(data);
 				if (len < maxChunkSize) {
-					byte[] bytes = baos.toByteArray();
-					handler.onChunkArrived(uri, args, bytes);
+					handler.onChunkArrived(uri, args, baos.toByteArray());
 					baos.reset();
-				}else{
+				} else {
 					maxChunkSize = len;
-					System.out.println(maxChunkSize);
 				}
-
-				/*
-				 * FileOutputStream fos = new
-				 * FileOutputStream("test"+path+"."+part); fos.write(data);
-				 * fos.close();
-				 */
 			}
-			line = "";
 		}
 	}
 
 	public String readLine(InputStream is) throws IOException {
 		String line = "";
-		byte[] buffer = new byte[1];
-
+		boolean hasCarriage = false;
 		while (true) {
-			int res = is.read(buffer);
+			int res = is.read();
 			if (res == -1) {
 				break;
 			}
-			line += (char) buffer[0];
-			if (line.endsWith("\r\n")) {
-				return line.trim();
+			if (res == 0xD) {
+				if (hasCarriage) {
+					line += (char) 0xD; // add the previous \r
+				} else {
+					hasCarriage = true;
+				}
+			} else if (hasCarriage && res == 0xA) {
+				return line;
+			} else {
+				line += (char) res;
+				hasCarriage = false;
 			}
 		}
 		return null;
 	}
 
-
-	private void replaceGet(String uri, Map<String, List<String>> args, Map<String, String> params, OutputStream outToClient)
-			throws IOException, InterruptedException {
+	private void replaceGet(String uri, Map<String, List<String>> args, Map<String, String> params,
+			OutputStream outToClient) throws IOException, InterruptedException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PrintStream ps = new PrintStream(baos);
-	
-		ps.println("HTTP/1.0 200");
-		for(Entry<String, String> e : params.entrySet()){
-			ps.println(e.getKey()+": " + e.getValue());
+
+		ps.print("HTTP/1.0 200" + CRLF);
+		for (Entry<String, String> e : params.entrySet()) {
+			ps.print(e.getKey() + ": " + e.getValue() + CRLF);
 		}
-		ps.println("Content-Type: multipart/x-mixed-replace;boundary=--myboundary");
+		ps.print("Content-Type: multipart/x-mixed-replace;boundary=--myboundary" + CRLF);
+		ps.flush();
 		outToClient.write(baos.toByteArray());
 
 		while (true) {
@@ -92,12 +80,13 @@ public class HTTPStreamRunnable implements Runnable {
 
 			if (ans != null) {
 				baos.reset();
-				baos.write(CRLF);
-				ps.println("--myboundary");
-				ps.println("Content-Type: image/jpeg");
-				ps.println("Content-Length: " + ans.length);
-				baos.write(CRLF);
-				baos.write(ans);
+				ps.print(CRLF);
+				ps.print("--myboundary" + CRLF);
+				ps.print("Content-Type: image/jpeg" + CRLF);
+				ps.print("Content-Length: " + ans.length + CRLF);
+				ps.print(CRLF);
+				ps.write(ans);
+				ps.flush();
 				outToClient.write(baos.toByteArray());
 
 			}
@@ -105,8 +94,6 @@ public class HTTPStreamRunnable implements Runnable {
 
 	}
 
-	
-	
 	private void doGet(String uri, Map<String, List<String>> args, Map<String, String> params, OutputStream outToClient)
 			throws IOException, InterruptedException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -117,15 +104,15 @@ public class HTTPStreamRunnable implements Runnable {
 		} else if (uri.endsWith("mp4")) {
 			type = "video/mp4";
 		}
-		
-		ps.println("HTTP/1.1 200");
-		ps.println("Connection: close");
-		ps.println("Content-Type: " + type);
-		ps.println("Transfer-Encoding: chunked");
-		for(Entry<String, String> e : params.entrySet()){
-			ps.println(e.getKey()+": " + e.getValue());
+
+		ps.print("HTTP/1.1 200" + CRLF);
+		ps.print("Content-Type: " + type + CRLF);
+		ps.print("Transfer-Encoding: chunked" + CRLF);
+		for (Entry<String, String> e : params.entrySet()) {
+			ps.print(e.getKey() + ": " + e.getValue() + CRLF);
 		}
-		baos.write(CRLF);
+		ps.print(CRLF);
+		ps.flush();
 		outToClient.write(baos.toByteArray());
 		baos.reset();
 
@@ -134,30 +121,22 @@ public class HTTPStreamRunnable implements Runnable {
 
 			if (ans != null) {
 
-				for(int l=0; l < ans.length ; l+=CHUNK_SIZE) {
-					int wr = ans.length -l;
-					if(wr>CHUNK_SIZE)
+				for (int l = 0; l < ans.length; l += CHUNK_SIZE) {
+					int wr = ans.length - l;
+					if (wr > CHUNK_SIZE){
 						wr = CHUNK_SIZE;
-					
-					
-					ps.print(Integer.toString(wr, 16));
-					baos.write(CRLF);
-					baos.write(ans,l, wr);
-					baos.write(CRLF);
+					}
+					ps.print(Integer.toString(wr, 16) + CRLF);
+					ps.write(ans, l, wr);
+					ps.print(CRLF);
+					ps.flush();
 					outToClient.write(baos.toByteArray());
 					baos.reset();
 				}
-				
-				ps.print("0");
-				baos.write(CRLF);
-				baos.write(CRLF);
-				outToClient.write(baos.toByteArray());
-				baos.reset();
 			}
 		}
 	}
 
-	
 	private Socket socket;
 	private ChunkHandler handler;
 
@@ -191,27 +170,27 @@ public class HTTPStreamRunnable implements Runnable {
 			}
 			String uri = path[0];
 
-			Map<String,String> headers = new TreeMap<String,String>();
-			
+			Map<String, String> headers = new TreeMap<String, String>();
+
 			System.out.println("---------------------------");
 			System.out.println(line);
-			while ((line = readLine(is)).length()>0) {
-				String [] tokens = line.split(":"); 
+			while ((line = readLine(is)).length() > 0) {
+				String[] tokens = line.split(":");
 				String key = tokens[0].trim();
 				String value = tokens[1].trim();
 				headers.put(key, value);
 				System.out.println(line);
 			}
-			
-			Map<String,String> params = handler.onStartReceiving(uri);		
-			
+
+			Map<String, String> params = handler.onStartReceiving(uri);
+
 			if (splits[0].startsWith("POST")) {
 				doPost(uri, args, is);
 			} else if (splits[0].startsWith("GET")) {
-				if(args.containsKey("r")){
+				if (args.containsKey("r")) {
 					replaceGet(uri, args, params, outToClient);
-				}else {
-					doGet(uri, args, params,outToClient);
+				} else {
+					doGet(uri, args, params, outToClient);
 				}
 			}
 		} catch (IOException | InterruptedException e) {
