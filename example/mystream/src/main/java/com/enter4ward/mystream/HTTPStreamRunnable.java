@@ -15,15 +15,15 @@ import java.util.TreeMap;
 public class HTTPStreamRunnable implements Runnable {
 
 	private static final byte[] CRLF = "\r\n".getBytes();
-
+	private static final int CHUNK_SIZE = 32768;
 
 	
 	
 	public void doPost(String uri, Map<String, List<String>> args, InputStream is) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		int maxChunkSize =0;
 		while (true) {
 			String line = readLine(is);
-			
 			
 			boolean isHex = line.matches("^[0-9a-fA-F]+$");
 			if (isHex) {
@@ -38,10 +38,13 @@ public class HTTPStreamRunnable implements Runnable {
 					l -= read;
 				}
 
-				if (len != 32768) {
+				if (len < maxChunkSize) {
 					byte[] bytes = baos.toByteArray();
 					handler.onChunkArrived(uri, args, bytes);
 					baos.reset();
+				}else{
+					maxChunkSize = len;
+					System.out.println(maxChunkSize);
 				}
 
 				/*
@@ -122,25 +125,34 @@ public class HTTPStreamRunnable implements Runnable {
 		for(Entry<String, String> e : params.entrySet()){
 			ps.println(e.getKey()+": " + e.getValue());
 		}
-		ps.println();
+		baos.write(CRLF);
 		outToClient.write(baos.toByteArray());
+		baos.reset();
 
 		while (true) {
 			byte[] ans = handler.onChunkRequest(uri, args);
 
 			if (ans != null) {
-				int repeats = ans.length / 32768;
-				int remainder = ans.length % 32768;
 
-				for (int i = 0; i <= repeats; ++i) {
-					int write = i == repeats ? remainder : 32768;
-
-					baos.reset();
-					ps.println(Integer.toString(write, 16));
-					baos.write(ans, i * 32768, write);
+				for(int l=0; l < ans.length ; l+=CHUNK_SIZE) {
+					int wr = ans.length -l;
+					if(wr>CHUNK_SIZE)
+						wr = CHUNK_SIZE;
+					
+					
+					ps.print(Integer.toString(wr, 16));
+					baos.write(CRLF);
+					baos.write(ans,l, wr);
 					baos.write(CRLF);
 					outToClient.write(baos.toByteArray());
+					baos.reset();
 				}
+				
+				ps.print("0");
+				baos.write(CRLF);
+				baos.write(CRLF);
+				outToClient.write(baos.toByteArray());
+				baos.reset();
 			}
 		}
 	}
@@ -196,7 +208,7 @@ public class HTTPStreamRunnable implements Runnable {
 			if (splits[0].startsWith("POST")) {
 				doPost(uri, args, is);
 			} else if (splits[0].startsWith("GET")) {
-				if(splits[1].contains("mjpg")){
+				if(args.containsKey("r")){
 					replaceGet(uri, args, params, outToClient);
 				}else {
 					doGet(uri, args, params,outToClient);

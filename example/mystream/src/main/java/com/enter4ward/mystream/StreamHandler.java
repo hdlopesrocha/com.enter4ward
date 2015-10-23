@@ -5,12 +5,20 @@ import java.util.List;
 import java.util.TreeMap;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.DefaultHttpContent;
+import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpContent;
+import io.netty.handler.codec.http.HttpHeaders.Names;
+import io.netty.handler.codec.http.HttpHeaders.Values;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.QueryStringDecoder;
 
 /**
@@ -24,7 +32,6 @@ public class StreamHandler extends SimpleChannelInboundHandler<Object> { // (1)
 	private HttpRequest request;
 	private QueryStringDecoder queryString;
 	private ChannelPipeline channel;
-	private ByteBuf buf;
 
 	public StreamHandler(ChannelPipeline channel, ChunkHandler handler) {
 		super();
@@ -64,7 +71,7 @@ public class StreamHandler extends SimpleChannelInboundHandler<Object> { // (1)
 	public void channelActive(final ChannelHandlerContext ctx) { // (1)
 		final ByteBuf time = ctx.alloc().buffer(4); // (2)
 		time.writeInt((int) (System.currentTimeMillis() / 1000L + 2208988800L));
-		ctx.writeAndFlush(time); 
+		ctx.writeAndFlush(time);
 	}
 
 	@Override
@@ -74,16 +81,22 @@ public class StreamHandler extends SimpleChannelInboundHandler<Object> { // (1)
 				request = (HttpRequest) msg;
 				queryString = new QueryStringDecoder(request.getUri());
 
-				/*
-				 * if (HttpMethod.GET.equals(request.getMethod())) {
-				 * DefaultHttpResponse res = new
-				 * DefaultHttpResponse(io.netty.handler.codec.http.HttpVersion.
-				 * HTTP_1_1, HttpResponseStatus.OK);
-				 * res.headers().add(Names.TRANSFER_ENCODING, Values.CHUNKED);
-				 * channel.writeAndFlush(res); channel.writeAndFlush(
-				 * handler.onChunkRequest(queryString.path(), new
-				 * TreeMap<String, List<String>>())); }
-				 */
+				if (HttpMethod.GET.equals(request.getMethod())) {
+					FullHttpResponse res = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
+					// res.headers().set("Content-Type", "text/plain");
+					res.headers().set(Names.TRANSFER_ENCODING, Values.CHUNKED);
+					ctx.writeAndFlush(res);
+					
+					while (true) {
+						byte[] b = handler.onChunkRequest(queryString.path(), new TreeMap<String, List<String>>());
+						if (b != null) {
+							HttpContent chunk = new DefaultHttpContent(Unpooled.wrappedBuffer(b));
+							channel.writeAndFlush(chunk);
+							System.out.println(b.length);
+						}
+					}
+				}
+
 			} else if (msg instanceof DefaultHttpContent) {
 				if (request != null) {
 
@@ -97,7 +110,7 @@ public class StreamHandler extends SimpleChannelInboundHandler<Object> { // (1)
 						System.out.println(request.getMethod());
 					}
 				}
-			} 
+			}
 
 		} finally {
 			// ReferenceCountUtil.release(msg); // (2)

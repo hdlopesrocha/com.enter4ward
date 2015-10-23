@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.imageio.ImageIO;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
@@ -36,7 +38,6 @@ public class Main implements ChunkHandler {
 
 	@Override
 	public void onChunkArrived(String path, Map<String, List<String>> args, byte[] bytes) {
-		System.out.println(path + " | " + bytes.length);
 
 		Payload payload = getPayload(path);
 		payload.setData(bytes);
@@ -47,14 +48,11 @@ public class Main implements ChunkHandler {
 	public byte[] onChunkRequest(String path, Map<String, List<String>> args) throws IOException {
 		Payload payload = getPayload(path);
 		payload.await();
-		// System.out.println(payload.getSn());
 		byte[] ret = null;
 		ret = payload.getData();
-
 		if (args.containsKey("info")) {
 			ret = ImageOverlay.editImage(ret, LOGO);
 		}
-
 		return ret;
 	}
 
@@ -68,6 +66,11 @@ public class Main implements ChunkHandler {
 
 	public Main(int port) {
 
+		try {
+			LOGO = ImageIO.read(getClass().getResourceAsStream("/logo.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		this.port = port;
 		ServerSocket httpServer;
 		try {
