@@ -36,7 +36,7 @@ public class StreamInitializer extends ChannelInitializer<SocketChannel> {
         p.addLast(new HttpRequestDecoder());
         p.addLast(new HttpResponseEncoder());
         p.addLast(new ChunkedWriteHandler());
-        p.addLast(new StreamHandler(p,handler));
+        p.addLast(new StreamHandler(handler));
         //p.addLast(new OutboundStreamHandler(handler));
 
     }

@@ -45,7 +45,7 @@ public class Main implements ChunkHandler {
 	}
 
 	@Override
-	public byte[] onChunkRequest(String path, Map<String, List<String>> args) throws IOException {
+	public byte[] onChunkRequest(String path, Map<String, List<String>> args)  {
 		Payload payload = getPayload(path);
 		payload.await();
 		byte[] ret = null;
