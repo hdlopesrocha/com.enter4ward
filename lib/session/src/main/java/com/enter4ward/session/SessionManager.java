@@ -32,7 +32,11 @@ public class SessionManager {
 	 * @return the session
 	 */
 	public final Session getSession(final String sid) {
-		return sessions.get(sid);
+		Session s = sessions.get(sid);
+		if(s==null){
+			s = generateSession();
+		}
+		return s;
 	}
 
 	/**
@@ -56,7 +60,7 @@ public class SessionManager {
 	 *
 	 * @return the session
 	 */
-	public final Session generateSession() {
+	private final Session generateSession() {
 		Session cookie = null;
 
 		long expireTime = System.currentTimeMillis() + duration;

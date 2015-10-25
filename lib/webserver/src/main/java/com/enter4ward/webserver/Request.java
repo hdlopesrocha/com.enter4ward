@@ -1,14 +1,11 @@
 package com.enter4ward.webserver;
 
-import com.enter4ward.session.Session;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,373 +21,325 @@ import java.util.UUID;
  */
 public class Request {
 
-    /** The Constant BUFFERSZ. */
-    static final int BUFFERSZ = 1024;
+	/** The Constant BUFFERSZ. */
+	static final int BUFFERSZ = 1024;
 
-    /** The attributes. */
-    private TreeMap<String, String> attributes = new TreeMap<String, String>();
+	/** The attributes. */
+	private TreeMap<String, String> attributes = new TreeMap<String, String>();
+	/** The session. */
+	private String sessionId = null;
 
-    /** The session. */
-    private Session session = null;
+	/** The version. */
+	private String version = "";
 
-    /** The version. */
-    private String version = "";
+	/** The url. */
+	private String url = "";
 
-    /** The url. */
-    private String url = "";
+	/** The file. */
+	private String file = "";
 
-    /** The file. */
-    private String file = "";
+	/** The method. */
+	private String method = "";
 
-    /** The method. */
-    private String method = "";
+	private String connection = "";
 
-    private String connection ="";
-    
-    /** The encodings. */
-    private List<String> encodings = new ArrayList<String>();
+	/** The encodings. */
+	private List<String> encodings = new ArrayList<String>();
 
-    /** The uploaded files. */
-    private Map<String, Upload> uploadedFiles = new TreeMap<String, Upload>();
+	/** The uploaded files. */
+	private Map<String, Upload> uploadedFiles = new TreeMap<String, Upload>();
 
-    /** The headers. */
-    private Map<String, String> headers = new TreeMap<String, String>();
+	/** The headers. */
+	private Map<String, String> headers = new TreeMap<String, String>();
 
-    /**
-     * Instantiates a new request.
-     *
-     * @param socket
-     *            the socket
-     * @param server
-     *            the server
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    public Request(final Socket socket, final HttpServer server)
-            throws IOException {
-        InputStream is = socket.getInputStream();
 
-        String currentLine = readLine(is);
-        if(currentLine==null){
-            throw new IOException();
-        }
-        StringTokenizer ssLine = new StringTokenizer(currentLine, " ");
-        method = ssLine.nextToken();
-        url = ssLine.nextToken();
-        version = ssLine.nextToken();
+	/**
+	 * Instantiates a new request.
+	 *
+	 * @param socket
+	 *            the socket
+	 * @param server
+	 *            the server
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public Request(final InputStream is) throws IOException {
 
-        StringTokenizer ssUrl = new StringTokenizer(url, "?");
-        if (ssUrl.hasMoreElements()) {
-            file = ssUrl.nextToken();
-        }
-        if (ssUrl.hasMoreElements()) {
-            setAttributes(ssUrl.nextToken());
-        }
- //       System.out.println("****************");
-        // BUILD HEADERS
-        while ((currentLine = readLine(is)) != null && currentLine.length() > 0) {
-   //         System.out.println(currentLine);
-            StringTokenizer ssDots = new StringTokenizer(currentLine, ":");
-            String key = ssDots.hasMoreElements() ? ssDots.nextToken().trim()
-                    .toLowerCase() : "";
-            String value = ssDots.hasMoreElements() ? ssDots.nextToken().trim().toLowerCase()      : "";
-            headers.put(key, value);
-        }
-        String value;
+		String currentLine = HttpTools.readLine(is);
+		if (currentLine == null) {
+			throw new IOException();
+		}
+		StringTokenizer ssLine = new StringTokenizer(currentLine, " ");
+		method = ssLine.nextToken();
+		url = ssLine.nextToken();
+		version = ssLine.nextToken();
 
-        if ((value = headers.get("cookie")) != null) {
-            session = server.getSession(value.substring(3));
-            // System.out.println(session!=null?session.getId():"");
-        }
+		StringTokenizer ssUrl = new StringTokenizer(url, "?");
+		if (ssUrl.hasMoreElements()) {
+			file = ssUrl.nextToken();
+		}
+		if (ssUrl.hasMoreElements()) {
+			setAttributes(ssUrl.nextToken());
+		}
+		// System.out.println("****************");
+		// BUILD HEADERS
+		while ((currentLine = HttpTools.readLine(is)) != null && currentLine.length() > 0) {
+			// System.out.println(currentLine);
+			StringTokenizer ssDots = new StringTokenizer(currentLine, ":");
+			String key = ssDots.hasMoreElements() ? ssDots.nextToken().trim().toLowerCase() : "";
+			String value = ssDots.hasMoreElements() ? ssDots.nextToken().trim().toLowerCase() : "";
+			headers.put(key, value);
+		}
+		String value;
 
-        if ((value = headers.get("accept-encoding")) != null) {
-            for (String s : value.split(",")) {
-                encodings.add(s.trim());
-            }
-        }
+		if ((value = headers.get("cookie")) != null) {
+			sessionId = value.substring(3);
+		}
 
-        
-        if ((value = headers.get("content-type")) != null) {
-            if (value.contains("application/x-www-form-urlencoded")) {
-                int contentLength = Integer.valueOf(headers
-                        .get("content-length"));
-                setAttributes(readSize(is, contentLength));
-            } else if (value.contains("multipart/form-data")) {
-                String[] mpfd = value.split("boundary=");
-                if (mpfd.length > 1) {
-                    StringTokenizer bst = new StringTokenizer(mpfd[1], ";");
-                    String boundary = "\r\n--" + bst.nextToken();
-                    multipartForm(is, boundary);
-                }
-            }
-        }
-        
-        connection = headers.get("connection");
-    }
+		if ((value = headers.get("accept-encoding")) != null) {
+			for (String s : value.split(",")) {
+				encodings.add(s.trim());
+			}
+		}
 
-    
-    public boolean keepAlive(){
-        return connection !=null && connection.equals("keep-alive");
-        
-    }
-    
-    /**
-     * Read line.
-     *
-     * @param is
-     *            the is
-     * @return the string
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    private String readLine(final InputStream is) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        int b;
-        boolean cr = false;
-        while (true) {
-            b = is.read();
-            if (b == -1 || (b == '\n' && cr)) {
-                break;
-            }
-            if (b == '\r') {
-                cr = true;
-            } else {
-                cr = false;
-                baos.write(b);
-            }
-        }
-        String ret = null;
-        if (baos.size() > 0) {
-            ret = new String(baos.toByteArray());
-        } else if (b >= 0) {
-            ret = "";
-        }
+		if ((value = headers.get("content-type")) != null) {
+			if (value.contains("application/x-www-form-urlencoded")) {
+				int contentLength = Integer.valueOf(headers.get("content-length"));
+				setAttributes(readSize(is, contentLength));
+			} else if (value.contains("multipart/form-data")) {
+				String[] mpfd = value.split("boundary=");
+				if (mpfd.length > 1) {
+					StringTokenizer bst = new StringTokenizer(mpfd[1], ";");
+					String boundary = "\r\n--" + bst.nextToken();
+					multipartForm(is, boundary);
+				}
+			}
+		}
+		connection = headers.get("connection");
+	}
 
-        return ret;
-    }
+	public String getSessionId() {
+		return sessionId;
+	}
 
-    /**
-     * Read size.
-     *
-     * @param is
-     *            the is
-     * @param size
-     *            the size
-     * @return the string
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    private String readSize(final InputStream is, final int size)
-            throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        int b;
-        for (int i = 0; i < size; ++i) {
-            b = is.read();
-            baos.write(b);
-        }
-        return new String(baos.toByteArray());
-    }
+	public boolean keepAlive() {
+		return connection != null && connection.equals("keep-alive");
 
-    /**
-     * Multipart form.
-     *
-     * @param is
-     *            the is
-     * @param boundary
-     *            the boundary
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    private void multipartForm(final InputStream is, final String boundary)
-            throws IOException {
-        String currentLine = "";
-        String contentDisposition = "";
-        String filename = "upload";
-        String name = "name";
+	}
 
-        while ((currentLine = readLine(is)) != null
-                && currentLine.length() > 0) {
-            StringTokenizer ssDots = new StringTokenizer(currentLine, ":");
-            String key = ssDots.hasMoreElements() ? ssDots.nextToken().trim()
-                    .toLowerCase() : "";
-            String value = ssDots.hasMoreElements() ? ssDots.nextToken("\n")
-                    .substring(1).trim() : "";
-            if (key.equals("content-disposition")) {
-                contentDisposition = value;
-                String[] cds1 = contentDisposition.split("filename=");
-                if (cds1.length > 1) {
-                    StringTokenizer stfn = new StringTokenizer(cds1[1], ";");
-                    filename = stfn.nextToken().trim();
-                    filename = filename.substring(1, filename.length() - 1);
-                }
 
-                String[] cds2 = contentDisposition.split("name=");
-                if (cds2.length > 1) {
-                    StringTokenizer stfn = new StringTokenizer(cds2[1], ";");
-                    name = stfn.nextToken().trim();
-                    name = name.substring(1, name.length() - 1);
-                }
 
-            }
-        }
+	/**
+	 * Read size.
+	 *
+	 * @param is
+	 *            the is
+	 * @param size
+	 *            the size
+	 * @return the string
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	private String readSize(final InputStream is, final int size) throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		int b;
+		for (int i = 0; i < size; ++i) {
+			b = is.read();
+			baos.write(b);
+		}
+		return new String(baos.toByteArray());
+	}
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        byte[] msg = new byte[BUFFERSZ];
-        int len = 0;
-        do {
-            len = is.read(msg);
-            if (len > 0) {
-                baos.write(msg, 0, len);
-            }
-        } while (len == BUFFERSZ);
+	/**
+	 * Multipart form.
+	 *
+	 * @param is
+	 *            the is
+	 * @param boundary
+	 *            the boundary
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	private void multipartForm(final InputStream is, final String boundary) throws IOException {
+		String currentLine = "";
+		String contentDisposition = "";
+		String filename = "upload";
+		String name = "name";
 
-        byte[] bytes = baos.toByteArray();
-        int boundPos = indexOf(bytes, boundary.getBytes("UTF-8"));
-        if (boundPos > 0) {
-            File file2 = File.createTempFile(UUID.randomUUID().toString(), "");
-            FileOutputStream fos = new FileOutputStream(file2);
-            fos.write(Arrays.copyOfRange(bytes, 0, boundPos));
-            fos.close();
-            uploadedFiles.put(name, new Upload(file2, filename));
-            if (boundPos + 2 * boundary.length() < bytes.length) {
-                InputStream nextIs = new ByteArrayInputStream(
-                        Arrays.copyOfRange(bytes, boundPos + boundary.length()
-                                + 2, bytes.length));
-                multipartForm(nextIs, boundary);
-                nextIs.close();
-            }
-        }
-    }
+		while ((currentLine = HttpTools.readLine(is)) != null && currentLine.length() > 0) {
+			StringTokenizer ssDots = new StringTokenizer(currentLine, ":");
+			String key = ssDots.hasMoreElements() ? ssDots.nextToken().trim().toLowerCase() : "";
+			String value = ssDots.hasMoreElements() ? ssDots.nextToken("\n").substring(1).trim() : "";
+			if (key.equals("content-disposition")) {
+				contentDisposition = value;
+				String[] cds1 = contentDisposition.split("filename=");
+				if (cds1.length > 1) {
+					StringTokenizer stfn = new StringTokenizer(cds1[1], ";");
+					filename = stfn.nextToken().trim();
+					filename = filename.substring(1, filename.length() - 1);
+				}
 
-    /**
-     * Gets the upload.
-     *
-     * @param name
-     *            the name
-     * @return the upload
-     */
-    public final Upload getUpload(final String name) {
-        return uploadedFiles.get(name);
-    }
+				String[] cds2 = contentDisposition.split("name=");
+				if (cds2.length > 1) {
+					StringTokenizer stfn = new StringTokenizer(cds2[1], ";");
+					name = stfn.nextToken().trim();
+					name = name.substring(1, name.length() - 1);
+				}
 
-    /**
-     * Index of.
-     *
-     * @param bytes
-     *            the bytes
-     * @param boundary
-     *            the boundary
-     * @return the int
-     */
-    private int indexOf(final byte[] bytes, final byte[] boundary) {
-        for (int i = 0; i < bytes.length; ++i) {
-            boolean found = true;
-            for (int j = 0; j < boundary.length; ++j) {
-                if (j + i >= bytes.length || bytes[i + j] != boundary[j]) {
-                    found = false;
-                    break;
-                }
-            }
-            if (found) {
-                return i;
-            }
-        }
-        return -1;
-    }
+			}
+		}
 
-    /**
-     * Accept encoding.
-     *
-     * @param enc
-     *            the enc
-     * @return the boolean
-     */
-    public final Boolean acceptEncoding(final String enc) {
-        return encodings.contains(enc);
-    }
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		byte[] msg = new byte[BUFFERSZ];
+		int len = 0;
+		do {
+			len = is.read(msg);
+			if (len > 0) {
+				baos.write(msg, 0, len);
+			}
+		} while (len == BUFFERSZ);
 
-    /**
-     * Sets the attributes.
-     *
-     * @param a
-     *            the new attributes
-     */
-    private void setAttributes(final String a) {
+		byte[] bytes = baos.toByteArray();
+		int boundPos = indexOf(bytes, boundary.getBytes("UTF-8"));
+		if (boundPos > 0) {
+			File file2 = File.createTempFile(UUID.randomUUID().toString(), "");
+			FileOutputStream fos = new FileOutputStream(file2);
+			fos.write(Arrays.copyOfRange(bytes, 0, boundPos));
+			fos.close();
+			uploadedFiles.put(name, new Upload(file2, filename));
+			if (boundPos + 2 * boundary.length() < bytes.length) {
+				InputStream nextIs = new ByteArrayInputStream(
+						Arrays.copyOfRange(bytes, boundPos + boundary.length() + 2, bytes.length));
+				multipartForm(nextIs, boundary);
+				nextIs.close();
+			}
+		}
+	}
 
-        if (a != null) {
-            StringTokenizer tok1 = new StringTokenizer(a, "&");
-            while (tok1.hasMoreElements()) {
-                StringTokenizer tok2 = new StringTokenizer(tok1.nextToken(),
-                        "=");
-                String key = tok2.hasMoreElements() ? tok2.nextToken() : "";
-                String value = tok2.hasMoreElements() ? tok2.nextToken() : "";
-                attributes.put(key, value);
-            }
-        }
-    }
+	/**
+	 * Gets the upload.
+	 *
+	 * @param name
+	 *            the name
+	 * @return the upload
+	 */
+	public final Upload getUpload(final String name) {
+		return uploadedFiles.get(name);
+	}
 
-    /**
-     * Read.
-     *
-     * @param key
-     *            the key
-     * @return the string
-     */
-    public final String read(final String key) {
-        return attributes.get(key);
-    }
+	/**
+	 * Index of.
+	 *
+	 * @param bytes
+	 *            the bytes
+	 * @param boundary
+	 *            the boundary
+	 * @return the int
+	 */
+	private int indexOf(final byte[] bytes, final byte[] boundary) {
+		for (int i = 0; i < bytes.length; ++i) {
+			boolean found = true;
+			for (int j = 0; j < boundary.length; ++j) {
+				if (j + i >= bytes.length || bytes[i + j] != boundary[j]) {
+					found = false;
+					break;
+				}
+			}
+			if (found) {
+				return i;
+			}
+		}
+		return -1;
+	}
 
-    /**
-     * Gets the entries.
-     *
-     * @return the entries
-     */
-    public final Set<Entry<String, String>> getEntries() {
-        return attributes.entrySet();
-    }
+	/**
+	 * Accept encoding.
+	 *
+	 * @param enc
+	 *            the enc
+	 * @return the boolean
+	 */
+	public final Boolean acceptEncoding(final String enc) {
+		return encodings.contains(enc);
+	}
 
-    /**
-     * Gets the session.
-     *
-     * @return the session
-     */
-    public final Session getSession() {
-        return session;
-    }
+	/**
+	 * Sets the attributes.
+	 *
+	 * @param a
+	 *            the new attributes
+	 */
+	private void setAttributes(final String a) {
 
-    /**
-     * Gets the version.
-     *
-     * @return the version
-     */
-    public final String getVersion() {
-        return version;
-    }
+		if (a != null) {
+			StringTokenizer tok1 = new StringTokenizer(a, "&");
+			while (tok1.hasMoreElements()) {
+				StringTokenizer tok2 = new StringTokenizer(tok1.nextToken(), "=");
+				String key = tok2.hasMoreElements() ? tok2.nextToken() : "";
+				String value = tok2.hasMoreElements() ? tok2.nextToken() : "";
+				attributes.put(key, value);
+			}
+		}
+	}
 
-    /**
-     * Gets the url.
-     *
-     * @return the url
-     */
-    public final String getUrl() {
-        return url;
-    }
+	/**
+	 * Read.
+	 *
+	 * @param key
+	 *            the key
+	 * @return the string
+	 */
+	public final String read(final String key) {
+		return attributes.get(key);
+	}
 
-    /**
-     * Gets the file.
-     *
-     * @return the file
-     */
-    public final String getFile() {
-        return file;
-    }
+	/**
+	 * Gets the entries.
+	 *
+	 * @return the entries
+	 */
+	public final Set<Entry<String, String>> getEntries() {
+		return attributes.entrySet();
+	}
 
-    /**
-     * Gets the method.
-     *
-     * @return the method
-     */
-    public final String getMethod() {
-        return method;
-    }
+	/**
+	 * Gets the version.
+	 *
+	 * @return the version
+	 */
+	public final String getVersion() {
+		return version;
+	}
+
+	/**
+	 * Gets the url.
+	 *
+	 * @return the url
+	 */
+	public final String getUrl() {
+		return url;
+	}
+
+	/**
+	 * Gets the file.
+	 *
+	 * @return the file
+	 */
+	public final String getFile() {
+		return file;
+	}
+
+	/**
+	 * Gets the method.
+	 *
+	 * @return the method
+	 */
+	public final String getMethod() {
+		return method;
+	}
+
+	public Map<String, String> getAttributes() {
+		// TODO Auto-generated method stub
+		return attributes;
+	}
 }

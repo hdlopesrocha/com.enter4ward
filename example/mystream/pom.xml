@@ -34,7 +34,11 @@
 			<version>20140107</version>
 		</dependency>
 	
-		
+		<dependency>
+			<groupId>com.enter4ward</groupId>
+			<artifactId>myserver</artifactId>
+			<version>1.0</version>
+		</dependency>	
 		<dependency>
 		  <groupId>org.eclipse.jetty</groupId>
 		  <artifactId>jetty-servlet</artifactId>

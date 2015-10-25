@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.TreeMap;
 
+import com.enter4ward.webserver.ChunkHandler;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;

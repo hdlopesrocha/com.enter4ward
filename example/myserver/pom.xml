@@ -7,8 +7,8 @@
   	<groupId>com.enter4ward</groupId>
   	<version>1.0</version>
 
-  <name>com.enter4ward.myserver</name>
-  <url>http://maven.apache.org</url>
+	  <name>com.enter4ward.myserver</name>
+	  <url>http://maven.apache.org</url>
 
 
 	<properties>
@@ -34,5 +34,24 @@
     </dependency>
 	
   </dependencies>
+    
+    	<build>
+		<plugins>
+			<plugin>
+			  <groupId>org.codehaus.mojo</groupId>
+			  <artifactId>exec-maven-plugin</artifactId>
+			  <version>1.1</version>
+			  <executions><execution>
+			    <goals><goal>java</goal></goals>
+			  </execution></executions>
+			  <configuration>
+			    <mainClass>com.enter4ward.myserver.Global</mainClass>
+			  </configuration>
+			</plugin>
+
+
+		</plugins>
+	</build>
+    
     
 </project>

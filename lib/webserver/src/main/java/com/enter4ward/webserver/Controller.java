@@ -1,179 +1,120 @@
 package com.enter4ward.webserver;
 
-import com.enter4ward.session.Session;
-
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.StringTokenizer;
+import java.io.OutputStream;
+
+import com.enter4ward.session.Session;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class Controller.
  */
 public abstract class Controller {
+	private InputStream is;
+	private OutputStream os;
+	private Request request;
+	private Session session;
 
-    /** The server. */
-    private HttpServer server;
+	/**
+	 * Instantiates a new controller.
+	 */
+	public Controller() {
+	}
 
-    /** The request. */
-    private Request request;
+	public abstract void run() throws IOException;
 
-    /** The session. */
-    private Session session;
+	/**
+	 * Prepare.
+	 *
+	 * @param s
+	 *            the s
+	 * @param request
+	 *            the r
+	 * @param socket
+	 */
+	protected final void init(InputStream is, OutputStream os, Request request, Session session) {
+		this.os = os;
+		this.is = is;
+		this.request = request;
+		this.session = session;
+	}
 
-    /**
-     * Instantiates a new controller.
-     */
-    public Controller() {
-    }
+	public Session getSession() {
+		return session;
+	}
 
-    /**
-     * Read.
-     *
-     * @param key
-     *            the key
-     * @return the object
-     */
-    public final Object session(final String key) {
-        if (session == null) {
-            session = request.getSession();
-        }
-        return session != null ? session.read(key) : null;
-    }
+	public Request getRequest() {
+		return request;
+	}
 
-    /**
-     * Write.
-     *
-     * @param key
-     *            the key
-     * @param value
-     *            the value
-     */
-    public final void session(final String key, final Object value) {
-        if (session == null) {
-            session = request.getSession();
-            if (session == null) {
-                session = server.generateSession();
-            }
-        }
-        session.write(key, value);
-    }
+	public Response createResponse(String status) {
+		Response response = new Response(status, request, session);
+		return response;
+	}
 
-    /**
-     * Gets the request.
-     *
-     * @return the request
-     */
-    public final Request getRequest() {
-        return request;
-    }
+	public void send(Response response) throws IOException {
+		byte [] data = response.build();
+		os.write(data);
+		os.flush();
+	}
 
-    /**
-     * Gets the nav.
-     *
-     * @return the nav
-     */
-    public String getNav() {
-        return server.getNav(request.getFile());
-    }
+	private static byte [] CRLF = "\r\n".getBytes();
+	
+	private static final int CHUNK_SIZE = 32768;
+	
+	
+	public void send(byte[] ans) throws IOException {
+		if (ans != null) {
+			for (int l = 0; l < ans.length; l += CHUNK_SIZE) {
+				int wr = ans.length - l;
+				if (wr > CHUNK_SIZE){
+					wr = CHUNK_SIZE;
+				}
+				
+				os.write(Integer.toString(wr,16).getBytes());
+				os.write(CRLF);
+				os.write(ans,l, wr);
+				os.write(CRLF);
+				os.flush();
 
-    /**
-     * Ok.
-     *
-     * @param html
-     *            the html
-     * @return the response
-     */
-    public final Response ok(final String html) {
-        Response response = new Response(server, request);
-        response.setContentType("text/html");
-        response.setData(html.getBytes());
-        return response;
-    }
+			}
+		}
+	}
 
-    /**
-     * Ok.
-     *
-     * @param file
-     *            the file
-     * @return the response
-     */
-    public final Response ok(final File file) {
-        StringTokenizer fileToks = new StringTokenizer(file.getName(), ".");
-        Response response = new Response(server, request);
+	private int maxFrameSize = 0;
 
-        try {
-            response.setData(read(file));
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            // e.printStackTrace();
-        }
-        if (fileToks.countTokens() > 1) {
-            fileToks.nextElement();
-            response.setContentType(fileToks.nextToken());
-        } else {
-            response.setContentType("text/html");
-        }
-        return response;
-    }
+	protected int readChunkAux(ByteArrayOutputStream baos) throws IOException {
+		String line = HttpTools.readLine(is);
 
-    /**
-     * Ok.
-     *
-     * @param file
-     *            the file
-     * @param filename
-     *            the filename
-     * @return the response
-     */
-    public final Response ok(final File file, final String filename) {
-        Response response = ok(file);
-        response.setContentDisposition("attachment; filename=\"" + filename
-                + "\"");
-        return response;
-    }
+		boolean isHex = line.matches("^[0-9a-fA-F]+$");
+		if (isHex) {
+			int len = Integer.valueOf(line, 16);
+			byte[] data = new byte[len];
+			is.read(data);
+			
+			
+			baos.write(data);
+			HttpTools.readLine(is);
+			return len;
+		}
+		return 0;
+	}
 
-    /**
-     * Read.
-     *
-     * @param file
-     *            the file
-     * @return the byte[]
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    private byte[] read(final File file) throws IOException {
+	
+	public byte[] readChunk() throws IOException {
+	
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        byte[] buffer = new byte[(int) file.length()];
-        InputStream ios = null;
-        try {
-            ios = new FileInputStream(file);
-            if (ios.read(buffer) == -1) {
-                throw new IOException(
-                        "EOF reached while trying to read the whole file");
-            }
-        } finally {
-            if (ios != null) {
-                ios.close();
-            }
-        }
-
-        return buffer;
-    }
-
-    /**
-     * Prepare.
-     *
-     * @param s
-     *            the s
-     * @param r
-     *            the r
-     */
-    public final void prepare(final HttpServer s, final Request r) {
-        server = s;
-        request = r;
-    }
+		while (true){
+			int len = readChunkAux(baos);
+			if (len < maxFrameSize || len==0) {
+				return baos.toByteArray();
+			} else {
+				maxFrameSize = len;
+			}
+		}		
+	}
 
 }

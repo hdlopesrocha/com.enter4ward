@@ -15,6 +15,8 @@
  */
 package com.enter4ward.mystream;
 
+import com.enter4ward.webserver.ChunkHandler;
+
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;

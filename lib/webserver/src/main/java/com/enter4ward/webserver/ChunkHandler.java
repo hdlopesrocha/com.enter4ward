@@ -1,4 +1,4 @@
-package com.enter4ward.mystream;
+package com.enter4ward.webserver;
 
 import java.util.List;
 import java.util.Map;

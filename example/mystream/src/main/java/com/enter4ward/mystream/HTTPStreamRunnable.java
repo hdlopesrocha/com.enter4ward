@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import com.enter4ward.webserver.ChunkHandler;
+
 public class HTTPStreamRunnable implements Runnable {
 
 	private static final String CRLF = "\r\n";

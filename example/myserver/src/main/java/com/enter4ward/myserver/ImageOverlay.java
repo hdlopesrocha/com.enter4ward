@@ -1,4 +1,4 @@
-package com.enter4ward.mystream;
+package com.enter4ward.myserver;
 
 import java.awt.Color;
 import java.awt.FontMetrics;

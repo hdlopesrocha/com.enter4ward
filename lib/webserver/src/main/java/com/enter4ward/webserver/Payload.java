@@ -1,4 +1,4 @@
-package com.enter4ward.mystream;
+package com.enter4ward.webserver;
 
 import java.util.Map;
 import java.util.TreeMap;
