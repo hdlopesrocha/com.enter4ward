@@ -1,19 +1,97 @@
+
+
 <html>
-	<head>
-		<link rel='stylesheet' type='text/css' href='/res/style.css'>
-		<link rel='stylesheet' type='text/css' href='/res/nav.css'>
+<head>
 		<title>Hidrogine WS</title>
-	</head>
-	<body>
-		<div class="wrapper">
-			<header>
-				<a>Hidrogine WS</a>
-			</header>
-			<nav>@nav</nav>
-			<main>@main</main>	
+<script src="/assets/js/jquery.js"></script>
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="/assets/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+<script src="/assets/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+td {
+    border:1px solid #aaaaaa;
+    width:48px;
+    height:48px;
+    text-align: center;
+}
+
+table {
+  border-spacing: 0px;
+}
+
+body {
+  padding-top: 50px;
+}
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.fixed {
+	background-color: #d9edf7;
+}
+
+.locked {
+	background-color: #eeeeee;
+}
+
+table tbody tr > td.success {
+  background-color: #dff0d8 !important;
+}
+
+table tbody tr > td.error {
+  background-color: #f2dede !important;
+}
+
+table tbody tr > td.warning {
+  background-color: #FAEBCC !important;
+}
+</style>
+
+</head>
+<body>
+
+
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+       
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+		  @nav
+
+      
+        </div>
+      </div>
+    </nav>
+
+
+    <div class="container">
+		<div id="debug">
 		</div>
-		<footer>
-			<a>Footer</a>
-		</footer>
-	</body>
+
+
+      <div class="starter-template">
+        <h1>Hidrogine</h1>
+      </div>
+ 		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-info">
+					<div class="panel-heading">example</div>
+					<div class="panel-body">		
+						@main
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+
+
+ 
+</body>
+
 </html>
+

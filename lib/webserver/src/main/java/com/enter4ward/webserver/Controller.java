@@ -86,8 +86,6 @@ public abstract class Controller {
 			int len = Integer.valueOf(line, 16);
 			byte[] data = new byte[len];
 			is.read(data);
-			
-			
 			baos.write(data);
 			HttpTools.readLine(is);
 			return len;

@@ -45,6 +45,7 @@ public class HttpTools {
 	public static void sendChunk(OutputStream os, byte [] data) throws IOException{
 	
 			if (data != null) {
+				System.out.println("CHUNK");
 				for (int l = 0; l < data.length; l += CHUNK_SIZE) {
 					int wr = data.length - l;
 					if (wr > CHUNK_SIZE){
@@ -56,14 +57,14 @@ public class HttpTools {
 					os.write(data,l, wr);
 					os.write(CRLF);
 					os.flush();
-
+					System.out.println(wr);
 				}
 				
 				os.write("0".getBytes());
 				os.write(CRLF);
 				os.write(CRLF);
 				os.flush();	
-				
+				System.out.println(0);
 			}
 	
 	}

@@ -24,7 +24,9 @@ public abstract class Template {
      * @return the nav
      */
     public static String getNav(final String path) {
-        String res = "<ul>";
+    	
+    	
+        String res = "<ul class='nav navbar-nav'>";
         res += getLi("Home","/",path.equals("/"));
         res += getLi("Convert","/convert",path.startsWith("/convert"));
         res += getLi("Upload","/upload",path.startsWith("/upload"));
@@ -36,7 +38,7 @@ public abstract class Template {
 
     private static String getLi(String name, String url,boolean selected){
         String res = "";
-    	res += "<li " + (selected ? "selected" : "") + ">";
+    	res += "<li " + (selected ? "class='active' selected" : "") + ">";
         res += "<a href='" + url + "'>" + name + "</a>";
         res += "</li>";	
         return res;

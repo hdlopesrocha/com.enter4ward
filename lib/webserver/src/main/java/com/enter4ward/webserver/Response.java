@@ -1,5 +1,6 @@
 package com.enter4ward.webserver;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,7 +10,6 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
@@ -21,6 +21,7 @@ import com.enter4ward.session.Session;
 public class Response {
 
 	public static final String CODE_OK = "200 OK";
+	public static final String CODE_NOT_FOUND = "404 NOT FOUND";
 
 	/** The version. */
 	private String version = "1.1";
@@ -68,20 +69,14 @@ public class Response {
 	}
 
 	public void setContent(File file) {
-		StringTokenizer fileToks = new StringTokenizer(file.getName(), ".");
-
+		
 		try {
 			setContent(read(file));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 		}
-		if (fileToks.countTokens() > 1) {
-			fileToks.nextElement();
-			setContentType(fileToks.nextToken());
-		} else {
-			setContentType(ContentTypes.TEXT_HTML);
-		}
+		setContentType(file);
 	}
 
 	public void setContent(File file, String filename) {
@@ -204,12 +199,31 @@ public class Response {
 		if (data != null) {
 			addHeader(Headers.CONTENT_LENGTH, Integer.toString(data.length));
 		}
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		baos.write(buildHeader().getBytes());
+		if(data !=null){
+			baos.write(data);
+		}
+		return baos.toByteArray();
+	}
 
-		byte[] header = buildHeader().getBytes();
-		byte[] packg = new byte[header.length + data.length];
-		System.arraycopy(header, 0, packg, 0, header.length);
-		System.arraycopy(data, 0, packg, header.length, data.length);
-		return packg;
+	public void setContentType(File file) {
+		String [] fileToks = file.getName().split("\\.");
+		String last = fileToks[fileToks.length-1];
+		
+		if ("jpeg".equals(last) || "jpg".equals(last)) {
+			setContentType(ContentTypes.IMAGE_JPEG);
+		} else if("png".equals(last)){
+			setContentType(ContentTypes.IMAGE_PNG);
+		} else if("gif".equals(last)){
+			setContentType(ContentTypes.IMAGE_GIF);
+		}else if("js".equals(last)){
+			setContentType(ContentTypes.APPLICATION_JAVASCRIPT);
+		}else if("css".equals(last)){
+			setContentType(ContentTypes.TEXT_CSS);
+		}else {
+			setContentType(ContentTypes.TEXT_HTML);
+		}		
 	}
 
 	
