@@ -1,4 +1,4 @@
-package com.enter4ward.myserver.controllers;
+package com.enter4ward.myserver;
 
 import com.enter4ward.webserver.HttpTools;
 
@@ -10,7 +10,7 @@ public abstract class Template {
 	/** The Constant template. */
 	private static final String TEMPLATE = HttpTools.loadText("template.html");
 
-	protected static String getTemplate(final String main, final String nav) {
+	public static String getTemplate(final String main, final String nav) {
 		return TEMPLATE.replace("@main", main).replace("@nav", nav);
 	}
 
@@ -26,7 +26,7 @@ public abstract class Template {
      *            the path
      * @return the nav
      */
-    protected static String getNav(final String path) {
+    public static String getNav(final String path) {
 
         String res = "<ul>";
         res += getLi("Home","/",path.equals("/"));
