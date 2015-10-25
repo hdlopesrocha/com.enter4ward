@@ -14,9 +14,6 @@ public abstract class Template {
 		return TEMPLATE.replace("@main", main).replace("@nav", nav);
 	}
 
-
-	
-
     /**
      * Gets the nav.
      *
@@ -27,7 +24,6 @@ public abstract class Template {
      * @return the nav
      */
     public static String getNav(final String path) {
-
         String res = "<ul>";
         res += getLi("Home","/",path.equals("/"));
         res += getLi("Convert","/convert",path.startsWith("/convert"));

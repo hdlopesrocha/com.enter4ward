@@ -66,6 +66,7 @@ public class Request {
 	public Request(final InputStream is) throws IOException {
 
 		String currentLine = HttpTools.readLine(is);
+		
 		if (currentLine == null) {
 			throw new IOException();
 		}

@@ -1,9 +1,14 @@
 package com.enter4ward.webserver;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import org.apache.commons.io.IOUtils;
 
 import com.enter4ward.session.Session;
 
@@ -60,27 +65,15 @@ public abstract class Controller {
 		os.flush();
 	}
 
-	private static byte [] CRLF = "\r\n".getBytes();
+	public void send(File file) throws FileNotFoundException, IOException{
+		FileInputStream fis = new FileInputStream(file);
+		send(IOUtils.toByteArray(fis));
+		fis.close();
+	}
 	
-	private static final int CHUNK_SIZE = 32768;
 	
-	
-	public void send(byte[] ans) throws IOException {
-		if (ans != null) {
-			for (int l = 0; l < ans.length; l += CHUNK_SIZE) {
-				int wr = ans.length - l;
-				if (wr > CHUNK_SIZE){
-					wr = CHUNK_SIZE;
-				}
-				
-				os.write(Integer.toString(wr,16).getBytes());
-				os.write(CRLF);
-				os.write(ans,l, wr);
-				os.write(CRLF);
-				os.flush();
-
-			}
-		}
+	public void send(byte[] data) throws IOException {
+		HttpTools.sendChunk(os, data);
 	}
 
 	private int maxFrameSize = 0;

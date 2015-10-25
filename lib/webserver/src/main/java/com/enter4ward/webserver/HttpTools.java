@@ -3,6 +3,8 @@ package com.enter4ward.webserver;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.zip.GZIPOutputStream;
 
 import org.apache.commons.io.IOUtils;
 
@@ -27,6 +29,45 @@ public class HttpTools {
 		return "";
 	}
 
+	public static byte [] compressGzip(byte [] data) throws IOException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		GZIPOutputStream gzip = new GZIPOutputStream(out);
+		gzip.write(data);
+		gzip.close();
+		return out.toByteArray();
+	}
+
+	private static byte [] CRLF = "\r\n".getBytes();
+	
+	private static final int CHUNK_SIZE = 32768;
+
+	
+	public static void sendChunk(OutputStream os, byte [] data) throws IOException{
+	
+			if (data != null) {
+				for (int l = 0; l < data.length; l += CHUNK_SIZE) {
+					int wr = data.length - l;
+					if (wr > CHUNK_SIZE){
+						wr = CHUNK_SIZE;
+					}
+					
+					os.write(Integer.toString(wr,16).getBytes());
+					os.write(CRLF);
+					os.write(data,l, wr);
+					os.write(CRLF);
+					os.flush();
+
+				}
+				
+				os.write("0".getBytes());
+				os.write(CRLF);
+				os.write(CRLF);
+				os.flush();	
+				
+			}
+	
+	}
+	
 	public static String readLine(InputStream is) throws IOException {
 
 		

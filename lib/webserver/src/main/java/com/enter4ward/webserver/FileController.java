@@ -14,8 +14,10 @@ public class FileController extends Controller {
 		
 		Response response = new Response(Response.CODE_OK, getRequest(), getSession());
 		response.setContent(file);
-		
+		//response.setChunked();
 		send (response);
+		//send (file);
+		
 		
 	}
 

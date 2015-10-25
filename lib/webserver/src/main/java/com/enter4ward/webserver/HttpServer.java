@@ -15,7 +15,7 @@ import com.enter4ward.session.SessionManager;
 public class HttpServer {
 
 	/** The Constant VERSION. */
-	public static final String VERSION = "1.5.0";
+	public static final String VERSION = "1.5.1";
 
 	/** The port. */
 	private int port;
