@@ -1,17 +1,16 @@
 package com.enter4ward.myserver.controllers;
 
-import com.enter4ward.webserver.Controller;
 import com.enter4ward.webserver.HttpTools;
 
 /**
  * The Class FileUpload.
  */
-public abstract class Template extends Controller {
+public abstract class Template {
 
 	/** The Constant template. */
 	private static final String TEMPLATE = HttpTools.loadText("template.html");
 
-	protected String getTemplate(final String main, final String nav) {
+	protected static String getTemplate(final String main, final String nav) {
 		return TEMPLATE.replace("@main", main).replace("@nav", nav);
 	}
 
@@ -27,7 +26,7 @@ public abstract class Template extends Controller {
      *            the path
      * @return the nav
      */
-    protected String getNav(final String path) {
+    protected static String getNav(final String path) {
 
         String res = "<ul>";
         res += getLi("Home","/",path.equals("/"));
@@ -39,7 +38,7 @@ public abstract class Template extends Controller {
         return res;
     }
 
-    private String getLi(String name, String url,boolean selected){
+    private static String getLi(String name, String url,boolean selected){
         String res = "";
     	res += "<li " + (selected ? "selected" : "") + ">";
         res += "<a href='" + url + "'>" + name + "</a>";

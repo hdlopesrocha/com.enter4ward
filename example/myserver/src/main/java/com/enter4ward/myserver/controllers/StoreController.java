@@ -2,13 +2,14 @@ package com.enter4ward.myserver.controllers;
 
 import java.io.IOException;
 
+import com.enter4ward.webserver.Controller;
 import com.enter4ward.webserver.HttpTools;
 import com.enter4ward.webserver.Response;
 
 /**
  * The Class FileUpload.
  */
-public class StoreController extends Template {
+public class StoreController extends Controller {
 
 	/** The Constant store. */
 	private static final String STORE = HttpTools.loadText("store.html");
@@ -26,7 +27,7 @@ public class StoreController extends Template {
 
 		Response response = createResponse(Response.CODE_OK);	
 
-		response.setContent(getTemplate(STORE.replace("@content", storedText), getNav(getRequest().getUrl())));
+		response.setContent(Template.getTemplate(STORE.replace("@content", storedText), Template.getNav(getRequest().getUrl())));
 		send(response);
 	}
 

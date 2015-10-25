@@ -2,6 +2,7 @@ package com.enter4ward.myserver.controllers;
 
 import java.io.IOException;
 
+import com.enter4ward.webserver.Controller;
 import com.enter4ward.webserver.HttpTools;
 import com.enter4ward.webserver.Response;
 import com.enter4ward.webserver.Upload;
@@ -9,7 +10,7 @@ import com.enter4ward.webserver.Upload;
 /**
  * The Class FileUpload.
  */
-public class UploadController extends Template {
+public class UploadController extends Controller {
 
 	/** The Constant upload. */
 	private static final String UPLOAD = HttpTools.loadText("upload.html");
@@ -38,7 +39,7 @@ public class UploadController extends Template {
 		}
 
 		Response response = createResponse(Response.CODE_OK);	
-		response.setContent(getTemplate(UPLOAD, getNav(getRequest().getUrl())));
+		response.setContent(Template.getTemplate(UPLOAD, Template.getNav(getRequest().getUrl())));
 
 		send(response);
 		

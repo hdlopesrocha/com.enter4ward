@@ -6,6 +6,7 @@ import org.json.JSONException;
 
 import com.enter4ward.wavefront.MaterialLibrary;
 import com.enter4ward.wavefront.WaveFront;
+import com.enter4ward.webserver.Controller;
 import com.enter4ward.webserver.HttpTools;
 import com.enter4ward.webserver.Response;
 import com.enter4ward.webserver.Upload;
@@ -13,7 +14,7 @@ import com.enter4ward.webserver.Upload;
 /**
  * The Class FileUpload.
  */
-public class ConvertController extends Template {
+public class ConvertController extends Controller {
 
 	/** The Constant upload. */
 	private static final String CONVERT = HttpTools.loadText("convert.html");
@@ -27,7 +28,7 @@ public class ConvertController extends Template {
 		Upload file = getRequest().getUpload("file");
 
 		if (file == null) {
-			response.setContent(getTemplate(CONVERT, getNav(getRequest().getUrl())));
+			response.setContent(Template.getTemplate(CONVERT, Template.getNav(getRequest().getUrl())));
 			send(response);
 			return;
 		}

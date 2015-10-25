@@ -48,7 +48,6 @@ public class StreamController extends Controller {
 		Payload payload = getPayload(getRequest().getFile());
 
 		if (getRequest().getMethod().equals("POST")) {
-
 			while (true) {
 				byte[] data = readChunk();
 				payload.setData(data);
