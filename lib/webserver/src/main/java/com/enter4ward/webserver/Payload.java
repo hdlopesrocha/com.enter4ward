@@ -51,7 +51,6 @@ public class Payload {
 		try {
 			condition.await();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally{
