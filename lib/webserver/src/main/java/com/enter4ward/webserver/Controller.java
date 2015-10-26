@@ -1,14 +1,9 @@
 package com.enter4ward.webserver;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import org.apache.commons.io.IOUtils;
 
 import com.enter4ward.session.Session;
 
@@ -17,10 +12,10 @@ import com.enter4ward.session.Session;
  * The Class Controller.
  */
 public abstract class Controller {
-	private InputStream is;
-	private OutputStream os;
-	private Request request;
-	private Session session;
+	private InputStream _inputStream;
+	private OutputStream _outputStream;
+	private Request _request;
+	private Session _session;
 
 	/**
 	 * Instantiates a new controller.
@@ -39,55 +34,47 @@ public abstract class Controller {
 	 *            the r
 	 * @param socket
 	 */
-	protected final void init(InputStream is, OutputStream os, Request request, Session session) {
-		this.os = os;
-		this.is = is;
-		this.request = request;
-		this.session = session;
+	protected final void init(InputStream is, OutputStream os, Request r, Session s) {
+		this._outputStream = os;
+		this._inputStream = is;
+		this._request = r;
+		this._session = s;
 	}
 
-	public Session getSession() {
-		return session;
+	public Session session() {
+		return _session;
 	}
 
-	public Request getRequest() {
-		return request;
+	public Object session(String key) {
+		return _session.read(key);
+	}
+	
+	public void session(String key, Object value){
+		_session.write(key,value);
+	}
+	
+	public Request request() {
+		return _request;
 	}
 
 	public Response createResponse(String status) {
-		Response response = new Response(status, request, session);
+		Response response = new Response(status, _request, _session,_outputStream);
 		return response;
 	}
 
-	public void send(Response response) throws IOException {
-		byte [] data = response.build();
-		os.write(data);
-		os.flush();
-	}
-
-	public void send(File file) throws FileNotFoundException, IOException{
-		FileInputStream fis = new FileInputStream(file);
-		send(IOUtils.toByteArray(fis));
-		fis.close();
-	}
-	
-	
-	public void send(byte[] data) throws IOException {
-		HttpTools.sendChunk(os, data);
-	}
 
 	private int maxFrameSize = 0;
 
 	protected int readChunkAux(ByteArrayOutputStream baos) throws IOException {
-		String line = HttpTools.readLine(is);
+		String line = HttpTools.readLine(_inputStream);
 
 		boolean isHex = line.matches("^[0-9a-fA-F]+$");
 		if (isHex) {
 			int len = Integer.valueOf(line, 16);
 			byte[] data = new byte[len];
-			is.read(data);
+			_inputStream.read(data);
 			baos.write(data);
-			HttpTools.readLine(is);
+			HttpTools.readLine(_inputStream);
 			return len;
 		}
 		return 0;

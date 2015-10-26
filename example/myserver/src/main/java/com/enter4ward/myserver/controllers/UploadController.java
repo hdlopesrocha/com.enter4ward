@@ -20,7 +20,7 @@ public class UploadController extends Controller {
 	@Override
 	public void run() throws IOException {
 	
-		Upload file1 = getRequest().getUpload("file1");
+		Upload file1 = request().getUpload("file1");
 
 		if (file1 != null) {
 			try {
@@ -30,7 +30,7 @@ public class UploadController extends Controller {
 			}
 		}
 
-		Upload file2 = getRequest().getUpload("file2");
+		Upload file2 = request().getUpload("file2");
 		if (file2 != null) {
 			try {
 				file2.copyTo(file2.getFilename());
@@ -40,9 +40,8 @@ public class UploadController extends Controller {
 		}
 
 		Response response = createResponse(Response.CODE_OK);	
-		response.setContent(Template.getTemplate(UPLOAD, Template.getNav(getRequest().getUrl())));
-
-		send(response);
+		response.setContent(Template.getTemplate(UPLOAD, Template.getNav(request().getUrl())));
+		response.send();
 		
 		
 	}

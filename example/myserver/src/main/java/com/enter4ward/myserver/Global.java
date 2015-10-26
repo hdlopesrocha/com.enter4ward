@@ -6,6 +6,7 @@ import com.enter4ward.myserver.controllers.LoginController;
 import com.enter4ward.myserver.controllers.StoreController;
 import com.enter4ward.myserver.controllers.StreamController;
 import com.enter4ward.myserver.controllers.UploadController;
+import com.enter4ward.myserver.controllers.WebGLController;
 import com.enter4ward.webserver.Controller;
 import com.enter4ward.webserver.FileController;
 import com.enter4ward.webserver.HttpServer;
@@ -46,6 +47,8 @@ public final class Global {
 					return new UploadController();
 				}else if(path.startsWith("/stream")){
 					return new StreamController();
+				}else if(path.startsWith("/wgl")){
+					return new WebGLController();
 				}else {
 					return new FileController();	
 				}				

@@ -9,15 +9,15 @@ import com.enter4ward.webserver.Response;
 /**
  * The Class FileUpload.
  */
-public class IndexController extends Controller {
+public class WebGLController extends Controller {
 
 
-	private static final String IMAGE = "<div><img src='res/test.png'></div>";
+	private static final String IFRAME = "<div><iframe src='/WebGL/index.html' style='width:100%;height:100%;' frameBorder='0'></iframe></div>";
 
 	@Override
 	public void run() throws IOException {
 		Response response = createResponse(Response.CODE_OK);	
-		response.setContent(Template.getTemplate(IMAGE, Template.getNav(request().getUrl())));	
+		response.setContent(Template.getTemplate(IFRAME, Template.getNav(request().getUrl())));	
 		response.send();
 	}
 

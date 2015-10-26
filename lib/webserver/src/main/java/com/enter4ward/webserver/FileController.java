@@ -9,20 +9,20 @@ public class FileController extends Controller {
 	@Override
 	public void run() throws IOException {
 
-		final String filename = getRequest().getUrl().substring(1);
+		final String filename = request().getUrl().substring(1);
 		final URL url = FileController.class.getClassLoader().getResource(filename);
 		if (url != null) {
 			File file = new File(url.getFile());
 
-			Response response = new Response(Response.CODE_OK, getRequest(), getSession());
-			response.setContent(file);
+			Response response = createResponse(Response.CODE_OK);
+			//response.setContent(file);
 			response.setContentType(file);
-			//response.setChunked();
-			send(response);
-			//send(file);
+			response.setChunked();
+			response.send();
+			response.send(file);
 		}else {
-			Response response = new Response(Response.CODE_NOT_FOUND, getRequest(), getSession());
-			send(response);
+			Response response = createResponse(Response.CODE_NOT_FOUND);
+			response.send();
 		}
 
 	}

@@ -15,7 +15,7 @@ import com.enter4ward.session.SessionManager;
 public class HttpServer {
 
 	/** The Constant VERSION. */
-	public static final String VERSION = "1.5.1";
+	public static final String VERSION = "1.5.2";
 
 	/** The port. */
 	private int port;
@@ -75,7 +75,7 @@ public class HttpServer {
 	 */
 	public final boolean process(InputStream is, OutputStream os) throws IOException {
 		Request request = new Request(is);
-		Session session = sessionManager.getSession(request.getSessionId());
+		Session session = sessionManager.getSession(request.getSessionId());		
 		Controller controller = requestHandler.onRequestArrived(request);
 		controller.init(is, os, request, session);
 		controller.run();

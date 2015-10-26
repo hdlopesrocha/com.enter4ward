@@ -17,10 +17,13 @@ public class LoginController extends Controller {
 
 	@Override
 	public void run() throws IOException{
-		
+		if("POST".equals( request().getMethod())){
+			System.out.println(request().getAttributes().entrySet().size());
+		}
+			
 		Response response = createResponse(Response.CODE_OK);	
-		response.setContent(Template.getTemplate(LOGIN, Template.getNav(getRequest().getUrl())));
-		send(response);
+		response.setContent(Template.getTemplate(LOGIN, Template.getNav(request().getUrl())));
+		response.send();
 	
 	}
 

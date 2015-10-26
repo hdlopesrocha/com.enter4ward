@@ -26,11 +26,11 @@ public class ConvertController extends Controller {
 	public void run() throws IOException {
 		Response response = createResponse(Response.CODE_OK);	
 		
-		Upload file = getRequest().getUpload("file");
+		Upload file = request().getUpload("file");
 
 		if (file == null) {
-			response.setContent(Template.getTemplate(CONVERT, Template.getNav(getRequest().getUrl())));
-			send(response);
+			response.setContent(Template.getTemplate(CONVERT, Template.getNav(request().getUrl())));
+			response.send();
 			return;
 		}
 
@@ -38,13 +38,13 @@ public class ConvertController extends Controller {
 			if ("obj".equals(file.getExtension())){
 				response.setContent(new WaveFront(file.getFile()).toFile(),
 						file.getName() + ".geo");
-				send(response);
+				response.send();
 				return;
 			}
 			if ("mtl".equals(file.getExtension())){
 				response.setContent(new MaterialLibrary(file.getFile()).toFile(),
 						file.getName() + ".mat");
-				send(response);
+				response.send();
 				return;
 			}
 			
@@ -52,7 +52,7 @@ public class ConvertController extends Controller {
 		
 		}
 		response.setContent("ERROR");
-		send(response);
+		response.send();
 	}
 
 }

@@ -17,19 +17,19 @@ public class StoreController extends Controller {
 
 	@Override
 	public void run() throws IOException {
-		String receivedText = getRequest().read("text");
+		String receivedText = request().read("text");
 		if (receivedText != null) {
-			getSession().write("text", receivedText);
+			session().write("text", receivedText);
 		}
-		String storedText = (String) getSession().read("text");
+		String storedText = (String) session().read("text");
 		if (storedText == null) {
 			storedText = "";
 		}
 
 		Response response = createResponse(Response.CODE_OK);	
 
-		response.setContent(Template.getTemplate(STORE.replace("@content", storedText), Template.getNav(getRequest().getUrl())));
-		send(response);
+		response.setContent(Template.getTemplate(STORE.replace("@content", storedText), Template.getNav(request().getUrl())));
+		response.send();
 	}
 
 }

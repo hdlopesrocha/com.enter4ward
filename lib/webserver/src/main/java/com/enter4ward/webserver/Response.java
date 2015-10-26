@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -12,6 +13,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.zip.GZIPOutputStream;
+
+import org.apache.commons.httpclient.ChunkedOutputStream;
 
 import com.enter4ward.session.Session;
 
@@ -25,12 +29,13 @@ public class Response {
 
 	/** The version. */
 	private String version = "1.1";
+	private OutputStream os;
 
 	/** The status. */
 	private String status = CODE_OK;
 
 	/** The data. */
-	private byte[] data = new byte[0];
+	private byte[] data = null;
 
 	private Map<String, String> headers = new TreeMap<String, String>();
 
@@ -69,7 +74,7 @@ public class Response {
 	}
 
 	public void setContent(File file) {
-		
+
 		try {
 			setContent(read(file));
 		} catch (IOException e) {
@@ -115,11 +120,58 @@ public class Response {
 		return buffer;
 	}
 
+	public void send() throws IOException {
+		byte[] data = build();
+		os.write(data);
+		os.flush();
+	}
+
+	public void send(File file) throws IOException {
+		if (file != null) {
+			send(new FileInputStream(file));
+		}
+	}
+
+	private OutputStream getOutputStream() throws IOException {
+		boolean gzip = "gzip".equals(headers.get(Headers.CONTENT_ENCODING));
+		boolean chunked = "chunked".equals(headers.get(Headers.TRANSFER_ENCODING));
+
+		OutputStream outputStream = os;
+		if (chunked) {
+			outputStream = new ChunkedOutputStream(outputStream);
+		}
+		if (gzip) {
+			outputStream = new GZIPOutputStream(outputStream);
+		}
+		return outputStream;
+	}
+
+	public void send(InputStream is) throws IOException {
+		if (is != null) {
+			OutputStream outputStream = getOutputStream();
+			byte[] buffer = new byte[2048];
+			int wr;
+			while ((wr = is.read(buffer)) > 0) {
+				outputStream.write(buffer, 0, wr);
+			}
+			outputStream.close();
+		}
+	}
+
+	public void send(byte[] data) throws IOException {
+		if (data != null) {
+			OutputStream outputStream = getOutputStream();
+			outputStream.write(data);
+			outputStream.close();
+		}
+	}
+
 	public void setChunked() {
 		addHeader(Headers.TRANSFER_ENCODING, "chunked");
 	}
 
-	protected Response(final String status, final Request request, Session session) {
+	protected Response(final String status, final Request request, Session session, OutputStream os) {
+		this.os = os;
 		this.status = status;
 		if (request.acceptEncoding("gzip")) {
 			addHeader(Headers.CONTENT_ENCODING, "gzip");
@@ -158,7 +210,6 @@ public class Response {
 		s += "HTTP/" + version + " " + status + "\r\n";
 		s += "Date: " + getServerTime() + "\r\n";
 		s += "Server: com.enter4ward/" + HttpServer.VERSION + "\r\n";
-
 		for (Entry<String, String> e : headers.entrySet()) {
 			s += e.getKey() + ": " + e.getValue() + "\r\n";
 		}
@@ -191,8 +242,6 @@ public class Response {
 		if ("gzip".equals(headers.get(Headers.CONTENT_ENCODING))) {
 			if (data != null) {
 				data = HttpTools.compressGzip(data);
-			} else {
-				headers.remove(Headers.CONTENT_ENCODING);
 			}
 		}
 
@@ -201,31 +250,29 @@ public class Response {
 		}
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		baos.write(buildHeader().getBytes());
-		if(data !=null){
+		if (data != null) {
 			baos.write(data);
 		}
 		return baos.toByteArray();
 	}
 
 	public void setContentType(File file) {
-		String [] fileToks = file.getName().split("\\.");
-		String last = fileToks[fileToks.length-1];
-		
+		String[] fileToks = file.getName().split("\\.");
+		String last = fileToks[fileToks.length - 1];
+
 		if ("jpeg".equals(last) || "jpg".equals(last)) {
 			setContentType(ContentTypes.IMAGE_JPEG);
-		} else if("png".equals(last)){
+		} else if ("png".equals(last)) {
 			setContentType(ContentTypes.IMAGE_PNG);
-		} else if("gif".equals(last)){
+		} else if ("gif".equals(last)) {
 			setContentType(ContentTypes.IMAGE_GIF);
-		}else if("js".equals(last)){
+		} else if ("js".equals(last)) {
 			setContentType(ContentTypes.APPLICATION_JAVASCRIPT);
-		}else if("css".equals(last)){
+		} else if ("css".equals(last)) {
 			setContentType(ContentTypes.TEXT_CSS);
-		}else {
+		} else {
 			setContentType(ContentTypes.TEXT_HTML);
-		}		
+		}
 	}
-
-	
 
 }

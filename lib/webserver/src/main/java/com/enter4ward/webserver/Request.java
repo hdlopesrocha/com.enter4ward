@@ -25,7 +25,7 @@ public class Request {
 	static final int BUFFERSZ = 1024;
 
 	/** The attributes. */
-	private TreeMap<String, String> attributes = new TreeMap<String, String>();
+	private Map<String, String> attributes = new TreeMap<String, String>();
 	/** The session. */
 	private String sessionId = null;
 
@@ -88,7 +88,7 @@ public class Request {
 			// System.out.println(currentLine);
 			StringTokenizer ssDots = new StringTokenizer(currentLine, ":");
 			String key = ssDots.hasMoreElements() ? ssDots.nextToken().trim().toLowerCase() : "";
-			String value = ssDots.hasMoreElements() ? ssDots.nextToken().trim().toLowerCase() : "";
+			String value = ssDots.hasMoreElements() ? ssDots.nextToken().trim() : "";
 			headers.put(key, value);
 		}
 		String value;
@@ -98,12 +98,16 @@ public class Request {
 		}
 
 		if ((value = headers.get("accept-encoding")) != null) {
+			value = value.toLowerCase();
+			
 			for (String s : value.split(",")) {
 				encodings.add(s.trim());
 			}
 		}
 
 		if ((value = headers.get("content-type")) != null) {
+			value = value.toLowerCase();
+			
 			if (value.contains("application/x-www-form-urlencoded")) {
 				int contentLength = Integer.valueOf(headers.get("content-length"));
 				setAttributes(readSize(is, contentLength));
@@ -116,7 +120,7 @@ public class Request {
 				}
 			}
 		}
-		connection = headers.get("connection");
+		connection = headers.get("connection").toLowerCase();
 	}
 
 	public String getSessionId() {
@@ -294,14 +298,7 @@ public class Request {
 		return attributes.get(key);
 	}
 
-	/**
-	 * Gets the entries.
-	 *
-	 * @return the entries
-	 */
-	public final Set<Entry<String, String>> getEntries() {
-		return attributes.entrySet();
-	}
+	
 
 	/**
 	 * Gets the version.

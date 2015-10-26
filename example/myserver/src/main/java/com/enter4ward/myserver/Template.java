@@ -32,6 +32,7 @@ public abstract class Template {
         res += getLi("Upload","/upload",path.startsWith("/upload"));
         res += getLi("Store","/store",path.startsWith("/store"));
         res += getLi("Login","/login",path.startsWith("/login"));        
+        res += getLi("WebGL","/wgl",path.startsWith("/wgl"));        
         res += "</ul>";
         return res;
     }

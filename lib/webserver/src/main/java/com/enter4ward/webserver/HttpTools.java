@@ -1,6 +1,9 @@
 package com.enter4ward.webserver;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -28,8 +31,10 @@ public class HttpTools {
 		}
 		return "";
 	}
-
-	public static byte [] compressGzip(byte [] data) throws IOException {
+	
+	
+	
+	public static byte[] compressGzip(byte[] data) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		GZIPOutputStream gzip = new GZIPOutputStream(out);
 		gzip.write(data);
@@ -37,41 +42,16 @@ public class HttpTools {
 		return out.toByteArray();
 	}
 
-	private static byte [] CRLF = "\r\n".getBytes();
-	
-	private static final int CHUNK_SIZE = 32768;
 
-	
-	public static void sendChunk(OutputStream os, byte [] data) throws IOException{
-	
-			if (data != null) {
-				System.out.println("CHUNK");
-				for (int l = 0; l < data.length; l += CHUNK_SIZE) {
-					int wr = data.length - l;
-					if (wr > CHUNK_SIZE){
-						wr = CHUNK_SIZE;
-					}
-					
-					os.write(Integer.toString(wr,16).getBytes());
-					os.write(CRLF);
-					os.write(data,l, wr);
-					os.write(CRLF);
-					os.flush();
-					System.out.println(wr);
-				}
-				
-				os.write("0".getBytes());
-				os.write(CRLF);
-				os.write(CRLF);
-				os.flush();	
-				System.out.println(0);
-			}
-	
+	public static byte[] getBytes(File file) throws IOException {
+		FileInputStream fis = new FileInputStream(file);
+		byte[] ret = IOUtils.toByteArray(fis);
+		fis.close();
+		return ret;
 	}
 	
 	public static String readLine(InputStream is) throws IOException {
 
-		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		boolean cr = false;
 		while (true) {
@@ -94,5 +74,5 @@ public class HttpTools {
 		}
 		return null;
 	}
-	
+
 }

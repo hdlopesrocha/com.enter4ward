@@ -20,7 +20,7 @@ public class StreamController extends Controller {
 
 	private static Map<String, Payload> globalBuffer = new TreeMap<String, Payload>();
 	private static BufferedImage LOGO;
-	
+
 	public StreamController() {
 		if (LOGO == null) {
 			try {
@@ -45,9 +45,9 @@ public class StreamController extends Controller {
 
 	@Override
 	public void run() throws IOException {
-		Payload payload = getPayload(getRequest().getFile());
+		Payload payload = getPayload(request().getFile());
 
-		if (getRequest().getMethod().equals("POST")) {
+		if (request().getMethod().equals("POST")) {
 			while (true) {
 				byte[] data = readChunk();
 				payload.setData(data);
@@ -57,17 +57,17 @@ public class StreamController extends Controller {
 			Response response = createResponse(Response.CODE_OK);
 			response.setContentType(ContentTypes.IMAGE_JPEG);
 			response.setChunked();
-			send(response);
+			response.send();
 
 			while (true) {
 				byte[] data = null;
 				payload.await();
 				data = payload.getData();
 				if (data != null) {
-					if (getRequest().getAttributes().containsKey("info")) {
+					if (request().getAttributes().containsKey("info")) {
 						data = ImageOverlay.editImage(data, LOGO);
 					}
-					send(data);
+					response.send(data);
 				}
 			}
 		}
