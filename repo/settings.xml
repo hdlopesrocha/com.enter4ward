@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+<pluginGroups>
+<pluginGroup>org.grails</pluginGroup></pluginGroups>
+  <servers>
+    <server>
+        <id>releases</id>
+        <username>admin</username>
+        <password>192837465</password>
+    </server>
+  </servers>
+  <profiles>
+    <profile>
+      <id>default</id>
+      <repositories>
+          <repository>
+              <id>releases</id>
+              <url>http://2n113.ddns.net:8081/nexus/content/repositories/releases</url>
+          </repository>
+      </repositories>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <activeProfile>default</activeProfile>
+  </activeProfiles>
+</settings>

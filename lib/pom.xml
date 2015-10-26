@@ -19,13 +19,11 @@
 	</properties>
 
 	<distributionManagement>
-		<repository>
-			<id>ip-172-31-36-194</id>
-			<name>ip-172-31-36-194-releases</name>
-			<url>http://git.bullray-cit.net:8081/artifactory/libs-release-local</url>
-		</repository>
-	</distributionManagement>
-
+  <repository>
+    <id>releases</id>
+    <url>http://2n113.ddns.net:8081/nexus/content/repositories/releases</url>
+  </repository>
+</distributionManagement>
 	<modules>
 		<module>math</module>
 		<module>network</module>
