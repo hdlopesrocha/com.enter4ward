@@ -3,6 +3,18 @@
 namespace http{
 
 	void Thread::run(int socket,RequestHandler * handler){
+		std::string line = "";
+		InputStream inputStream(socket);
+
+		std::cout << "Socket: " << socket<< std::endl;
+		while(inputStream.readLine(line)!=-1){
+			std::cout << "|  " << line << std::endl;
+			line.clear();
+		}
+
+		std::cout << "XXX" << std::endl;
+
+
 		handler->onRequestArrived();
 		::close(socket);
 		delete this;

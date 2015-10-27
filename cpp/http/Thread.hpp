@@ -9,7 +9,7 @@
 #include <iostream>
 #include <unistd.h>
 #include "RequestHandler.hpp"
-
+#include "InputStream.hpp"
 
 namespace http {
 	class Thread {
