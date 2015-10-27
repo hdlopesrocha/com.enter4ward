@@ -166,6 +166,33 @@ public class Response {
 		}
 	}
 
+	public void send(byte[] data, String contentType) throws IOException {
+		boolean gzip = "gzip".equals(headers.get(Headers.CONTENT_ENCODING));
+
+		if (data != null) {
+			if(gzip){
+				data = HttpTools.compressGzip(data);
+			}
+			
+			OutputStream outputStream = os;
+			outputStream.write(("--boundary\r\n").getBytes());
+			outputStream.write(("Content-Type: "+contentType+"\r\n").getBytes());
+			outputStream.write(("Content-Length: " + data.length + "\r\n").getBytes());
+			outputStream.write(("\r\n").getBytes());
+			outputStream.write(data);
+			outputStream.write(("\r\n").getBytes());
+//			outputStream.close();
+		}
+	}
+
+	public void setReplace() {
+		addHeader(Headers.CACHE_CONTROL, "no-cache,private");
+	//	addHeader(Headers.CACHE_CONTROL, "private");
+		addHeader(Headers.CONTENT_TYPE, ContentTypes.MULTIPART_X_MIXED_REPLACE +";boundary=--boundary");
+		headers.remove(Headers.CONTENT_ENCODING);
+		version = "1.0";
+	}
+
 	public void setChunked() {
 		addHeader(Headers.TRANSFER_ENCODING, "chunked");
 	}
@@ -237,7 +264,7 @@ public class Response {
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public final byte[] build() throws IOException {
+	private final byte[] build() throws IOException {
 
 		if ("gzip".equals(headers.get(Headers.CONTENT_ENCODING))) {
 			if (data != null) {

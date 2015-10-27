@@ -9,5 +9,6 @@ public class Headers {
 	public static final String CONNECTION = "Connection";
 	public static final String TRANSFER_ENCODING = "Transfer-Encoding";
 	public static final String SET_COOKIE = "Set-Cookie";
+	public static final String CACHE_CONTROL = "Cache-Control";
 
 }
