@@ -24,10 +24,8 @@ class MyRequestHandler : public http::RequestHandler {
     		}
 		}
 
-		std::string msg = "HTTP/1.0 200 OK\r\n";
-		out.writeBytes(msg.c_str(),0,msg.length());
-		out.flush();
-
+		http::Response response(HTTP_1_1, STATUS_OK);
+		response.send(out);
 	}
  };
 

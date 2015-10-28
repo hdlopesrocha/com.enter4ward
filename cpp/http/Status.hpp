@@ -3,6 +3,9 @@
 #include <string>
 #include <vector>
 
+
+#define HTTP_1_0 "HTTP/1.0"
+#define HTTP_1_1 "HTTP/1.1"
 #define STATUS_CONTINUE 100
 #define STATUS_SWITCHING_PROTOCOLS 101
 #define STATUS_OK 200

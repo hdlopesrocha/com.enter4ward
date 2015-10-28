@@ -13,6 +13,7 @@
 
 #include "RequestHandler.hpp"
 #include "Thread.hpp"
+#include "Response.hpp"
 
 #define VERSION std::string("1.1.0.1")
 

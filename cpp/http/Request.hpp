@@ -13,7 +13,7 @@ namespace http {
 		public: std::string file;
 		public: std::string query;
 		public: std::string version;
-		public: std::map<std::string,std::vector<std::string>> fields;
+		public: std::map<std::string,std::vector<std::string>> fields;	
 		public: std::map<std::string,std::vector<std::string>> headers;
 		public: Request(std::string method, std::string file, std::string query, std::string version);
 	}; 
