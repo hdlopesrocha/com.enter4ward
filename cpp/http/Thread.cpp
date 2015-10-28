@@ -35,9 +35,11 @@ static inline std::string &trim(std::string &s) {
 	void Thread::run(int socket,RequestHandler * handler){
 		std::string line = "";
 		InputStream inputStream(socket);
+		OutputStream outputStream(socket);
+
 
 		std::string file,method,query,version;
-		std::string temp, key , value;
+		std::string temp, key , value, values;
 
 
 
@@ -61,13 +63,21 @@ static inline std::string &trim(std::string &s) {
 		while(inputStream.readLine(line)>0){
 		 	std::stringstream ss_line(line);		   	
 			getline(ss_line,key,':');
-			getline(ss_line,value,':');
-			value = trim(value);
-			request.headers[key].push_back(value);
+			getline(ss_line,values,':');
+
+
+		 	std::stringstream ss_values(values);		   	
+			while (getline(ss_values, value, ',')){
+				value = trim(value);
+				request.headers[key].push_back(value);
+			}
+
+
+
 			line.clear();
 		}
 
-		handler->onRequestArrived(request);
+		handler->onRequestArrived(request,outputStream);
 		::close(socket);
 		delete this;
 	}

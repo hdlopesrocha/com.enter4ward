@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <iostream>
 #include <unistd.h>
-#include "RequestHandler.hpp"
 
 #define IS_BUFFER_SIZE 2048
 

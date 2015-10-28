@@ -8,7 +8,7 @@
 
 
 class MyRequestHandler : public http::RequestHandler {
-	public: void onRequestArrived(http::Request &request){
+	public: void onRequestArrived(http::Request &request, http::OutputStream &out){
 		std::cout << request.method << " "<< request.file << std::endl;
 		std::cout << "=== fields ==="<< std::endl;
 		for (auto i : request.fields){
@@ -23,10 +23,15 @@ class MyRequestHandler : public http::RequestHandler {
     			std::cout << "{" << i.first << "," << j << "}" << std::endl;
     		}
 		}
+
+		std::string msg = "HTTP/1.0 200 OK\r\n";
+		out.writeBytes(msg.c_str(),0,msg.length());
+		out.flush();
+
 	}
  };
 
-int main () {
+int main () {	
 	MyRequestHandler handler;
 	http::Server server(1991);
 	server.run(&handler);

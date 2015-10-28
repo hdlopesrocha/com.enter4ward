@@ -5,6 +5,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include "Status.hpp"
 
 namespace http {
 	class Request {
