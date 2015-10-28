@@ -8,8 +8,21 @@
 
 
 class MyRequestHandler : public http::RequestHandler {
-	public: void onRequestArrived(){
-		std::cout << "onRequestArrived" << std::endl;
+	public: void onRequestArrived(http::Request &request){
+		std::cout << request.method << " "<< request.file << std::endl;
+		std::cout << "=== fields ==="<< std::endl;
+		for (auto i : request.fields){
+    		for (auto j : i.second){
+    			std::cout << "{" << i.first << "," << j << "}" << std::endl;
+    		}
+		}
+
+		std::cout << "=== headers ==="<< std::endl;
+		for (auto i : request.headers){
+    		for (auto j : i.second){
+    			std::cout << "{" << i.first << "," << j << "}" << std::endl;
+    		}
+		}
 	}
  };
 

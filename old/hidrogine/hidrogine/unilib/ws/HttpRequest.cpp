@@ -54,8 +54,6 @@ text=dsff
 			getline(ss_line,type,' ');
 			getline(ss_line,url,' ');
 			getline(ss_line,version,' ');
-
-
 			
 		   	stringstream ss_url(url);
 			getline(ss_url, file, '?');

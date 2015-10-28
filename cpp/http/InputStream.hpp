@@ -1,5 +1,5 @@
-#ifndef INPUT_STREAM
-#define INPUT_STREAM
+#ifndef INPUT_STREAM_HPP
+#define INPUT_STREAM_HPP
 
 #include <thread>
 #include <mutex>

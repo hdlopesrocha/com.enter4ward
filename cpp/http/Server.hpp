@@ -14,7 +14,7 @@
 #include "RequestHandler.hpp"
 #include "Thread.hpp"
 
-#define VERSION std::string("1.1.0.0")
+#define VERSION std::string("1.1.0.1")
 
 namespace http {
 

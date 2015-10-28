@@ -1,14 +1,20 @@
-#ifndef HTTP_THREAD
-#define HTTP_THREAD
+#ifndef HTTP_THREAD_HPP
+#define HTTP_THREAD_HPP
 
 #include <thread>
 #include <mutex>
+#include <sstream>
 #include <csignal>
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <functional> 
+#include <cctype>
+#include <locale>
+#include <algorithm> 
 #include <unistd.h>
 #include "RequestHandler.hpp"
+#include "Request.hpp"
 #include "InputStream.hpp"
 
 namespace http {
