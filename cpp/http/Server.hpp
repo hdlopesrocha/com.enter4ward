@@ -1,6 +1,7 @@
 #ifndef HTTP_SERVER_HPP
 #define HTTP_SERVER_HPP
 
+#define VERSION std::string("1.1.1")
 #include <sys/types.h>       // For data types
 #include <sys/socket.h>      // For socket(), connect(), send(), and recv()
 #include <netdb.h>           // For gethostbyname()
@@ -15,7 +16,6 @@
 #include "Thread.hpp"
 #include "Response.hpp"
 
-#define VERSION std::string("1.1.0.1")
 
 namespace http {
 

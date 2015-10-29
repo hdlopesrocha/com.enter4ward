@@ -16,6 +16,7 @@ namespace http {
 		public: std::map<std::string,std::vector<std::string>> fields;	
 		public: std::map<std::string,std::vector<std::string>> headers;
 		public: Request(std::string method, std::string file, std::string query, std::string version);
+		public: void dump();
 	}; 
 }
 
