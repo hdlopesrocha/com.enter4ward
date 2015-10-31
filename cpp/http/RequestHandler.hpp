@@ -3,11 +3,12 @@
 
 #include "Request.hpp"
 #include "OutputStream.hpp"
+#include "InputStream.hpp"
 
 namespace http {
 	class RequestHandler
 	{
-		public: virtual void onRequestArrived(Request &request, OutputStream &out) = 0;
+		public: virtual void onRequestArrived(InputStream &in, OutputStream &out) = 0;
 	}; 
 }
 

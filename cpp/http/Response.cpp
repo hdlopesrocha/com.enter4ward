@@ -2,11 +2,9 @@
 
 namespace http {
 
-	#define MAX_CHUNK_SIZE 8192
-
 	Response::Response(std::string v, int c){
 		version = v;
-		isChunked = false;
+		chunkSize = 0;
 		code = c;
 		content = NULL;
 		contentLength = 0;
@@ -15,6 +13,8 @@ namespace http {
 	void Response::addHeader(std::string key, std::string value){
 		headers[key].push_back(value);
 	}
+
+
 
 	void Response::removeHeader(std::string key){
 		std::map<std::string,std::vector<std::string>>::iterator it = headers.find(key);
@@ -36,61 +36,82 @@ namespace http {
 			msg << "Content-Type: " << contentType << "\r\n";
 		}
 
-		if(isChunked){
+		if(chunkSize>0){
 			msg << "Transfer-Encoding: chunked\r\n"; 
 		}
 		else if(content!=NULL){
 			msg << "Content-Length: " << contentLength << "\r\n";
 		}
 
-		msg << "\r\n";
 		std::string data = msg.str();
-		success &= out.writeBytes(data.c_str(),0,data.length());
-		success &= out.flush();
-		return success;
+		if(!out.writeBytes(data.c_str(),data.length())){
+			return false;
+		}
+
+		if(!out.writeBytes(CRLF.c_str(),CRLF.length())){
+			return false;
+		}
+
+		return out.flush();
 	}
 
-	void Response::setChunked(bool v){
-		isChunked = v;
+	void Response::setChunked(int v){
+		chunkSize = v;
 	}
 
 	void Response::setContentType(std::string t){
 		contentType = t;
 	}
 
+	bool Response::endChunk(OutputStream &out){
+		if(chunkSize>0){
+			static std::string end = "0\r\n\r\n";				
+			return out.writeBytes(end.c_str(),end.length());
+		}
+		return false;
+	}
+
 	bool Response::sendBody(OutputStream &out){
-		bool success = true;
-		if(isChunked){
-			for (int i = 0; i < contentLength; i+=MAX_CHUNK_SIZE) {
-				int wr = contentLength - i;
-				if(wr > MAX_CHUNK_SIZE){
-					wr = MAX_CHUNK_SIZE;
+		if(chunkSize>0){
+			for (int i = 0; i < contentLength; i+=chunkSize) {
+				unsigned int wr = contentLength - i;
+				if(wr > chunkSize) {
+					wr = chunkSize;
 				}
-				{
-					std::stringstream msg;
-					msg << wr << "\r\n";
-					std::string data = msg.str();
-					success &= out.writeBytes(data.c_str(),0,data.length());
+				
+				std::stringstream ss;
+
+				ss << std::hex<<wr << "\r\n";
+
+				std::string data = ss.str();
+				std::cout << data;
+
+				if(!out.writeBytes(data.c_str(),data.length())){
+					return false;
 				}
-				success &= out.writeBytes(content,i,wr);
-				{
-					std::string data = "\r\n";
-					success &= out.writeBytes(data.c_str(),0,data.length());
+
+				if(!out.writeBytes(&content[i],wr)){
+					return false;				
+				}
+
+				if(!out.writeBytes(CRLF.c_str(),CRLF.length())){
+					return false;
 				}
 			}
+
 		}
 		else {
-			success &= out.writeBytes(content,0,contentLength);
+			if(!out.writeBytes(content,contentLength)){
+				return false;
+			}
 		}
 
-		success &= out.flush();
-		return success;
+		return out.flush();
 	}
 
 	void Response::setContent(const char * c, long l){
 		content = c;
 		contentLength = l;
 	}
-
 }
 

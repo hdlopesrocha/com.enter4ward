@@ -1,7 +1,7 @@
 #ifndef HTTP_SERVER_HPP
 #define HTTP_SERVER_HPP
 
-#define VERSION std::string("1.1.1")
+#define VERSION std::string("1.1.2")
 #include <sys/types.h>       // For data types
 #include <sys/socket.h>      // For socket(), connect(), send(), and recv()
 #include <netdb.h>           // For gethostbyname()

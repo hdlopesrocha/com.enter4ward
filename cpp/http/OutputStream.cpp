@@ -16,12 +16,15 @@ namespace http{
 	}
 
 	bool OutputStream::flush(){
-		int w = write(socket, buffer,cursor);
-		cursor = 0;
-		return w > 0;
+		if(cursor>0){
+			int w = write(socket, buffer,cursor);
+			cursor = 0;
+			return w > 0;
+		}
+		return true;
 	}
 
-	bool OutputStream::writeBytes(const char *c,int o, int l){
+	bool OutputStream::writeBytes(const char *c, int l){
 		
 		if(l < OS_BUFFER_SIZE){
 			if(cursor + l >= OS_BUFFER_SIZE) {
@@ -29,8 +32,7 @@ namespace http{
 					return false;
 				}
 			}
-			int end = o+l;
-			for(int i=o; i < end;++i){
+			for(int i=0; i < l;++i){
 				if(!writeByte(c[i])){
 					return false;
 				}
@@ -40,7 +42,7 @@ namespace http{
 			if(!flush()){
 				return false;
 			}
-			write(socket, c+o, l);
+			write(socket, c, l);
 		}
 
 		return true;

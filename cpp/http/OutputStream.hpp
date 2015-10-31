@@ -18,7 +18,7 @@ namespace http {
 		private: int cursor;
 		
 		public: OutputStream(int s);
-		public: bool writeBytes(const char * c,int o, int l);
+		public: bool writeBytes(const char * c, int l);
 		public: bool writeByte(char c);
 		public: bool flush();
 	};
