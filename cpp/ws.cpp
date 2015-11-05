@@ -13,7 +13,6 @@ std::mutex frameMutex;
 
 #define STREAM_BLOCK_SIZE 32768
 
-
 void receiveStream(http::InputStream &in, http::Request &request){
 	http::Response response(HTTP_1_1, STATUS_OK);
 	
@@ -62,9 +61,7 @@ void sendStream(http::OutputStream &out, http::Request &request){
 		response.setContent(&frame[0],frame.size());
 		valid = response.sendBody(out);
 
-		 
 		usleep(33333);
-
 	}
 	response.endChunk(out);
 }
