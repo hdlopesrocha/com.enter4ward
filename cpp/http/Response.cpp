@@ -84,7 +84,7 @@ namespace http {
 				ss << std::hex<<wr << "\r\n";
 
 				std::string data = ss.str();
-				std::cout << data;
+			//	std::cout << data;
 
 				if(!out.writeBytes(data.c_str(),data.length())){
 					return false;

@@ -4,6 +4,7 @@
 #include <vector>
 #include <string.h>
 #include "http/Server.hpp"
+#include "pixel.hpp"
 #include <IL/il.h>
 #include <IL/ilu.h>
 
@@ -11,9 +12,96 @@
 // ffplay http://localhost:1991/stream/test.mjpg
 
 std::map<std::string,std::vector<char>> frameBuffer;
+std::map<std::string,std::vector<char>> oldFrameBuffer;
+int acum = 0;
+bool oldPresent = false;
+
 std::mutex frameMutex;
 
 #define STREAM_BLOCK_SIZE 32768
+
+
+ILuint texture[2];
+	
+
+void writePixel(int x, int y, char r, char g, char b){
+	Pixel pixel(r,g,b);
+	ilSetPixels(x,y,0,1,1,1, IL_RGB,IL_UNSIGNED_BYTE,pixel.data);
+}
+
+
+
+void readPixel(int x,int y, Pixel &pixel){
+	ilCopyPixels(x,y,0,1,1,1,IL_RGB,IL_UNSIGNED_BYTE,pixel.data);
+}
+
+
+void overlay(char * imgBytes1, unsigned int imgSize1,char * imgBytes2, unsigned int imgSize2, std::vector<char> &ret){
+	long error = 0;
+
+	bool success = true;
+	success &= ilLoadL(IL_JPG, imgBytes2, imgSize2);
+	ilBindImage(texture[0]);
+	ILuint width = ilGetInteger(IL_IMAGE_WIDTH);
+	ILuint height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+	ILubyte * img1 = ilGetData();
+
+
+
+	ilBindImage(texture[1]);
+	success &= ilLoadL(IL_JPG, imgBytes1, imgSize1);
+	ILubyte * img2 = ilGetData();
+
+	ilBindImage(texture[0]);
+
+
+
+
+	if(success){
+
+
+		for(int i =0; i < width ; ++i){
+			for(int j =0; j < height ; ++j){
+				ILubyte * pix1 = &img1[j*width*3 +i*3];
+				ILubyte * pix2 = &img2[j*width*3 +i*3];
+
+	
+				ILubyte xred = abs(pix1[0] - pix2[0]); 
+				ILubyte xgreen = abs(pix1[1] - pix2[1]); 
+				ILubyte xblue = abs(pix1[2] - pix2[2]); 
+
+				ILubyte max = 32;
+				if(xred> max || xgreen > max || xblue> max ){
+					writePixel(i,j,255,0,0);
+				
+				}
+				error += xred;
+				error += xgreen;
+				error += xblue;
+
+			}	
+		}
+
+		std::cout << "ruido = "<< (error/(width*height*3.0*255) ) << std::endl;
+
+
+		ILuint fileSize = width*height*3*4;
+		char * bytes = (char*) malloc(fileSize);
+	    ILuint writtenBytes = ilSaveL(IL_JPG, bytes, fileSize);
+
+	    for(int i=0; i < writtenBytes ; ++i){
+	    	ret.push_back(bytes[i]);
+	    }
+
+	    free(bytes);
+	    return;
+	}
+	std::cout << "Invalid JPEG!" << std::endl;
+}
+
+
+
 
 void receiveStream(http::InputStream &in, http::Request &request){
 	http::Response response(HTTP_1_1, STATUS_OK);
@@ -38,8 +126,27 @@ void receiveStream(http::InputStream &in, http::Request &request){
 	
     	if(len<STREAM_BLOCK_SIZE) {
     		frameMutex.lock();
+
+    		if(acum == 0){
+    			oldFrameBuffer[request.file] = oldPresent ? frameBuffer[request.file] : frame;
+    			oldPresent = true;
+    		}
+
+
+
+    		if(acum++>300){
+    			acum = 0;
+    		}
+    			
+
+
+
+
     		frameBuffer[request.file] = frame;
     		frameMutex.unlock();
+
+
+
    			frame.clear();
 	   	}
 
@@ -58,9 +165,14 @@ void sendStream(http::OutputStream &out, http::Request &request){
 	bool valid = true;
 	while(valid){
 		frameMutex.lock();
+		std::vector<char> oldFrame = oldFrameBuffer[request.file];
 		std::vector<char> frame = frameBuffer[request.file];
 		frameMutex.unlock();
-		response.setContent(&frame[0],frame.size());
+
+		std::vector<char> img;
+		overlay(&oldFrame[0],oldFrame.size(),&frame[0],frame.size(),img);
+
+		response.setContent(&img[0],img.size());
 		valid = response.sendBody(out);
 
 		usleep(33333);
@@ -142,7 +254,14 @@ class MyRequestHandler : public http::RequestHandler {
 	}
  };
 
-int main () {
+
+
+
+
+void devilTest(){
+	ilInit();
+	ilGenImages(2, texture);
+
  	FILE *file = fopen("test.jpg", "rb");
  	fseek(file, 0, SEEK_END);
 	ILuint fileSize = ftell(file);
@@ -150,11 +269,14 @@ int main () {
 	fseek(file, 0, SEEK_SET);
 	fread(bytes, 1, fileSize, file);
 	fclose(file);
+	std::vector<char> img;
+	//overlay(bytes,fileSize,img);
 
-	ilLoadL(IL_JPG, bytes, fileSize);
-	free(bytes);
+}
 
 
+int main () {
+	devilTest();
 	MyRequestHandler handler;
 	http::Server server(1991);
 	server.run(&handler);
