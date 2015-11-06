@@ -4,6 +4,8 @@
 #include <vector>
 #include <string.h>
 #include "http/Server.hpp"
+#include <IL/il.h>
+#include <IL/ilu.h>
 
 // ffmpeg -f video4linux2 -i /dev/video0 -vf scale=1024:768 -an -qscale:v 2 -f mjpeg http://localhost:1991/stream/test.mjpg
 // ffplay http://localhost:1991/stream/test.mjpg
@@ -140,7 +142,19 @@ class MyRequestHandler : public http::RequestHandler {
 	}
  };
 
-int main () {	
+int main () {
+ 	FILE *file = fopen("test.jpg", "rb");
+ 	fseek(file, 0, SEEK_END);
+	ILuint fileSize = ftell(file);
+	char * bytes = (char*) malloc(fileSize);
+	fseek(file, 0, SEEK_SET);
+	fread(bytes, 1, fileSize, file);
+	fclose(file);
+
+	ilLoadL(IL_JPG, bytes, fileSize);
+	free(bytes);
+
+
 	MyRequestHandler handler;
 	http::Server server(1991);
 	server.run(&handler);
