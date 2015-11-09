@@ -9,6 +9,7 @@ class  Frame
 	public: std::vector<char> oldFrame;
 	public: long age;
 
+
 	public: Frame(){
 		age = 0;
 	}

@@ -183,8 +183,8 @@ void devilTest(){
 	for(int i=0; i < fileSize ; ++i){
 		img.push_back(bytes[i]);
 	}
-	std::cout << img.size() << std::endl;
-		
+	
+	
 	convertYuv(img);
 
 }
