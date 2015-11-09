@@ -9,7 +9,7 @@
 #include "frame.hpp"
 #include <IL/il.h>
 #include <IL/ilu.h>
-#include <sys/wait.h>  /*****  For waitpid.                   *****/
+
 // ffmpeg -f video4linux2 -i /dev/video0 -vf scale=1024:768 -an -qscale:v 2 -f mjpeg http://localhost:1991/stream/test.mjpg
 // ffplay http://localhost:1991/stream/test.mjpg
 
@@ -18,88 +18,6 @@ std::map<std::string,Frame> frameBuffer;
 std::mutex frameMutex;
 
 #define STREAM_BLOCK_SIZE 32768
-
-void playSound(){
-	int status = 0;
-	int pid = fork();
-	if (pid==0) {
-		execl("/usr/bin/mpg321","mpg321", "alarm.mp3", (char *) 0);
-		exit(0);
-	}
-	else {
-		waitpid(-1, NULL, 0);
-	}
-}
-
-void writePixel(int x, int y, char r, char g, char b){
-	Pixel pixel(r,g,b);
-	ilSetPixels(x,y,0,1,1,1, IL_RGB,IL_UNSIGNED_BYTE,pixel.data);
-}
-
-void readPixel(int x,int y, Pixel &pixel){
-	ilCopyPixels(x,y,0,1,1,1,IL_RGB,IL_UNSIGNED_BYTE,pixel.data);
-}
-
-void overlay(Frame &frame, std::vector<char> &ret){
-	if(frame.oldFrame.size()>0 && frame.currentFrame.size()>0){
-		ILuint texture[2];
-		ilGenImages(2, texture);
-		long error = 0;
-		bool success = true;
-
-		ilBindImage(texture[0]);
-		success &= ilLoadL(IL_JPG, &frame.oldFrame[0], frame.oldFrame.size());
-	
-		ILuint width = ilGetInteger(IL_IMAGE_WIDTH);
-		ILuint height = ilGetInteger(IL_IMAGE_HEIGHT);
-
-		std::vector<char> temp(width*height*3);
-
-		ILubyte * img1 = ilGetData();
-
-		ilBindImage(texture[1]);
-		success &= ilLoadL(IL_JPG, &frame.currentFrame[0], frame.currentFrame.size());
-		ILubyte * img2 = ilGetData();
-
-
-		if(success){
-			for(int i =0; i < width*height*3 ; ++i){
-				//ILubyte x = img1[i] ^ img2[i]; 		
-				ILubyte x = abs(img1[i] - img2[i]); 		
-				unsigned int b = img2[i]*0.1+x;
-				if(b>255){
-					b = 255;					
-				}		
-				error += x;
-				temp[i]= b;
-			}	
-
-			std::cout << "ruido = "<< (error/(width*height*3.0*255) ) << std::endl;
-			ilSetPixels(0,0,0,width,height,1, IL_RGB,IL_UNSIGNED_BYTE,&temp[0]);
-
-			ILuint fileSize = width*height*3*4;
-			char * bytes = (char*) malloc(fileSize);
-			ILuint writtenBytes = ilSaveL(IL_JPG, bytes, fileSize);
-
-			for(int i=0; i < writtenBytes ; ++i){
-				ret.push_back(bytes[i]);
-			}
-
-			free(bytes);
-		
-			if(error/(height*width*3*256.0)>0.03){
-			//	playSound();
-			}
-
-			ilDeleteImages(2,texture);
-
-			return;
-		}
-		std::cout << "Invalid JPEG!" << std::endl;
-	}
-}
-
-
 
 
 void receiveStream(http::InputStream &in, http::Request &request){
@@ -149,12 +67,7 @@ void sendStream(http::OutputStream &out, http::Request &request){
 		frameMutex.lock();
 		Frame frame = frameBuffer[request.file];
 		frameMutex.unlock();
-
-
-		std::vector<char> img;
-		overlay(frame,img);
-
-		response.setContent(&img[0],img.size());
+		response.setContent(&frame.currentFrame[0],frame.currentFrame.size());
 		valid = response.sendBody(out);
 
 		usleep(33333);
@@ -178,30 +91,6 @@ void notFound(http::InputStream &in, http::OutputStream &out){
 void index(http::InputStream &in, http::OutputStream &out){
 	http::Response response(HTTP_1_1, STATUS_OK);
 	std::string content = "<h1>Hello World!</h1>";
-
-	content += "Lorem ipsum dolor sit amet, duo ea consul imperdiet dissentias. Causae intellegam mediocritatem id has, munere saperet electram cu quo. Ei paulo malorum praesent sed, sit dicam iriure aperiam in. Sint affert usu ex, ut tantas semper honestatis eum.<br>";
-	content += "Praesent temporibus omittantur his ex. Velit dolor mucius id vis, nostrum scripserit reformidans pri an. Dolorem perfecto ad est, usu no utamur vidisse, eam reque causae eu. Id vis appellantur ullamcorper, omnium qualisque eum et, eos duis illum an. Facilisi erroribus no nam, vitae dicant epicuri usu ei, mei no vocent aliquip nusquam.<br>";
-	content += "Dicit nemore ut eos, in vim graece electram assentior. Explicari consequat voluptaria cum ea, vix ad detraxit partiendo, et nam convenire gloriatur. Cum quod quas malis ad, eam nibh dicit molestie at. Bonorum officiis adipisci no pro. Cum vidisse recteque te, ridens dicunt mel in.<br>";
-	content += "Quando laudem efficiantur sea ei, in error appellantur sea, cum iriure discere appareat no. Ne affert theophrastus mea, qui id prompta voluptatum vituperatoribus. Ex sed semper adolescens, minimum gloriatur no eos. Has justo fugit assueverit at, tollit option pro in, te malis commodo delenit ius. Per vitae ceteros efficiantur ea, no mea summo delicata scripserit, inermis mentitum no mea. Autem graeco quodsi nec ei, ut quo dicant homero propriae, ea vim novum suavitate.<br>";
-	content += "No civibus pertinacia moderatius eam, viris eirmod comprehensam te has. Ad qui ponderum adipisci disputando, partem dignissim vis id. Vim ut dictas repudiare, id inani sanctus signiferumque eum, omittam adipiscing ex est. Id usu possim convenire definitionem, an partem utroque sententiae sea. Te putent diceret sed, eu eos decore pertinax, mel cu sumo quot. Cu ius minim elitr, semper eripuit accumsan duo ex, at sit eius harum.<br>";
-	content += "Cum noster lobortis et. Sea vide primis recusabo et. Saepe interesset eam cu, id nam ubique lobortis splendide. Legere principes patrioque sit te, ne munere maiorum nec, qui facilisis argumentum ne. Ei nisl pertinax disputationi has, at pri rebum populo detracto.<br>";
-	content += "Ea fabulas prodesset persecuti mel, vix cu nostrud menandri. Ad probo interesset usu, quem soluta vivendum pro ex. Nam enim viris et, summo molestie reprehendunt ad his. Cum ut animal lobortis, ea eam purto pericula abhorreant, wisi principes pri in.<br>";
-	content += "Cetero conceptam scribentur est an. Quem posse repudiandae vis ut, no dolor iudico civibus mei. Quem esse incorrupte ut sed, eos ei oportere ocurreret. Eos cu liber atomorum. Nam hinc dolorem tibique in, ne iusto fierent vivendum eos.<br>";
-	content += "Ad vix ferri labores, et sit commodo sanctus invenire. Eu aliquid reprimique cum, eu velit mandamus quo. In eam tibique sententiae eloquentiam. Quo et everti mediocrem, has id feugait verterem, ex usu petentium iudicabit.<br>";
-	content += "In assum elitr vel, ad mea suas nulla, agam tantas reprimique eos in. Cu vix dicunt legimus necessitatibus. Id vim facer epicurei elaboraret, tempor audiam cu mei. Mel ex unum corpora, eos quot justo mnesarchum at. An nonumy inimicus argumentum quo. Eum labore impedit te, vitae accusam at pri, his facer dolorem vivendum no.<br>";
-	content += "Aperiri eruditi omnesque et pri, eam at quem option abhorreant. Nec cu unum prompta, an quot mutat comprehensam eam. Vel et oblique alienum consequat, atqui impedit has et, brute habemus te his. Id vix sapientem corrumpit scripserit, sed possit reformidans eu, qui an idque discere. Errem possit ea duo, definiebas eloquentiam usu no. Eu vel phaedrum patrioque.<br>";
-	content += "Aeterno vivendo phaedrum vis ut, sea ea omnesque patrioque. Sea te dicant soleat probatus, sed ridens sanctus ei, at pri assum feugiat. Eius ferri vituperatoribus no sit, eos minimum comprehensam ex. Sea ocurreret appellantur te, ei sea apeirian adipisci philosophia. Cu mel sumo meliore eloquentiam, ius velit ullamcorper ne.<br>";
-	content += "Eu quo legimus vivendo, his ad homero soluta. Ut quot munere definitiones pri. Ex vel illud ancillae accusata. Utamur intellegat neglegentur has in, duo id error labore, admodum principes sed in. Vel mutat epicuri blandit ei, veri maluisset omittantur per cu.<br>";
-	content += "Nam te dico repudiare, munere denique blandit no duo. Nonumy electram has ei. Porro vitae probatus mei id, dictas saperet detraxit vim te. Sed soluta denique salutatus id, vim ea sint percipit consequat. An mea timeam perfecto, ad brute graeci pro. Quis impetus euripidis mea ex.<br>";
-	content += "Libris saperet an sit. Cu sit suscipit repudiandae, eum odio paulo prodesset id, usu cu quodsi diceret. Mei ut ullum feugait, tamquam persequeris ei sit. Vel at labore vocent volutpat, no eam scribentur neglegentur. Eu qui mollis utamur.<br>";
-	content += "Id sed ornatus maiorum. An vim error libris, his at aliquid gubergren, at eos errem platonem definitionem. At dicat dicit suavitate pri, falli munere at his. Qui populo vocent pericula no.<br>";
-	content += "Ea nemore malorum electram quo, debet appetere ad mel, et enim dictas debitis duo. Adhuc verear nam ex. Malorum splendide quaerendum ea nec, no wisi pericula consetetur eum. Noster sensibus principes cu his, vim quot omnium ponderum id. Sed ex tamquam voluptatum. Cu lorem quaerendum vix.<br>";
-	content += "Vidit evertitur te his, ea tation nostro facilisis eam, ius magna singulis tacimates eu. Ut aperiam adversarium quo, eum facete discere nonumes in. At sea molestie corrumpit, et eam rebum complectitur. Vocent voluptaria quo eu.<br>";
-	content += "Placerat consequat ne mei, est dicta iusto ex. Sed ex laboramus efficiendi, vix iusto scriptorem disputationi ex. Ei eos elit dicit. Vim ne insolens consetetur. Nec pertinacia referrentur ea.<br>";
-	content += "Illud rationibus voluptatum te his. Ne invenire consequat pri. Habemus deleniti philosophia ne eam, ut mei lorem dolorum electram, mea an hinc assueverit signiferumque. Vim justo oporteat ne.<br>";
-	content += "Mel malis labores in, possim commune similique ne sea, est albucius verterem imperdiet ad. Sea doctus convenire instructior at. Prima atqui tractatos id vel. Vim ne stet quaestio facilisis, ut minim nobis vel. Ne habeo maiestatis quo, in ius conceptam sententiae. Soleat appetere adversarium et vis, ei sed quas dolores, legere mentitum concludaturque vim te. Noluisse deserunt cum et.<br>";
-	content += "At pro adversarium philosophia. Mei wisi clita delicata ea. Ut inimicus maiestatis nam, admodum reformidans no qui. Quis pericula appellantur mea ne, est eius nominavi et. Dicat referrentur te per. Ea meis mediocrem has, doming urbanitas te ius. Vero latine ex eum, ut ius nisl everti consequat, pro sonet laoreet eu.<br>";
-	content += "Amet assueverit signiferumque eu eos, quo.<br>";
 
 // ERR_CONTENT_LENGTH_MISMATCH
 	response.setContentType("text/html");
@@ -241,9 +130,7 @@ class MyRequestHandler : public http::RequestHandler {
 
 
 void devilTest(){
-	ilInit();
-
-	
+	ilInit();	
  	FILE *file = fopen("test.jpg", "rb");
  	fseek(file, 0, SEEK_END);
 	ILuint fileSize = ftell(file);
